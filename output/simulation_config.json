@@ -1,0 +1,38 @@
+{
+  "target_simulator": "NEURON",
+  "run": {
+    "tstart": 0.0,
+    "tstop": 1000.0,
+    "dt": 0.001,
+    "dL": 20.0,
+    "spike_threshold": -15.0,
+    "nsteps_block": 5000
+  },
+  "conditions": {
+    "celsius": 34.0,
+    "v_init": -80.0
+  },
+  "inputs": {},
+  "output": {
+    "log_file": "log.txt",
+    "output_dir": "/home/tjbanks/Desktop/AmygdalaTheta/output",
+    "spikes_file": "spikes.h5"
+  },
+  "reports": {},
+  "node_sets_file": "/home/tjbanks/Desktop/AmygdalaTheta/node_sets.json",
+  "network": "/home/tjbanks/Desktop/AmygdalaTheta/circuit_config.json",
+  "config_path": "/home/tjbanks/Desktop/AmygdalaTheta/simulation_config.json",
+  "config_dir": "/home/tjbanks/Desktop/AmygdalaTheta",
+  "components": {
+    "biophysical_neuron_models_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/biophysical_neuron_models",
+    "mechanisms_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/mechanisms",
+    "morphologies_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/morphologies",
+    "point_neuron_models_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/point_neuron_models",
+    "synaptic_models_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/synaptic_models",
+    "templates_dir": "/home/tjbanks/Desktop/AmygdalaTheta/components/templates"
+  },
+  "networks": {
+    "nodes": [],
+    "edges": []
+  }
+}

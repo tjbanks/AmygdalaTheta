@@ -1,0 +1,2 @@
+2020-06-10 05:50:20,446 [INFO] Created log file
+2020-06-10 05:50:20,491 [ERROR] Could not find any network files. Unable to build network.

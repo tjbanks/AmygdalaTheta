@@ -1,0 +1,19 @@
+{
+  "manifest": {
+    "$BASE_DIR": "${configdir}",
+    "$NETWORK_DIR": "$BASE_DIR/network",
+    "$COMPONENTS_DIR": "$BASE_DIR/components"
+  },
+  "components": {
+    "biophysical_neuron_models_dir": "$COMPONENTS_DIR/biophysical_neuron_models",
+    "mechanisms_dir": "$COMPONENTS_DIR/mechanisms",
+    "morphologies_dir": "$COMPONENTS_DIR/morphologies",
+    "point_neuron_models_dir": "$COMPONENTS_DIR/point_neuron_models",
+    "synaptic_models_dir": "$COMPONENTS_DIR/synaptic_models",
+    "templates_dir": "$COMPONENTS_DIR/templates"
+  },
+  "networks": {
+    "nodes": [],
+    "edges": []
+  }
+}
