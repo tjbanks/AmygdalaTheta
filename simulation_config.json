@@ -1,20 +1,21 @@
 {
   "manifest": {
-    "$BASE_DIR": "${configdir}",
-    "$OUTPUT_DIR": "$BASE_DIR/output"
+    "$BASE_DIR": ".",
+    "$OUTPUT_DIR": "$BASE_DIR/output",
+    "$INPUT_DIR": "$BASE_DIR/input"
   },
   "target_simulator": "NEURON",
   "run": {
     "tstart": 0.0,
     "tstop": 1000.0,
-    "dt": 0.001,
-    "dL": 20.0,
-    "spike_threshold": -15.0,
+    "dt": 0.1,
+    "dL": 1000.0,
+    "spike_threshold": 0.0,
     "nsteps_block": 5000
   },
   "conditions": {
-    "celsius": 34.0,
-    "v_init": -80.0
+    "celsius": 6.0,
+    "v_init": -65.0
   },
   "inputs": {},
   "output": {

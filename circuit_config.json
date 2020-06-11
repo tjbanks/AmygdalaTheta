@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "$BASE_DIR": "${configdir}",
+    "$BASE_DIR": ".",
     "$NETWORK_DIR": "$BASE_DIR/network",
     "$COMPONENTS_DIR": "$BASE_DIR/components"
   },
@@ -13,7 +13,25 @@
     "templates_dir": "$COMPONENTS_DIR/templates"
   },
   "networks": {
-    "nodes": [],
-    "edges": []
+    "nodes": [
+      {
+        "nodes_file": "$NETWORK_DIR/amygdala_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/amygdala_node_types.csv"
+      },
+      {
+        "nodes_file": "$NETWORK_DIR/input_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/input_node_types.csv"
+      }
+    ],
+    "edges": [
+      {
+        "edges_file": "$NETWORK_DIR/amygdala_amygdala_edges.h5",
+        "edge_types_file": "$NETWORK_DIR/amygdala_amygdala_edge_types.csv" 
+      },
+      {
+        "edges_file": "$NETWORK_DIR/input_amygdala_edges.h5",
+        "edge_types_file": "$NETWORK_DIR/input_amygdala_edge_types.csv" 
+      }
+    ]
   }
 }
