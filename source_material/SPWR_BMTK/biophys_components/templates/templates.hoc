@@ -1,0 +1,460 @@
+
+begintemplate Cell_A
+    //public append_sections
+    public NumSoma
+    NumSoma = 1
+    public soma, dend, apic, axon// declares object soma is a public object that can be accessed by any procedures/functions
+    	
+
+    public all, somatic, basal, apical, axonal
+    objref all,  somatic, basal, apical, axonal
+    objref this
+
+	create soma[NumSoma]	// declares soma as a membrane compartment object
+	create dend[1]
+	create apic[1]
+    
+    
+    
+
+	proc init() {
+ 	all = new SectionList()
+	somatic = new SectionList()
+	basal = new SectionList()
+	apical = new SectionList()
+
+	for i=0,NumSoma soma[i] { all.append()
+            somatic.append()} 
+
+	dend[0] all.append()
+	apic[0] all.append()
+	soma[0] somatic.append()
+	dend[0] basal.append()
+	apic[0] apical.append()
+
+
+        	gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		gna = 0.015 
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002 //0.002 
+		ghd = 1.5e-5 //1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+
+
+        /////// topology ////////
+
+		connect dend[0](0), soma[0](0)
+
+        	connect apic[0](0), soma[0](1)
+
+
+
+
+                	
+		/////// geometrical properties //////
+		soma[0] {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    	dend[0] {diam= 3 L=270 nseg=8}     // 3.5
+		apic[0] {diam =5 L=555 nseg=7} 
+        
+        
+	
+	//access soma[0]	
+
+	apic[0] {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				
+				
+								
+		}		
+		soma[0] {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				
+				
+		//drv = new IClamp(0.5)
+		//drv.del = 0
+		//drv.dur = tstop
+		//drv.amp = 0.0//0.2  //nA
+		
+				
+		}	
+		
+		dend[0] {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				
+			}
+		
+		forall {
+		  //insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+	
+		}	
+		
+
+
+
+	//print x,r
+	//        r = sqrt((x_xtra(x) - $1)^2 + (y_xtra(x) - $2)^2 + (z_xtra(x) - $3)^2)
+        // 0.01 converts rho's cm to um and ohm to megohm
+        // if electrode is exactly at a node, r will be 0
+        // this would be meaningless since the location would be inside the cell
+        // so force r to be at least as big as local radius
+	
+		
+	
+
+define_shape()
+}
+endtemplate Cell_A
+
+//////////////////////////////////type C/////////////////////////
+
+
+begintemplate Cell_C
+    //public append_sections
+    public NumSoma
+    NumSoma = 1
+    public soma, dend, apic, axon// declares object soma is a public object that can be accessed by any procedures/functions
+    	
+
+    public all, somatic, basal, apical, axonal
+    objref all,  somatic, basal, apical, axonal
+    objref this
+
+	create soma[NumSoma]	// declares soma as a membrane compartment object
+	create dend[1]
+	create apic[1]
+    
+    
+    
+
+	proc init() {
+ 	all = new SectionList()
+	somatic = new SectionList()
+	basal = new SectionList()
+	apical = new SectionList()
+
+	for i=0,NumSoma soma[i] { all.append()
+            somatic.append()} 
+
+	dend[0] all.append()
+	apic[0] all.append()
+	soma[0] somatic.append()
+	dend[0] basal.append()
+	apic[0] apical.append()
+
+
+        	gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		gna = 0.015 
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002 //0.002 
+		ghd = 1.5e-5 //1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+
+
+        /////// topology ////////
+
+		connect dend[0](0), soma[0](0)
+
+        	connect apic[0](0), soma[0](1)
+
+
+
+
+                	
+		/////// geometrical properties //////
+		soma[0] {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    	dend[0] {diam= 3 L=270 nseg=8}     // 3.5
+		apic[0] {diam =5 L=555 nseg=7} 
+        
+        
+	
+	//access soma[0]	
+
+	apic[0] {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				
+				
+								
+		}		
+		soma[0] {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				
+				
+		//drv = new IClamp(0.5)
+		//drv.del = 0
+		//drv.dur = tstop
+		//drv.amp = 0.0//0.2  //nA
+		
+				
+		}	
+		
+		dend[0] {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				
+			}
+		
+		forall {
+		  //insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+	
+		}	
+		
+
+
+
+	//print x,r
+	//        r = sqrt((x_xtra(x) - $1)^2 + (y_xtra(x) - $2)^2 + (z_xtra(x) - $3)^2)
+        // 0.01 converts rho's cm to um and ohm to megohm
+        // if electrode is exactly at a node, r will be 0
+        // this would be meaningless since the location would be inside the cell
+        // so force r to be at least as big as local radius
+	
+		
+	
+
+define_shape()
+}
+endtemplate Cell_C
+
+
+//////////////////PN cells//////////////////
+
+begintemplate Cell_PN
+    public type,LFPtemp_xtra,drv,append_sections,all,set_nseg,connect2target
+    public init, connect_sections, insert_mechs,connect_gap
+    public mechinit, set_biophys, get_root
+    public pre_list, connect_pre, is_art, is_connected, gid, randi
+    public soma, dend, apic, axon
+    public all, soma_list, axon_list, dendrite_list
+    public all, somatic, basal, apical, axonal
+    public Vrest
+    objref tlist, area_vec
+	public tlist, area_vec
+    strdef type
+    objref gaps[200],drv
+    // objects
+    objref syn, pre_list, templist, rootlist, myrootsec, this, rr, rotation
+    objref this
+    // external variables
+    //external numCellTypes, cellType, VClampVector
+
+    create soma[1]
+    create dend[1]
+    //create apic[1]
+    //create axon[12]
+    proc init(){
+        tlist = new List()
+    	area_vec = new Vector()	
+        type = "InterneuronCell"
+        connect_sections()
+        define_shape()	
+        append_sections()
+        set_nseg()
+        insert_mechs()
+        //connect_gap()
+        //connect2target()
+       
+    }
+
+    proc connect_sections(){
+        connect dend[0](0), soma[0](1)
+    }
+objref all, somatic,axonal,basal,apical
+    proc append_sections() { local i
+        objref all, somatic,axonal,basal,apical
+
+        all = new SectionList()
+        somatic = new SectionList()
+        axonal = new SectionList()
+        basal = new SectionList()
+        apical = new SectionList()
+        
+        soma all.append()
+        soma somatic.append()
+        
+        dend[0] all.append()
+        dend[0] basal.append()
+    }
+
+    proc set_nseg() {
+        soma[0] {
+                nseg=1
+                L=15		// (micrometer)
+                diam=15		// (micrometer)
+                }
+
+            dend[0] {
+                nseg=1
+                L=150		// (micrometer)
+                diam=10		// (micrometer)
+            }	
+    }
+
+    proc insert_mechs(){
+
+        soma[0]{
+            cm = 1//1		    // (microF/cm2)
+            Ra = 150*22.5	// (ohm-cm)
+            Rm = 20000	    // (ohm-cm2)
+            
+            insert leakinter
+            glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+            el_leakinter = -70	// (mV)
+
+            insert nainter
+            insert kdrinter
+            ena = 45		// (mV)
+            gnabar_nainter = 0.035	// (siemens/cm2)
+
+            ek = -80		// (mV)
+            gkdrbar_kdrinter = 0.008 // (siemens/cm2)
+            
+            /*for i=0,199 { 
+            gaps[i] = new gap(0.5) 
+            gaps[i].r = 1500//100000//100000 // Mohm resistance corresponding to 0.01 nS conductance
+                    // that correspondes to 1nS for a cells of ~10000 ‘my surface  
+                    // order of magn. that was measured experimentally 
+                    // ** 0.01 mS/cmy
+
+            
+            setpointer gaps[i].vgap,v(0.5)
+            }*/
+            //n_gaps=0
+            //insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+        }
+
+        dend[0]{
+            cm = 1//1		// (microF/cm2)
+            Ra = 150	// (ohm-cm)
+            Rm = 20000	// (ohm-cm2)
+            
+            insert leakinter
+            glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+            el_leakinter = -70	// (mV)
+
+            insert nainter
+            insert kdrinter
+            ena = 45		// (mV)
+            gnabar_nainter = 0.010	// (siemens/cm2)
+
+            ek = -80		// (mV)
+            gkdrbar_kdrinter = 0.003 // (siemens/cm2)
+            
+            insert ca_ion
+            eca = 120
+            //insert xtraimemrec
+        }
+    }
+
+    init()
+endtemplate Cell_PN
+
+

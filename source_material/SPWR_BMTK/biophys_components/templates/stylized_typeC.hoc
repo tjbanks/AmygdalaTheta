@@ -1,0 +1,417 @@
+begintemplate stylized_typeC
+
+public init, connect_sections, size_sections, append_sections, define_synapses
+public mechinit, insert_mechs, set_biophys, get_root
+public  pre_list, connect_pre, is_art, is_connected, gid, randi
+public soma, dend, apic, axon
+public all, soma_list, axon_list, dendrite_list
+public all, somatic, basal, apical, axonal
+public x, y, z, position, myroot, myrootsec, Vrest
+public NumSoma, NumDend, NumAxon
+public SynRecord
+
+NumSoma = 1
+
+
+// strings
+strdef myroot, myname
+
+// objects
+objref syn, pre_list, templist, rootlist, myrootsec, this, rr, rotation
+
+// external variables
+//external numCellTypes, cellType, VClampVector
+
+create soma[1]
+create dend[1]
+create apic[1]
+create axon[12]
+
+	
+proc init(){
+
+	//gid = $1
+	//randi = $2
+	
+	// morphology
+	connect_sections()	// local fcn: connect soma, dendrites, axon initial segment
+	size_sections()		// local fcn: set the size dimensions of each section
+	define_shape()		// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections 
+  	append_sections()	// local fcn: append all sections to the section list
+	set_nseg()			// local fcn: set the number of segments in each section
+	//get_root()			// local fcn: perform morphology checks
+
+	// electrophysiology
+	mechinit()			// local fcn: set values for max conductances and reversal potentials of ion channels and other ephys parameters that are subject to fitting
+	insert_mechs()		// local fcn: insert ion channels and actually set values determined in the mechinit fcn
+	set_chanparams()	// local fcn: after all channels have been inserted, then their other parameters can be set	
+
+	// synapses
+	pre_list = new List() // define a list for the presynaptic connections	
+	//define_synapses($3)	// local fcn: define all possible synaptic connections received by this cell
+}
+
+
+proc connect_sections() { local i
+	connect apic[0](0), soma[0](1)
+	connect dend[0](0), soma[0](0)
+	connect axon[0](0), soma[0](0.5)
+	for i=1,11{connect axon[i](0), axon[i-1](1)}
+	//print "connected sections"
+}
+
+proc size_sections() {local thetaz
+	//Rotation about z axis
+	objref rotation
+	//rotation = new Random($1)
+	thetaz = 0//rotation.uniform(0,2*PI)
+	//print "thetaz: ", thetaz
+	//print "pyramidal soma points: ",12.5*sin(thetaz),12.5*cos(thetaz),25*sin(thetaz),25*cos(thetaz)
+		soma[0] {pt3dclear()
+			pt3dadd(0, 0, 0, 25)
+			pt3dadd(0, 25*sin(thetaz), 25*cos(thetaz), 25)
+			nseg = 1
+		}
+
+		apic[0] {pt3dclear()
+			pt3dadd(0, 25*sin(thetaz), 25*cos(thetaz), 3)
+			pt3dadd(0, 295*sin(thetaz), 295*cos(thetaz), 3)
+			nseg = 7
+		}
+
+		dend[0] {pt3dclear()
+			pt3dadd(0, 0, 0, 5)
+			pt3dadd(0, -555*sin(thetaz), -555*cos(thetaz), 5)
+			nseg = 8    
+		}
+
+		axon[0]{pt3dclear()
+			pt3dadd(-12.707*cos(thetaz),-12.707*sin(thetaz),0,6)
+			pt3dadd(-14.707*cos(thetaz),-14.707*sin(thetaz),0,5)
+			pt3dadd(-16.707*cos(thetaz),-16.707*sin(thetaz),0,4)
+			pt3dadd(-18.707*cos(thetaz),-18.707*sin(thetaz),0,3)
+			pt3dadd(-20.707*cos(thetaz),-20.707*sin(thetaz),0,2)
+			pt3dadd(-22.707*cos(thetaz),-22.707*sin(thetaz),0,1.3)
+			nseg = 10
+		}
+		
+		for i=2,11{
+			axon[i-1] {pt3dclear()
+				pt3dadd((-22.707-5*(i-1))*cos(thetaz),(-22.707-5*(i-1))*sin(thetaz),0, 1.22)
+				pt3dadd((-27.707-5*(i-1))*cos(thetaz),(-27.707-5*(i-1))*sin(thetaz),0, 1.22)
+			}
+		}
+
+		axon[11]{pt3dclear()
+			pt3dadd(-72.707*cos(thetaz),-72.707*sin(thetaz),0,1.22)
+			pt3dadd(-172.707*cos(thetaz),-172.707*sin(thetaz),0,1.22)
+		}
+	//print "defined size of sections"
+}
+
+
+objref all, somatic,axonal,basal,apical
+proc append_sections() { local i
+	objref all, somatic,axonal,basal,apical
+
+	all = new SectionList()
+	somatic = new SectionList()
+	axonal = new SectionList()
+	basal = new SectionList()
+	apical = new SectionList()
+	
+	soma all.append()
+	soma somatic.append()
+	
+	dend[0] all.append()
+	dend[0] basal.append()
+	apic[0] all.append()
+	apic[0] apical.append()
+
+	axon[0] all.append()
+	axon[1] all.append()
+	axon[2] all.append()
+	axon[3] all.append()
+	axon[4] all.append()
+	
+	axon[5] all.append()
+	axon[6] all.append()
+	axon[7] all.append()
+	axon[8] all.append()
+	axon[9] all.append()
+	axon[10] all.append()
+	axon[11] all.append()
+
+	for i=0,11{	
+		axon[i] axonal.append()
+	}
+	//print "appended sections"
+
+}
+
+
+external lambda_f
+proc set_nseg() {
+  	forsec all { nseg = int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1  }
+}
+
+proc mechinit() {
+
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend = 1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+
+		// BIOPHYSICS //
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000
+		Cm = 2.4
+		RaAll= 150
+		RaSoma= 150 
+		RaDend = 150
+		Vpas = -72	
+
+
+		// axon
+		gna12_ais_max = 0//3200   // Nav1.2 
+		gna16_ais_max = 3200   // Nav1.6
+		gna16_nakeaxon= 300    
+		gna12_myelin=20       // Nav1.2 at myelins
+		gna16_node = 3200     // Nav1.6 at node
+
+		// Kv
+		Ek = -90  
+		gkv_axon = 1000
+	  
+	 	// Hu et al. half activation voltages
+		vhalf_na16 = -47
+		vhalf_na12 = -30
+		vhalf_na = -30
+ 
+		
+}
+
+proc insert_mechs(){		
+		
+		// Added by Hu et al. 2009
+		vshift_na12 = -35 - vhalf_na12 -10  // negative shift of input voltage, high threshold  -30mV    
+		vshift_na16 = -35 - vhalf_na16 -10    // positive shift of input voltage, low threshold  -43mV
+		vshift_na = -35 - vhalf_na -10  // the same as Na12
+		
+		
+		dend[0]{
+			insert leak el_leak = Vpas  glbar_leak = gleak_dend Ra=RaDend cm = Cm
+			insert cadyn gcabar_cadyn = gca eca = 120
+			insert hd ghdbar_hd = ghd 
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+			insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 
+			insert sAHP gsAHPbar_sAHP = 0
+			insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+			insert kap gkabar_kap = 0
+		}
+
+		apic[0]{
+			insert leak el_leak= Vpas  glbar_leak = gleak_dend  Ra=RaAll cm = Cm
+			insert cadyn gcabar_cadyn = gca  eca = 120	
+			insert hd ghdbar_hd = ghd
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+			insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 
+			insert sAHP gsAHPbar_sAHP = 0
+			insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+			insert kap gkabar_kap = gkap
+		}
+
+		soma[0]{	
+			insert leak el_leak= Vpas  glbar_leak = gleak   Ra=RaSoma cm = Cm
+			insert cadyn gcabar_cadyn = gca  eca = 120
+			insert hd ghdbar_hd = ghd 
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+			insert nap gbar_nap = gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+			insert sAHP gsAHPbar_sAHP = gsAHP
+			insert im gbar_im = gm
+			insert kap gkabar_kap = gkap
+		}
+		
+
+		for i=0,10 axon[i] {
+			insert pas e_pas = Vpas  g_pas = gleak Ra=RaDend cm = Cm
+			insert na12
+			insert na16
+			insert kv
+			//gbar_cav31 = 0.008
+		}
+
+		axon[11]{
+			insert pas e_pas = Vpas  g_pas = gleak Ra=RaDend cm = Cm
+			insert na12
+			insert na16
+			insert kv
+		}
+
+		axon[0].gbar_na12 = gna12_ais_max*0.96*1
+		axon[1].gbar_na12 = gna12_ais_max*0.9*1                      
+		axon[2].gbar_na12 = gna12_ais_max*0.75*1                    
+		axon[3].gbar_na12 = gna12_ais_max*0.55*0.95              
+		axon[4].gbar_na12 = gna12_ais_max*0.366985879*0.880142857  
+		axon[5].gbar_na12 = gna12_ais_max*0.2*0.75                 
+		axon[6].gbar_na12 = gna12_ais_max*0.100330761*0.647857143  
+		axon[7].gbar_na12 = gna12_ais_max*0.011532125*0.520285714 
+		axon[8].gbar_na12 = gna12_ais_max*0*0.428571429            
+		axon[9].gbar_na12 = gna12_ais_max*0*0.342857143 
+		axon[10].gbar_na12 = gna12_ais_max*0*0.342857143 
+		axon[11].gbar_na12 = gna12_ais_max*0*0.342857143 	
+		
+		axon[0].gbar_na16 = gna16_ais_max	*	0.04	*	1   
+		axon[1].gbar_na16 = gna16_ais_max	*	0.1	*	1   
+		axon[2].gbar_na16 = gna16_ais_max	*	0.25	*	1   
+		axon[3].gbar_na16 = gna16_ais_max	*	0.45	*	0.95   
+		axon[4].gbar_na16 = gna16_ais_max	*	0.633014121	*	0.880142857   
+		axon[5].gbar_na16 = gna16_ais_max	*	0.8	*	0.75   
+		axon[6].gbar_na16 = gna16_ais_max	*	0.899669239	*	0.647857143   
+		axon[7].gbar_na16 = gna16_ais_max	*	0.988467875	*	0.520285714   
+		axon[8].gbar_na16 = gna16_ais_max	*	1	*	0.428571429   
+		axon[9].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+		axon[10].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+						
+		axon[11].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+		axon[0].gbar_kv = gkv_axon	*	0.2 
+		axon[1].gbar_kv = gkv_axon	*	0.3 
+		axon[2].gbar_kv = gkv_axon	*	0.4 
+		axon[3].gbar_kv = gkv_axon	*	0.5 
+		axon[4].gbar_kv = gkv_axon	*	0.6 
+		axon[5].gbar_kv = gkv_axon	*	0.7 
+		axon[6].gbar_kv = gkv_axon	*	0.8 
+		axon[7].gbar_kv = gkv_axon	*	0.9
+		axon[8].gbar_kv = gkv_axon	*	1
+		axon[9].gbar_kv = gkv_axon	*	1
+		axon[10].gbar_kv = gkv_axon	*	1
+		axon[11].gbar_kv = gkv_axon	*	1
+
+
+		//print "inserted mechs"
+}	
+	
+proc set_chanparams() {
+	forsec all {
+		
+	}
+}
+
+/*
+proc connect_pre() {  // $o1 target point process, $o2 returned NetCon
+	axon[10] $o2 = new NetCon (&v(0.5), $o1)
+			$o2.threshold = -10
+
+}
+
+func is_art()  { return 0 }
+
+proc position(){ local i
+	forall {
+		for i = 0, n3d()-1 {
+			pt3dchange(i, $1-x+x3d(i), $2-y+y3d(i), $3-z+z3d(i), diam3d(i))
+		}
+	}
+	x = $1  y = $2  z = $3	
+}
+
+proc get_root() {local i localobj sref
+	rootlist = new SectionList()
+	rootlist.allroots()
+	i=0
+	forsec all {
+		sref = new SectionRef()
+		if (sref.has_parent==0) {
+			myroot = secname()
+			i=i+1
+		}
+		for(x,0) {
+			if (diam(x) <=0.01) print "WARNING: tiny diameter of ",  diam(x), " um at ", secname(), ", point ", x, "!"
+			if (diam3d(x) <=0.01) print "WARNING: tiny 3d diameter of ", diam3d(x), " um at ", secname(), ", point ", x, "!"
+		}
+		if (L <=0.001) print "WARNING: tiny length of ", L, " um at ", secname(), "!"
+	}
+	if (i>1) {
+		print "WARNING: cell ", gid, " has ", i, " root sections!"
+	}
+}
+strdef myStr
+
+objref newSecRef, syn, SynRecord, SynRecordVec
+proc define_synapses() {
+	SynRecord = new List()
+	ind = $1
+	i = 0
+
+	access soma[0]
+	{distance()}
+
+	for celltype = 0, numCellTypes-1 {
+		templist = new List ()
+		for r=0, cellType[ind].SynList[celltype].count()-1 {
+		
+			execute(cellType[ind].SynList[celltype].object(r).NewSynStr, this) // sets newSecRef
+						
+			forsec newSecRef {		
+				for (x,0) {
+					// Decides if distance is correct
+					execute(cellType[ind].SynList[celltype].object(r).CondStr, this)
+					
+					 if (y==1) {
+						// Declares new synapse
+						execute(cellType[ind].SynList[celltype].object(r).SynStr, this)
+						if (cellType[ind].SynList[celltype].object(r).GABAabFlag==0) {
+							syn.tau1 = cellType[ind].SynList[celltype].object(r).tau1
+							syn.tau2 = cellType[ind].SynList[celltype].object(r).tau2
+							syn.e = cellType[ind].SynList[celltype].object(r).efirst
+							if (strcmp(cellType[ind].SynList[celltype].object(r).SynType,"MyExp2Sidnw")==0) {
+								syn.nw = cellType[ind].SynList[celltype].object(r).Scaling
+							}
+						} else {
+							syn.tau1a = cellType[ind].SynList[celltype].object(r).tau1a
+							syn.tau2a = cellType[ind].SynList[celltype].object(r).tau2a
+							syn.ea = cellType[ind].SynList[celltype].object(r).ea
+							syn.tau1b = cellType[ind].SynList[celltype].object(r).tau1b
+							syn.tau2b = cellType[ind].SynList[celltype].object(r).tau2b
+							syn.eb = cellType[ind].SynList[celltype].object(r).eb
+						}
+						syn.sid = i
+						indx = VClampVector.indwhere("==",gid)
+						
+						
+						if(indx>=0){
+							print "Recording synapse ", i, "on a pyrC cell"
+							SynRecordVec = new Vector()
+							SynRecordVec.record(&syn.i)
+							SynRecord.append(SynRecordVec)
+						}
+						templist.append(syn)
+						i = i + 1
+					}
+				}
+			}
+		}
+		pre_list.append(templist)
+		findme = 1
+	}
+}
+	*/
+
+init()
+endtemplate stylized_typeC

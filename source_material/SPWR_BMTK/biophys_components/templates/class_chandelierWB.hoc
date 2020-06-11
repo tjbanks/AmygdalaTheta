@@ -1,0 +1,323 @@
+begintemplate chandelierWB
+
+public init, connect_sections, size_sections, append_sections, define_synapses
+public mechinit, insert_mechs, set_biophys, get_root
+public  pre_list, connect_pre, is_art, is_connected, gid, randi
+public soma, dend
+public all, basal_list, apical_list, soma_list, dendrite_list
+public x, y, z, position, myroot, myrootsec, Vrest
+public NumSoma, NumApical, NumBasal, NumAxon, NumDend
+public gna12_ais_max, gna16_ais_max, gkv_axon, gNav_soma, gKdr_soma, gKdr_dend, gNav_dend
+public SynRecord
+
+// strings
+strdef myroot, myname
+
+// objects
+objref syn, pre_list, templist, rootlist, myrootsec, this, rr, rv
+
+// external variables
+//external numCellTypes, cellType, VClampVector
+
+// create the sections[segments]
+myname = "fengpvbasketcell"
+
+create soma[1], dend[1]
+
+
+
+proc init() {
+	//gid = $1
+	//randi = $2
+	
+	// morphology
+	connect_sections()	// local fcn: connect soma, dendrites, axon initial segment
+	size_sections()		// local fcn: set the size dimensions of each section
+	define_shape()		// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections 
+  	append_sections()	// local fcn: append all sections to the section list
+	set_nseg()			// local fcn: set the number of segments in each section
+	//get_root()			// local fcn: perform morphology checks
+	//add_noise(gid)
+	
+	// electrophysiology
+	mechinit()			// local fcn: set values for max conductances and reversal potentials of ion channels and other ephys parameters that are subject to fitting
+	insert_mechs()		// local fcn: insert ion channels and actually set values determined in the mechinit fcn
+	set_chanparams()	// local fcn: after all channels have been inserted, then their other parameters can be set	
+
+	// synapses
+	//pre_list = new List() // define a list for the presynaptic connections	
+	//define_synapses($3)	// local fcn: define all possible synaptic connections received by this cell
+}
+
+
+proc connect_sections() {
+	connect dend[0](0), soma[0](1)
+}
+
+proc size_sections(){
+	soma[0] {
+		nseg=1
+		L=15		// (micrometer)
+		diam=15		// (micrometer)
+	}
+
+	dend[0] {
+		nseg=1
+		L=150		// (micrometer)
+		diam=10		// (micrometer)
+	}
+}
+
+objref all, dend_list, soma_list
+proc append_sections() { local i
+	
+	objref all, soma_list, dend_list
+	all = new SectionList()
+    soma[0] all.append()
+    dend[0] all.append()
+
+	soma_list = new SectionList()
+    soma[0] soma_list.append()
+
+	dend_list = new SectionList()
+    dend[0] dend_list.append()
+	
+}
+
+
+external lambda_f
+proc set_nseg() {
+  	forsec all { nseg = int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1  }
+}
+
+proc mechinit() {
+	//objref rv, rr
+	//rr = new Random($1+12)
+	//rv = new Random($1+199)
+	
+	// resting membrane potential. Must lie between Na+ and K+ reversal potentials
+	Vrest = -70//rv.normal(-61.8,4) //mean, variance
+	
+	// Temperature of simulation
+	celsius = 34.0
+	
+	// Membrane resistance in ohm*cm2
+	RmDend = 10000
+	RmSoma = 10000
+	
+	// Membrane capacitance in uF/cm2
+	CmSoma= 1
+	CmDend = 1
+
+	// Axial resistance in ohm*cm
+	RaDend = 150
+	RaSoma = 150*22.5	
+
+
+	// reversal potentials in mV
+	ekval = -90
+	enaval = 55
+	
+	eleakval = Vrest
+
+	// max ion channel conductances in mho/cm2
+	gNa_soma = 0.05
+	gNa_dend = 0.05
+
+	gK_soma = 0.01
+	gK_dend = 0.01
+}
+
+proc insert_mechs() {
+
+
+	forsec soma_list {
+		Ra = RaSoma
+		cm = CmSoma
+		
+		insert nainter_WB
+		gnabar_nainter_WB = gNa_soma
+		
+		insert kdrinter_WB
+		gkdrbar_kdrinter_WB = gK_soma
+		
+		insert leakinter
+		glbar_inter_leakinter = 1/RmSoma
+	}
+	
+	forsec dend_list{
+		Ra = RaDend
+		cm = CmSoma
+		
+		insert nainter_WB
+		gnabar_nainter_WB = gNa_dend
+		
+		insert kdrinter_WB
+		gkdrbar_kdrinter_WB = gK_dend
+		
+		insert leakinter
+		glbar_inter_leakinter = 1/RmDend
+	}
+	
+}
+
+proc set_chanparams() {
+	forsec all {
+		
+		ena = enaval
+		ek = ekval
+		el_leakinter = eleakval
+		//eca = ecaval
+		//cao_iconc_Ca = ca_outside
+		
+	}
+}
+
+/*
+	proc connect_pre() {  // $o1 target point process, $o2 returned NetCon
+	soma[0] $o2 = new NetCon (&v(1), $o1)
+			$o2.threshold = -10
+
+	}
+
+	func is_art()  { return 0 }
+
+proc position(){ local i
+	forall {
+		for i = 0, n3d()-1 {
+			pt3dchange(i, $1-x+x3d(i), $2-y+y3d(i), $3-z+z3d(i), diam3d(i))
+		}
+	}
+	x = $1  y = $2  z = $3	
+}
+
+proc get_root() {local i localobj sref
+	rootlist = new SectionList()
+	rootlist.allroots()
+	i=0
+	forsec all {
+		sref = new SectionRef()
+		if (sref.has_parent==0) {
+			myroot = secname()
+			i=i+1
+		}
+		for(x,0) {
+			if (diam(x) <=0.01) print "WARNING: tiny diameter of ",  diam(x), " um at ", secname(), ", point ", x, "!"
+			if (diam3d(x) <=0.01) print "WARNING: tiny 3d diameter of ", diam3d(x), " um at ", secname(), ", point ", x, "!"
+		}
+		if (L <=0.001) print "WARNING: tiny length of ", L, " um at ", secname(), "!"
+	}
+	if (i>1) {
+		print "WARNING: cell ", gid, " has ", i, " root sections!"
+	}
+}
+
+
+objref stim[100000],noise_syn[100000],noise_nc[100000],rnoise
+
+proc add_noise(){
+        //create netstim
+	g = $1
+	for i=1,100{
+		f = 10 // hz
+		stim[i] = new NetStim()
+		stim[i].interval = 1000/f
+		stim[i].number = 10e4
+		stim[i].start = 1
+		stim[i].noise = 1
+
+		
+		f1 = 6 // hz
+		stim[i+100] = new NetStim()
+		stim[i+100].interval = 1000/f1
+		stim[i+100].number = 60
+		stim[i+100].start = 1500
+		stim[i+100].noise = 1
+
+        	//create synapse
+		soma(1/i) noise_syn[i] = new MyExp2Sid(0.5)
+		noise_syn[i].tau1 = 0.132
+		noise_syn[i].tau2 = 5.74
+		noise_syn[i].e = -75
+
+        	//use netcon to connect them
+		noise_nc[i] = new NetCon(stim[i], noise_syn[i])
+		noise_nc[i].weight = 0.004
+		
+				
+		dend(1/i) noise_syn[i+100] = new MyExp2Sid(0.5)
+		noise_syn[i+100].tau1 = 0.132
+		noise_syn[i+100].tau2 = 2.5
+		noise_syn[i+100].e = 0
+
+        	//use netcon to connect them
+		noise_nc[i+100] = new NetCon(stim[i+100], noise_syn[i+100])
+		noise_nc[i+100].weight = 0.003
+
+	}
+}
+
+
+strdef myStr
+
+
+objref newSecRef, syn, SynRecord, SynRecordVec
+proc define_synapses() {
+	SynRecord = new List()
+	ind = $1
+	i = 0
+
+	access soma
+	{distance()}
+
+	for celltype = 0, numCellTypes-1 {
+		templist = new List ()
+		for r=0, cellType[ind].SynList[celltype].count()-1 {
+		
+			execute(cellType[ind].SynList[celltype].object(r).NewSynStr, this) // sets newSecRef
+						
+			forsec newSecRef {		
+				for (x,0) {
+					// Decides if distance is correct
+					execute(cellType[ind].SynList[celltype].object(r).CondStr, this)
+					
+					 if (y==1) {
+						// Declares new synapse
+						execute(cellType[ind].SynList[celltype].object(r).SynStr, this)
+						if (cellType[ind].SynList[celltype].object(r).GABAabFlag==0) {
+							syn.tau1 = cellType[ind].SynList[celltype].object(r).tau1
+							syn.tau2 = cellType[ind].SynList[celltype].object(r).tau2
+							syn.e = cellType[ind].SynList[celltype].object(r).efirst
+							if (strcmp(cellType[ind].SynList[celltype].object(r).SynType,"MyExp2Sidnw")==0) {
+								syn.nw = cellType[ind].SynList[celltype].object(r).Scaling
+							}
+						} else {
+							syn.tau1a = cellType[ind].SynList[celltype].object(r).tau1a
+							syn.tau2a = cellType[ind].SynList[celltype].object(r).tau2a
+							syn.ea = cellType[ind].SynList[celltype].object(r).ea
+							syn.tau1b = cellType[ind].SynList[celltype].object(r).tau1b
+							syn.tau2b = cellType[ind].SynList[celltype].object(r).tau2b
+							syn.eb = cellType[ind].SynList[celltype].object(r).eb
+						}
+						syn.sid = i
+						indx = VClampVector.indwhere("==",gid)
+						
+						
+						if(indx>=0){
+							print "Recording synapse ", i, "on a pyrA cell"
+							SynRecordVec = new Vector()
+							SynRecordVec.record(&syn.i)
+							SynRecord.append(SynRecordVec)
+						}
+						templist.append(syn)
+						i = i + 1
+					}
+				}
+			}
+		}
+		pre_list.append(templist)
+		findme = 1
+	}
+}
+*/
+endtemplate chandelierWB

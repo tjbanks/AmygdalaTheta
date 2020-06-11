@@ -1,0 +1,53 @@
+{
+  "node_sets_file": "/home/latimerb/SPWR_BMTK/node_sets.json", 
+  "run": {
+    "dL": 20.0, 
+    "nsteps_block": 5000, 
+    "spike_threshold": -15.0, 
+    "tstart": 0.0, 
+    "tstop": 50.0, 
+    "dt": 0.1
+  }, 
+  "network": "/home/latimerb/SPWR_BMTK/circuit_config.json", 
+  "config_path": "/home/latimerb/SPWR_BMTK/simulation_configSAVEWGTS.json", 
+  "conditions": {
+    "celsius": 34.0, 
+    "v_init": -80.0
+  }, 
+  "reports": {
+    "save_synapses_mod": {
+      "network_dir": "updated_conns", 
+      "module": "save_synapses"
+    }
+  }, 
+  "components": {
+    "__pycache___dir": "/home/latimerb/SPWR_BMTK/biophys_components/__pycache__", 
+    "morphologies_dir": "/home/latimerb/SPWR_BMTK/biophys_components/morphologies", 
+    "point_neuron_models_dir": "/home/latimerb/SPWR_BMTK/biophys_components/point_neuron_models", 
+    "templates_dir": "/home/latimerb/SPWR_BMTK/biophys_components/templates", 
+    "biophysical_neuron_models_dir": "/home/latimerb/SPWR_BMTK/biophys_components/biophysical_neuron_models", 
+    "mechanisms_dir": "/home/latimerb/SPWR_BMTK/biophys_components/mechanisms", 
+    "synaptic_models_dir": "/home/latimerb/SPWR_BMTK/biophys_components/synaptic_models"
+  }, 
+  "output": {
+    "spikes_file": "spikes.h5", 
+    "log_file": "log.txt", 
+    "output_dir": "/home/latimerb/SPWR_BMTK/output"
+  }, 
+  "target_simulator": "NEURON", 
+  "config_dir": "/home/latimerb/SPWR_BMTK", 
+  "networks": {
+    "nodes": [
+      {
+        "node_types_file": "/home/latimerb/SPWR_BMTK/network/SPWR_biophysical_node_types.csv", 
+        "nodes_file": "/home/latimerb/SPWR_BMTK/network/SPWR_biophysical_nodes.h5"
+      }
+    ], 
+    "edges": [
+      {
+        "edges_file": "/home/latimerb/SPWR_BMTK/network/SPWR_biophysical_SPWR_biophysical_edges.h5", 
+        "edge_types_file": "/home/latimerb/SPWR_BMTK/network/SPWR_biophysical_SPWR_biophysical_edge_types.csv"
+      }
+    ]
+  }
+}
