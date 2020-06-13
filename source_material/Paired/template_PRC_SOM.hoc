@@ -1,0 +1,136 @@
+begintemplate SOMCell
+
+	public soma, dend1, dend2, connect2target, type, synlist
+	create soma, dend1, dend2
+	public synn, nsn, ncn	
+	public ncl
+	objref ncl
+	objref synlist, all, syn_
+	objref synn, nsn, ncn, r
+	strdef type
+
+	proc init() {
+		synlist = new List()
+		ncl = new List()
+		type = "SOM"
+
+		/////// topology ////////
+		create soma, dend1, dend2
+		connect dend1(0), soma(1)
+		connect dend2(0), soma(0)
+		/////// geometry ////////
+		soma {
+			nseg=1
+			L=10		// (micrometer)
+			diam=10		// (micrometer)
+	    	}
+
+		dend1 {
+			nseg=1
+			L=150		// (micrometer)
+			diam=5		// (micrometer)
+		}
+		
+		dend2 {
+			nseg=1
+			L=150		// (micrometer)
+			diam=5		// (micrometer)
+		}
+
+		/////// biophysics //////
+		soma {
+			cm = 1.6		    // (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			
+			insert leak
+			g_leak = 5e-5 // (siemens/cm2)
+			e_leak = -67	// (mV)
+
+			insert nainter
+			insert kdrinter
+
+	    	}
+
+		dend1 {
+			cm = 1.6		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			
+			insert leak
+			g_leak = 5e-5 // (siemens/cm2)
+			e_leak = -67	// (mV)
+
+			insert nainter
+			insert kdrinter
+
+		}
+		
+		dend2 {
+			cm = 1.6		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			
+			insert leak
+			g_leak = 5e-5 // (siemens/cm2)
+			e_leak = -67	// (mV)
+
+			insert nainter
+			insert kdrinter
+
+		}
+		
+		soma {
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			
+			
+			gkdrbar_kdrinter = 0.002   
+			gnabar_nainter =  0.005  
+
+			
+			/*
+			r = new Random()
+			r.MCellRan4(1000*($1+1))
+			r.negexp(1)
+			
+			synn = new Exp2Syn(0.5)
+			synn.tau1 = 4
+			synn.tau2 = 10
+			nsn = new NetStim()
+			ncn = new NetCon(nsn,synn,0,0,0.008)
+			nsn.number = 1e30
+			nsn.interval = 1000/0.5  //1000/0.75
+			nsn.noise = 0.5
+			nsn.start = 0
+
+			nsn.noiseFromRandom(r)
+			*/
+		}
+
+		dend1 {
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			
+			
+			gkdrbar_kdrinter =  0.002   
+			gnabar_nainter =    0.0042 
+
+		}
+		
+		dend2 {
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			
+			
+			gkdrbar_kdrinter =  0.002   
+			gnabar_nainter =    0.0042 
+
+		}
+	}
+
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}
+
+endtemplate SOMCell

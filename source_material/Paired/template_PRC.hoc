@@ -1,0 +1,207 @@
+begintemplate PRC
+
+public soma, Apicaltrunk, Apicaldend1, Apicaldend2, Basaldend, synlist, all, connect2target, synapses, type
+public ncn
+
+
+create soma, Apicaltrunk, Apicaldend1, Apicaldend2, Basaldend
+
+	objref synlist, all, syn_, stimlist
+	objref synn, nsn, ncn, r
+
+proc init() {
+
+	strdef type
+	type = "RS"
+    x = 0
+	y = 0
+	
+create soma, Apicaltrunk, Apicaldend1 , Apicaldend2, Basaldend
+
+connect Apicaltrunk(0), soma(1)
+connect Apicaldend1(0), Apicaltrunk(0.5)
+connect Apicaldend2(0), Apicaltrunk(0.5)
+connect Basaldend(1), soma(0)
+
+	synlist = new List()
+	stimlist = new List()
+
+soma {nseg=1 L=20 diam=10}        	// changed L & diam
+	
+	Apicaltrunk {nseg=1 L=400 diam=5}   //Apicaldend {nseg=1 L=200 diam=3}	
+	Apicaldend2 {nseg=3 L=300 diam=3.5}   //Apicaldend {nseg=1 L=200 diam=3}
+	Apicaldend1 {nseg=1 L=300 diam=3.5}   //Apicaldend {nseg=1 L=200 diam=3}
+	Basaldend {nseg=1 L=400 diam=5}  //Basaldend {nseg=3 L=100 diam=3}
+	soma {
+		insert leak
+		cm = 0.9	   // (microfarads/cm2)
+		Ra = 150  // (ohm-cm)
+	
+		g_leak = 1.585e-5   //  (Siemens/cm2)
+			insert kd
+			insert na
+			
+			insert ahp
+			insert cal
+			insert c
+			insert h2
+			insert a
+			
+			insert pool
+
+
+		// SETTING REVERSAL POTENTIALS FOR INSERTED MECHANISMS
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			e_leak = -78		// (mV)
+			eh = -20  //maybe should be -32 or -40
+			
+		// SETTING CONDUCTANCES (AND MORE) FOR INSERTED MECHANISMS
+			g_kd =  0.0001    
+			gnabar_na = 0.8    	// old: 75000e-6 (S/cm2)
+			
+			g_ahp = 0.00028
+			g_cal =   .029      //5000e-6  
+			g_c =    0.0108
+			g_h2 =   1.1e-5
+			g_a =   .0001
+			
+			f_pool = 0.0005
+			tau_pool = 100
+			
+			/*
+			r = new Random()
+			r.MCellRan4(1000*($1+1))
+			r.negexp(1)
+
+			
+			synn = new Exp2Syn(0.5)
+			synn.tau1 = 4
+			synn.tau2 = 10
+			nsn = new NetStim()
+			ncn = new NetCon(nsn,synn,0,0,0.006)
+			nsn.number = 1e30
+			nsn.interval = 1000/0.25
+			nsn.noise = 0.5
+			nsn.start = 0
+			
+			nsn.noiseFromRandom(r)
+			*/
+
+
+		}
+	Basaldend {
+		// INSERTING MECHANISMS FROM MOD FILES
+			insert leak
+		cm = 0.9	   // (microfarads/cm2)
+		Ra = 150  	  // (ohm-cm)
+		
+		g_leak = 1.585e-5   //  (Siemens/cm2)
+			insert kd
+			insert na
+			insert cal
+
+
+		// SETTING REVERSAL POTENTIALS FOR INSERTED MECHANISMS
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			e_leak = -78		// (mV)
+			
+		// SETTING CONDUCTACES (AND MORE) FOR INSERTED MECHANISMS
+			g_kd =  0.00131   //old: 15000e-6 
+			gnabar_na = 0.028   // old: 45000e-6
+			g_cal =   .0005  //10000e-6
+			
+
+
+		
+		}
+		Apicaltrunk {
+		// INSERTING MECHANISMS FROM MOD FILES
+			insert leak
+		cm = 0.9	   // (microfarads/cm2)
+		Ra = 150  // (ohm-cm)
+		
+		g_leak = 1.585e-5   //  (Siemens/cm2)
+			insert kd
+			insert na
+			insert cal
+
+
+		// SETTING REVERSAL POTENTIALS FOR INSERTED MECHANISMS
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			e_leak = -78		// (mV)
+			
+		// SETTING CONDUCTANCES (AND MORE) FOR INSERTED MECHANISMS
+			g_kd =      0.00129   //old: 15000e-6 
+			gnabar_na =      0.028   // old: 45000e-6
+			g_cal =    .0005   //10000e-6
+
+			
+		
+		}
+		
+	Apicaldend1 {
+		// INSERTING MECHANISMS FROM MOD FILES
+			insert leak
+		cm = 0.9	   // (microfarads/cm2)
+		Ra = 150  // (ohm-cm)
+		
+		g_leak = 1.585e-5   //  (Siemens/cm2)
+			insert kd
+			insert na
+			insert cal
+
+
+		// SETTING REVERSAL POTENTIALS FOR INSERTED MECHANISMS
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			e_leak = -78		// (mV)
+			
+		// SETTING CONDUCTANCES (AND MORE) FOR INSERTED MECHANISMS
+			g_kd =      0.00129   //old: 15000e-6 
+			gnabar_na =      0.028   // old: 45000e-6
+			g_cal =    .0005   //10000e-6
+
+			
+		
+		}
+
+Apicaldend2 {
+		// INSERTING MECHANISMS FROM MOD FILES
+			insert leak
+		cm = 0.9	   // (microfarads/cm2)
+		Ra = 150  // (ohm-cm)
+		
+		g_leak = 1.585e-5   //  (Siemens/cm2)
+			insert kd
+			insert na
+			insert cal
+
+
+		// SETTING REVERSAL POTENTIALS FOR INSERTED MECHANISMS
+			ena = 55		// (mV)
+			ek = -90		// (mV)
+			e_leak = -78		// (mV)
+			
+		// SETTING CONDUCTANCES (AND MORE) FOR INSERTED MECHANISMS
+			g_kd =      0.00129   //old: 15000e-6 
+			gnabar_na =      0.028   // old: 45000e-6
+			g_cal =    .0005   //10000e-6
+
+			
+		
+		}		
+   all = new SectionList()
+}
+
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(1), $o1)
+	nc.threshold = -10
+	if (numarg() == 2) { $o2 = nc }
+	return nc
+}
+
+	endtemplate PRC
+// ************************************************************************************************************

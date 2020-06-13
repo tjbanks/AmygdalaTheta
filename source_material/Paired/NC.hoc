@@ -1,0 +1,32 @@
+begintemplate TemporalNeocortex  
+	public cable, stimlist, connect2target
+	create cable
+	
+	objref stimlist
+
+proc init() {
+
+	stimlist = new List()
+
+	cable { L = 10e3
+		diam = 3
+		nseg = 201
+	
+	
+		cm = 0.25	   // (microfarads/cm2)
+		Ra = 150 // (ohm-cm)
+	
+		insert leak
+		e_leak = -80	// (mV)
+		g_leak = 0.0004   //  (Siemens/cm2)
+		}	
+}
+
+
+obfunc connect2target() { localobj nc
+	cable nc = new NetCon(&v($2), $o1)
+	nc.threshold = 0
+	return nc
+}
+
+endtemplate TemporalNeocortex

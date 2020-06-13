@@ -1,0 +1,459 @@
+seed = 47653  //55555
+strdef fname
+
+
+objref pc
+pc = new ParallelContext()
+
+NCELL=520
+NCPASSES = 1
+NSEG = 201
+
+LENGTH = 10
+WIDTH = 3
+DEPTH = 2
+
+
+//Intrinsic weights
+wEEshort = 0.00001  //0.5 //1  //0.2  //0.06   
+wEElong = 2.15 //0.3 //0.15    
+
+wEI1 = 0.3  //0.25
+wEI2 = 0.4  //0.3 //0.11  //0.14
+wI1I2 = 0.1  
+wI2I1 = 0.15  
+wI1E = 0.02  //0.03   
+wI2E = 0.01 //0.035  
+//Afferent weights
+wAI = 0.4  //0.3  //0.15 
+wAE = 0.9 //0.09  //0.085   
+
+
+lengthconstant = 2
+
+
+
+
+//---------SETTING WORKSHEET OF CELL LOCATIONS AND TYPES------
+objref types,loc, rT, rXYZ, rL, rO, layer, term, terms
+
+{rT = new Random(62882)} 
+{rXYZ = new Random(40240*2)}   // x 2 
+{rL = new Random(91750)} 
+{rO = new Random(40240)} 
+{types = new Vector(NCELL)}
+{loc = new Matrix(3,NCELL)}
+{layer = types.c()}
+
+
+
+//-----SET CELL TYPES-----------
+
+
+//INSERT INTERNEURONS(FS) EVENLY TO FILL VOLUME, 60 SPOTS CURRENTLY
+n=0
+k=1
+Xinterv = 0.5     //	mm
+Yinterv = 1.5	     // mm
+Zinterv = 0.6        // mm
+
+for(z=0.4;z<=2.0;z+=Zinterv) {
+  y=1
+    for(x=0.250;x<=LENGTH;x+=Xinterv) {
+
+	  loc.x[0][n] = x
+	  loc.x[1][n] = y
+	  loc.x[2][n] = z
+
+	  types.x[n] = 3
+	  
+	  layer.x[n] = z/0.6-(z/0.6)%1
+
+	  n += 1
+    }
+  
+}
+
+
+ //INSERT INTERNEURONS(SOM) EVENLY TO FILL VOLUME, 60 SPOTS CURRENTLY
+
+for(z=0.4;z<=2.0;z+=Zinterv) {
+  y=2
+    for(x=0.250;x<=LENGTH;x+=Xinterv) {
+
+	  loc.x[0][n] = x
+	  loc.x[1][n] = y
+	  loc.x[2][n] = z
+
+	  types.x[n] = 4
+	  
+	  layer.x[n] = z/0.6-(z/0.6)%1
+
+	  n += 1
+
+    }
+  
+}
+
+
+
+
+//INSERT PRINCIPAL CELLS EVENLY TO FILL VOLUME, 400 SPOTS CURRENTLY
+
+Xinterv = 0.5       //	mm
+Yinterv = 0.75	     // mm
+Zinterv = 0.4        // mm
+
+for(z=0.2;z<=2.0;z+=Zinterv) {
+  for(y=0.375;y<=WIDTH;y+=Yinterv) {
+    for(x=0.250;x<=LENGTH;x+=Xinterv) {
+
+	  loc.x[0][n] = x
+	  loc.x[1][n] = y
+	  loc.x[2][n] = z
+	
+	  types.x[n] = 1
+
+	  if(z<0.8) {       layer.x[n] = 0
+	  } else if(z>1.2) { layer.x[n] = 2
+	  } else {           layer.x[n] = 1
+	  }
+	  n += 1
+
+
+    }
+  }
+}
+
+
+
+print NCELL
+
+
+
+
+
+//---SAVE NETWORK VECS---------
+
+
+objref fobj
+
+if(pc.id==0) {
+
+
+sprint(fname,"%g/netsheet",seed)
+
+{fobj = new File("netsheet")}
+{fobj.wopen()}
+
+types.printf(fobj)
+loc.getrow(0).printf(fobj)
+loc.getrow(1).printf(fobj)
+loc.getrow(2).printf(fobj)
+layer.printf(fobj)
+
+{fobj.close()}
+
+}
+
+
+//----------------------------------------------------------
+
+
+
+
+
+//------SETTING UP WORKSHEET OF CONNECTIONS HERE------------
+
+objref weights, delays, rC
+{weights = new Matrix(NCELL,NCELL)}
+{weights = weights.zero()}
+{delays = weights.c()}
+{rC = new Random(seed)}   // x 2
+
+
+
+for i=0,NCELL-1 {        //i = Target ID
+  for j=0,NCELL-1 {      //j = Source ID
+ 
+  dx=loc.x[0][i]-loc.x[0][j]
+  dy=loc.x[1][i]-loc.x[1][j]
+  dz=loc.x[2][i]-loc.x[2][j]
+	  
+  dist = sqrt(dx^2 + dy^2 + dz^2)
+  radius = sqrt(dx^2 + dy^2)
+ 
+      if(i!=j) {
+
+	//FS-PN conns & vice-versa
+	
+	if(layer.x[i]==layer.x[j]) {
+  
+	  if(types.x[j]==3 && types.x[i]==1 && abs(dx)<0.75 ) {
+	      weights.x[i][j] = wI1E
+	      delays.x[i][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+	  }
+	
+	  if(types.x[j]==1 && types.x[i]==3 && abs(dx)<0.75 ) {
+	      weights.x[i][j] = wEI1
+	      delays.x[i][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+	  }
+
+	}
+}
+}	
+}
+
+for j=0,NCELL-1 {       //j = Source ID 
+  for i=0,NCELL-1 {     //i = Target ID 
+ 
+  dx=loc.x[0][i]-loc.x[0][j]
+  dy=loc.x[1][i]-loc.x[1][j]
+  dz=loc.x[2][i]-loc.x[2][j]
+	  
+  dist = sqrt(dx^2 + dy^2 + dz^2)
+  radius = sqrt(dx^2 + dy^2)
+ 
+      if(i!=j) {
+
+	//PN-PN conns
+
+	if(types.x[j]==1 && types.x[i]==1 && weights.x[i][j]==0 ) {
+
+//	  prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(1-0.5*loc.x[2][j]+1.5*(3*loc.x[2][j]+6)*exp(-dx^2/(1*abs(loc.x[2][j]-2.1))))
+//	  prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(4-2*loc.x[2][j] + (4*loc.x[2][j]-4)*exp(-dx^2/4))
+//	  prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(4-3.5*exp(-dx^2/6))
+
+
+          if(layer.x[j]==0) {
+		  prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(7-7*exp(-dx^2/1))  //Previously 6%'s
+           //prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(12-12*exp(-dx^2/1))  //Previously 6%'s
+			 //prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(7-7*exp(-dx^2/1))  //Previously 6%'s
+          } else if(layer.x[j]==1) {
+            prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(0+4*exp(-dx^2/2))
+	  } else {
+	    prob = 2/3*(1 + 1/(1+exp(-5*dy)))*(0+4*exp(-dx^2/2))
+          }	
+
+	
+
+
+	  if(rC.uniform(0,100) < prob) {
+
+	   if(abs(dx)>5 && abs(dx)<6.25) {
+	    weights.x[i][j] = wEElong
+		delays.x[i][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+		
+		for k=0,NCELL-1 {
+		  ddx=loc.x[0][k]-loc.x[0][i]
+		  ddy=loc.x[1][k]-loc.x[1][i]
+		  ddz=loc.x[2][k]-loc.x[2][i]
+		if( k!=j && abs(ddx)<=0.75 && abs(ddy)<=0.75 && abs(ddz)<=0.8 && weights.x[k][j]==0 && types.x[k]==1) {
+		pr=30
+		if(rC.uniform(0,100) < pr) {
+		weights.x[k][j] = wEElong
+		delays.x[k][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+		}
+		}
+		}
+	//break		
+           } else if(abs(dx)<1) {
+            weights.x[i][j] = wEEshort
+			delays.x[i][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+	   }
+
+          }
+
+	}
+	}
+	}
+	}
+	
+	for i=0,NCELL-1 {        //i = Target ID
+  for j=0,NCELL-1 {      //j = Source ID
+ 
+  dx=loc.x[0][i]-loc.x[0][j]
+  dy=loc.x[1][i]-loc.x[1][j]
+  dz=loc.x[2][i]-loc.x[2][j]
+	  
+  dist = sqrt(dx^2 + dy^2 + dz^2)
+  radius = sqrt(dx^2 + dy^2)
+ 
+      if(i!=j) {
+	
+		
+		//SOM-PN conns
+		if(layer.x[i]==layer.x[j]) {
+		if(types.x[j]==4 && types.x[i]==1 && abs(dx)<=0.75) {
+	      weights.x[i][j] = wI2E
+	      delays.x[i][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+	  }
+	}
+	
+	//SOM-FS conns
+      if(types.x[j]==4 && types.x[i]==3) {
+	  if(abs(dx)<=0.25) {				// 0.75
+	    weights.x[i][j] = wI2I1
+		delays.x[i][j] = 2  //2.25*(dist+rC.uniform(-0.1,0.1))
+		}
+		}
+		/*
+		//FS-SOM conns
+      if(types.x[j]==3 && types.x[i]==4) {
+	  if(abs(dx)<1.2) {
+	    weights.x[i][j] = wI1I2
+		delays.x[i][j] = 2 //2.25*(dist+rC.uniform(-0.1,0.1))
+		}
+		}	
+		*/
+      }
+
+  }
+
+}
+
+for i=0,NCELL-1 {        
+  for j=0,NCELL-1 {      
+ 
+  dx=loc.x[0][i]-loc.x[0][j]
+  dy=loc.x[1][i]-loc.x[1][j]
+  dz=loc.x[2][i]-loc.x[2][j]
+	  
+  dist = sqrt(dx^2 + dy^2 + dz^2)
+  radius = sqrt(dx^2 + dy^2)
+
+  
+	//PN-SOM conns
+	
+	if (weights.x[i][j] == wEElong) {
+	for k=0,NCELL-1 {
+		if(weights.x[i][k]==wI2E && types.x[k]==4) {
+		weights.x[k][j] = wEI2
+		delays.x[k][j] = 2.25*(dist+rC.uniform(-0.1,0.1))
+	}
+	}
+	}
+	
+}
+}
+
+//----WRITE OUT CONN MATRIX-----
+
+objref fobj2
+
+if(pc.id==0) {
+
+sprint(fname,"%g/connsheet",seed)
+
+
+fobj2 = new File("connsheet")
+fobj2.wopen()
+
+
+weights.fprint(0,fobj2)
+delays.fprint(0,fobj2)
+
+fobj2.close()
+
+}
+
+
+
+
+
+//----------SET UP AFFERENT NEOCORTICAL CONNECTIONS LIST-------------------------
+objref affloc, affwt, affdel, afftarg, rA, affid
+
+
+
+{affloc = new Vector()}
+{affid = new Vector()}
+{affwt = new Vector()}
+{afftarg = new Vector() }
+{affdel = new Vector() }
+
+{rA = new Random(62882*27)}    // x 0.5, 3, 27
+
+
+
+for m=0,NCPASSES-1 {
+	for n=0,NSEG-1 {
+		for j=0,NCELL-1 {
+		
+			dx=abs(loc.x[0][j]-(n*LENGTH/NSEG + LENGTH/NSEG/2))
+			dy=abs(loc.x[1][j])
+			dz=abs(loc.x[2][j])
+	  
+			dist = sqrt(dx^2 + dy^2 + dz^2)
+			radius = sqrt(dx^2 + dy^2)
+		
+                        if(types.x[j]==1) {
+//                              prob = 0.1 + 0.15*exp(-dx^2/2)*1/(1+exp((dz-1.2)/0.25))
+//                              prob = 0.08+0.12*exp(-dx^2/1)*1/(1+exp((dz-1.2)/0.25))
+//                                prob = 0.02+0.48*exp(-dx^2/1)*1/(1+exp((dz-1.2)/0.25))
+//                                prob = 0.02+0.48*exp(-dx^2/1)  //no dependence on Y or Z
+
+			//if(abs(dx)<(0.53+0.5)) { prob = 1
+			//} else if(abs(dx)<1.03+0.5) { prob = 0.4 //0.2
+			if(abs(dx)<1.03+0.5) { prob = 0.6 //0.2
+			} else { prob = 0.05
+			}
+
+
+				prob *= 1.0
+
+                                if(rA.uniform(0,1) < prob) {
+                                        affwt.append(wAE)
+                                        affdel.append((9.5-5.5*cos(3.14159*dist/sqrt(LENGTH^2+WIDTH^2+DEPTH^2)))*rA.uniform(0.5,1.5))
+                                        affloc.append(n*LENGTH/NSEG+LENGTH/NSEG/2)
+                                        afftarg.append(j)
+                                        affid.append(NCELL+n)
+                                }
+
+                        } else if(types.x[j]==3){
+//                              prob = 0.5*exp(-dx^2)  // 0.5*exp(-dx^2)
+
+                                
+			if(abs(dx)<(0.53+0.50)) { prob = 1
+				} else { prob = 0
+				}
+
+
+
+                                if(rA.uniform(0,1) < prob) {
+                                        affwt.append(wAI)
+                                        affdel.append((9.5-5.5*cos(3.14159*dist/sqrt(LENGTH^2+WIDTH^2+DEPTH^2)))*rA.uniform(0.5,1.5))
+                                        affloc.append(n*LENGTH/NSEG+LENGTH/NSEG/2)
+                                        afftarg.append(j)
+                                        affid.append(NCELL+n)
+                                }
+
+                        }
+
+                }
+        }
+}                         
+
+//----------SAVE AFFERENT INFORMATION--------------------
+//---SAVE NETWORK VECS---------
+
+
+objref fobj4
+
+if(pc.id==0) {
+
+sprint(fname,"%g/affconns",seed)
+
+fobj4 = new File("affconns")
+fobj4.wopen()
+
+affloc.printf(fobj4)
+affid.printf(fobj4)
+afftarg.printf(fobj4)
+affwt.printf(fobj4)
+affdel.printf(fobj4)
+
+fobj4.close()
+
+}
+

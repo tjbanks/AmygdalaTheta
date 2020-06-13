@@ -1,0 +1,77 @@
+proc theta() { localobj tstim, fih
+	
+    if(pc.gid_exists(NCELL+1)){
+		affr.cable tstim = new thetastim2($1/LENGTH)
+		affr.stimlist.append(tstim)
+		tstim.amp = $2
+
+		nstim = affr.stimlist.count()-1
+		sprint(tstr,"settheta(%g,%g,%g)",nstim,$3,$4)
+		fih = new FInitializeHandler(0,tstr)
+		fihs.append(fih)
+    }
+
+}
+
+proc pulse() {local nstim,i localobj stim,fih
+
+    if(pc.gid_exists(NCELL+1)){
+
+		affr.cable stim = new IClamp($1/LENGTH)
+		affr.stimlist.append(stim)
+		stim.amp = $2
+		stim.del = 1e30
+		stim.dur = 0.3
+		
+		if(argtype(3)==0) {
+			nstim = affr.stimlist.count()-1
+			for i=3,numarg() {
+				sprint(tstr,"settimes(%g,%g)",nstim,$i)
+				fih = new FInitializeHandler(0,tstr)
+				fihs.append(fih)
+			}
+		} else if(argtype(3)==1) {
+			nstim = affr.stimlist.count()-1
+			for i=0,$o3.size()-1 {
+				sprint(tstr,"settimes(%g,%g)",nstim,$o3.x(i))
+				fih = new FInitializeHandler(0,tstr)
+				fihs.append(fih)
+			}
+		}
+
+      }
+}
+
+proc settheta() {
+			sprint(tstr,"affr.stimlist.o[%g].ton = %g affr.stimlist.o[%g].start = %g affr.stimlist.o[%g].tdone = %g cvode.re_init()",$1,$2,$1,$2,$1,$3)
+			cvode.event($2,tstr)
+}
+
+proc settimes() {
+			sprint(tstr,"affr.stimlist.o[%g].del = %g cvode.re_init()",$1,$2)
+			cvode.event($2,tstr)
+}
+
+proc burst() { localobj times
+	if(numarg()!=5) { 
+	  print "WRONG # OF ARGS TO TRAIN, USE: train(x,amp,t0,num,freq)"
+	} else {
+	  times = new Vector()
+	  times.indgen($3,$3+($4-0.95)/$5*1000,1000/$5)
+	  pulse($1,$2,times)
+	}
+}
+
+proc train() {local t0 localobj times
+	if(numarg()!=7) { 
+	  print "WRONG # OF ARGS TO THETA, USE: theta2(x,amp,t0,num1,freq1,num2,freq2)"
+	} else if($7<$5) {
+	  print "FREQ1 FASTER THAN FREQ2: CHECK NUMBERS"
+	} else {
+	  times = new Vector()
+	  times.indgen($3,$3+($4-1)/$5*1000,1000/$5)
+	  for(t0=$3;t0<=($3+($4-1)/$5*1000);t0+=(1000/$5)) {
+		burst($1,$2,t0,$6,$7)
+	  }
+	}
+}

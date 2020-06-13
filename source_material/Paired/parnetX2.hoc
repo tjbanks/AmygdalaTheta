@@ -1,0 +1,784 @@
+{load_file("nrngui.hoc")} // load the GUI and standard run libraries
+objref pc
+
+
+strdef teststr
+
+continuing = 0  //set to !=0 if starting with pre-defined weights
+
+
+objref ablate
+ablate = new Vector()
+
+
+//ablate.append(178,232,263,342,377,404,460,479)
+//Ablating cells w/>200 spikes & > 6 conns from 1,3,7,9 mm @ NC
+
+
+
+
+
+pc = new ParallelContext()
+
+{load_file("template_PRC.hoc")}
+{load_file("template_PRC_FS.hoc")}
+{load_file("template_PRC_SOM.hoc")}
+{load_file("NC.hoc")}
+
+FARADAY=96520
+PI=3.14159
+celsius=30  
+dt = 0.01  //0.05
+steps_per_ms = 100  //20
+tstop = 110000 //110000
+NCELL=520
+NCPASSES = 1
+NSEG = 201
+
+LENGTH = 10
+WIDTH = 3
+DEPTH = 2
+
+v_init = -75
+
+wdt = 100   // ms interval with which weights are saved to a file
+vdt = 2
+
+wEEshort = 1  //1  //0.2  //0.06   
+wEElong = 1.2  //2.1   //1.97  //2.03  //2.05  //2.15 //0.3 //0.15  
+
+//NEXT FEW LINES DETERMINE LENGTH OF 'FINALWEIGHTS' FILE
+
+
+/*
+objref vcount,wfcount
+vcount = new Vector()
+wfcount=new File("finalweights")
+
+wfcount.ropen()
+vcount.scanf(wfcount,1,3)
+
+NUMCONNS = vcount.size()-1
+
+wfcount.close()
+*/
+
+obfunc LoadMatrix() { local nrow,ncol localobj mat,datafile
+		nrow = $2
+		ncol = $3
+		datafile = new File()
+		datafile.ropen($s1)
+		mat = new Matrix()
+		mat.scanf(datafile,nrow,ncol)
+		datafile.close()
+		return mat
+		}
+		
+objref conn, weights, delays
+strdef ww		
+sprint(ww,"connsheet") 
+		conn = new Matrix()
+		conn = LoadMatrix(ww,NCELL*2,NCELL)
+		
+		weights = new Matrix(NCELL,NCELL)
+		delays = new Matrix(NCELL,NCELL)
+
+		
+for aa=0,NCELL-1 {
+	for b=0,NCELL-1 {
+		weights.x[aa][b] = conn.x[aa][b]
+}
+}
+
+		for aa=NCELL,2*NCELL-1 {
+			for b=0,NCELL-1 {
+		delays.x[aa-NCELL][b] = conn.x[aa][b]
+}
+}
+
+objref netsheet, affcons
+objref ntsheet, afferents
+netsheet = new File()
+netsheet.ropen("netsheet")
+ntsheet = new Vector()
+ntsheet.scanf(netsheet)
+affcons = new File()
+affcons.ropen("affconns")
+afferents = new Vector()
+afferents.scanf(affcons)
+
+objref types, loc, layer
+
+types = new Vector(NCELL)
+
+for aa=0,NCELL-1 {
+		types.x[aa] = ntsheet.x[aa]
+}
+
+loc = new Matrix(NCELL,3)
+for aa=NCELL,2*NCELL-1 {
+		loc.x[aa-NCELL][0] = ntsheet.x[aa]
+		loc.x[aa-NCELL][1] = ntsheet.x[aa+NCELL]
+		loc.x[aa-NCELL][2] = ntsheet.x[aa+2*NCELL]
+}
+
+layer = new Vector(NCELL)
+
+for aa=NCELL*4,5*NCELL-1 {
+		layer.x[aa-NCELL*4] = ntsheet.x[aa]
+}
+
+objref affloc, affid, afftarg, affwt, affdel
+
+tot_siz = afferents.size
+
+affloc = new Vector(tot_siz/5)
+affid = new Vector(tot_siz/5)
+afftarg = new Vector(tot_siz/5)
+affwt = new Vector(tot_siz/5)
+affdel = new Vector(tot_siz/5)
+
+tot_siz = afferents.size
+
+for aa=0,tot_siz/5 -1 {
+		affloc.x[aa] = afferents.x[aa]
+		affid.x[aa] = afferents.x[aa+tot_siz/5]
+		afftarg.x[aa] = afferents.x[aa+2*tot_siz/5]
+		affwt.x[aa] = afferents.x[aa+3*tot_siz/5]
+		affdel.x[aa] = afferents.x[aa+4*tot_siz/5]
+}
+
+
+//load_file("netparamsX2.hoc")
+
+objref cells,nclist,voltage[NCELL],fobj[NCELL], fihs
+
+fihs = new List()
+
+proc mkring() {
+	mkcells($1) // create the cells
+	connectcells() // connect them together
+}
+
+objref cells,rs
+cells = new List()
+rs = new List()
+
+proc mkcells() {local i, rval, rval2 localobj cell, nc, nil, r
+
+
+for (i=pc.id; i < NCELL; i += pc.nhost) {
+	
+	if(types.x[i]==1) {
+		cell = new PRC()
+	} else if(types.x[i]==3) {
+		cell = new FastSpikingCell()
+	}else {
+		cell = new SOMCell()
+	}
+
+		cells.append(cell)
+		pc.set_gid2node(i, pc.id) // associate gid i with this host
+		nc = cell.connect2target(nil) // attach spike detector to cell
+		pc.cell(i, nc) // associate gid i with spike detector
+
+	}
+
+}
+
+
+proc connectcells() {local i, targid, ind localobj src, target, syn, nc, wfile, isrc, itarg, intwts
+        nclist = new List()
+/*       
+	   wfile = new File("finalweights")
+        wfile.ropen()
+
+        intwts = new Matrix()
+        intwts.scanf(wfile,NUMCONNS,3)
+
+        isrc = new Vector()
+        itarg = new Vector()
+
+        wfile.close()
+	*/
+	for i=0, NCELL - 1 { // iterating over target gids
+
+		if (!pc.gid_exists(i)) { continue }   //Only do it if target cell is on this machine
+		target = pc.gid2cell(i)  //Here, cell object is returned from the GID
+
+		
+		for j=0,NCELL - 1  {  // iterating over source gids
+		if (abs(weights.x[i][j])>0) {
+		
+
+		
+		if(types.x[i]==3 && types.x[j]==1) {
+	
+		target.dend1 syn = new NewgluNP(0.5) // Add an excitatory synapse to the dendrite	
+		syn.gbar_nmda = .5e-3 //0.47e-3 //.5e-3
+		syn.gbar_ampa  = 1e-3
+
+		} else if(types.x[i]==1 && types.x[j]==1) {
+
+		if(weights.x[i][j]==wEElong) {
+		target.Apicaldend2 syn = new Newglu(0.8333)
+		syn.L1 = 9  //5.5  //4.5  //7   //10  //  0.1  //0.5   //0.06*4  //0.06
+		syn.L2 = 0.005 // 0.03   //0.015 //0.016
+		syn.L3 = 0.25  //0.5 //0.02*3  // 0.02
+		syn.fn = 0.14   //-0.015
+		syn.dth = 0.5
+		syn.pth = 0.7
+		syn.fmax = 2  //1.5		
+		syn.gbar_nmda =  .5e-3 //0.47e-3 //.5e-3
+		syn.gbar_ampa  = 1e-3
+
+
+		syn.U = 0.0
+		syn.tauD = 75
+		} else {
+		target.Apicaldend2 syn = new Newglu(0.8333)
+		syn.L1 = 9  //5.5  //4.5 //7  //10  // 0.1  //0.5   //0.06*4  //0.06
+		syn.L2 = 0.005 //0.03 //0.015 //0.016
+		syn.L3 = 0.25  //0.5 //0.02*3  // 0.02
+		syn.fn = 0.14   //-0.015
+		syn.dth = 0.5
+		syn.pth = 0.7 
+		syn.gbar_nmda =  .5e-3 //0.47e-3 //.5e-3
+		syn.gbar_ampa  = 1e-3
+		syn.fmax = 2  //1.5
+		syn.U = 0.0
+		syn.tauD = 75
+		}
+		
+		}
+
+		if(types.x[j]==3 && types.x[i]==1) { 
+			target.soma syn = new gabaDexp(0.5)
+		}
+		
+		if(types.x[j]==4 && types.x[i]==1) { 
+			target.Apicaldend2 syn = new gabaDexpSOMRS(0.5)
+		}
+		
+		if(types.x[j]==1 && types.x[i]==4) {
+		target.dend1 syn = new NewgluNP(0.5)
+		syn.gbar_nmda =  .5e-3 //0.47e-3 //.5e-3
+		syn.gbar_ampa  = 1e-3
+		}
+		
+		if(types.x[j]==4 && types.x[i]==3) {
+		target.soma syn = new gabaDexp(0.5)
+		}
+		/*
+		if(types.x[j]==3 && types.x[i]==4) {
+		target.soma syn = new gabaDexp(0.5)
+		}
+		*/
+		target.synlist.append(syn)
+
+		syn.source = j
+		syn.dest = i
+
+		
+   // Add said synapse to the list so it doesn't get disappeared
+
+		nc = pc.gid_connect(j, syn)   // connect cell i to synapse syn, send object id to nc
+		nclist.append(nc)	      // add this synapse to the netcon list
+		
+
+	if(ablate.indwhere("==",j)!=-1) {
+		syn.initW = 0
+		nc.weight = 1
+	} else {
+		syn.initW = weights.x[i][j]
+		nc.weight = 1
+	}
+
+
+
+		nc.delay = delays.x[i][j]
+
+
+             if( types.x[i]!=45 && types.x[j]!=3) {    //placeholder code to exclude certain cells from new init
+                if(continuing==0) {
+                 // syn.initW = 1
+                } else {
+				/*
+                  isrc = intwts.getcol(0).indvwhere("==",j)  //find entries in final weights that start with the current src cell
+                  ind = itarg.index(intwts.getcol(1),isrc).indwhere("==",i) // find the right element in the second column
+                  syn.initW = itarg.index(intwts.getcol(2),isrc).x[ind]  // Get weight associated with the source-target
+				  */
+                }
+             }
+
+		}
+	}
+}
+}
+
+
+objref affr
+proc mkafferents() { localobj nil, nc, r
+
+if(pc.id==(NCELL+1)%pc.nhost) { //place affr cable on node after node with final cell
+		affr = new TemporalNeocortex()   // A whole brain region!
+		affr.cable.L = LENGTH*1000
+		
+		//Spikes from "cells" NCELL-1 to NCELL+NSEG+1 come from the NSEG segments on the cable
+		for n=0,NSEG-1 {   
+		  pc.set_gid2node(NCELL+n, pc.id) // associate gid i+NCELL with this host
+		  nc = affr.connect2target(nil,n/NSEG + 1/NSEG/2) // attach spike detector to cell
+		  pc.cell(NCELL+n, nc) // associate gid i+NCELL with spike detector
+		}
+
+		sprint(teststr,"Afferent cable made on host %d, sharing host with %d PRC cells",pc.id, cells.count())		
+		print teststr
+
+	}
+
+}
+
+load_file("inputprocs.hoc")
+
+
+objref afflist
+afflist = new List()
+
+proc connaffs() { local targid, src, del, wt, srcid, ind localobj syn, nc, target, wfile, wts, isrc, itarg
+
+/*
+        wfile = new File("finalweights")
+        wfile.ropen()
+
+        wts = new Matrix()
+        wts.scanf(wfile,NUMCONNS,3)
+
+        isrc = new Vector() 
+        itarg = new Vector()
+
+        wfile.close()
+
+*/
+	for n=0,affwt.size()-1 {
+
+		targid = afftarg.x[n]
+
+		if (!pc.gid_exists(targid)) { continue }   //Only do it if target cell is on this machine
+			target = pc.gid2cell(targid)  //Here, cell object is returned from the GID
+
+			if(types.x[targid]==3) {   //If target is an interneuron
+				target.dend1 syn = new NewgluNP(0.5) // Add an excitatory synapse to the dendrite
+						syn.gbar_nmda =  .5e-3 //0.47e-3 //.5e-3
+						syn.gbar_ampa  = 1e-3
+
+			} else if(types.x[targid]==1) {
+			target.Apicaldend1 syn = new Newglu(0.5) // Add an excitatory synapse to the dendrite
+			
+			syn.L1 = 2  //1.25  //0.6  //0.45  //2.9  //0.2  //0.5    // 0.2
+			syn.L2 = 0.1  //0.055  //0.06 //0.084  //0.23 //0.084 //0.058  //0.031  //0.03  //0.03    // 0.04 or 0.03, whatever
+			syn.L3 = 0.5
+			syn.fn = 0.14
+			syn.pth = 0.7
+			syn.dth = 0.5
+			syn.gbar_nmda =  .5e-3 //0.47e-3 //.5e-3
+			syn.gbar_ampa  = 1e-3
+
+			syn.U = 0
+
+
+			}
+
+		target.synlist.append(syn)
+		syn.source = affloc.x[n]
+		syn.dest = targid
+		srcid = NCELL + (affloc.x[n]-LENGTH/NSEG/2)/(LENGTH/NSEG)
+		srcid = srcid-srcid%1
+		
+		nc = pc.gid_connect(srcid, syn)   // connect cell srcid to synapse syn, send object id to nc
+		afflist.append(nc)	      // add this synapse to the netcon list
+		
+		syn.initW = affwt.x[n]
+		nc.weight = 1
+		nc.delay = affdel.x[n]
+		nc.threshold = 0
+
+
+
+        //This block initializes weights to 1 if continuing==0, else inserts old weights from the file
+
+             if( types.x[targid]!=45) {    //only do this for NC-->RS connections
+                if(continuing==0) {
+                 // syn.initW = 1
+                } else {
+                  /*
+				  isrc = wts.getcol(0).indvwhere("==",srcid)  //find entries in final weights that start with the current NC src
+                  ind = itarg.index(wts.getcol(1),isrc).indwhere("==",targid) // find the right element in the second column
+                  syn.initW = itarg.index(wts.getcol(2),isrc).x[ind]  // Get weight associated with the source-target
+				  */
+                }
+             }
+
+
+		}
+	}
+
+mkring(NCELL)
+mkafferents()
+connaffs()
+
+
+//----------------------------------------------------\\
+//          SPECIFY INPUTS TO NEOCORTEX HERE          \\
+//----------------------------------------------------\\
+//-----------                              -----------\\
+//-----                                          -----\\
+
+
+
+//////INPUT SEQUENCES///////
+
+
+
+
+
+// SINGLE PULSES PRE-TRAINING
+
+pulse(1,20, 1000)
+pulse(3,20, 4000)
+pulse(5,20, 7000)
+pulse(7,20,10000)
+pulse(9,20,13000)
+pulse(2,20,16000)
+pulse(4,20,19000)
+pulse(6,20,22000)
+pulse(8,20,25000)
+
+/*
+pulse(1,20, 31000)
+pulse(3,20, 34000)
+pulse(5,20, 37000)
+pulse(7,20,40000)
+pulse(9,20,43000)
+pulse(2,20,46000)
+pulse(4,20,49000)
+pulse(6,20,52000)
+pulse(8,20,55000)
+*/
+
+///
+/////TRAINING SEQUENCES///////
+///
+
+
+//45 SEC TBS
+
+train(2,20,30000,30,1000/1500,8,8)
+//train(5,20,30000,30,1000/1500,8,8)
+train(8,20,30000,30,1000/1500,8,8)
+
+
+//INTENSITY
+
+//train(2,25,30000,30,1000/1500,8,8)
+//train(5,20,30000,30,1000/1500,8,8)
+//train(8,25,30000,30,1000/1500,8,8)
+
+
+// SINGLE PULSES POST-TRAINING
+
+pulse(1,20, 81000)
+pulse(3,20, 84000)
+pulse(5,20, 87000)
+pulse(7,20,90000)
+pulse(9,20,93000)
+pulse(2,20,96000)
+pulse(4,20,99000)
+pulse(6,20,102000)
+pulse(8,20,105000)
+
+
+
+
+
+
+//-----                                          -----\\
+//-----------                              -----------\\
+//----------------------------------------------------\\
+//----------------------------------------------------\\
+
+
+
+
+// PROCEDURE TO RECORD SPIKE TIMES -------------------------------
+objref tvec, idvec
+proc spikerecord() {local i localobj nc, nil
+	tvec = new Vector()
+	idvec = new Vector()
+	for i=0, cells.count-1 {
+		nc = cells.object(i).connect2target(nil)
+		nc.record(tvec, idvec, nc.srcgid)
+	}
+	if(pc.gid_exists(NCELL+1)) {
+		n=0
+		for(x=1/NSEG/2;x<=1;x+=1/NSEG){
+			nc = affr.connect2target(nil,x)
+			nc.record(tvec,idvec,NCELL+n)
+			n+=1
+		}
+	}
+
+}
+
+
+spikerecord()
+//---------------------------------------------------------------
+
+
+
+
+
+
+/////////////// WEIGHT VECTORS ///////////////////
+objref wt_vec, wlist
+wlist = new List()
+proc wts() { localobj cellid
+	for i = 0,NCELL-1 {
+		if(pc.gid_exists(i)){
+		cellid = pc.gid2cell(i)
+		 for j=0,cellid.synlist.count()-1 {
+		 wt_vec = new Vector()
+	         wt_vec.record(&cellid.synlist.o[j].w,wdt)
+		 wlist.append(wt_vec)
+		 }
+  		}
+	}
+}
+wts()
+
+//////////////// CALCIUM VECTORS /////////////////////
+objref Can_vec, Canlist, Cam_vec, Camlist
+Canlist = new List()
+Camlist = new List()
+
+proc Can_Vecs() { localobj cellid
+	for i = 0,NCELL-1{
+
+		if(pc.gid_exists(i)){
+		cellid = pc.gid2cell(i)
+		 for j=0,cellid.synlist.count()-1 {
+		 Can_vec = new Vector()
+	         Can_vec.record(&cellid.synlist.o[j].can,wdt)
+		 Canlist.append(Can_vec)
+		 }
+  		}
+	}
+}
+proc Cam_Vecs() { localobj cellid
+	for i = 0,NCELL-1{
+
+		if(pc.gid_exists(i)){
+		cellid = pc.gid2cell(i)
+		 for j=0,cellid.synlist.count()-1 {
+		 Cam_vec = new Vector()
+	         Cam_vec.record(&cellid.synlist.o[j].cam,wdt)
+		 Camlist.append(Cam_vec)
+		 }
+  		}
+	}
+}
+Can_Vecs()
+Cam_Vecs()
+
+/////////////// BACKGROUND ///////////////////
+objref bg_vec, bglist
+bglist = new List()
+proc background() { localobj cellid
+	for i = 0,NCELL-1 {
+		if(pc.gid_exists(i)){
+		cellid = pc.gid2cell(i) 
+		 bg_vec = new Vector()
+	        cellid.ncn.record(bg_vec)
+		 bglist.append(bg_vec)
+		 
+  		}
+	}
+}
+//background()
+
+/////////////// VOLTAGE ///////////////////
+
+objref vol_vec, vollist
+vollist = new List()
+proc Vol_Vecs() { localobj cellid
+	for i = 0,NCELL-1 {
+		if(pc.gid_exists(i)){
+		cellid = pc.gid2cell(i) 
+		 vol_vec = new Vector()
+	     vol_vec.record(&cellid.soma.v(0.5),vdt)
+		 vollist.append(vol_vec)
+		 
+  		}
+	}
+}
+//Vol_Vecs()
+
+
+//----------------------------------------------------
+
+
+objref prog
+if(pc.id==0) {
+cells.o[0].soma prog = new progress(0.5)
+prog.tstop = tstop
+}
+
+st = pc.time
+
+
+{pc.timeout(0)}
+{pc.set_maxstep(10)}
+stdinit()
+{pc.psolve(tstop)}
+
+print pc.time - st
+
+
+
+
+
+// PROCEDURE TO SAVE WEIGHTS AND CALCIUM ----------------------
+
+strdef fname, Wt, Ca_n, Ca_m
+objref wfile, camfile, canfile
+
+proc saveweights() { localobj cell, syn
+n=0
+for j=0,NCELL-1 {
+
+  if(pc.gid_exists(j)) {
+
+
+    cell = pc.gid2cell(j)
+
+    for i=0,cell.synlist.count()-1 {   //For each synapse on the cell
+
+      syn = cell.synlist.o[i]
+
+      if(types.x[syn.dest]!=45) {
+	sprint(Wt,"/ibfs1/home/psamarth/data/PRC/Control/Paired/Weights/%g_%d_Wt",syn.source,syn.dest)
+        
+		wfile = new File()
+		wfile.wopen(Wt)
+        wlist.o[n].printf(wfile)
+        wfile.close()
+
+		sprint(Ca_n,"/ibfs1/home/psamarth/data/PRC/Control/Paired/Can/%g_%d_Can",syn.source,syn.dest)
+
+		canfile = new File()
+        canfile.wopen(Ca_n)
+        Canlist.o[n].printf(canfile)
+        canfile.close()
+
+		sprint(Ca_m,"/ibfs1/home/psamarth/data/PRC/Control/Paired/Cam/%g_%d_Cam",syn.source,syn.dest)
+
+		camfile = new File()
+        camfile.wopen(Ca_m)
+        Camlist.o[n].printf(camfile)
+        camfile.close()
+
+      }
+
+      n += 1
+
+
+    }
+
+
+  }
+
+pc.barrier()
+
+}
+}
+
+strdef Bg
+objref f_Bg
+
+proc savebackground() { localobj cell
+m=0
+for j=0,NCELL-1 {
+  if(pc.gid_exists(j)) {
+    cell = pc.gid2cell(j)
+      f_Bg = new File()
+			sprint(Bg,"/ibfs1/home/psamarth/data/PRC/Control/Paired/Background/BG_%d",j)
+		f_Bg.wopen(Bg)
+        bglist.o[m].printf(f_Bg)
+        f_Bg.close()
+		m += 1
+		}
+pc.barrier()
+}
+}
+
+strdef vols
+objref f_vol
+
+proc savevoltage() { localobj cell
+m=0
+for j=0,NCELL-1 {
+  if(pc.gid_exists(j)) {
+    cell = pc.gid2cell(j)
+      f_vol = new File()
+			sprint(vols,"/ibfs1/home/psamarth/data/PRC/Control/Paired/Voltage/Vol_%d",j)
+		f_vol.wopen(vols)
+        vollist.o[m].printf(f_vol)
+        f_vol.close()
+		m += 1
+		}
+pc.barrier()
+}
+}
+
+
+
+
+// PROCEDURE TO SEND SPIKES TO A FILE "SPIKERASTER"--------------------------
+objref spikefile
+
+//sprint(fname,"%g/spikeraster",seed)
+
+spikefile = new File("spikeraster")
+
+if(pc.id==0){     //"wopen" once by node 0 to clear the contents of the file
+spikefile.wopen()
+spikefile.close()
+}
+
+
+proc spikefileout() { local i, rank
+pc.barrier() // wait for all hosts to get to this point
+
+for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+
+if (rank==pc.id) {
+for i=0, tvec.size-1 {
+spikefile.aopen()                               //"aopen" to append data
+spikefile.printf("%8.4f\t %d\n", tvec.x[i], idvec.x[i])
+spikefile.close()
+}
+}
+pc.barrier() // wait for all hosts to get to this point
+}
+}
+
+spikefileout()
+//savebackground()
+//saveweights()
+//savevoltage()
+//---------------------------------------------------------------------------
+{pc.runworker()}
+{pc.done()}
+
+
+
+

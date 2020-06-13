@@ -1,0 +1,6 @@
+#BSUB -J  PRC520
+#BSUB -oo  PRC520.o%J.txt
+#BSUB -eo  PRC520.e%J.txt
+#BSUB -n 30
+#BSUB -q idle
+mpirun nrniv -mpi parnetX2.hoc
