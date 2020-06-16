@@ -1,0 +1,20 @@
+load_file("class_fengpvbasketcell.hoc")
+
+objref PV, ccl
+
+PV = new fengpvbasketcell()
+
+
+access PV.soma
+
+ccl = new IClamp(0.5)
+ccl.del = 200
+ccl.dur = 1000
+ccl.amp = 0.160
+
+
+tstop = 1400
+
+init()
+
+run()

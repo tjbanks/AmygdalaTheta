@@ -1,0 +1,112 @@
+/////////////////////
+// Model Templates //
+/////////////////////
+
+begintemplate PVCell
+
+	public NumSoma,NumDend
+	NumSoma = 1
+	NumDend = 1
+
+	public soma, dend, drv
+	create soma[NumSoma], dend[NumDend]
+
+	public all, somatic, basal, apical, axonal
+	objref all, somatic, basal, apical, axonal
+	objref this
+
+	objref drv
+
+    //external tstop
+	
+
+	proc init() {	
+
+		//////// bmtk /////////
+		all = new SectionList()
+		somatic = new SectionList()
+		basal = new SectionList()
+		apical = new SectionList()
+		axonal = new SectionList()
+
+		for i=0,NumSoma soma[i] {
+			all.append()
+			somatic.append()
+		} 
+		for i=0,NumDend dend[i] {
+			all.append()
+			basal.append()
+		}
+
+		/////// topology ////////
+		//create soma, dend
+		connect dend[0](0), soma[0](1)
+
+		/////// geometry ////////
+		soma[0] {
+			nseg=1
+			L=15		// (micrometer)
+			diam=15		// (micrometer)
+	    	}
+
+		dend[0] {
+			nseg=1
+			L=150		// (micrometer)
+			diam=10		// (micrometer)
+		}
+
+		/////// biophysics //////
+		soma[0] {
+			cm = 1//1		    // (microF/cm2)
+			Ra = 150*22.5	// (ohm-cm)
+			Rm = 20000	    // (ohm-cm2)
+			
+			insert leakinter
+			glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+			el_leakinter = -70	// (mV)
+
+			insert nainter
+			insert kdrinter
+			drv = new IClamp(0.5)
+			drv.del = 0
+			drv.dur = 0//tstop
+			drv.amp = 0.0//0.2  //nA
+	    	}
+
+		dend[0] {
+			cm = 1//1		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			Rm = 20000	// (ohm-cm2)
+			
+			insert leakinter
+			glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+			el_leakinter = -70	// (mV)
+
+			insert nainter
+			insert kdrinter
+		}
+		soma[0] {
+			ena = 45		// (mV)
+			gnabar_nainter = 0.035	// (siemens/cm2)
+
+			ek = -80		// (mV)
+			gkdrbar_kdrinter = 0.008 // (siemens/cm2)
+			
+			
+			//insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+		}
+
+		dend[0] {
+			ena = 45		// (mV)
+			gnabar_nainter = 0.010	// (siemens/cm2)
+
+			ek = -80		// (mV)
+			gkdrbar_kdrinter = 0.003 // (siemens/cm2)
+			
+			//insert xtraimemrec	
+		}
+		
+		define_shape()
+	}
+	
+endtemplate PVCell

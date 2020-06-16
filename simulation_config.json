@@ -14,7 +14,7 @@
     "nsteps_block": 5000
   },
   "conditions": {
-    "celsius": 6.0,
+    "celsius": 31.0,
     "v_init": -65.0
   },
   "inputs": {},

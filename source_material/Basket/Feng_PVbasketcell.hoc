@@ -1,0 +1,122 @@
+/////////////////////
+// Model Templates //
+/////////////////////
+
+begintemplate InterneuronCell
+	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv
+	create soma, dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		synlist = new List()
+		ncl = new List()
+		type = "InterneuronCell"
+
+		/////// topology ////////
+		create soma, dend
+		connect dend(0), soma(1)
+
+		/////// geometry ////////
+		soma {
+			nseg=1
+			L=15		// (micrometer)
+			diam=15		// (micrometer)
+	    	}
+
+		dend {
+			nseg=1
+			L=150		// (micrometer)
+			diam=10		// (micrometer)
+		}
+
+		/////// biophysics //////
+		soma {
+			cm = 1//1		    // (microF/cm2)
+			Ra = 150*22.5	// (ohm-cm)
+			Rm = 20000	    // (ohm-cm2)
+			
+			insert leakinter
+			glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+			el_leakinter = -70	// (mV)
+
+			insert nainter
+			insert kdrinter
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.0//0.2  //nA
+	    	}
+
+		dend {
+			cm = 1//1		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			Rm = 20000	// (ohm-cm2)
+			
+			insert leakinter
+			glbar_inter_leakinter = 1/Rm // (siemens/cm2)
+			el_leakinter = -70	// (mV)
+
+			insert nainter
+			insert kdrinter
+		}
+		soma {
+			ena = 45		// (mV)
+			gnabar_nainter = 0.035	// (siemens/cm2)
+
+			ek = -80		// (mV)
+			gkdrbar_kdrinter = 0.008 // (siemens/cm2)
+			
+			
+			insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+		}
+
+		dend {
+			ena = 45		// (mV)
+			gnabar_nainter = 0.010	// (siemens/cm2)
+
+			ek = -80		// (mV)
+			gkdrbar_kdrinter = 0.003 // (siemens/cm2)
+			
+			insert xtraimemrec	
+		}
+		forall {
+		   insert extracellular
+		   for (x, 0) {
+		   if (ismembrane("xtraimemrec")) {
+	//print x
+		setpointer im_xtraimemrec(x), i_membrane(x)
+		setpointer ex_xtraimemrec(x), e_extracellular(x)
+		
+		
+	              }
+	           }
+			   
+			   for (x,0){
+			   		tlist.append(new Vector())
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		tlist.o(tlist.count()-1).record(&er_xtraimemrec(x),1)//changce recording resolution if needed
+			   }
+		    }
+	}
+	
+	
+
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}
+endtemplate InterneuronCell
