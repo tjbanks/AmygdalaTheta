@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 import click
 import logging
 import os
 
 from clint.textui import puts, colored, indent
 
-from manager import input_commands
+from manager import input_commands, tuning_commands
 
 @click.group()
 @click.option('--verbose', is_flag=True, default=False, help='Verbose printing')
@@ -21,6 +22,7 @@ def cli(ctx, verbose):
 
 
 cli.add_command(input_commands.cli)
+cli.add_command(tuning_commands.cli)
 
 if __name__ == "__main__":
     cli()
