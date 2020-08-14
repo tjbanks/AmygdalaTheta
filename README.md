@@ -30,12 +30,26 @@ python run_bionet.py
 
 ## Single Cell Profiling
 
+Cell templates can be found in:
+```
+./components/templates/templates.hoc
+```
+Templates used are:
+```
+Cell_A
+Cell_C
+PVCell
+SOM_Cell
+CR_Cell
+```
+
 ### Tuning
 
 Individual tuning interfaces can be run with the following:
 ```
 python manage tune
 ```
+
 
 ### FI Curves
 
@@ -45,8 +59,8 @@ FI Curves can be plotted using:
 python manage tune fi
 
 # Pyramidal 
-python manage tune fi Cell_A
-python manage tune fi Cell_C
+python manage tune fi A
+python manage tune fi C
 
 # PV+
 python manage tune fi PV
@@ -67,7 +81,17 @@ FI Curves can be plotted using:
 python manage tune clamp
 
 # Pyramidal 
-python manage tune clamp Cell_A
+python manage tune clamp A
+python manage tune clamp C
+
+# PV+
+python manage tune clamp PV
+
+# CR+
+python manage tune clamp CR
+
+# SOM+
+python manage tune clamp SOM
 ```
 
 ### Syanpses

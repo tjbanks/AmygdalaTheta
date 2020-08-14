@@ -1,1 +1,0 @@
-bmtool util cell --template Cell_A fi

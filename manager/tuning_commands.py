@@ -42,24 +42,41 @@ def execute(command):
 ## Current Clamps                                                    ##
 #######################################################################
 
-@cli_clamp.command('Cell_A',help="Current Clamp Cell A")
+@cli_clamp.command('A',help="Current Clamp Cell A")
 @click.pass_context
 def cli_clamp_cell_a(ctx):
     execute('nrngui ./tuning/current_clamp/Cell_A.hoc')
 
+@cli_clamp.command('C',help="Current Clamp Cell C")
+@click.pass_context
+def cli_clamp_cell_c(ctx):
+    execute('nrngui ./tuning/current_clamp/Cell_C.hoc')
 
+@cli_clamp.command('PV',help="Current Clamp PV cell")
+@click.pass_context
+def cli_clamp_cell_basket(ctx):
+    execute('nrngui ./tuning/current_clamp/PV_Cell.hoc')
 
+@cli_clamp.command('CR',help="Current Clamp CR cell")
+@click.pass_context
+def cli_clamp_cell_cr(ctx):
+    execute('nrngui ./tuning/current_clamp/CR_Cell.hoc')
+
+@cli_clamp.command('SOM',help="Current Clamp SOM cell")
+@click.pass_context
+def cli_clamp_cell_som(ctx):
+    execute('nrngui ./tuning/current_clamp/SOM_Cell.hoc')
 
 #######################################################################
 ## FI Curves                                                         ##
 #######################################################################
 
-@cli_fi.command('Cell_A',help="FI Curve for Cell A")
+@cli_fi.command('A',help="FI Curve for Cell A")
 @click.pass_context
 def cli_fi_cell_a(ctx):
     execute('bmtool util cell --template Cell_A fi')
   
-@cli_fi.command('Cell_C',help="FI Curve for Cell C")
+@cli_fi.command('C',help="FI Curve for Cell C")
 @click.pass_context
 def cli_fi_cell_c(ctx):
     execute('bmtool util cell --template Cell_C fi')
@@ -67,17 +84,17 @@ def cli_fi_cell_c(ctx):
 @cli_fi.command('PV',help="FI Curve for PV Cell")
 @click.pass_context
 def cli_fi_pv(ctx):
-    execute('bmtool util cell --template PV fi')
+    execute('bmtool util cell --template PVCell fi')
 
 @cli_fi.command('CR',help="FI Curve for CR Cell")
 @click.pass_context
 def cli_fi_cr(ctx):
-    execute('bmtool util cell --template CR fi')
+    execute('bmtool util cell --template CR_Cell fi')
 
 @cli_fi.command('SOM',help="FI Curve for SOM Cell")
 @click.pass_context
 def cli_fi_som(ctx):
-    execute('bmtool util cell --template SOM fi')
+    execute('bmtool util cell --template SOM_Cell fi')
 
 
 #######################################################################
