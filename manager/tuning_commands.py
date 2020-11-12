@@ -74,17 +74,20 @@ def cli_clamp_cell_som(ctx):
 @cli_fi.command('A',help="FI Curve for Cell A")
 @click.pass_context
 def cli_fi_cell_a(ctx):
-    execute('bmtool util cell --template Cell_A fi')
+    #execute('bmtool util cell --template Cell_A fi')
+    execute('bmtool util cell --template feng_typeA fi')
   
 @cli_fi.command('C',help="FI Curve for Cell C")
 @click.pass_context
 def cli_fi_cell_c(ctx):
-    execute('bmtool util cell --template Cell_C fi')
+    #execute('bmtool util cell --template Cell_C fi')
+    execute('bmtool util cell --template feng_typeC fi')
 
 @cli_fi.command('PV',help="FI Curve for PV Cell")
 @click.pass_context
 def cli_fi_pv(ctx):
-    execute('bmtool util cell --template PVCell fi')
+    #execute('bmtool util cell --template PVCell fi')
+    execute('bmtool util cell --template chandelier fi')
 
 @cli_fi.command('CR',help="FI Curve for CR Cell")
 @click.pass_context

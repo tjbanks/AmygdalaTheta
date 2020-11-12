@@ -1,0 +1,369 @@
+begintemplate feng_typeA
+
+public init, connect_sections, size_sections, append_sections, define_synapses
+public mechinit, insert_mechs, set_biophys, get_root
+public  pre_list, connect_pre, is_art, is_connected, gid, randi
+public soma, dend, apic, axon
+public all, soma_list, axon_list, dendrite_list
+public all, somatic, basal, apical, axonal
+public x, y, z, position, myroot, myrootsec, Vrest
+public NumSoma, NumDend, NumAxon
+public SynRecord
+
+NumSoma = 1
+
+
+// strings
+strdef myroot, myname
+
+// objects
+objref syn, pre_list, templist, rootlist, myrootsec, this, rr, rotation
+objref noise_exc, noise_inh, cclA
+objref noiseRandObj_exc, noiseRandObj_inh
+
+
+
+
+// external variables
+//external numCellTypes, cellType, VClampVector
+
+create soma[1]
+create dend[1]
+create apic[1]
+	
+proc init(){
+
+	//gid = $1
+	//randi = $2
+	
+	// morphology
+	connect_sections()	// local fcn: connect soma, dendrites, axon initial segment
+	size_sections()		// local fcn: set the size dimensions of each section
+	define_shape()		// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections 
+  	append_sections()	// local fcn: append all sections to the section list
+	set_nseg()			// local fcn: set the number of segments in each section
+	//get_root()			// local fcn: perform morphology checks
+	//add_noise()
+
+	// electrophysiology
+	mechinit()			// local fcn: set values for max conductances and reversal potentials of ion channels and other ephys parameters that are subject to fitting
+	insert_mechs(100)		// local fcn: insert ion channels and actually set values determined in the mechinit fcn
+	set_chanparams()	// local fcn: after all channels have been inserted, then their other parameters can be set	
+
+	// synapses
+	pre_list = new List() // define a list for the presynaptic connections	
+	//define_synapses($3)	// local fcn: define all possible synaptic connections received by this cell
+}
+
+
+proc connect_sections() { local i
+	connect apic[0](0), soma[0](1)
+	connect dend[0](0), soma[0](0)
+}
+
+objref cclA, AMP, f
+strdef fdef 
+proc add_noise(){
+
+	cclA = new IClamp(0.5)
+	cclA.del = 0                          // (ms)
+	cclA.dur = 10e9                 // (ms)
+			
+	print "making AMP"	
+	AMP = new Vector()
+	f = new File()
+	fdef = "5Hz_nonoise.csv"
+	len_AMP = 100000
+	print "!!!! len_AMP:", len_AMP
+	f.ropen(fdef)
+	print "opened file", fdef
+	for i=0,len_AMP-1{
+		AMP.append(f.scanvar())
+		print(AMP.x(i))
+	}
+	f.close()
+	AMP.play(&cclA.amp,0.1)	
+	print "Done playing"
+
+}
+
+
+proc size_sections() {local thetaz
+	//Rotation about z axis
+	objref rotation
+	//rotation = new Random($1)
+	//thetaz = rotation.uniform(0,2*PI)
+	thetaz = 0
+	//print "thetaz: ", thetaz
+	//print "pyramidal soma points: ",12.5*sin(thetaz),12.5*cos(thetaz),25*sin(thetaz),25*cos(thetaz)
+		soma[0] {pt3dclear()
+			pt3dadd(0, 0, 0, 24.75)
+			pt3dadd(0, 25*sin(thetaz), 25*cos(thetaz), 24.75)
+			nseg = 1
+		}
+
+		apic[0] {pt3dclear()
+			pt3dadd(0, 25*sin(thetaz), 25*cos(thetaz), 5)
+			pt3dadd(0, 580*sin(thetaz), 580*cos(thetaz), 5)
+			nseg = 7
+		}
+
+		dend[0] {pt3dclear()
+			pt3dadd(0, 0, 0, 3)
+			pt3dadd(0, -270*sin(thetaz), -270*cos(thetaz), 3)
+			nseg = 8    
+		}
+
+
+}
+
+
+objref all, somatic,axonal,basal,apical
+proc append_sections() { local i
+	objref all, somatic,axonal,basal,apical
+
+	all = new SectionList()
+	somatic = new SectionList()
+	basal = new SectionList()
+	apical = new SectionList()
+	
+	soma all.append()
+	soma somatic.append()
+	
+	dend[0] all.append()
+	dend[0] basal.append()
+	apic[0] all.append()
+	apic[0] apical.append()
+
+	//print "appended sections"
+
+}
+
+
+external lambda_f
+proc set_nseg() {
+  	forsec all { nseg = int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1  }
+}
+
+proc mechinit() {
+
+		
+		// BIOPHYSICS //
+		Vrest = -72
+		Cm = 2.4
+		RaAll= 150
+		RaSoma= 150
+		RaDend = 150
+		RaAx = 150
+
+		gna = 0.015
+		gnap = 0.000559//0.000551 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5//2.5e-5 
+		gleak_dend = 1.57*3.0e-5
+
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+
+		Ena = 45
+		Ek = -80
+}
+
+proc insert_mechs(){
+		r = $1
+		forall {
+			insert na gbar_na=0
+			insert na12  gbar_na12=0
+			insert na16  gbar_na16=0
+			insert kv    gbar_kv=0
+			insert km    gbar_km=0
+			insert kca   gbar_kca=0
+			insert ca    gbar_ca=0
+			insert cav31 gbar_cav31=0
+		}
+		
+		forall if(ismembrane("k_ion")) ek = Ek
+		forall if(ismembrane("na_ion")) ena = Ena
+		
+		
+		dend[0]{
+			insert cadyn gcabar_cadyn = gca eca = 120
+			insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+			insert hd ghdbar_hd = ghd 
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+			insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 1.0*gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 
+			insert sAHP gsAHPbar_sAHP = 0
+			insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+			insert kap gkabar_kap = gkap
+		}
+
+
+		apic[0]{
+			insert cadyn gcabar_cadyn = gca  eca = 120
+			insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+			insert hd ghdbar_hd = ghd
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+			insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 0.8*gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 
+			insert sAHP gsAHPbar_sAHP = 0
+			insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+			insert kap gkabar_kap = 0
+		}
+
+		soma[0]{
+	
+			insert cadyn gcabar_cadyn = gca  eca = 120
+			insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+			insert hd ghdbar_hd = ghd 
+			insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+			insert nap gbar_nap = gnap
+			insert kdr gbar_kdr = gkdr
+			insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+			insert sAHP gsAHPbar_sAHP = gsAHP
+			insert im gbar_im = gm
+			insert kap gkabar_kap = gkap	
+			
+			noiseRandObj_exc=new Random()
+			noiseRandObj_exc.Random123(r)   
+    			noiseRandObj_exc.normal(0,1)
+	
+			noise_exc = new Gfluct2_exc(0.5)
+    
+    			noise_exc.g_e0 = 0.0032//0.0032
+    			noise_exc.std_e = 0.003//0.003	
+    			noise_exc.setRandObj(noiseRandObj_exc)
+			
+			noiseRandObj_inh=new Random()
+			noiseRandObj_inh.Random123(r)   
+    			noiseRandObj_inh.normal(0,1)
+	
+			noise_inh = new Gfluct2_inh(0.5)
+    
+    			noise_inh.g_e0 = 0.021
+    			noise_inh.std_e = 0.008	
+    			noise_inh.setRandObj(noiseRandObj_inh)
+		
+
+		}
+
+
+		
+}	
+	
+proc set_chanparams() {
+	forsec all {
+		
+	}
+}
+
+/*
+proc connect_pre() {  // $o1 target point process, $o2 returned NetCon
+	axon[10] $o2 = new NetCon (&v(0.5), $o1)
+			$o2.threshold = -10
+
+}
+
+func is_art()  { return 0 }
+
+proc position(){ local i
+	forall {
+		for i = 0, n3d()-1 {
+			pt3dchange(i, $1-x+x3d(i), $2-y+y3d(i), $3-z+z3d(i), diam3d(i))
+		}
+	}
+	x = $1  y = $2  z = $3	
+}
+
+proc get_root() {local i localobj sref
+	rootlist = new SectionList()
+	rootlist.allroots()
+	i=0
+	forsec all {
+		sref = new SectionRef()
+		if (sref.has_parent==0) {
+			myroot = secname()
+			i=i+1
+		}
+		for(x,0) {
+			if (diam(x) <=0.01) print "WARNING: tiny diameter of ",  diam(x), " um at ", secname(), ", point ", x, "!"
+			if (diam3d(x) <=0.01) print "WARNING: tiny 3d diameter of ", diam3d(x), " um at ", secname(), ", point ", x, "!"
+		}
+		if (L <=0.001) print "WARNING: tiny length of ", L, " um at ", secname(), "!"
+	}
+	if (i>1) {
+		print "WARNING: cell ", gid, " has ", i, " root sections!"
+	}
+}
+strdef myStr
+
+objref newSecRef, syn, SynRecord, SynRecordVec
+proc define_synapses() {
+	SynRecord = new List()
+	ind = $1
+	i = 0
+
+	access soma[0]
+	{distance()}
+
+	for celltype = 0, numCellTypes-1 {
+		templist = new List ()
+		for r=0, cellType[ind].SynList[celltype].count()-1 {
+		
+			execute(cellType[ind].SynList[celltype].object(r).NewSynStr, this) // sets newSecRef
+						
+			forsec newSecRef {		
+				for (x,0) {
+					// Decides if distance is correct
+					execute(cellType[ind].SynList[celltype].object(r).CondStr, this)
+					
+					 if (y==1) {
+						// Declares new synapse
+						execute(cellType[ind].SynList[celltype].object(r).SynStr, this)
+						if (cellType[ind].SynList[celltype].object(r).GABAabFlag==0) {
+							syn.tau1 = cellType[ind].SynList[celltype].object(r).tau1
+							syn.tau2 = cellType[ind].SynList[celltype].object(r).tau2
+							syn.e = cellType[ind].SynList[celltype].object(r).efirst
+							if (strcmp(cellType[ind].SynList[celltype].object(r).SynType,"MyExp2Sidnw")==0) {
+								syn.nw = cellType[ind].SynList[celltype].object(r).Scaling
+							}
+						} else {
+							syn.tau1a = cellType[ind].SynList[celltype].object(r).tau1a
+							syn.tau2a = cellType[ind].SynList[celltype].object(r).tau2a
+							syn.ea = cellType[ind].SynList[celltype].object(r).ea
+							syn.tau1b = cellType[ind].SynList[celltype].object(r).tau1b
+							syn.tau2b = cellType[ind].SynList[celltype].object(r).tau2b
+							syn.eb = cellType[ind].SynList[celltype].object(r).eb
+						}
+						syn.sid = i
+						indx = VClampVector.indwhere("==",gid)
+						
+						
+						if(indx>=0){
+							print "Recording synapse ", i, "on a pyrC cell"
+							SynRecordVec = new Vector()
+							SynRecordVec.record(&syn.i)
+							SynRecord.append(SynRecordVec)
+						}
+						templist.append(syn)
+						i = i + 1
+					}
+				}
+			}
+		}
+		pre_list.append(templist)
+		findme = 1
+	}
+}
+	*/
+
+init()
+endtemplate feng_typeA
