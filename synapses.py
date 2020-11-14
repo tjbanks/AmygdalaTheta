@@ -399,7 +399,7 @@ def load():
     add_synapse_model(Int2Int, overwrite=False)
     return
 
-def syn_params_dicts(syn_dir='biophys_components/synaptic_models'):
+def syn_params_dicts(syn_dir='components/synaptic_models'):
     """
     returns: A dictionary of dictionaries containing all
     properties in the synapse json files

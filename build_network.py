@@ -44,8 +44,8 @@ pyra_pos = pos.copy()
 # Add a population of numPN_A nodes (all of which share model_type, dynamics_params, etc.)
 net.add_nodes(N=numPN_A, pop_name='PyrA',
               positions=positions_list(positions=pos),
-	      #rotation_angle_zaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
-	      #rotation_angle_yaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_zaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_yaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
               model_template='hoc:feng_typeA',
@@ -66,8 +66,8 @@ pyrc_pos = pos.copy()
 # Add a population of numPN_A nodes (all of which share model_type, dynamics_params, etc.)
 net.add_nodes(N=numPN_C, pop_name='PyrC',
               positions=positions_list(positions=pos),
-	      #rotation_angle_zaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
-	      #rotation_angle_yaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_zaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_yaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
               model_template='hoc:feng_typeC',
@@ -87,8 +87,8 @@ if False:
     # Add a population of numAAC nodes
     net.add_nodes(N=numAAC, pop_name='AAC',
                 positions=positions_list(positions=pos),
-            #rotation_angle_zaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
-            #rotation_angle_yaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
+            rotation_angle_zaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
+            rotation_angle_yaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
                 mem_potential='e',
                 model_type='biophysical',
                 model_template='hoc:chandelier',
@@ -111,8 +111,8 @@ nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos])
 # Add a population of numBask nodes
 net.add_nodes(N=numBask, pop_name='Bask',
               positions=positions_list(positions=pos),
-	      #rotation_angle_zaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
-	      #rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_zaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+	      rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
               model_template='hoc:basket',
@@ -498,17 +498,17 @@ build_env_bionet(base_dir='./',
 
 from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 #
-psg = PoissonSpikeGenerator(population='mthalamus')
-psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
-        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
-psg.to_sonata('mthalamus_spikes.h5')
+#psg = PoissonSpikeGenerator(population='mthalamus')
+#psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
+#        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+#        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+#psg.to_sonata('mthalamus_spikes.h5')
 
-psg = PoissonSpikeGenerator(population='exc_bg_bask')
-psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
-        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
-psg.to_sonata('exc_bg_bask_spikes.h5')
+#psg = PoissonSpikeGenerator(population='exc_bg_bask')
+#psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
+#        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+#        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+#psg.to_sonata('exc_bg_bask_spikes.h5')
 
 
 def syn_dist_delay(source, target, min_delay, pos):
