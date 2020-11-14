@@ -87,7 +87,7 @@ def cli_fi_cell_c(ctx):
 @click.pass_context
 def cli_fi_pv(ctx):
     #execute('bmtool util cell --template PVCell fi')
-    execute('bmtool util cell --template chandelier fi')
+    execute('bmtool util cell --template basket fi')
 
 @cli_fi.command('CR',help="FI Curve for CR Cell")
 @click.pass_context

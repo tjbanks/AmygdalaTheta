@@ -1,2 +1,2 @@
-2020-06-10 05:50:20,446 [INFO] Created log file
-2020-06-10 05:50:20,491 [ERROR] Could not find any network files. Unable to build network.
+2020-11-14 00:36:19,033 [INFO] Created log file
+2020-11-14 00:36:19,183 [ERROR] Could not find edge dynamics_params file /home/tjbanks/git_stage/AmygdalaTheta/biophys_components/synaptic_models/PN2PN.json.
