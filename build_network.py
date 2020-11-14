@@ -492,7 +492,7 @@ build_env_bionet(base_dir='./',
                 #     'delay': 100.0, 
                 #     'duration': 50.0 
                 # },
-		components_dir='biophys_components',
+		components_dir='components',
 		compile_mechanisms=True)
 
 

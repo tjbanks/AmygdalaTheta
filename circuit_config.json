@@ -2,7 +2,7 @@
   "manifest": {
     "$BASE_DIR": "${configdir}",
     "$NETWORK_DIR": "$BASE_DIR/network",
-    "$COMPONENTS_DIR": "$BASE_DIR/biophys_components"
+    "$COMPONENTS_DIR": "$BASE_DIR/components"
   },
   "components": {
     "biophysical_neuron_models_dir": "$COMPONENTS_DIR/biophysical_neuron_models",

@@ -44,12 +44,12 @@
   "config_path": "/home/tjbanks/git_stage/AmygdalaTheta/simulation_config.json",
   "config_dir": "/home/tjbanks/git_stage/AmygdalaTheta",
   "components": {
-    "biophysical_neuron_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/biophysical_neuron_models",
-    "mechanisms_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/mechanisms",
-    "morphologies_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/morphologies",
-    "point_neuron_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/point_neuron_models",
-    "synaptic_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/synaptic_models",
-    "templates_dir": "/home/tjbanks/git_stage/AmygdalaTheta/biophys_components/templates"
+    "biophysical_neuron_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/biophysical_neuron_models",
+    "mechanisms_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/mechanisms",
+    "morphologies_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/morphologies",
+    "point_neuron_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/point_neuron_models",
+    "synaptic_models_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/synaptic_models",
+    "templates_dir": "/home/tjbanks/git_stage/AmygdalaTheta/components/templates"
   },
   "networks": {
     "nodes": [
