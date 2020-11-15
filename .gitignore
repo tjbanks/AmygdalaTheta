@@ -137,3 +137,5 @@ components/mechanisms/x86_64/
 components/mechanisms/modfiles/*.c
 components/mechanisms/modfiles/*.o
 components/mechanisms/modfiles/*.dll
+
+*.h5
