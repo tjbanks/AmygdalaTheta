@@ -109,4 +109,17 @@ def cli_fi_som(ctx):
 def cli_exp2syn_cell_a(ctx):
     execute('nrngui ./tuning/synapses/exp2syn_Cell_A.hoc')
     
+@cli_syn.command('exp2syn_Cell_C',help="Exp2Syn Cell C")
+@click.pass_context
+def cli_exp2syn_cell_c(ctx):
+    execute('nrngui ./tuning/synapses/exp2syn_Cell_C.hoc')
 
+@cli_syn.command('bg2pyr_Cell_A',help="bg2pyr Cell A")
+@click.pass_context
+def cli_bg2pyr_cell_a(ctx):
+    execute('nrngui ./tuning/synapses/bg2pyr_Cell_A.hoc')
+
+@cli_syn.command('bg2pyr_Cell_C',help="bg2pyr Cell C")
+@click.pass_context
+def cli_bg2pyr_cell_c(ctx):
+    execute('nrngui ./tuning/synapses/bg2pyr_Cell_C.hoc')

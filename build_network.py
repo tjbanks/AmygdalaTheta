@@ -473,7 +473,8 @@ net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params='BG2PN_feng.json',
-                   model_template='bg2pyr')
+                   model_template='bg2pyr',
+                   sec_x=0.9)
 
 net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    connection_rule=one_to_one,
@@ -484,7 +485,8 @@ net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params='BG2PN_feng.json',
-                   model_template='bg2pyr')
+                   model_template='bg2pyr',
+                   sec_x=0.9)
 
 net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
                    connection_rule=one_to_one,
@@ -495,7 +497,8 @@ net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params='BG2PN_feng.json',
-                   model_template='bg2pyr')
+                   model_template='bg2pyr',
+                   sec_x=0.9)
 
 net.build()
 net.save_nodes(output_dir='network')
