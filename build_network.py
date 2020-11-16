@@ -124,6 +124,7 @@ net.add_nodes(N=numBask, pop_name='Bask',
 thalamus = NetworkBuilder('mthalamus')
 thalamus.add_nodes(N=numPN_A+numPN_C,
                    pop_name='tON',
+                   pop_group='mthalamus',
                    potential='exc',
                    model_type='virtual')
 
@@ -131,6 +132,7 @@ thalamus.add_nodes(N=numPN_A+numPN_C,
 exc_bg_bask = NetworkBuilder('exc_bg_bask')
 exc_bg_bask.add_nodes(N=numBask,
                    pop_name='tON',
+                   pop_group='exc_bg_bask',
                    potential='exc',
                    model_type='virtual')
 ##############################################################################
@@ -425,6 +427,8 @@ min_delays.append(-1)#Want to append -1 if not adding delays.
 #conn._edge_type_properties['sec_id'] = 0
 #conn._edge_type_properties['sec_x'] = 0.9
 
+"""
+
 net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
                    connection_rule=one_to_one,
                    syn_weight=7.0e-03,
@@ -457,6 +461,41 @@ net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
                    distance_range=[0.0, 300.0],
                    dynamics_params='AMPA_ExcToExc.json',
                    model_template='exp2syn')
+
+"""
+
+net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
+                   connection_rule=one_to_one,
+                   syn_weight=8.5e-03,
+                   weight_function='lognormal',
+                   weight_sigma=2.0e-03,
+                   target_sections=['basal'],
+                   delay=0.1,
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params='BG2PN_feng.json',
+                   model_template='bg2pyr')
+
+net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
+                   connection_rule=one_to_one,
+                   syn_weight=8.5e-03,
+                   weight_function='lognormal',
+                   weight_sigma=2.0e-03,
+                   target_sections=['basal'],
+                   delay=0.1,
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params='BG2PN_feng.json',
+                   model_template='bg2pyr')
+
+net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
+                   connection_rule=one_to_one,
+                   syn_weight=1.0e-03,
+                   weight_function='lognormal',
+                   weight_sigma=2.0e-04,
+                   target_sections=['basal'],
+                   delay=0.1,
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params='BG2PN_feng.json',
+                   model_template='bg2pyr')
 
 net.build()
 net.save_nodes(output_dir='network')
@@ -497,19 +536,21 @@ build_env_bionet(base_dir='./',
 
 
 from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
-#
-#psg = PoissonSpikeGenerator(population='mthalamus')
-#psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
-#        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-#        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
-#psg.to_sonata('mthalamus_spikes.h5')
 
-#psg = PoissonSpikeGenerator(population='exc_bg_bask')
-#psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
-#        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-#        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
-#psg.to_sonata('exc_bg_bask_spikes.h5')
+psg = PoissonSpikeGenerator(population='mthalamus')
+psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
+        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+psg.to_sonata('mthalamus_spikes.h5')
 
+psg = PoissonSpikeGenerator(population='exc_bg_bask')
+psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
+        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+psg.to_sonata('exc_bg_bask_spikes.h5')
+
+
+exit()
 
 def syn_dist_delay(source, target, min_delay, pos):
     x_ind,y_ind,z_ind = 0,1,2

@@ -16,6 +16,14 @@
     "celsius": 34.0,
     "v_init": -80.0
   },
+  "node_sets": {
+    "mthalamus": {
+      "pop_group": "mthalamus"
+    },
+    "exc_bg_bask": {
+      "pop_group": "exc_bg_bask"
+    }
+  },  
   "inputs": {
     "mthalamus_spikes": {
       "input_type": "spikes",

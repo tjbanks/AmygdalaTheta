@@ -1,19 +1,19 @@
-2020-11-14 00:54:39,308 [INFO] Created log file
-2020-11-14 00:54:40,208 [INFO] Building cells.
-2020-11-14 00:57:25,285 [INFO] Building recurrent connections
-2020-11-14 00:59:48,464 [INFO] Building virtual cell stimulations for mthalamus_spikes
-2020-11-14 00:59:52,358 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
-2020-11-14 00:59:53,893 [INFO] Running simulation for 5000.000 ms with the time step 0.100 ms
-2020-11-14 00:59:53,893 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2020-11-14 00:59:53,893 [INFO] Block save every 5000 steps
-2020-11-14 01:10:57,145 [INFO]     step:5000 t_sim:500.00 ms
-2020-11-14 01:22:11,148 [INFO]     step:10000 t_sim:1000.00 ms
-2020-11-14 01:33:06,556 [INFO]     step:15000 t_sim:1500.00 ms
-2020-11-14 01:43:58,775 [INFO]     step:20000 t_sim:2000.00 ms
-2020-11-14 01:54:46,090 [INFO]     step:25000 t_sim:2500.00 ms
-2020-11-14 02:05:39,073 [INFO]     step:30000 t_sim:3000.00 ms
-2020-11-14 02:16:28,440 [INFO]     step:35000 t_sim:3500.00 ms
-2020-11-14 02:27:19,469 [INFO]     step:40000 t_sim:4000.00 ms
-2020-11-14 02:38:14,368 [INFO]     step:45000 t_sim:4500.00 ms
-2020-11-14 02:49:05,942 [INFO]     step:50000 t_sim:5000.00 ms
-2020-11-14 02:49:06,065 [INFO] Simulation completed in 109.0 minutes, 12.17 seconds 
+2020-11-15 23:59:48,582 [INFO] Created log file
+2020-11-15 23:59:48,583 [INFO] Running NEURON with mpi (20 cores).
+2020-11-15 23:59:49,458 [INFO] Building cells.
+2020-11-15 23:59:50,435 [INFO] Building recurrent connections
+2020-11-15 23:59:58,354 [INFO] Building virtual cell stimulations for mthalamus_spikes
+2020-11-15 23:59:59,812 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
+2020-11-16 00:00:01,624 [INFO] Running simulation for 5000.000 ms with the time step 0.100 ms
+2020-11-16 00:00:01,625 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2020-11-16 00:00:01,625 [INFO] Block save every 5000 steps
+2020-11-16 00:00:49,956 [INFO]     step:5000 t_sim:500.00 ms
+2020-11-16 00:01:37,741 [INFO]     step:10000 t_sim:1000.00 ms
+2020-11-16 00:02:26,072 [INFO]     step:15000 t_sim:1500.00 ms
+2020-11-16 00:03:14,950 [INFO]     step:20000 t_sim:2000.00 ms
+2020-11-16 00:03:58,445 [INFO]     step:25000 t_sim:2500.00 ms
+2020-11-16 00:04:46,650 [INFO]     step:30000 t_sim:3000.00 ms
+2020-11-16 00:05:33,527 [INFO]     step:35000 t_sim:3500.00 ms
+2020-11-16 00:06:20,616 [INFO]     step:40000 t_sim:4000.00 ms
+2020-11-16 00:07:06,643 [INFO]     step:45000 t_sim:4500.00 ms
+2020-11-16 00:07:54,298 [INFO]     step:50000 t_sim:5000.00 ms
