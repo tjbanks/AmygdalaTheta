@@ -414,8 +414,8 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.z = float(syn_params['z'])
     if syn_params.get('neuroM'):
         lsyn.neuroM = float(syn_params['neuroM'])
-    if syn_params.get('k'):
-        lsyn.k = float(syn_params['k'])
+    #if syn_params.get('k'):
+    #    lsyn.k = float(syn_params['k'])
     if syn_params.get('tauCa'):
         lsyn.tauCa = float(syn_params['tauCa'])
     if syn_params.get('P0g'):
@@ -436,10 +436,10 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.fmax = float(syn_params['fmax'])
     if syn_params.get('fmin'):
         lsyn.fmin = float(syn_params['fmin'])
-    if syn_params.get('GAPstart1'):
-        lsyn.GAPstart1 = float(syn_params['GAPstart1'])
-    if syn_params.get('GAPstop1'):
-        lsyn.GAPstop1 = float(syn_params['GAPstop1'])
+    #if syn_params.get('GAPstart1'):
+    #    lsyn.GAPstart1 = float(syn_params['GAPstart1'])
+    #if syn_params.get('GAPstop1'):
+    #    lsyn.GAPstop1 = float(syn_params['GAPstop1'])
     if syn_params.get('thr_rp'):
         lsyn.thr_rp = float(syn_params['thr_rp'])
     if syn_params.get('facfactor'):
@@ -456,42 +456,42 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.d2 = float(syn_params['d2'])
     if syn_params.get('tauD2'):
         lsyn.tauD2 = float(syn_params['tauD2'])
-    if syn_params.get('DAstart1'):
-        lsyn.DAstart1 = float(syn_params['DAstart1'])
-    if syn_params.get('DAstop1'):
-        lsyn.DAstop1 = float(syn_params['DAstop1'])
-    if syn_params.get('DAstart2'):
-        lsyn.DAstart2 = float(syn_params['DAstart2'])
-    if syn_params.get('DAstop2'):
-        lsyn.DAstop2 = float(syn_params['DAstop2'])
-    if syn_params.get('DA_t1'):
-        lsyn.DA_t1 = float(syn_params['DA_t1'])
-    if syn_params.get('DA_t2'):
-        lsyn.DA_t2 = float(syn_params['DA_t2'])
-    if syn_params.get('DA_t3'):
-        lsyn.DA_t3 = float(syn_params['DA_t3'])
-    if syn_params.get('DA_S'):
-        lsyn.DA_S = float(syn_params['DA_S'])
-    if syn_params.get('Beta1'):
-        lsyn.Beta1 = float(syn_params['Beta1'])
-    if syn_params.get('Beta2'):
-        lsyn.Beta2 = float(syn_params['Beta2'])
-    if syn_params.get('NEstart1'):
-        lsyn.NEstart1 = float(syn_params['NEstart1'])
-    if syn_params.get('NEstop1'):
-        lsyn.NEstop1 = float(syn_params['NEstop1'])
-    if syn_params.get('NEstart2'):
-        lsyn.NEstart2 = float(syn_params['NEstart2'])
-    if syn_params.get('NEstop2'):
-        lsyn.NEstop2 = float(syn_params['NEstop2'])
-    if syn_params.get('NE_t1'):
-        lsyn.NE_t1 = float(syn_params['NE_t1'])
-    if syn_params.get('NE_t2'):
-        lsyn.NE_t2 = float(syn_params['NE_t2'])
-    if syn_params.get('NE_t3'):
-        lsyn.NE_t3 = float(syn_params['NE_t3'])
-    if syn_params.get('NE_S'):
-        lsyn.NE_S = float(syn_params['NE_S'])
+    #if syn_params.get('DAstart1'):
+    #    lsyn.DAstart1 = float(syn_params['DAstart1'])
+    #if syn_params.get('DAstop1'):
+    #    lsyn.DAstop1 = float(syn_params['DAstop1'])
+    #if syn_params.get('DAstart2'):
+    #    lsyn.DAstart2 = float(syn_params['DAstart2'])
+    #if syn_params.get('DAstop2'):
+    #    lsyn.DAstop2 = float(syn_params['DAstop2'])
+    #if syn_params.get('DA_t1'):
+    #    lsyn.DA_t1 = float(syn_params['DA_t1'])
+    #if syn_params.get('DA_t2'):
+    #    lsyn.DA_t2 = float(syn_params['DA_t2'])
+    #if syn_params.get('DA_t3'):
+    #    lsyn.DA_t3 = float(syn_params['DA_t3'])
+    #if syn_params.get('DA_S'):
+    #    lsyn.DA_S = float(syn_params['DA_S'])
+    #if syn_params.get('Beta1'):
+    #    lsyn.Beta1 = float(syn_params['Beta1'])
+    #if syn_params.get('Beta2'):
+    #    lsyn.Beta2 = float(syn_params['Beta2'])
+    #if syn_params.get('NEstart1'):
+    #    lsyn.NEstart1 = float(syn_params['NEstart1'])
+    #if syn_params.get('NEstop1'):
+    #    lsyn.NEstop1 = float(syn_params['NEstop1'])
+    #if syn_params.get('NEstart2'):
+    #    lsyn.NEstart2 = float(syn_params['NEstart2'])
+    #if syn_params.get('NEstop2'):
+    #    lsyn.NEstop2 = float(syn_params['NEstop2'])
+    #if syn_params.get('NE_t1'):
+    #    lsyn.NE_t1 = float(syn_params['NE_t1'])
+    #if syn_params.get('NE_t2'):
+    #    lsyn.NE_t2 = float(syn_params['NE_t2'])
+    #if syn_params.get('NE_t3'):
+    #    lsyn.NE_t3 = float(syn_params['NE_t3'])
+    #if syn_params.get('NE_S'):
+    #    lsyn.NE_S = float(syn_params['NE_S'])
 
     return lsyn
 
@@ -516,7 +516,7 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.Erev_gaba = float(syn_params['Erev_gaba'])
     if syn_params.get('gbar_gaba'):
         lsyn.gbar_gaba = float(syn_params['gbar_gaba'])
-    if syn_params.get('Cainf'):
+   # if syn_params.get('Cainf'):
         lsyn.Cainf = float(syn_params['Cainf'])
     if syn_params.get('pooldiam'):
         lsyn.pooldiam = float(syn_params['pooldiam'])
@@ -524,8 +524,8 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.z = float(syn_params['z'])
     if syn_params.get('neuroM'):
         lsyn.neuroM = float(syn_params['neuroM'])
-    if syn_params.get('k'):
-        lsyn.k = float(syn_params['k'])
+    #if syn_params.get('k'):
+    #    lsyn.k = float(syn_params['k'])
     if syn_params.get('tauCa'):
         lsyn.tauCa = float(syn_params['tauCa'])
     if syn_params.get('P0g'):
@@ -546,10 +546,10 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.fmax = float(syn_params['fmax'])
     if syn_params.get('fmin'):
         lsyn.fmin = float(syn_params['fmin'])
-    if syn_params.get('GAPstart1'):
-        lsyn.GAPstart1 = float(syn_params['GAPstart1'])
-    if syn_params.get('GAPstop1'):
-        lsyn.GAPstop1 = float(syn_params['GAPstop1'])
+    #if syn_params.get('GAPstart1'):
+    #    lsyn.GAPstart1 = float(syn_params['GAPstart1'])
+    #if syn_params.get('GAPstop1'):
+    #    lsyn.GAPstop1 = float(syn_params['GAPstop1'])
     if syn_params.get('thr_rp'):
         lsyn.thr_rp = float(syn_params['thr_rp'])
     if syn_params.get('facfactor'):
@@ -566,42 +566,42 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.d2 = float(syn_params['d2'])
     if syn_params.get('tauD2'):
         lsyn.tauD2 = float(syn_params['tauD2'])
-    if syn_params.get('DAstart1'):
-        lsyn.DAstart1 = float(syn_params['DAstart1'])
-    if syn_params.get('DAstop1'):
-        lsyn.DAstop1 = float(syn_params['DAstop1'])
-    if syn_params.get('DAstart2'):
-        lsyn.DAstart2 = float(syn_params['DAstart2'])
-    if syn_params.get('DAstop2'):
-        lsyn.DAstop2 = float(syn_params['DAstop2'])
-    if syn_params.get('DA_t1'):
-        lsyn.DA_t1 = float(syn_params['DA_t1'])
-    if syn_params.get('DA_t2'):
-        lsyn.DA_t2 = float(syn_params['DA_t2'])
-    if syn_params.get('DA_t3'):
-        lsyn.DA_t3 = float(syn_params['DA_t3'])
-    if syn_params.get('DA_S'):
-        lsyn.DA_S = float(syn_params['DA_S'])
-    if syn_params.get('Beta1'):
-        lsyn.Beta1 = float(syn_params['Beta1'])
-    if syn_params.get('Beta2'):
-        lsyn.Beta2 = float(syn_params['Beta2'])
-    if syn_params.get('NEstart1'):
-        lsyn.NEstart1 = float(syn_params['NEstart1'])
-    if syn_params.get('NEstop1'):
-        lsyn.NEstop1 = float(syn_params['NEstop1'])
-    if syn_params.get('NEstart2'):
-        lsyn.NEstart2 = float(syn_params['NEstart2'])
-    if syn_params.get('NEstop2'):
-        lsyn.NEstop2 = float(syn_params['NEstop2'])
-    if syn_params.get('NE_t1'):
-        lsyn.NE_t1 = float(syn_params['NE_t1'])
-    if syn_params.get('NE_t2'):
-        lsyn.NE_t2 = float(syn_params['NE_t2'])
-    if syn_params.get('NE_t3'):
-        lsyn.NE_t3 = float(syn_params['NE_t3'])
-    if syn_params.get('NE_S'):
-        lsyn.NE_S = float(syn_params['NE_S'])
+    #if syn_params.get('DAstart1'):
+    #    lsyn.DAstart1 = float(syn_params['DAstart1'])
+    #if syn_params.get('DAstop1'):
+    #    lsyn.DAstop1 = float(syn_params['DAstop1'])
+    #if syn_params.get('DAstart2'):
+    #    lsyn.DAstart2 = float(syn_params['DAstart2'])
+    #if syn_params.get('DAstop2'):
+    #    lsyn.DAstop2 = float(syn_params['DAstop2'])
+    #if syn_params.get('DA_t1'):
+    #    lsyn.DA_t1 = float(syn_params['DA_t1'])
+    #if syn_params.get('DA_t2'):
+    #    lsyn.DA_t2 = float(syn_params['DA_t2'])
+    #if syn_params.get('DA_t3'):
+    #    lsyn.DA_t3 = float(syn_params['DA_t3'])
+    #if syn_params.get('DA_S'):
+    #    lsyn.DA_S = float(syn_params['DA_S'])
+    #if syn_params.get('Beta1'):
+    #    lsyn.Beta1 = float(syn_params['Beta1'])
+    #if syn_params.get('Beta2'):
+    #    lsyn.Beta2 = float(syn_params['Beta2'])
+    #if syn_params.get('NEstart1'):
+    #    lsyn.NEstart1 = float(syn_params['NEstart1'])
+    #if syn_params.get('NEstop1'):
+    #    lsyn.NEstop1 = float(syn_params['NEstop1'])
+    #if syn_params.get('NEstart2'):
+    #    lsyn.NEstart2 = float(syn_params['NEstart2'])
+    #if syn_params.get('NEstop2'):
+    #    lsyn.NEstop2 = float(syn_params['NEstop2'])
+    #if syn_params.get('NE_t1'):
+    #    lsyn.NE_t1 = float(syn_params['NE_t1'])
+    #if syn_params.get('NE_t2'):
+    #    lsyn.NE_t2 = float(syn_params['NE_t2'])
+    #if syn_params.get('NE_t3'):
+    #    lsyn.NE_t3 = float(syn_params['NE_t3'])
+    #if syn_params.get('NE_S'):
+    #    lsyn.NE_S = float(syn_params['NE_S'])
 
     return lsyn
 
@@ -635,8 +635,8 @@ def pyrD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.Erev_ampa = float(syn_params['Erev_ampa'])
     if syn_params.get('gbar_ampa'):
         lsyn.gbar_ampa = float(syn_params['gbar_ampa'])
-    if syn_params.get('eca'):
-        lsyn.eca = float(syn_params['eca'])
+    #if syn_params.get('eca'):
+    #    lsyn.eca = float(syn_params['eca'])
     if syn_params.get('Cainf'):
         lsyn.Cainf = float(syn_params['Cainf'])
     if syn_params.get('pooldiam'):
@@ -718,8 +718,8 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.Erev_ampa = float(syn_params['Erev_ampa'])
     if syn_params.get('gbar_ampa'):
         lsyn.gbar_ampa = float(syn_params['gbar_ampa'])
-    if syn_params.get('eca'):
-        lsyn.eca = float(syn_params['eca'])
+    #if syn_params.get('eca'):
+    #    lsyn.eca = float(syn_params['eca'])       
     if syn_params.get('Cainf'):
         lsyn.Cainf = float(syn_params['Cainf'])
     if syn_params.get('pooldiam'):
@@ -748,26 +748,26 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.fmax = float(syn_params['fmax'])
     if syn_params.get('fmin'):
         lsyn.fmin = float(syn_params['fmin'])
-    if syn_params.get('DAstart1'):
-        lsyn.DAstart1 = float(syn_params['DAstart1'])
-    if syn_params.get('DAstop1'):
-        lsyn.DAstop1 = float(syn_params['DAstop1'])
-    if syn_params.get('DAstart2'):
-        lsyn.DAstart2 = float(syn_params['DAstart2'])
-    if syn_params.get('DAstop2'):
-        lsyn.DAstop2 = float(syn_params['DAstop2'])
-    if syn_params.get('DA_t1'):
-        lsyn.DA_t1 = float(syn_params['DA_t1'])
-    if syn_params.get('DA_t2'):
-        lsyn.DA_t2 = float(syn_params['DA_t2'])
-    if syn_params.get('DA_t3'):
-        lsyn.DA_t3 = float(syn_params['DA_t3'])
-    if syn_params.get('DA_S'):
-        lsyn.DA_S = float(syn_params['DA_S'])
-    if syn_params.get('Beta1'):
-        lsyn.Beta1 = float(syn_params['Beta1'])
-    if syn_params.get('Beta2'):
-        lsyn.Beta2 = float(syn_params['Beta2'])
+    #if syn_params.get('DAstart1'):
+    #    lsyn.DAstart1 = float(syn_params['DAstart1'])
+    #if syn_params.get('DAstop1'):
+    #    lsyn.DAstop1 = float(syn_params['DAstop1'])
+    #if syn_params.get('DAstart2'):
+    #    lsyn.DAstart2 = float(syn_params['DAstart2'])
+    #if syn_params.get('DAstop2'):
+    #    lsyn.DAstop2 = float(syn_params['DAstop2'])
+    #if syn_params.get('DA_t1'):
+    #    lsyn.DA_t1 = float(syn_params['DA_t1'])
+    #if syn_params.get('DA_t2'):
+    #    lsyn.DA_t2 = float(syn_params['DA_t2'])
+    #if syn_params.get('DA_t3'):
+    #    lsyn.DA_t3 = float(syn_params['DA_t3'])
+    #if syn_params.get('DA_S'):
+    #    lsyn.DA_S = float(syn_params['DA_S'])
+    #if syn_params.get('Beta1'):
+    #    lsyn.Beta1 = float(syn_params['Beta1'])
+    #if syn_params.get('Beta2'):
+    #    lsyn.Beta2 = float(syn_params['Beta2'])
     if syn_params.get('thr_rp'):
         lsyn.thr_rp = float(syn_params['thr_rp'])
     if syn_params.get('facfactor'):
