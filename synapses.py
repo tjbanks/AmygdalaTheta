@@ -386,6 +386,407 @@ def pyr2pyr(syn_params, xs, secs):
     return syns
 
 
+def interD2interD_STFD(syn_params, sec_x, sec_id):
+
+    lsyn = h.interD2interD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('srcid'):
+        lsyn.srcid = float(syn_params['srcid'])
+    if syn_params.get('destid'):
+        lsyn.destid = float(syn_params['destid'])
+    if syn_params.get('type'):
+        lsyn.type = float(syn_params['type'])
+    if syn_params.get('Cdur_gaba'):
+        lsyn.Cdur_gaba = float(syn_params['Cdur_gaba'])
+    if syn_params.get('AlphaTmax_gaba'):
+        lsyn.AlphaTmax_gaba = float(syn_params['AlphaTmax_gaba'])
+    if syn_params.get('Beta_gaba'):
+        lsyn.Beta_gaba = float(syn_params['Beta_gaba'])
+    if syn_params.get('Erev_gaba'):
+        lsyn.Erev_gaba = float(syn_params['Erev_gaba'])
+    if syn_params.get('gbar_gaba'):
+        lsyn.gbar_gaba = float(syn_params['gbar_gaba'])
+    if syn_params.get('Cainf'):
+        lsyn.Cainf = float(syn_params['Cainf'])
+    if syn_params.get('pooldiam'):
+        lsyn.pooldiam = float(syn_params['pooldiam'])
+    if syn_params.get('z'):
+        lsyn.z = float(syn_params['z'])
+    if syn_params.get('neuroM'):
+        lsyn.neuroM = float(syn_params['neuroM'])
+    if syn_params.get('k'):
+        lsyn.k = float(syn_params['k'])
+    if syn_params.get('tauCa'):
+        lsyn.tauCa = float(syn_params['tauCa'])
+    if syn_params.get('P0g'):
+        lsyn.P0g = float(syn_params['P0g'])
+    if syn_params.get('fCag'):
+        lsyn.fCag = float(syn_params['fCag'])
+    if syn_params.get('lambda1'):
+        lsyn.lambda1 = float(syn_params['lambda1'])
+    if syn_params.get('lambda2'):
+        lsyn.lambda2 = float(syn_params['lambda2'])
+    if syn_params.get('threshold1'):
+        lsyn.threshold1 = float(syn_params['threshold1'])
+    if syn_params.get('threshold2'):
+        lsyn.threshold2 = float(syn_params['threshold2'])
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    if syn_params.get('fmax'):
+        lsyn.fmax = float(syn_params['fmax'])
+    if syn_params.get('fmin'):
+        lsyn.fmin = float(syn_params['fmin'])
+    if syn_params.get('GAPstart1'):
+        lsyn.GAPstart1 = float(syn_params['GAPstart1'])
+    if syn_params.get('GAPstop1'):
+        lsyn.GAPstop1 = float(syn_params['GAPstop1'])
+    if syn_params.get('thr_rp'):
+        lsyn.thr_rp = float(syn_params['thr_rp'])
+    if syn_params.get('facfactor'):
+        lsyn.facfactor = float(syn_params['facfactor'])
+    if syn_params.get('f'):
+        lsyn.f = float(syn_params['f'])
+    if syn_params.get('tauF'):
+        lsyn.tauF = float(syn_params['tauF'])
+    if syn_params.get('d1'):
+        lsyn.d1 = float(syn_params['d1'])
+    if syn_params.get('tauD1'):
+        lsyn.tauD1 = float(syn_params['tauD1'])
+    if syn_params.get('d2'):
+        lsyn.d2 = float(syn_params['d2'])
+    if syn_params.get('tauD2'):
+        lsyn.tauD2 = float(syn_params['tauD2'])
+    if syn_params.get('DAstart1'):
+        lsyn.DAstart1 = float(syn_params['DAstart1'])
+    if syn_params.get('DAstop1'):
+        lsyn.DAstop1 = float(syn_params['DAstop1'])
+    if syn_params.get('DAstart2'):
+        lsyn.DAstart2 = float(syn_params['DAstart2'])
+    if syn_params.get('DAstop2'):
+        lsyn.DAstop2 = float(syn_params['DAstop2'])
+    if syn_params.get('DA_t1'):
+        lsyn.DA_t1 = float(syn_params['DA_t1'])
+    if syn_params.get('DA_t2'):
+        lsyn.DA_t2 = float(syn_params['DA_t2'])
+    if syn_params.get('DA_t3'):
+        lsyn.DA_t3 = float(syn_params['DA_t3'])
+    if syn_params.get('DA_S'):
+        lsyn.DA_S = float(syn_params['DA_S'])
+    if syn_params.get('Beta1'):
+        lsyn.Beta1 = float(syn_params['Beta1'])
+    if syn_params.get('Beta2'):
+        lsyn.Beta2 = float(syn_params['Beta2'])
+    if syn_params.get('NEstart1'):
+        lsyn.NEstart1 = float(syn_params['NEstart1'])
+    if syn_params.get('NEstop1'):
+        lsyn.NEstop1 = float(syn_params['NEstop1'])
+    if syn_params.get('NEstart2'):
+        lsyn.NEstart2 = float(syn_params['NEstart2'])
+    if syn_params.get('NEstop2'):
+        lsyn.NEstop2 = float(syn_params['NEstop2'])
+    if syn_params.get('NE_t1'):
+        lsyn.NE_t1 = float(syn_params['NE_t1'])
+    if syn_params.get('NE_t2'):
+        lsyn.NE_t2 = float(syn_params['NE_t2'])
+    if syn_params.get('NE_t3'):
+        lsyn.NE_t3 = float(syn_params['NE_t3'])
+    if syn_params.get('NE_S'):
+        lsyn.NE_S = float(syn_params['NE_S'])
+
+    return lsyn
+
+
+def interD2pyrD_STFD(syn_params, sec_x, sec_id):
+
+    lsyn = h.interD2pyrD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('srcid'):
+        lsyn.srcid = float(syn_params['srcid'])
+    if syn_params.get('destid'):
+        lsyn.destid = float(syn_params['destid'])
+    if syn_params.get('type'):
+        lsyn.type = float(syn_params['type'])
+    if syn_params.get('Cdur_gaba'):
+        lsyn.Cdur_gaba = float(syn_params['Cdur_gaba'])
+    if syn_params.get('AlphaTmax_gaba'):
+        lsyn.AlphaTmax_gaba = float(syn_params['AlphaTmax_gaba'])
+    if syn_params.get('Beta_gaba'):
+        lsyn.Beta_gaba = float(syn_params['Beta_gaba'])
+    if syn_params.get('Erev_gaba'):
+        lsyn.Erev_gaba = float(syn_params['Erev_gaba'])
+    if syn_params.get('gbar_gaba'):
+        lsyn.gbar_gaba = float(syn_params['gbar_gaba'])
+    if syn_params.get('Cainf'):
+        lsyn.Cainf = float(syn_params['Cainf'])
+    if syn_params.get('pooldiam'):
+        lsyn.pooldiam = float(syn_params['pooldiam'])
+    if syn_params.get('z'):
+        lsyn.z = float(syn_params['z'])
+    if syn_params.get('neuroM'):
+        lsyn.neuroM = float(syn_params['neuroM'])
+    if syn_params.get('k'):
+        lsyn.k = float(syn_params['k'])
+    if syn_params.get('tauCa'):
+        lsyn.tauCa = float(syn_params['tauCa'])
+    if syn_params.get('P0g'):
+        lsyn.P0g = float(syn_params['P0g'])
+    if syn_params.get('fCag'):
+        lsyn.fCag = float(syn_params['fCag'])
+    if syn_params.get('lambda1'):
+        lsyn.lambda1 = float(syn_params['lambda1'])
+    if syn_params.get('lambda2'):
+        lsyn.lambda2 = float(syn_params['lambda2'])
+    if syn_params.get('threshold1'):
+        lsyn.threshold1 = float(syn_params['threshold1'])
+    if syn_params.get('threshold2'):
+        lsyn.threshold2 = float(syn_params['threshold2'])
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    if syn_params.get('fmax'):
+        lsyn.fmax = float(syn_params['fmax'])
+    if syn_params.get('fmin'):
+        lsyn.fmin = float(syn_params['fmin'])
+    if syn_params.get('GAPstart1'):
+        lsyn.GAPstart1 = float(syn_params['GAPstart1'])
+    if syn_params.get('GAPstop1'):
+        lsyn.GAPstop1 = float(syn_params['GAPstop1'])
+    if syn_params.get('thr_rp'):
+        lsyn.thr_rp = float(syn_params['thr_rp'])
+    if syn_params.get('facfactor'):
+        lsyn.facfactor = float(syn_params['facfactor'])
+    if syn_params.get('f'):
+        lsyn.f = float(syn_params['f'])
+    if syn_params.get('tauF'):
+        lsyn.tauF = float(syn_params['tauF'])
+    if syn_params.get('d1'):
+        lsyn.d1 = float(syn_params['d1'])
+    if syn_params.get('tauD1'):
+        lsyn.tauD1 = float(syn_params['tauD1'])
+    if syn_params.get('d2'):
+        lsyn.d2 = float(syn_params['d2'])
+    if syn_params.get('tauD2'):
+        lsyn.tauD2 = float(syn_params['tauD2'])
+    if syn_params.get('DAstart1'):
+        lsyn.DAstart1 = float(syn_params['DAstart1'])
+    if syn_params.get('DAstop1'):
+        lsyn.DAstop1 = float(syn_params['DAstop1'])
+    if syn_params.get('DAstart2'):
+        lsyn.DAstart2 = float(syn_params['DAstart2'])
+    if syn_params.get('DAstop2'):
+        lsyn.DAstop2 = float(syn_params['DAstop2'])
+    if syn_params.get('DA_t1'):
+        lsyn.DA_t1 = float(syn_params['DA_t1'])
+    if syn_params.get('DA_t2'):
+        lsyn.DA_t2 = float(syn_params['DA_t2'])
+    if syn_params.get('DA_t3'):
+        lsyn.DA_t3 = float(syn_params['DA_t3'])
+    if syn_params.get('DA_S'):
+        lsyn.DA_S = float(syn_params['DA_S'])
+    if syn_params.get('Beta1'):
+        lsyn.Beta1 = float(syn_params['Beta1'])
+    if syn_params.get('Beta2'):
+        lsyn.Beta2 = float(syn_params['Beta2'])
+    if syn_params.get('NEstart1'):
+        lsyn.NEstart1 = float(syn_params['NEstart1'])
+    if syn_params.get('NEstop1'):
+        lsyn.NEstop1 = float(syn_params['NEstop1'])
+    if syn_params.get('NEstart2'):
+        lsyn.NEstart2 = float(syn_params['NEstart2'])
+    if syn_params.get('NEstop2'):
+        lsyn.NEstop2 = float(syn_params['NEstop2'])
+    if syn_params.get('NE_t1'):
+        lsyn.NE_t1 = float(syn_params['NE_t1'])
+    if syn_params.get('NE_t2'):
+        lsyn.NE_t2 = float(syn_params['NE_t2'])
+    if syn_params.get('NE_t3'):
+        lsyn.NE_t3 = float(syn_params['NE_t3'])
+    if syn_params.get('NE_S'):
+        lsyn.NE_S = float(syn_params['NE_S'])
+
+    return lsyn
+
+def pyrD2interD_STFD(syn_params, sec_x, sec_id):
+    
+    lsyn = h.pyrD2interD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('srcid'):
+        lsyn.srcid = float(syn_params['srcid'])
+    if syn_params.get('destid'):
+        lsyn.destid = float(syn_params['destid'])
+    if syn_params.get('type'):
+        lsyn.type = float(syn_params['type'])
+    if syn_params.get('Cdur_nmda'):
+        lsyn.Cdur_nmda = float(syn_params['Cdur_nmda'])
+    if syn_params.get('AlphaTmax_nmda'):
+        lsyn.AlphaTmax_nmda = float(syn_params['AlphaTmax_nmda'])
+    if syn_params.get('Beta_nmda'):
+        lsyn.Beta_nmda = float(syn_params['Beta_nmda'])
+    if syn_params.get('Erev_nmda'):
+        lsyn.Erev_nmda = float(syn_params['Erev_nmda'])
+    if syn_params.get('gbar_nmda'):
+        lsyn.gbar_nmda = float(syn_params['gbar_nmda'])
+    if syn_params.get('Cdur_ampa'):
+        lsyn.Cdur_ampa = float(syn_params['Cdur_ampa'])
+    if syn_params.get('AlphaTmax_ampa'):
+        lsyn.AlphaTmax_ampa = float(syn_params['AlphaTmax_ampa'])
+    if syn_params.get('Beta_ampa'):
+        lsyn.Beta_ampa = float(syn_params['Beta_ampa'])
+    if syn_params.get('Erev_ampa'):
+        lsyn.Erev_ampa = float(syn_params['Erev_ampa'])
+    if syn_params.get('gbar_ampa'):
+        lsyn.gbar_ampa = float(syn_params['gbar_ampa'])
+    if syn_params.get('eca'):
+        lsyn.eca = float(syn_params['eca'])
+    if syn_params.get('Cainf'):
+        lsyn.Cainf = float(syn_params['Cainf'])
+    if syn_params.get('pooldiam'):
+        lsyn.pooldiam = float(syn_params['pooldiam'])
+    if syn_params.get('z'):
+        lsyn.z = float(syn_params['z'])
+    if syn_params.get('neuroM'):
+        lsyn.neuroM = float(syn_params['neuroM'])
+    if syn_params.get('tauCa'):
+        lsyn.tauCa = float(syn_params['tauCa'])
+    if syn_params.get('P0n'):
+        lsyn.P0n = float(syn_params['P0n'])
+    if syn_params.get('fCan'):
+        lsyn.fCan = float(syn_params['fCan'])
+    if syn_params.get('P0a'):
+        lsyn.P0a = float(syn_params['P0a'])
+    if syn_params.get('fCaa'):
+        lsyn.fCaa = float(syn_params['fCaa'])
+    if syn_params.get('lambda1'):
+        lsyn.lambda1 = float(syn_params['lambda1'])
+    if syn_params.get('lambda2'):
+        lsyn.lambda2 = float(syn_params['lambda2'])
+    if syn_params.get('threshold1'):
+        lsyn.threshold1 = float(syn_params['threshold1'])
+    if syn_params.get('threshold2'):
+        lsyn.threshold2 = float(syn_params['threshold2'])
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    if syn_params.get('fmax'):
+        lsyn.fmax = float(syn_params['fmax'])
+    if syn_params.get('fmin'):
+        lsyn.fmin = float(syn_params['fmin'])
+    if syn_params.get('thr_rp'):
+        lsyn.thr_rp = float(syn_params['thr_rp'])
+    if syn_params.get('facfactor'):
+        lsyn.facfactor = float(syn_params['facfactor'])
+    if syn_params.get('f'):
+        lsyn.f = float(syn_params['f'])
+    if syn_params.get('tauF'):
+        lsyn.tauF = float(syn_params['tauF'])
+    if syn_params.get('d1'):
+        lsyn.d1 = float(syn_params['d1'])
+    if syn_params.get('tauD1'):
+        lsyn.tauD1 = float(syn_params['tauD1'])
+    if syn_params.get('d2'):
+        lsyn.d2 = float(syn_params['d2'])
+    if syn_params.get('tauD2'):
+        lsyn.tauD2 = float(syn_params['tauD2'])
+
+    return lsyn
+
+def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
+    
+    lsyn = h.pyrD2pyrD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('srcid'):
+        lsyn.srcid = float(syn_params['srcid'])
+    if syn_params.get('destid'):
+        lsyn.destid = float(syn_params['destid'])
+    if syn_params.get('type'):
+        lsyn.type = float(syn_params['type'])
+    if syn_params.get('Cdur_nmda'):
+        lsyn.Cdur_nmda = float(syn_params['Cdur_nmda'])
+    if syn_params.get('AlphaTmax_nmda'):
+        lsyn.AlphaTmax_nmda = float(syn_params['AlphaTmax_nmda'])
+    if syn_params.get('Beta_nmda'):
+        lsyn.Beta_nmda = float(syn_params['Beta_nmda'])
+    if syn_params.get('Erev_nmda'):
+        lsyn.Erev_nmda = float(syn_params['Erev_nmda'])
+    if syn_params.get('gbar_nmda'):
+        lsyn.gbar_nmda = float(syn_params['gbar_nmda'])
+    if syn_params.get('Cdur_ampa'):
+        lsyn.Cdur_ampa = float(syn_params['Cdur_ampa'])
+    if syn_params.get('AlphaTmax_ampa'):
+        lsyn.AlphaTmax_ampa = float(syn_params['AlphaTmax_ampa'])
+    if syn_params.get('Beta_ampa'):
+        lsyn.Beta_ampa = float(syn_params['Beta_ampa'])
+    if syn_params.get('Erev_ampa'):
+        lsyn.Erev_ampa = float(syn_params['Erev_ampa'])
+    if syn_params.get('gbar_ampa'):
+        lsyn.gbar_ampa = float(syn_params['gbar_ampa'])
+    if syn_params.get('eca'):
+        lsyn.eca = float(syn_params['eca'])
+    if syn_params.get('Cainf'):
+        lsyn.Cainf = float(syn_params['Cainf'])
+    if syn_params.get('pooldiam'):
+        lsyn.pooldiam = float(syn_params['pooldiam'])
+    if syn_params.get('z'):
+        lsyn.z = float(syn_params['z'])
+    if syn_params.get('neuroM'):
+        lsyn.neuroM = float(syn_params['neuroM'])
+    if syn_params.get('tauCa'):
+        lsyn.tauCa = float(syn_params['tauCa'])
+    if syn_params.get('P0'):
+        lsyn.P0 = float(syn_params['P0'])
+    if syn_params.get('fCa'):
+        lsyn.fCa = float(syn_params['fCa'])
+    if syn_params.get('lambda1'):
+        lsyn.lambda1 = float(syn_params['lambda1'])
+    if syn_params.get('lambda2'):
+        lsyn.lambda2 = float(syn_params['lambda2'])
+    if syn_params.get('threshold1'):
+        lsyn.threshold1 = float(syn_params['threshold1'])
+    if syn_params.get('threshold2'):
+        lsyn.threshold2 = float(syn_params['threshold2'])
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    if syn_params.get('fmax'):
+        lsyn.fmax = float(syn_params['fmax'])
+    if syn_params.get('fmin'):
+        lsyn.fmin = float(syn_params['fmin'])
+    if syn_params.get('DAstart1'):
+        lsyn.DAstart1 = float(syn_params['DAstart1'])
+    if syn_params.get('DAstop1'):
+        lsyn.DAstop1 = float(syn_params['DAstop1'])
+    if syn_params.get('DAstart2'):
+        lsyn.DAstart2 = float(syn_params['DAstart2'])
+    if syn_params.get('DAstop2'):
+        lsyn.DAstop2 = float(syn_params['DAstop2'])
+    if syn_params.get('DA_t1'):
+        lsyn.DA_t1 = float(syn_params['DA_t1'])
+    if syn_params.get('DA_t2'):
+        lsyn.DA_t2 = float(syn_params['DA_t2'])
+    if syn_params.get('DA_t3'):
+        lsyn.DA_t3 = float(syn_params['DA_t3'])
+    if syn_params.get('DA_S'):
+        lsyn.DA_S = float(syn_params['DA_S'])
+    if syn_params.get('Beta1'):
+        lsyn.Beta1 = float(syn_params['Beta1'])
+    if syn_params.get('Beta2'):
+        lsyn.Beta2 = float(syn_params['Beta2'])
+    if syn_params.get('thr_rp'):
+        lsyn.thr_rp = float(syn_params['thr_rp'])
+    if syn_params.get('facfactor'):
+        lsyn.facfactor = float(syn_params['facfactor'])
+    if syn_params.get('f'):
+        lsyn.f = float(syn_params['f'])
+    if syn_params.get('tauF'):
+        lsyn.tauF = float(syn_params['tauF'])
+    if syn_params.get('d1'):
+        lsyn.d1 = float(syn_params['d1'])
+    if syn_params.get('tauD1'):
+        lsyn.tauD1 = float(syn_params['tauD1'])
+    if syn_params.get('d2'):
+        lsyn.d2 = float(syn_params['d2'])
+    if syn_params.get('tauD2'):
+        lsyn.tauD2 = float(syn_params['tauD2'])
+
+    return lsyn
+
 def load():
     add_synapse_model(Bg2Pyr, 'bg2pyr', overwrite=False)
     add_synapse_model(Bg2Pyr, overwrite=False)
@@ -397,6 +798,16 @@ def load():
     add_synapse_model(Int2Pyr, overwrite=False)
     add_synapse_model(Int2Int, 'int2int', overwrite=False)
     add_synapse_model(Int2Int, overwrite=False)
+    
+    add_synapse_model(interD2interD_STFD, 'interD2interD_STFD', overwrite=False)
+    add_synapse_model(interD2interD_STFD, overwrite=False)
+    add_synapse_model(interD2pyrD_STFD, 'interD2pyrD_STFD', overwrite=False)
+    add_synapse_model(interD2pyrD_STFD, overwrite=False)
+    add_synapse_model(pyrD2interD_STFD, 'pyrD2interD_STFD', overwrite=False)
+    add_synapse_model(pyrD2interD_STFD, overwrite=False)
+    add_synapse_model(pyrD2pyrD_STFD, 'pyrD2pyrD_STFD', overwrite=False)
+    add_synapse_model(pyrD2pyrD_STFD, overwrite=False)
+
     return
 
 def syn_params_dicts(syn_dir='components/synaptic_models'):

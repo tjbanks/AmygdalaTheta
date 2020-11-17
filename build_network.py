@@ -202,6 +202,18 @@ def one_to_one(source, target):
 
     return tmp_nsyn
 
+def one_to_one_offset(source, target, offset=0):
+
+    sid = source.node_id
+    tid = target.node_id - offset
+    if sid == tid:
+        #print("connecting cell {} to {}".format(sid,tid))
+        tmp_nsyn = 1
+    else:
+        #print("NOT connecting cell {} to {}".format(sid,tid))
+        return None
+
+    return tmp_nsyn
 
 def syn_dist_delay(source, target, min_delay):#, min_weight, max_weight):
 
@@ -230,7 +242,8 @@ def syn_percent(source,target,p):
 add_delays = []#Says whether the next add_edges should have delays added by distance.
 min_delays = []#Stores min_delay for each synapse type to be used later.
 
-dynamics_file = 'PN2PN.json'
+#dynamics_file = 'PN2PN.json'
+dynamics_file = 'PN2PN_feng.json'
 
 add_delays.append(True)
 min_delays.append(syn[dynamics_file]['delay'])
@@ -264,7 +277,8 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': [
 #             rule_params={'min_delay':syn[dynamics_file]['delay']}, dtypes=[np.float])
 
 # Create connections between Pyr --> Bask cells
-dynamics_file = 'PN2INT.json'
+#dynamics_file = 'PN2INT.json'
+dynamics_file = 'PN2INT_feng.json'
 
 add_delays.append(True)
 min_delays.append(syn[dynamics_file]['delay'])
@@ -321,7 +335,8 @@ if False:
                 sec_x=0.5)
 
 # Create connections between Bask --> Pyr cells
-dynamics_file = 'INT2PN.json'
+#dynamics_file = 'INT2PN.json'
+dynamics_file = 'INT2PN_feng.json'
 
 add_delays.append(True)
 min_delays.append(syn[dynamics_file]['delay'])
@@ -380,6 +395,7 @@ if False:
 
 # Create connections between Bask --> Bask cells
 dynamics_file = 'INT2INT.json'
+dynamics_file = 'INT2INT_feng.json'
 
 add_delays.append(True)
 min_delays.append(syn[dynamics_file]['delay'])
@@ -466,9 +482,10 @@ net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
 
 net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
                    connection_rule=one_to_one,
-                   syn_weight=8.5e-03,
-                   weight_function='lognormal',
-                   weight_sigma=2.0e-03,
+                   syn_weight=1,
+                   #syn_weight=8.5e-03,
+                   #weight_function='lognormal',
+                   #weight_sigma=2.0e-03,
                    target_sections=['basal'],
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
@@ -478,9 +495,10 @@ net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
 
 net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    connection_rule=one_to_one,
-                   syn_weight=8.5e-03,
-                   weight_function='lognormal',
-                   weight_sigma=2.0e-03,
+                   syn_weight=1,
+                   #syn_weight=8.5e-03,
+                   #weight_function='lognormal',
+                   #weight_sigma=2.0e-03,
                    target_sections=['basal'],
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
@@ -489,10 +507,12 @@ net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    sec_x=0.9)
 
 net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
-                   connection_rule=one_to_one,
-                   syn_weight=1.0e-03,
-                   weight_function='lognormal',
-                   weight_sigma=2.0e-04,
+                   connection_rule=one_to_one_offset,
+                   connection_params={'offset':numPN_A+numPN_C},
+                   syn_weight=1,
+                   #syn_weight=1.0e-03,
+                   #weight_function='lognormal',
+                   #weight_sigma=2.0e-04,
                    target_sections=['basal'],
                    delay=0.1,
                    distance_range=[0.0, 9999.9],
@@ -518,7 +538,7 @@ exc_bg_bask.build()
 exc_bg_bask.save_nodes(output_dir='network')
 #
 #print("External nodes and edges built")
-t_sim = 5000
+t_sim = 5000.0
 
 from bmtk.utils.sim_setup import build_env_bionet
 
@@ -542,14 +562,14 @@ from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 
 psg = PoissonSpikeGenerator(population='mthalamus')
 psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
-        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+        firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+        times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
 psg.to_sonata('mthalamus_spikes.h5')
 
 psg = PoissonSpikeGenerator(population='exc_bg_bask')
 psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
-        firing_rate=0.002,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim))    # Firing starts at 0 s up to 3 s
+        firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+        times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
 psg.to_sonata('exc_bg_bask_spikes.h5')
 
 

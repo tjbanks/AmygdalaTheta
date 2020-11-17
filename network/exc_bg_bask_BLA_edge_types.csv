@@ -1,2 +1,2 @@
-edge_type_id target_query source_query distance_range weight_function delay syn_weight target_sections dynamics_params model_template weight_sigma
-106 pop_name=='Bask' * "[0.0, 9999.9]" lognormal 0.1 0.001 ['basal'] BG2PN_feng.json bg2pyr 0.0002
+edge_type_id target_query source_query model_template sec_x syn_weight delay dynamics_params distance_range target_sections
+106 pop_name=='Bask' * bg2pyr 0.9 1 0.1 BG2PN_feng.json "[0.0, 9999.9]" ['basal']
