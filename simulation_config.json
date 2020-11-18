@@ -10,7 +10,7 @@
     "dt": 0.1,
     "dL": 20.0,
     "spike_threshold": -15.0,
-    "nsteps_block": 5000
+    "nsteps_block": 500
   },
   "conditions": {
     "celsius": 34.0,
@@ -34,14 +34,6 @@
     "log_file": "log.txt",
     "output_dir": "$OUTPUT_DIR",
     "spikes_file": "spikes.h5"
-  },
-  "reports": {
-    "v_report": {
-      "variable_name": "v",
-      "cells": "all",
-      "module": "membrane_report",
-      "sections": "soma"
-    }
   },
   "node_sets_file": "$BASE_DIR/node_sets.json",
   "network": "$BASE_DIR/circuit_config.json"
