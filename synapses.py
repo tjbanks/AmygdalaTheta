@@ -16,7 +16,11 @@ def Bg2Pyr(syn_params, sec_x, sec_id):
 
     lsyn = h.bg2pyr(sec_x, sec=sec_id)
 
-    if syn_params.get('initW'):
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = syn_params['initW_lognormal_mean']
+        std = syn_params['initW_lognormal_std']
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
     if syn_params.get('taun1'):
         lsyn.taun1 = float(syn_params['taun1'])
@@ -430,7 +434,11 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.threshold1 = float(syn_params['threshold1'])
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
-    if syn_params.get('initW'):
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = syn_params['initW_lognormal_mean']
+        std = syn_params['initW_lognormal_std']
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
     if syn_params.get('fmax'):
         lsyn.fmax = float(syn_params['fmax'])
@@ -540,7 +548,11 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.threshold1 = float(syn_params['threshold1'])
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
-    if syn_params.get('initW'):
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = syn_params['initW_lognormal_mean']
+        std = syn_params['initW_lognormal_std']
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
     if syn_params.get('fmax'):
         lsyn.fmax = float(syn_params['fmax'])
@@ -663,7 +675,11 @@ def pyrD2interD_STFD(syn_params, sec_x, sec_id):
         lsyn.threshold1 = float(syn_params['threshold1'])
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
-    if syn_params.get('initW'):
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = syn_params['initW_lognormal_mean']
+        std = syn_params['initW_lognormal_std']
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
     if syn_params.get('fmax'):
         lsyn.fmax = float(syn_params['fmax'])
@@ -742,7 +758,11 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
         lsyn.threshold1 = float(syn_params['threshold1'])
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
-    if syn_params.get('initW'):
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = syn_params['initW_lognormal_mean']
+        std = syn_params['initW_lognormal_std']
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
     if syn_params.get('fmax'):
         lsyn.fmax = float(syn_params['fmax'])
