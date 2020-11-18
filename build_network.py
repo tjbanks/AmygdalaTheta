@@ -547,6 +547,8 @@ build_env_bionet(base_dir='./',
 		network_dir='./network',
 		tstop=t_sim, dt = 0.1,
 		report_vars = ['v'],
+                v_init = -70.0,
+                celsius = 31.0,
 		spikes_inputs=[('mthalamus',   # Name of population which spikes will be generated for
                                 'mthalamus_spikes.h5'),('exc_bg_bask','exc_bg_bask_spikes.h5')],
 		#current_clamp={     

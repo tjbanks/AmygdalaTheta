@@ -19,13 +19,13 @@ LFP = data(channel,:);
 
 % assuming LFP is stored in an array called LFP
 
-LFP = lowpass(LFP,500,fs);
-[pxx,f] = pwelch(LFP,bartlett(nfft),0,nfft,fs);
-%[pxx,f] = pwelch(LFP,nfft,0,nfft,fs);
+%LFP = lowpass(LFP,500,fs);
+%[pxx,f] = pwelch(LFP,bartlett(nfft),0,nfft,fs);
+[pxx,f] = pwelch(LFP,nfft,0,nfft,fs);
 plot(f,pxx);
-%xlim([0,50]);
+%xlim([0,100]);
 set(gca,'yscale','log');
-set(gca,'xscale','linear');
+set(gca,'xscale','log');
 
 %window = 1*floor(size(LFP,2)/7.8);
 %window = size(LFP,2)

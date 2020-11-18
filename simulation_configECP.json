@@ -14,8 +14,8 @@
     "nsteps_block": 5000
   },
   "conditions": {
-    "celsius": 34.0,
-    "v_init": -80.0
+    "celsius": 31.0,
+    "v_init": -70.0
   },
   "inputs": {
     "mthalamus_spikes": {
