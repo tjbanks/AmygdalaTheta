@@ -19,6 +19,9 @@ def Bg2Pyr(syn_params, sec_x, sec_id):
     if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         mean = syn_params['initW_lognormal_mean']
         std = syn_params['initW_lognormal_std']
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
         lsyn.initW = float(np.random.lognormal(mean,std))
     elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -435,8 +438,11 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
     if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
-        mean = syn_params['initW_lognormal_mean']
-        std = syn_params['initW_lognormal_std']
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
         lsyn.initW = float(np.random.lognormal(mean,std))
     elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -549,8 +555,11 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
     if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
-        mean = syn_params['initW_lognormal_mean']
-        std = syn_params['initW_lognormal_std']
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
         lsyn.initW = float(np.random.lognormal(mean,std))
     elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -676,8 +685,11 @@ def pyrD2interD_STFD(syn_params, sec_x, sec_id):
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
     if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
-        mean = syn_params['initW_lognormal_mean']
-        std = syn_params['initW_lognormal_std']
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
         lsyn.initW = float(np.random.lognormal(mean,std))
     elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -759,8 +771,11 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2'])
     if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
-        mean = syn_params['initW_lognormal_mean']
-        std = syn_params['initW_lognormal_std']
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
         lsyn.initW = float(np.random.lognormal(mean,std))
     elif syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])

@@ -263,7 +263,7 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': [
               distance_range=[0.0, 9999.9],
               target_sections=['basal'],
               sec_id=0,
-              sec_x=0.5)
+              sec_x=0.9)
 
 # if add_properties:
 #     if do_pos:
@@ -296,9 +296,9 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
               distance_range=[0.0, 9999.9],
-              target_sections=['somatic'],
+              target_sections=['basal'],
               sec_id=0,
-              sec_x=0.5)
+              sec_x=0.9)
 
 # if add_properties:
 #     if do_pos:
@@ -356,7 +356,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               distance_range=[0.0, 9999.9],
               target_sections=['somatic'],
               sec_id=0,
-              sec_x=0.5)
+              sec_x=0.9)
 
 # if add_properties:
 #     if do_pos:
@@ -418,7 +418,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               distance_range=[0.0, 9999.9],
               target_sections=['somatic'],
               sec_id=0,
-              sec_x=0.5)
+              sec_x=0.9)
 
 # if add_properties:
 #     if do_pos:

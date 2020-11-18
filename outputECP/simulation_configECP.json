@@ -27,21 +27,23 @@
     }
   },
   "output": {
-    "log_file": "/home/tbg28/git_stage/AmygdalaTheta/output/log.txt",
-    "output_dir": "/home/tbg28/git_stage/AmygdalaTheta/output",
-    "spikes_file": "/home/tbg28/git_stage/AmygdalaTheta/output/spikes.h5"
+    "log_file": "/home/tbg28/git_stage/AmygdalaTheta/outputECP/log.txt",
+    "output_dir": "/home/tbg28/git_stage/AmygdalaTheta/outputECP",
+    "spikes_file": "/home/tbg28/git_stage/AmygdalaTheta/outputECP/spikes.h5"
   },
   "reports": {
-    "v_report": {
-      "variable_name": "v",
+    "ecp": {
       "cells": "all",
-      "module": "membrane_report",
-      "sections": "soma"
+      "variable_name": "v",
+      "module": "extracellular",
+      "electrode_positions": "/home/tbg28/git_stage/AmygdalaTheta/components/recXelectrodes/linear_electrode.csv",
+      "file_name": "ecp.h5",
+      "electrode_channels": "all"
     }
   },
   "node_sets_file": "/home/tbg28/git_stage/AmygdalaTheta/node_sets.json",
   "network": "/home/tbg28/git_stage/AmygdalaTheta/circuit_config.json",
-  "config_path": "/home/tbg28/git_stage/AmygdalaTheta/simulation_config.json",
+  "config_path": "/home/tbg28/git_stage/AmygdalaTheta/simulation_configECP.json",
   "config_dir": "/home/tbg28/git_stage/AmygdalaTheta",
   "components": {
     "__pycache___dir": "/home/tbg28/git_stage/AmygdalaTheta/components/__pycache__",

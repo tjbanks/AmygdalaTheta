@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import welch
 import scipy.signal as ss
 
-tsim = 10000
+tsim = 5000
 
 def moving_average(a, n=3) :
     ret = np.cumsum(a, dtype=float)
@@ -19,10 +19,10 @@ def zscore(x):
     return (x - np.mean(x))/np.std(x)
 
 # Load data
-config_file = "simulation_config.json"
-lfp_file = "./output/ecp.h5"
-mem_pot_file = './output/v_report.h5'
-raster_file = './output/spikes.h5'
+config_file = "simulation_configECP.json"
+lfp_file = "./outputECP/ecp.h5"
+mem_pot_file = './outputECP/v_report.h5'
+raster_file = './outputECP/spikes.h5'
 conns_file = './network/BLA_BLA_edges.h5'
 
 
@@ -35,19 +35,20 @@ lfp = list(f['ecp']['data'])
 lfp_arr = np.asarray(lfp)
 
 f = h5py.File(raster_file,'r')
-gids = f['spikes']['exc_bg_bask']['node_ids']
-timestamps = f['spikes']['exc_bg_bask']['timestamps']
-
+#gids = f['spikes']['exc_bg_bask']['node_ids']
+#timestamps = f['spikes']['exc_bg_bask']['timestamps']
+gids = f['spikes']['BLA']['node_ids']
+timestamps = f['spikes']['BLA']['timestamps']
 
 plt.figure()
 plt.title('LFP')
 lfp1 = zscore(lfp_arr[:,0])
-lfp2 = zscore(lfp_arr[:,2])
-lfp3 = zscore(lfp_arr[:,4])
+#lfp2 = zscore(lfp_arr[:,2])
+#lfp3 = zscore(lfp_arr[:,4])
 #np.savetxt("lfp_ben.csv", lfp1, delimiter=",")
 plt.plot(np.arange(0,tsim,0.1),lfp1)
-plt.plot(np.arange(0,tsim,0.1),lfp2)
-plt.plot(np.arange(0,tsim,0.1),lfp3)
+#plt.plot(np.arange(0,tsim,0.1),lfp2)
+#plt.plot(np.arange(0,tsim,0.1),lfp3)
 plt.xlim(4000,5000)
 
 freqs, psd = welch(lfp1,fs=10000)
@@ -65,6 +66,7 @@ plt.figure()
 plt.title('INT FR')
 plt.hist(n/(tsim/1000))
 
+"""
 gids2 = f['spikes']['mthalamus']['node_ids']
 timestamps2 = f['spikes']['mthalamus']['timestamps']
 
@@ -73,7 +75,7 @@ timestamps2 = f['spikes']['mthalamus']['timestamps']
 plt.figure()
 plt.title('PN FR')
 plt.hist(n/(tsim/1000))
-
+"""
 
 #f = h5py.File(conns_file,'r')
 #src = f['edges']['SPWR_biophysical_SPWR_biophysical']['source_node_id']
@@ -110,10 +112,12 @@ plt.hist(n/(tsim/1000))
 #plt.plot(lfp_arr[:,1])
 #plt.plot(lfp_arr[:,2])
 
-
+"""
 plt.figure()
 plt.plot(timestamps,gids,'r.')
+
 plt.plot(timestamps2,gids2 + np.max(gids),'b.')
+"""
 
 #plt.figure()
 #x = lfp_arr[:,0]
