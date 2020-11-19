@@ -1,6 +1,6 @@
 {
     "level_of_detail": "bg2pyr",
-    "initW_lognormal_mean": 8.5,
+    "initW_lognormal_mean":12.75, 
     "initW_lognormal_std": 2,
     "taun1": 5,
     "taun2": 125,
