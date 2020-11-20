@@ -176,5 +176,6 @@ begintemplate SOM_Cell
 	define_shape()
 
 	}
+        proc insert_mechs(){}        
 
 endtemplate SOM_Cell

@@ -14,7 +14,7 @@ figure;plot(lfp_d);
  figure;plot(f,pxx);
  set(gca, 'YScale', 'log');
  set(gca, 'XScale', 'log');
- return
+ %return
 %load ('spikes.mat');
 timestamps = h5read(spikeh5path,'/spikes/BLA/timestamps');
 node_ids = h5read(spikeh5path,'/spikes/BLA/node_ids');

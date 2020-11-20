@@ -14,10 +14,15 @@ net = NetworkBuilder("BLA")
 numPN_A = 640#4114#15930
 numPN_C = 260#4115#6210
 numBask = 100#854#4860
+numSOM = 100
 # add_properties = False
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
 
+connect_som = False
+
+if connect_som:
+    num_cells = num_cells + numSOM
 # Create the possible x,y,z coordinates
 
 x_start, x_end = 0,600
@@ -51,11 +56,11 @@ net.add_nodes(N=numPN_A, pop_name='PyrA',
               model_template='hoc:feng_typeA',
               morphology=None)
 
-##################################################################################
-###################################Pyr Type C#####################################
-
 # Get rid of coordinates already used
 pos_list = np.delete(pos_list,inds,0)
+
+##################################################################################
+###################################Pyr Type C#####################################
 
 # Pick new coordinates
 inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numPN_C,replace=False)
@@ -72,12 +77,14 @@ net.add_nodes(N=numPN_C, pop_name='PyrC',
               model_type='biophysical',
               model_template='hoc:feng_typeC',
               morphology=None)
+
+# Get rid of coordinates already used
+pos_list = np.delete(pos_list,inds,0)
+
 #################################################################################
 ############################# Chandelier ########################################
-if False:
-    # Get rid of coordinates already used
-    pos_list = np.delete(pos_list,inds,0)
 
+if False:
     # Pick new coordinates
     inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numAAC,replace=False)
     pos = pos_list[inds,:]
@@ -117,6 +124,33 @@ net.add_nodes(N=numBask, pop_name='Bask',
               model_type='biophysical',
               model_template='hoc:basket',
               morphology=None)
+
+pos_list = np.delete(pos_list,inds,0)
+#################################################################################
+################################# SOM Cells #####################################
+
+if connect_som:
+    # Pick new coordinates
+    inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numSOM,replace=False)
+    pos = pos_list[inds,:]
+
+    som_pos = pos.copy()
+    #nid_pos = np.concatenate([pyra_pos, pyrc_pos, aac_pos, bask_pos])
+    nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos,som_pos])
+    #import pdb; pdb.set_trace()
+
+    # Add a population of numBask nodes
+    net.add_nodes(N=numSOM, pop_name='SOM',
+              positions=positions_list(positions=pos),
+              rotation_angle_zaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+              rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+              mem_potential='e',
+              model_type='biophysical',
+              model_template='hoc:SOM_Cell',
+              morphology=None)
+
+
+    pos_list = np.delete(pos_list,inds,0)
 ################################################################################
 ############################# BACKGROUND INPUTS ################################
 
@@ -350,8 +384,46 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               connection_params={'p':0.34},
               syn_weight=1,
               delay=0.1,
-              dynamics_params='INT2PN.json',
-              model_template=syn['INT2PN.json']['level_of_detail'],
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              #distance_range=[0.0, 300.0],
+              distance_range=[0.0, 9999.9],
+              target_sections=['somatic'],
+              sec_id=0,
+              sec_x=0.9)
+
+
+if connect_som:
+    dynamics_file = 'PN2SOM_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'SOM'},
+              iterator = 'one_to_one',
+              #connection_rule=dist_conn_perc,
+              #connection_params={'min_dist':0.0,'max_dist':100000.0,
+                          #   'min_syns':1,'max_syns':2,'A':0.313,'B':0.004029},
+              connection_rule=syn_percent,
+              connection_params={'p':0.309},
+              syn_weight=1,
+              delay=0.1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              #distance_range=[0.0, 300.0],
+              distance_range=[0.0, 9999.9],
+              target_sections=['somatic'],
+              sec_id=0,
+              sec_x=0.9)
+
+    dynamics_file = 'SOM2PN_tyler.json'
+    conn = net.add_edges(source={'pop_name': 'SOM'}, target={'pop_name': ['PyrA','PyrC']},
+              iterator = 'one_to_one',
+              #connection_rule=dist_conn_perc,
+              #connection_params={'min_dist':0.0,'max_dist':100000.0,
+                          #   'min_syns':1,'max_syns':2,'A':0.313,'B':0.004029},
+              connection_rule=syn_percent,
+              connection_params={'p':0.066},
+              syn_weight=1,
+              delay=0.1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
               distance_range=[0.0, 9999.9],
               target_sections=['somatic'],
