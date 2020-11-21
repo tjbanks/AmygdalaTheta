@@ -171,7 +171,7 @@ begintemplate SOM_Cell
 	
 		}
 	
-  	connect soma[0](1), dend[0](0)
+  	connect dend[0](1), soma[0](0)
 	connect dend[1](1), soma[0](0)
 	define_shape()
 
