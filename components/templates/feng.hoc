@@ -1,22 +1,41 @@
 begintemplate Cell_Af
-	public soma, dend, p_dend, connect2target, type,drv
-	create soma, dend, p_dend
+	public soma, dend, p_dend, connect2target, type,drv, insert_mechs
+	create soma[1], dend[1], p_dend[1]
 
 	public ncl, synlist,baglist
 	objref ncl, synlist,drv,baglist
 	strdef type
 	objref tlist, area_vec
-        public tlist, area_vec
-        external tstop
+	public tlist, area_vec
+	external tstop
 	
+	objref noise_exc, noise_inh, cclA
+	objref noiseRandObj_exc, noiseRandObj_inh
+
+	public all, somatic, basal, apical, axonal
 
 	proc init() {	
 
-	        tlist = new List()
-                area_vec = new Vector()
+		objref all, somatic,axonal,basal,apical
+
+		all = new SectionList()
+		somatic = new SectionList()
+		basal = new SectionList()
+		apical = new SectionList()
+		
+		soma[0] all.append()
+		soma[0] somatic.append()
+		
+		dend[0] all.append()
+		dend[0] basal.append()
+		p_dend[0] all.append()
+		p_dend[0] apical.append()
+		
+		tlist = new List()
+		area_vec = new Vector()
 		ncl = new List()
 		synlist =new List()	
-                baglist = new List()
+		baglist = new List()
 		type = "Cell_A"	
 
 		gUnf_Xsoma = 2.5e-05
@@ -52,18 +71,18 @@ begintemplate Cell_Af
 		celsius = 31.0 
 		
 		/////// topology ////////
-		connect dend(0), soma(0)
-                connect p_dend(0), soma(1)
+		connect dend[0](0), soma[0](0)
+        connect p_dend[0](0), soma[0](1)
 		
 		/////// geometry ////////
-		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
-	        dend {diam= 3 L=270 nseg=8}     // 3.5
-		p_dend {diam =5 L=555 nseg=7} 
+		soma[0] {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend[0] {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend[0] {diam =5 L=555 nseg=7} 
 		
-		access soma
+		access soma[0]
 		//distance()
 		
-		p_dend {
+		p_dend[0] {
 			insert cadyn gcabar_cadyn = gca eca = 120
 			insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd 
@@ -86,7 +105,7 @@ begintemplate Cell_Af
 			}
 								
 		}		
-		soma {	
+		soma[0] {	
 			insert cadyn gcabar_cadyn = gca  eca = 120
 			insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd 
@@ -115,7 +134,7 @@ begintemplate Cell_Af
 			}
 		}	
 		
-		dend {  // need to add Spine Scale
+		dend[0] {  // need to add Spine Scale
 			insert cadyn gcabar_cadyn = gca  eca = 120
 			insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd
@@ -170,8 +189,35 @@ begintemplate Cell_Af
         	// this would be meaningless since the location would be inside the cell
        		// so force r to be at least as big as local radius
 	
-		
+
+	insert_mech(100)	
 	}//end init
+
+	proc insert_mechs(){
+		r = $1
+		soma[0]{
+			noiseRandObj_exc=new Random()
+			noiseRandObj_exc.Random123(r)   
+			noiseRandObj_exc.normal(0,1)
+
+			noise_exc = new Gfluct2_exc(0.5)
+
+			noise_exc.g_e0 = 0.0032//0.0032
+			noise_exc.std_e = 0.003//0.003	
+			noise_exc.setRandObj(noiseRandObj_exc)
+
+			noiseRandObj_inh=new Random()
+			noiseRandObj_inh.Random123(r)   
+			noiseRandObj_inh.normal(0,1)
+
+			noise_inh = new Gfluct2_inh(0.5)
+
+			noise_inh.g_e0 = 0.021
+			noise_inh.std_e = 0.008	
+			noise_inh.setRandObj(noiseRandObj_inh)
+		}
+	}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
@@ -188,8 +234,8 @@ endtemplate Cell_Af
 /////===================/////
 
 begintemplate Cell_Cf
-	public soma, dend, p_dend, connect2target, type,drv
-	create soma, dend, p_dend
+	public soma, dend, p_dend, connect2target, type,drv, insert_mechs
+	create soma[0], dend[0], p_dend[0]
 
 	public ncl, synlist,baglist,baglist
 	objref ncl, synlist,drv,baglist
@@ -198,8 +244,28 @@ begintemplate Cell_Cf
 	public tlist, area_vec
 	external tstop
 
+	objref noise_exc, noise_inh, cclA
+	objref noiseRandObj_exc, noiseRandObj_inh
+
+	public all, somatic, basal, apical, axonal
+
 	proc init() {	
 
+		objref all, somatic,axonal,basal,apical
+
+		all = new SectionList()
+		somatic = new SectionList()
+		basal = new SectionList()
+		apical = new SectionList()
+		
+		soma[0] all.append()
+		soma[0] somatic.append()
+		
+		dend[0] all.append()
+		dend[0] basal.append()
+		p_dend[0] all.append()
+		p_dend[0] apical.append()
+		
 		tlist = new List()
     	area_vec = new Vector()	
 	
@@ -241,19 +307,18 @@ begintemplate Cell_Cf
 		celsius = 31.0 
 		
 		/////// topology ////////
-		connect dend(0), soma(0)
-
-        connect p_dend(0), soma(1)
+		connect dend[0](0), soma[0](0)
+        connect p_dend[0](0), soma[0](1)
 		
 		/////// geometry ////////
-		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
-	    dend {diam= 3 L=270 nseg=8}     // 3.5
-		p_dend {diam =5 L=555 nseg=7} 
+		soma[0] {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend[0] {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend[0] {diam =5 L=555 nseg=7} 
 		
-		access soma
+		access soma[0]
 		//distance()
 		
-		p_dend {
+		p_dend[0] {
 			insert cadyn gcabar_cadyn = gca eca = 120
 			insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd 
@@ -277,7 +342,7 @@ begintemplate Cell_Cf
 			}
 								
 		}		
-		soma {	
+		soma[0] {	
 			insert cadyn gcabar_cadyn = gca  eca = 120
 			insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd 
@@ -305,7 +370,7 @@ begintemplate Cell_Cf
 			}
 		}	
 		
-		dend {  // need to add Spine Scale
+		dend[0] {  // need to add Spine Scale
 			insert cadyn gcabar_cadyn = gca  eca = 120
 			insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
 			insert hd ghdbar_hd = ghd
@@ -354,8 +419,35 @@ begintemplate Cell_Cf
 			}
 			   
 		}
-		
-	} // end init
+	
+	insert_mechs(100)	
+	}//end init
+
+	proc insert_mechs(){
+		r = $1
+		soma[0]{
+			noiseRandObj_exc=new Random()
+			noiseRandObj_exc.Random123(r)   
+			noiseRandObj_exc.normal(0,1)
+
+			noise_exc = new Gfluct2_exc(0.5)
+
+			noise_exc.g_e0 = 0.0032//0.0032
+			noise_exc.std_e = 0.003//0.003	
+			noise_exc.setRandObj(noiseRandObj_exc)
+
+			noiseRandObj_inh=new Random()
+			noiseRandObj_inh.Random123(r)   
+			noiseRandObj_inh.normal(0,1)
+
+			noise_inh = new Gfluct2_inh(0.5)
+
+			noise_inh.g_e0 = 0.021
+			noise_inh.std_e = 0.008	
+			noise_inh.setRandObj(noiseRandObj_inh)
+		}
+	}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
