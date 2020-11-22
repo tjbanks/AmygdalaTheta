@@ -1,8 +1,12 @@
+{load_file("stdrun.hoc")}
+{load_file("nrngui.hoc")}
+
 begintemplate Cell_Af
+
 	public soma, dend, p_dend, connect2target, type,drv, insert_mechs
 	create soma[1], dend[1], p_dend[1]
 
-	public ncl, synlist,baglist
+	public ncl, synlist,baglist,cclA
 	objref ncl, synlist,drv,baglist
 	strdef type
 	objref tlist, area_vec
@@ -190,7 +194,7 @@ begintemplate Cell_Af
        		// so force r to be at least as big as local radius
 	
 
-	insert_mech(100)	
+	insert_mechs(100)	
 	}//end init
 
 	proc insert_mechs(){
@@ -459,7 +463,7 @@ endtemplate Cell_Cf
 
 begintemplate InterneuronCellf
 	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv
-	create soma, dend
+	create soma[1], dend[1]
 
 	public ncl, synlist
 	objref ncl, synlist,drv
@@ -469,8 +473,26 @@ begintemplate InterneuronCellf
 	public tlist, area_vec
 	external tstop
 	
+	objref noise_exc, noise_inh, cclA
+	objref noiseRandObj_exc, noiseRandObj_inh
+
+	public all, somatic, basal, apical, axonal
 
 	proc init() {	
+
+		objref all, somatic,axonal,basal,apical
+
+		all = new SectionList()
+		somatic = new SectionList()
+		basal = new SectionList()
+		apical = new SectionList()
+		
+		soma[0] all.append()
+		soma[0] somatic.append()
+		
+		dend[0] all.append()
+		dend[0] basal.append()
+		
 
 		tlist = new List()
     	area_vec = new Vector()	
@@ -480,24 +502,24 @@ begintemplate InterneuronCellf
 		type = "InterneuronCell"
 
 		/////// topology ////////
-		create soma, dend
-		connect dend(0), soma(1)
+		create soma[0], dend[0]
+		connect dend[0](0), soma[0](1)
 
 		/////// geometry ////////
-		soma {
+		soma[0] {
 			nseg=1
 			L=15		// (micrometer)
 			diam=15		// (micrometer)
 	    	}
 
-		dend {
+		dend[0] {
 			nseg=1
 			L=150		// (micrometer)
 			diam=10		// (micrometer)
 		}
 
 		/////// biophysics //////
-		soma {
+		soma[0] {
 			cm = 1//1		    // (microF/cm2)
 			Ra = 150*22.5	// (ohm-cm)
 			Rm = 20000	    // (ohm-cm2)
@@ -514,7 +536,7 @@ begintemplate InterneuronCellf
 			drv.amp = 0.0//0.2  //nA
 		}
 
-		dend {
+		dend[0] {
 			cm = 1//1		// (microF/cm2)
 			Ra = 150	// (ohm-cm)
 			Rm = 20000	// (ohm-cm2)
@@ -526,7 +548,7 @@ begintemplate InterneuronCellf
 			insert nainter
 			insert kdrinter
 		}
-		soma {
+		soma[0] {
 			ena = 45		// (mV)
 			gnabar_nainter = 0.035	// (siemens/cm2)
 
@@ -537,7 +559,7 @@ begintemplate InterneuronCellf
 			insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
 		}
 
-		dend {
+		dend[0] {
 			ena = 45		// (mV)
 			gnabar_nainter = 0.010	// (siemens/cm2)
 
@@ -566,7 +588,33 @@ begintemplate InterneuronCellf
 				tlist.o(tlist.count()-1).record(&er_xtraimemrec(x),1)//changce recording resolution if needed
 			}
 		}
-	} //end init
+	insert_mechs(100)	
+	}//end init
+
+	proc insert_mechs(){
+		r = $1
+		soma[0]{
+			noiseRandObj_exc=new Random()
+			noiseRandObj_exc.Random123(r)   
+			noiseRandObj_exc.normal(0,1)
+
+			noise_exc = new Gfluct2_exc(0.5)
+
+			noise_exc.g_e0 = 0.0032//0.0032
+			noise_exc.std_e = 0.003//0.003	
+			noise_exc.setRandObj(noiseRandObj_exc)
+
+			noiseRandObj_inh=new Random()
+			noiseRandObj_inh.Random123(r)   
+			noiseRandObj_inh.normal(0,1)
+
+			noise_inh = new Gfluct2_inh(0.5)
+
+			noise_inh.g_e0 = 0.021
+			noise_inh.std_e = 0.008	
+			noise_inh.setRandObj(noiseRandObj_inh)
+		}
+	}
 	
 	
 
