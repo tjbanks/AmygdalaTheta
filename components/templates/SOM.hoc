@@ -26,6 +26,7 @@ begintemplate SOM_Cell
         gcat   = 0.0005
         gsahp  = 5e-5
 		gnap   = 0//1e-5
+		gleak = 6e-5
 
 		//create soma, adend, bdend
 
@@ -80,7 +81,7 @@ begintemplate SOM_Cell
 		 	el_ichan2OLM =-60
 			gnatbar_ichan2OLM= gnat  
 			gkfbar_ichan2OLM= gkdr 
-			gl_ichan2OLM = 3e-5
+			gl_ichan2OLM = gleak
 			
 			insert ccanlOLM
 			catau_ccanlOLM = cattau
@@ -114,7 +115,7 @@ begintemplate SOM_Cell
 			el_ichan2OLM =-60
 			gnatbar_ichan2OLM= gnat  
 			gkfbar_ichan2OLM= gkdr 
-			gl_ichan2OLM = 3e-5
+			gl_ichan2OLM = gleak
 
 			insert ccanlOLM
 			catau_ccanlOLM = cattau
@@ -150,7 +151,7 @@ begintemplate SOM_Cell
 			el_ichan2OLM =-60
 			gnatbar_ichan2OLM= gnat  
 			gkfbar_ichan2OLM= gkdr  
-			gl_ichan2OLM = 3e-5	
+			gl_ichan2OLM = gleak
 
 			insert ccanlOLM
 			catau_ccanlOLM = cattau
@@ -171,7 +172,7 @@ begintemplate SOM_Cell
 	
 		}
 	
-  	connect soma[0](1), dend[0](0)
+  	connect dend[0](1), soma[0](0)
 	connect dend[1](1), soma[0](0)
 	define_shape()
 

@@ -71,6 +71,8 @@ python manage tune fi CR
 # SOM+
 python manage tune fi SOM
 
+bmtool util cell --template SOM_Cell vhseg --gleak gl_ichan2OLM --eleak el_ichan2OLM --segvars eh,enat,ekf,ek,el_ichan2OLM,elca,gnatbar_ichan2OLM,gkfbar_ichan2OLM,eh,gkhbar_ihOLM,gkAbar_AOLM,catau_ccanlOLM,gsAHbar_sAHPOLM,glcabar_lcaOLM,gcatbar_catOLM,gbar_napOLM --othersec dend[0],dend[1] --fminpa 44 --fmaxpa 305 --fincrement 20
+
 ```
 
 ### Current Clamps
