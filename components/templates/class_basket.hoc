@@ -1,3 +1,6 @@
+{load_file("stdrun.hoc")}
+{load_file("nrngui.hoc")}
+
 begintemplate basket
 
 public init, connect_sections, size_sections, append_sections, define_synapses
