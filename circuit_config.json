@@ -16,8 +16,8 @@
   "networks": {
     "nodes": [
       {
-        "node_types_file": "$NETWORK_DIR/BLA_node_types.csv",
-        "nodes_file": "$NETWORK_DIR/BLA_nodes.h5"
+        "nodes_file": "$NETWORK_DIR/BLA_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/BLA_node_types.csv"
       },
       {
         "node_types_file": "$NETWORK_DIR/exc_bg_bask_node_types.csv",

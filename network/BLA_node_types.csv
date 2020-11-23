@@ -1,4 +1,4 @@
-node_type_id model_template model_type pop_name morphology mem_potential
-100 hoc:feng_typeA biophysical PyrA  e
-101 hoc:feng_typeC biophysical PyrC  e
-102 hoc:basket biophysical Bask  e
+node_type_id pop_name mem_potential morphology model_type model_template
+100 PyrA e  biophysical hoc:feng_typeA
+101 PyrC e  biophysical hoc:feng_typeC
+102 Bask e  biophysical hoc:basket

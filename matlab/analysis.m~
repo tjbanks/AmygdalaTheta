@@ -11,10 +11,10 @@ lfp = lfp(skip_n:end);
 %lfp=load ('ecp.mat');
 lfp_d = downsample(lfp,10);
 nfft=1024;fs=1000;
-figure(1);plot(lfp_d);
+figure;plot(lfp_d);
 [pxx,f] = pwelch(lfp_d,nfft,0,nfft,fs);
 
- figure(2);plot(f,pxx);
+ figure;plot(f,pxx);
  set(gca, 'YScale', 'log');
  set(gca, 'XScale', 'log');
  %return

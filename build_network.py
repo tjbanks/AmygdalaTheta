@@ -10,11 +10,13 @@ np.random.seed(123412)
 # Initialize our network
 net = NetworkBuilder("BLA")
 
+scale = 1
+
 #Number of cells in each population
-numPN_A = 640#4114#15930
-numPN_C = 260#4115#6210
-numBask = 100#854#4860
-numSOM = 100
+numPN_A = 640 * scale #4114#15930
+numPN_C = 260 * scale #4115#6210
+numBask = 100 * scale #854#4860
+numSOM = 42 * scale
 # add_properties = False
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
@@ -53,7 +55,8 @@ net.add_nodes(N=numPN_A, pop_name='PyrA',
 	      rotation_angle_yaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:feng_typeA',
+              model_template='hoc:feng_typeA',#Ben's model
+              #model_template='hoc:Cell_Af',
               morphology=None)
 
 # Get rid of coordinates already used
@@ -75,7 +78,8 @@ net.add_nodes(N=numPN_C, pop_name='PyrC',
 	      rotation_angle_yaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:feng_typeC',
+              model_template='hoc:feng_typeC',#Ben's model
+              #model_template='hoc:Cell_Cf',
               morphology=None)
 
 # Get rid of coordinates already used
@@ -94,11 +98,11 @@ if False:
     # Add a population of numAAC nodes
     net.add_nodes(N=numAAC, pop_name='AAC',
                 positions=positions_list(positions=pos),
-            rotation_angle_zaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
-            rotation_angle_yaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
+                rotation_angle_zaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
+                rotation_angle_yaxis=xiter_random(N=numAAC, min_x=0.0, max_x=2*np.pi),
                 mem_potential='e',
                 model_type='biophysical',
-                model_template='hoc:chandelier',
+                model_template='hoc:chandelier',#Ben's model
                 morphology=None)
     # Get rid of coordinates already used
     pos_list = np.delete(pos_list,inds,0)
@@ -122,7 +126,8 @@ net.add_nodes(N=numBask, pop_name='Bask',
 	      rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:basket',
+              model_template='hoc:basket',#Ben's model
+              #model_template='hoc:InterneuronCellf',
               morphology=None)
 
 pos_list = np.delete(pos_list,inds,0)
@@ -269,6 +274,35 @@ def syn_delay(source, target, min_delay):
     return [syn_dist_delay(source, target, min_delay)]
     #return [0.1]
 
+def syn_dist_delay_feng(source, target):
+    dt = 0.1
+    min_delay=0.8   #////define minmum delay,ms
+    #maxdis=2.425   #/// mm sqrt((1.4)^2+(1.4)^2+(1.4)^2)
+    x = float(x_end - x_start)/1000
+    y = float(y_end - y_start)/1000
+    z = float(z_end - z_start)/1000
+    max_dist = np.sqrt(x**2 + y**2 + z**2)
+    max_delay=2.425 #////define maximum delay,ms
+    #max_delay=max_dist
+
+    x_ind,y_ind,z_ind = 0,1,2
+
+    dx = target['positions'][x_ind] - source['positions'][x_ind]
+    dy = target['positions'][y_ind] - source['positions'][y_ind]
+    dz = target['positions'][z_ind] - source['positions'][z_ind]
+
+    dist = np.sqrt(dx**2 + dy**2 + dz**2)
+    
+    del_fluc = np.random.uniform(-0.1,0.1)
+    #print("delay = {}".format(distDelay))
+
+    delay=(dist/max_dist)*max_delay+min_delay+del_fluc+dt
+
+    return delay
+
+def syn_dist_delay_feng_section(source, target, sec_id=0, sec_x=0.9):
+    return syn_dist_delay_feng(source, target), sec_id, sec_x
+
 def syn_percent(source,target,p):
     return 1 if random.random() < p else 0
 
@@ -298,6 +332,11 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': [
               target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 
 # if add_properties:
 #     if do_pos:
@@ -333,6 +372,12 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
 
 # if add_properties:
 #     if do_pos:
@@ -392,6 +437,10 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               sec_id=0,
               sec_x=0.9)
 
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 
 if connect_som:
     dynamics_file = 'PN2SOM_tyler.json'
@@ -412,6 +461,11 @@ if connect_som:
               sec_id=0,
               sec_x=0.9)
 
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
     dynamics_file = 'SOM2PN_tyler.json'
     conn = net.add_edges(source={'pop_name': 'SOM'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_one',
@@ -429,6 +483,11 @@ if connect_som:
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 
 # if add_properties:
 #     if do_pos:
@@ -491,6 +550,11 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 
 # if add_properties:
 #     if do_pos:
@@ -611,7 +675,7 @@ exc_bg_bask.build()
 exc_bg_bask.save_nodes(output_dir='network')
 #
 #print("External nodes and edges built")
-t_sim = 5000.0
+t_sim = 10000.0
 
 from bmtk.utils.sim_setup import build_env_bionet
 

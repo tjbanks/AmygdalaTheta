@@ -1,5 +1,5 @@
-edge_type_id target_query source_query syn_weight model_template sec_id target_sections dynamics_params delay sec_x distance_range
-100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" 1 pyrD2pyrD_STFD 0 ['basal'] PN2PN_feng.json 0.1 0.9 "[0.0, 9999.9]"
-101 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" 1 pyrD2interD_STFD 0 ['basal'] PN2INT_feng.json 0.1 0.9 "[0.0, 9999.9]"
-102 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' 1 interD2pyrD_STFD 0 ['somatic'] INT2PN_feng.json 0.1 0.9 "[0.0, 9999.9]"
-103 pop_name=='['Bask']' pop_name=='Bask' 1 interD2interD_STFD 0 ['somatic'] INT2INT_feng.json 0.1 0.9 "[0.0, 9999.9]"
+edge_type_id target_query source_query sec_id delay syn_weight distance_range dynamics_params sec_x target_sections model_template
+100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" 0 0.1 1 "[0.0, 9999.9]" PN2PN_feng.json 0.9 ['basal'] pyrD2pyrD_STFD
+101 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" 0 0.1 1 "[0.0, 9999.9]" PN2INT_feng.json 0.9 ['basal'] pyrD2interD_STFD
+102 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' 0 0.1 1 "[0.0, 9999.9]" INT2PN_feng.json 0.9 ['somatic'] interD2pyrD_STFD
+103 pop_name=='['Bask']' pop_name=='Bask' 0 0.1 1 "[0.0, 9999.9]" INT2INT_feng.json 0.9 ['somatic'] interD2interD_STFD

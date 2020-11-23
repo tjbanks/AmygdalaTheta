@@ -2,7 +2,7 @@
   "target_simulator": "NEURON",
   "run": {
     "tstart": 0.0,
-    "tstop": 5000.0,
+    "tstop": 10000.0,
     "dt": 0.1,
     "dL": 20000.0,
     "spike_threshold": -15.0,
@@ -57,8 +57,8 @@
   "networks": {
     "nodes": [
       {
-        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_node_types.csv",
-        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_nodes.h5"
+        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_nodes.h5",
+        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_node_types.csv"
       },
       {
         "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/exc_bg_bask_node_types.csv",
