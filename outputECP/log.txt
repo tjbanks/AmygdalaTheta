@@ -1,30 +1,30 @@
-2020-11-23 01:24:23,804 [INFO] Created log file
-2020-11-23 01:24:23,805 [INFO] Running NEURON with mpi (25 cores).
-2020-11-23 01:24:24,501 [INFO] Building cells.
-2020-11-23 01:24:24,633 [INFO] Building recurrent connections
-2020-11-23 01:24:29,994 [INFO] Building virtual cell stimulations for mthalamus_spikes
-2020-11-23 01:24:32,229 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
-2020-11-23 01:24:33,753 [INFO] Running simulation for 10000.000 ms with the time step 0.100 ms
-2020-11-23 01:24:33,753 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2020-11-23 01:24:33,754 [INFO] Block save every 5000 steps
-2020-11-23 01:24:45,420 [INFO]     step:5000 t_sim:500.00 ms
-2020-11-23 01:24:56,875 [INFO]     step:10000 t_sim:1000.00 ms
-2020-11-23 01:25:09,176 [INFO]     step:15000 t_sim:1500.00 ms
-2020-11-23 01:25:21,315 [INFO]     step:20000 t_sim:2000.00 ms
-2020-11-23 01:25:34,270 [INFO]     step:25000 t_sim:2500.00 ms
-2020-11-23 01:25:47,331 [INFO]     step:30000 t_sim:3000.00 ms
-2020-11-23 01:26:00,202 [INFO]     step:35000 t_sim:3500.00 ms
-2020-11-23 01:26:12,257 [INFO]     step:40000 t_sim:4000.00 ms
-2020-11-23 01:26:24,325 [INFO]     step:45000 t_sim:4500.00 ms
-2020-11-23 01:26:36,022 [INFO]     step:50000 t_sim:5000.00 ms
-2020-11-23 01:26:48,346 [INFO]     step:55000 t_sim:5500.00 ms
-2020-11-23 01:27:00,527 [INFO]     step:60000 t_sim:6000.00 ms
-2020-11-23 01:27:12,070 [INFO]     step:65000 t_sim:6500.00 ms
-2020-11-23 01:27:23,774 [INFO]     step:70000 t_sim:7000.00 ms
-2020-11-23 01:27:35,255 [INFO]     step:75000 t_sim:7500.00 ms
-2020-11-23 01:27:46,818 [INFO]     step:80000 t_sim:8000.00 ms
-2020-11-23 01:27:59,100 [INFO]     step:85000 t_sim:8500.00 ms
-2020-11-23 01:28:10,598 [INFO]     step:90000 t_sim:9000.00 ms
-2020-11-23 01:28:22,803 [INFO]     step:95000 t_sim:9500.00 ms
-2020-11-23 01:28:36,259 [INFO]     step:100000 t_sim:10000.00 ms
-2020-11-23 01:28:37,022 [INFO] Simulation completed in 4.0 minutes, 3.269 seconds 
+2020-11-23 15:19:45,233 [INFO] Created log file
+2020-11-23 15:19:45,233 [INFO] Running NEURON with mpi (25 cores).
+2020-11-23 15:19:45,778 [INFO] Building cells.
+2020-11-23 15:19:45,969 [INFO] Building recurrent connections
+2020-11-23 15:19:49,775 [INFO] Building virtual cell stimulations for mthalamus_spikes
+2020-11-23 15:19:51,057 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
+2020-11-23 15:19:51,902 [INFO] Running simulation for 10000.000 ms with the time step 0.100 ms
+2020-11-23 15:19:51,902 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2020-11-23 15:19:51,903 [INFO] Block save every 5000 steps
+2020-11-23 15:19:58,681 [INFO]     step:5000 t_sim:500.00 ms
+2020-11-23 15:20:05,511 [INFO]     step:10000 t_sim:1000.00 ms
+2020-11-23 15:20:12,403 [INFO]     step:15000 t_sim:1500.00 ms
+2020-11-23 15:20:19,319 [INFO]     step:20000 t_sim:2000.00 ms
+2020-11-23 15:20:26,344 [INFO]     step:25000 t_sim:2500.00 ms
+2020-11-23 15:20:33,281 [INFO]     step:30000 t_sim:3000.00 ms
+2020-11-23 15:20:40,447 [INFO]     step:35000 t_sim:3500.00 ms
+2020-11-23 15:20:47,855 [INFO]     step:40000 t_sim:4000.00 ms
+2020-11-23 15:20:54,899 [INFO]     step:45000 t_sim:4500.00 ms
+2020-11-23 15:21:01,983 [INFO]     step:50000 t_sim:5000.00 ms
+2020-11-23 15:21:09,097 [INFO]     step:55000 t_sim:5500.00 ms
+2020-11-23 15:21:16,123 [INFO]     step:60000 t_sim:6000.00 ms
+2020-11-23 15:21:23,256 [INFO]     step:65000 t_sim:6500.00 ms
+2020-11-23 15:21:30,380 [INFO]     step:70000 t_sim:7000.00 ms
+2020-11-23 15:21:37,510 [INFO]     step:75000 t_sim:7500.00 ms
+2020-11-23 15:21:44,798 [INFO]     step:80000 t_sim:8000.00 ms
+2020-11-23 15:21:51,949 [INFO]     step:85000 t_sim:8500.00 ms
+2020-11-23 15:22:00,094 [INFO]     step:90000 t_sim:9000.00 ms
+2020-11-23 15:22:07,279 [INFO]     step:95000 t_sim:9500.00 ms
+2020-11-23 15:22:14,644 [INFO]     step:100000 t_sim:10000.00 ms
+2020-11-23 15:22:15,130 [INFO] Simulation completed in 2.0 minutes, 23.23 seconds 

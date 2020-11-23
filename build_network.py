@@ -21,6 +21,13 @@ numSOM = 42 * scale
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
 
+dist_constraint = False
+min_conn_dist = 0.0
+max_conn_dist = 9999.9
+
+if dist_constraint:
+    max_conn_dist = 300.0 #9999.9# Distance constraint for all cells
+
 connect_som = False
 
 if connect_som:
@@ -275,6 +282,9 @@ def syn_delay(source, target, min_delay):
     #return [0.1]
 
 def syn_dist_delay_feng(source, target):
+    #if not dist_constraint:
+    #    return 0.1
+
     dt = 0.1
     min_delay=0.8   #////define minmum delay,ms
     #maxdis=2.425   #/// mm sqrt((1.4)^2+(1.4)^2+(1.4)^2)
@@ -303,8 +313,32 @@ def syn_dist_delay_feng(source, target):
 def syn_dist_delay_feng_section(source, target, sec_id=0, sec_x=0.9):
     return syn_dist_delay_feng(source, target), sec_id, sec_x
 
-def syn_percent(source,target,p):
-    return 1 if random.random() < p else 0
+syn_list = []
+def syn_percent(source,target,p,track_syn=False):
+    if random.random() < p:
+        if track_syn:#we only want to track synapses that may have a recurrent connection, will speed up build time considerably
+            syn_list.append({'source_gid':source['node_id'],'target_gid':target['node_id']})        
+        return 1
+    else:
+        return 0
+
+def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
+    """
+    General logic:
+    1. Given a *potential* source and target
+    2. Look through all edges currently made
+    3. If any of the current edges contains 
+        a. the current source as a previous target of 
+        b. the current target as a prevous source
+    4. Return number of synapses per this connection, 0 otherwise (no connection)
+    """
+    for e in all_edges:
+        if source['node_id'] == e['target_gid'] and target['node_id'] == e['source_gid']:
+            if random.random() < p:
+                return random.randint(min_syn,max_syn)
+            else:
+                return 0
+    return 0
 
 # Create connections between Pyr --> Pyr cells
 add_delays = []#Says whether the next add_edges should have delays added by distance.
@@ -328,7 +362,8 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': [
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
@@ -368,7 +403,8 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
@@ -390,6 +426,29 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 #         conn.add_properties(names=['delay'], rule=syn_delay, 
 #             rule_params={'min_delay':syn[dynamics_file]['delay']}, dtypes=[np.float])
 
+
+conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
+              iterator = 'one_to_one',
+                  #connection_rule=dist_conn_perc,
+              #connection_params={'min_dist':0.0,'max_dist':50.0,
+                          #       'min_syns':1,'max_syns':2,'A':0.3217,'B':0.005002},
+              connection_rule=recurrent_connector,
+              connection_params={'p':0.16,'all_edges':syn_list},
+              syn_weight=1,
+              delay = 0.1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              #distance_range=[0.0, 300.0],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['basal'],
+              sec_id=0,
+              sec_x=0.9)
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 
 
 # Create connections between Pyr --> AAC cells
@@ -426,13 +485,14 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               #connection_params={'min_dist':0.0,'max_dist':100000.0,
 			  #   'min_syns':1,'max_syns':2,'A':0.313,'B':0.004029},
               connection_rule=syn_percent,
-              connection_params={'p':0.34},
+              connection_params={'p':0.34,'track_syn':True},
               syn_weight=1,
               delay=0.1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
@@ -456,7 +516,8 @@ if connect_som:
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
@@ -479,7 +540,8 @@ if connect_som:
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
@@ -546,7 +608,8 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               #distance_range=[0.0, 300.0],
-              distance_range=[0.0, 9999.9],
+              #distance_range=[0.0, 9999.9],
+              distance_range=[min_conn_dist,max_conn_dist],
               target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
