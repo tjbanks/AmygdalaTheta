@@ -1,2 +1,2 @@
-edge_type_id target_query source_query distance_range dynamics_params model_template sec_x target_sections delay syn_weight
-107 pop_name=='Bask' * "[0.0, 9999.9]" BG2PNi_feng.json bg2pyr 0.9 ['basal'] 0.1 1
+edge_type_id target_query source_query target_sections distance_range model_template dynamics_params delay syn_weight sec_x
+107 pop_name=='Bask' * ['basal'] "[0.0, 9999.9]" bg2pyr BG2PNi_feng.json 0.1 1 0.9

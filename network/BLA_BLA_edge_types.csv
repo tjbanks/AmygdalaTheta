@@ -1,6 +1,6 @@
-edge_type_id target_query source_query distance_range dynamics_params model_template sec_x target_sections sec_id delay syn_weight
-100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" "[0.0, 9999.9]" PN2PN_feng.json pyrD2pyrD_STFD 0.9 ['basal'] 0 0.1 1
-101 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" "[0.0, 9999.9]" PN2INT_feng.json pyrD2interD_STFD 0.9 ['basal'] 0 0.1 1
-102 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" "[0.0, 9999.9]" PN2INT_feng.json pyrD2interD_STFD 0.9 ['basal'] 0 0.1 1
-103 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' "[0.0, 9999.9]" INT2PN_feng.json interD2pyrD_STFD 0.9 ['somatic'] 0 0.1 1
-104 pop_name=='['Bask']' pop_name=='Bask' "[0.0, 9999.9]" INT2INT_feng.json interD2interD_STFD 0.9 ['somatic'] 0 0.1 1
+edge_type_id target_query source_query target_sections distance_range model_template dynamics_params delay sec_id syn_weight sec_x
+100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" ['basal'] "[0.0, 9999.9]" pyrD2pyrD_STFD PN2PN_feng.json 0.1 0 1 0.9
+101 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" ['basal'] "[0.0, 9999.9]" pyrD2interD_STFD PN2INT_feng.json 0.1 0 1 0.9
+102 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' ['somatic'] "[0.0, 9999.9]" interD2pyrD_STFD INT2PN_feng.json 0.1 0 1 0.9
+103 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" ['basal'] "[0.0, 9999.9]" pyrD2interD_STFD PN2INT_feng.json 0.1 0 1 0.9
+104 pop_name=='['Bask']' pop_name=='Bask' ['somatic'] "[0.0, 9999.9]" interD2interD_STFD INT2INT_feng.json 0.1 0 1 0.9
