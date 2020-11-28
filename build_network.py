@@ -769,16 +769,18 @@ build_env_bionet(base_dir='./',
 
 from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 
+i_t_sim = 100000
+
 psg = PoissonSpikeGenerator(population='mthalamus')
 psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
         firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
+        times=(0.0, i_t_sim/1000.0))    # Firing starts at 0 s up to 3 s
 psg.to_sonata('mthalamus_spikes.h5')
 
 psg = PoissonSpikeGenerator(population='exc_bg_bask')
 psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
         firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
+        times=(0.0, i_t_sim/1000.0))    # Firing starts at 0 s up to 3 s
 psg.to_sonata('exc_bg_bask_spikes.h5')
 
 
