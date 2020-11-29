@@ -110,3 +110,4 @@ x=sprintf('Spiking freq histogram for( PNs is %3.2fHz+/-%3.2fHz);ITNs is %3.2fHz
 title(x);ylabel('Percentage(#)');
 legend('PNa','PNc','FSI')
 
+    

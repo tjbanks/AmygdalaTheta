@@ -29,6 +29,7 @@ max_conn_dist = 9999.9
 if dist_constraint:
     max_conn_dist = 300.0 #9999.9# Distance constraint for all cells
 
+i2i_gap = False
 connect_som = False
 
 if connect_som:
@@ -281,6 +282,10 @@ p2p_props = [
     {'min_dist': 501, 'max_dist': 600, 'syn_prob': 0.02}, #0.005
 ]
 
+p2p_props = [
+    {'min_dist':0, 'max_dist':600, 'syn_prob': 0.02}
+]
+
 # What we're doing here is looping through the different connection
 # probabilities based on distance apart instead of re-writing this
 # large block of code several times
@@ -288,9 +293,6 @@ p2p_props = [
 for p2p_prop in p2p_props:
     #dynamics_file = 'PN2PN.json'
     dynamics_file = 'PN2PN_feng.json'
-
-    add_delays.append(True)
-    min_delays.append(syn[dynamics_file]['delay'])
 
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['PyrA','PyrC']},
                 iterator = 'one_to_one',
@@ -315,13 +317,14 @@ for p2p_prop in p2p_props:
 
 gap_list = []
 
-conn = net.add_gap_junctions(source={'pop_name': ['Bask']}, 
+if i2i_gap:
+    conn = net.add_gap_junctions(source={'pop_name': ['Bask']}, 
 		      target={'pop_name': ['Bask']},
  		      resistance = 0.0001, target_sections=['somatic'], 
 		      connection_rule=syn_percent,
 		      connection_params={'p':0.08, 'track_list':gap_list})
-conn._edge_type_properties['sec_id'] = 0
-conn._edge_type_properties['sec_x'] = 0.9
+    conn._edge_type_properties['sec_id'] = 0
+    conn._edge_type_properties['sec_x'] = 0.9
 
 
 ##########################################################################

@@ -83,7 +83,11 @@
         "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network/mthalamus_BLA_edges.h5"
       }
     ],
-    "gap_juncs": []
+    "gap_juncs": [
+      {
+        "gap_juncs_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_gap_juncs.h5"
+      }
+    ]
   },
   "node_sets": {
     "biophysical_nodes": {
