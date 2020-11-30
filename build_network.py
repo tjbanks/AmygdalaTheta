@@ -22,7 +22,7 @@ numCR = 42 * scale
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
 
-dist_constraint = False
+dist_constraint = True
 min_conn_dist = 0.0
 max_conn_dist = 9999.9
 
@@ -64,8 +64,8 @@ net.add_nodes(N=numPN_A, pop_name='PyrA',
 	      rotation_angle_yaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:feng_typeA',#Ben's model
-              #model_template='hoc:Cell_Af',
+              #model_template='hoc:feng_typeA',#Ben's model
+              model_template='hoc:Cell_Af',
               morphology=None)
 
 # Get rid of coordinates already used
@@ -87,8 +87,8 @@ net.add_nodes(N=numPN_C, pop_name='PyrC',
 	      rotation_angle_yaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:feng_typeC',#Ben's model
-              #model_template='hoc:Cell_Cf',
+              #model_template='hoc:feng_typeC',#Ben's model
+              model_template='hoc:Cell_Cf',
               morphology=None)
 
 # Get rid of coordinates already used
@@ -114,8 +114,8 @@ net.add_nodes(N=numBask, pop_name='Bask',
 	      rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:basket',#Ben's model
-              #model_template='hoc:InterneuronCellf',
+              #model_template='hoc:basket',#Ben's model
+              model_template='hoc:InterneuronCellf',
               morphology=None)
 
 pos_list = np.delete(pos_list,inds,0)
@@ -283,7 +283,7 @@ p2p_props = [
 ]
 
 p2p_props = [
-    {'min_dist':0, 'max_dist':600, 'syn_prob': 0.02}
+    {'min_dist':0, 'max_dist':max_conn_dist, 'syn_prob': 0.02}
 ]
 
 # What we're doing here is looping through the different connection
@@ -356,7 +356,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
+              target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
 
@@ -382,7 +382,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
+              target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
 
@@ -401,7 +401,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
+              target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
 
@@ -494,7 +494,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
               dtypes=[np.float, np.int32, np.float])
 
 
-conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
+conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_one',
               connection_rule=recurrent_connector,
               connection_params={'p':1,'all_edges':pyr_int_bi_list},
@@ -503,7 +503,7 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
+              target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
 

@@ -3,7 +3,7 @@ function [data] = analysis(ecph5path,spikeh5path)
 %clear all;close all;
 clc;
 channel = 1;
-skip_n = 40001;
+skip_n = 50000;
 data = h5read(ecph5path,'/ecp/data');
 lfp = data(channel,:);
 lfp = lfp(skip_n:end);
