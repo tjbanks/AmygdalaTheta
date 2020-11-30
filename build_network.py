@@ -22,7 +22,7 @@ numCR = 42 * scale
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
 
-dist_constraint = True
+dist_constraint = False
 min_conn_dist = 0.0
 max_conn_dist = 9999.9
 
@@ -197,7 +197,7 @@ def syn_dist_delay_feng(source, target):
     #if not dist_constraint:
     #    return 0.1
 
-    dt = 0.1
+    dt = 0.05
     min_delay=0.8   #////define minmum delay,ms
     #maxdis=2.425   #/// mm sqrt((1.4)^2+(1.4)^2+(1.4)^2)
     x = float(x_end - x_start)/1000
@@ -356,7 +356,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
+              target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
 
@@ -382,7 +382,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
+              target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
 
@@ -401,7 +401,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
+              target_sections=['somatic'],
               sec_id=0,
               sec_x=0.9)
 
@@ -528,7 +528,7 @@ if connect_som:
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
+              target_sections=['basal'],
               sec_id=0,
               sec_x=0.9)
 
@@ -628,7 +628,7 @@ from bmtk.utils.sim_setup import build_env_bionet
 
 build_env_bionet(base_dir='./',
 		network_dir='./network',
-		tstop=t_sim, dt = 0.1,
+		tstop=t_sim, dt = 0.05,
 		report_vars = ['v'],
                 v_init = -70.0,
                 celsius = 31.0,
@@ -638,23 +638,3 @@ build_env_bionet(base_dir='./',
 		compile_mechanisms=True)
 
 
-
-##########################################################################
-########################### GENERATE INPUT ###############################
-
-
-from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
-
-i_t_sim = 100000
-
-psg = PoissonSpikeGenerator(population='mthalamus')
-psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
-        firing_rate=2.0,    # 2 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, i_t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-psg.to_sonata('mthalamus_spikes.h5')
-
-psg = PoissonSpikeGenerator(population='exc_bg_bask')
-psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
-        firing_rate=2.0,    # 2 Hz, we can also pass in a nonhomoegenous function/array
-        times=(0.0, i_t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-psg.to_sonata('exc_bg_bask_spikes.h5')

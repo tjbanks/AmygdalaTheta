@@ -32,7 +32,27 @@ VERBATIM
 extern double* vector_vec();
 extern int vector_capacity();
 extern void* vector_arg();
+//extern void hoc_obj_ref(void*);
+//extern void hoc_obj_unref(void*);
+//extern void** vector_pobj(void*);
 ENDVERBATIM
+
+DESTRUCTOR {
+VERBATIM {
+  void** vv;
+  void* vtmp;
+  if (ifarg(1)) {
+    vtmp = vector_arg(1);
+    hoc_obj_ref(*vector_pobj(vtmp));
+  }
+  vv = (void**)(&space);
+  if (*vv) {
+    hoc_obj_unref(*vector_pobj(*vv));
+  }
+if (vtmp) { *vv = vtmp; }  
+}
+ENDVERBATIM
+}
 
 PROCEDURE element() {
 VERBATIM	
@@ -64,6 +84,7 @@ VERBATIM
 	*vv = (void*)0;
 	if (ifarg(1)) {
 		*vv = vector_arg(1);
+	hoc_obj_ref(*vector_pobj(*vv));
 	}
 ENDVERBATIM
 }

@@ -9,7 +9,7 @@ lfp = data(channel,:);
 lfp = lfp(skip_n:end);
 
 %lfp=load ('ecp.mat');
-lfp_d = downsample(lfp,10);%x1000 mV to V fix
+lfp_d = downsample(lfp,20);%x1000 mV to V fix
 nfft=1024;fs=1000;
 figure(1);plot(lfp_d*1e3);
 [pxx,f] = pwelch(lfp_d,nfft,0,nfft,fs);

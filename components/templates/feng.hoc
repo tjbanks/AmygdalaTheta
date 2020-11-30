@@ -192,7 +192,7 @@ begintemplate Cell_Af
        		// so force r to be at least as big as local radius
 	
 
-	insert_mechs(100)	
+	//#insert_mechs(100)	
 	define_shape()// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections
 	}//end init
 
@@ -420,7 +420,7 @@ begintemplate Cell_Cf
 			   
 		}
 	
-	insert_mechs(100)	
+	//insert_mechs(100)	
 	define_shape()// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections
 	}//end init
 
@@ -583,7 +583,7 @@ begintemplate InterneuronCellf
 		//		tlist.o(tlist.count()-1).record(&er_xtraimemrec(x),1)//changce recording resolution if needed
 		//	}
 		//}
-	insert_mechs(100)
+	//insert_mechs(100)
 	define_shape()// builtin fcn: fill in 3d info for sections defined by only L and diam, translate 3d points for consistency with their connections	
 	}//end init
 
