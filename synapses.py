@@ -822,6 +822,64 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
 
     return lsyn
 
+
+
+
+def interD2interD_STFD_min(syn_params, sec_x, sec_id):
+
+    lsyn = h.interD2interD_STFD(sec_x, sec=sec_id)
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
+        lsyn.initW = float(np.random.lognormal(mean,std))
+    return lsyn
+
+
+def interD2pyrD_STFD_min(syn_params, sec_x, sec_id):
+
+    lsyn = h.interD2pyrD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
+        lsyn.initW = float(np.random.lognormal(mean,std))
+
+    return lsyn
+
+def pyrD2interD_STFD_min(syn_params, sec_x, sec_id):
+    
+    lsyn = h.pyrD2interD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
+        lsyn.initW = float(np.random.lognormal(mean,std))
+
+    return lsyn
+
+def pyrD2pyrD_STFD_min(syn_params, sec_x, sec_id):
+    
+    lsyn = h.pyrD2pyrD_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        mean = float(syn_params['initW_lognormal_mean'])
+        std = float(syn_params['initW_lognormal_std'])
+        mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
+        std_ = np.sqrt(np.log((std/mean)**2 + 1))
+        mean = mean_; std = std_
+        lsyn.initW = float(np.random.lognormal(mean,std))
+
+    return lsyn
+
 def load():
     add_synapse_model(Bg2Pyr, 'bg2pyr', overwrite=False)
     add_synapse_model(Bg2Pyr, overwrite=False)
@@ -842,6 +900,15 @@ def load():
     add_synapse_model(pyrD2interD_STFD, overwrite=False)
     add_synapse_model(pyrD2pyrD_STFD, 'pyrD2pyrD_STFD', overwrite=False)
     add_synapse_model(pyrD2pyrD_STFD, overwrite=False)
+
+    add_synapse_model(interD2interD_STFD_min, 'interD2interD_STFD_min', overwrite=False)
+    add_synapse_model(interD2interD_STFD_min, overwrite=False)
+    add_synapse_model(interD2pyrD_STFD_min, 'interD2pyrD_STFD_min', overwrite=False)
+    add_synapse_model(interD2pyrD_STFD_min, overwrite=False)
+    add_synapse_model(pyrD2interD_STFD_min, 'pyrD2interD_STFD_min', overwrite=False)
+    add_synapse_model(pyrD2interD_STFD_min, overwrite=False)
+    add_synapse_model(pyrD2pyrD_STFD_min, 'pyrD2pyrD_STFD_min', overwrite=False)
+    add_synapse_model(pyrD2pyrD_STFD_min, overwrite=False)
 
     return
 
