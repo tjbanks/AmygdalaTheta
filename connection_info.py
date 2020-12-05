@@ -56,7 +56,7 @@ def run(path, scale=1, convergence=True):
     print("P2I Connectivity\t" + str(round(avg_p2i/total_p*100,2)) + "%")
     print("I2I Connectivity\t" + str(round(avg_i2i/total_i*100,2)) + "%")
     print()
-    #import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
