@@ -56,6 +56,29 @@ def run(path, scale=1, convergence=True):
     print("P2I Connectivity\t" + str(round(avg_p2i/total_p*100,2)) + "%")
     print("I2I Connectivity\t" + str(round(avg_i2i/total_i*100,2)) + "%")
     print()
+    
+    
+    df1 = pd.DataFrame(columns=['source','target'])#flipped
+    df1['source'] = df.target
+    df1['target'] = df.source
+
+    dfs = df.append(df1,ignore_index=True)
+    df_rec = dfs[dfs.duplicated(keep='first')]
+    
+    p2p_rec = df_rec[(df_rec.source < i_start) & (df_rec.target < i_start)]
+    p2i_rec = df_rec[(df_rec.source < i_start) & (df_rec.target >= i_start)]
+    i2i_rec = df_rec[(df_rec.source >= i_start) & (df_rec.target >= i_start)]
+    
+    avg_p2p_rec = np.average(list(p2p[cd].value_counts()))
+    avg_p2i_rec = np.average(list(p2i[cd].value_counts()))
+    avg_i2i_rec = np.average(list(i2i[cd].value_counts()))
+
+    print()
+    print("reciprocal P2P\t" + str(round(avg_p2p_rec/total_p*100,2)) + "%")
+    print("reciprocal P2I\t" + str(round(avg_p2i_rec/total_p*100,2)) + "%")
+    print("reciprocal I2I\t" + str(round(avg_i2i_rec/total_i*100,2)) + "%")
+    print()
+    
     import pdb;pdb.set_trace()
 
 if __name__ == '__main__':
