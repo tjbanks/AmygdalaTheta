@@ -1,0 +1,1 @@
+obfunc LoadMatrix() { local nrow,ncol localobj mat,datafile	nrow = $2	ncol = $3	datafile = new File()	datafile.ropen($s1)	mat = new Matrix()	mat.scanf(datafile,nrow,ncol)	//print mat.nrow, mat.ncol	datafile.close()	return mat}

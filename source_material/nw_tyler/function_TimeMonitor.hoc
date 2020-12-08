@@ -1,0 +1,15 @@
+begintemplate TimeMonitor
+	public soma
+	create soma	
+
+	proc init() {
+		create soma
+		soma {
+			insert TMonitor
+			totaltime_TMonitor = $1
+		}
+	}
+endtemplate TimeMonitor
+
+objref TMonObj
+TMonObj = new TimeMonitor(tstop)

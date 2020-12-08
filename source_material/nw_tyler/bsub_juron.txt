@@ -1,0 +1,24 @@
+ #!/bin/bash
+
+
+#BSUB -q normal
+#BSUB -n 120
+##BSUB -R "affinity[thread(8,same=core)]"
+#BSUB -R "span[ptile=20]"
+##BSUB -x 
+#BSUB -e "stderr.%J"
+#BSUB -o "stdout.%J"
+#BSUB -W 15:00
+##BSUB --mem-per-cpu=4G
+#BSUB -J dualmodel
+#BSUB -B -N                   # Send email when job begins & ends/fails 
+#BSUB -u ffvxb@mail.missouri.edu     # NOTE! guest users you would need to use this option
+
+
+module load openmpi/2.1.2-gcc_5.4.0-cuda_8.0.61
+#export OMP_NUM_THREADS=4
+#export MP_TASK_AFFINITY core:$OMP_NUM_THREADS
+
+module load python/3.6.1
+#mpirun nrniv -mpi BLA_main_Drew_reordingimem_simplify_big_saveLFPimem_noDANE_extrinsic_NSG_vecstim_invivo_multielec_optimized_LFPrealtime_filter_closelp.hoc
+mpirun nrniv -mpi BL_main_small_lightdis_randompluses_poisson_automated_onlinepulses_PRC_finereso_skip.hoc
