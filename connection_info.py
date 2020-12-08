@@ -66,12 +66,13 @@ def run(path, scale=1, convergence=True):
     df_rec = dfs[dfs.duplicated(keep='first')]
     
     p2p_rec = df_rec[(df_rec.source < i_start) & (df_rec.target < i_start)]
-    p2i_rec = df_rec[(df_rec.source < i_start) & (df_rec.target >= i_start)]
+    #p2i_rec = df_rec[(df_rec.source < i_start) & (df_rec.target >= i_start)]
+    p2i_rec = df_rec[((df_rec.source < i_start) & (df_rec.target >= i_start)) | ((df_rec.target < i_start) & (df_rec.source >= i_start))]
     i2i_rec = df_rec[(df_rec.source >= i_start) & (df_rec.target >= i_start)]
     
-    avg_p2p_rec = np.average(list(p2p[cd].value_counts()))
-    avg_p2i_rec = np.average(list(p2i[cd].value_counts()))
-    avg_i2i_rec = np.average(list(i2i[cd].value_counts()))
+    avg_p2p_rec = np.average(list(p2p_rec[cd].value_counts()))/2
+    avg_p2i_rec = np.average(list(p2i_rec[cd].value_counts()))/2
+    avg_i2i_rec = np.average(list(i2i_rec[cd].value_counts()))/2
 
     print()
     print("reciprocal P2P\t" + str(round(avg_p2p_rec/total_p*100,2)) + "%")

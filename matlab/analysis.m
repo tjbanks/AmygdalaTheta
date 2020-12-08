@@ -1,6 +1,6 @@
 function [data] = analysis(ecph5path,spikeh5path)
 %analysis('../outputECP/ecp.h5','../outputECP/spikes.h5')
-%clear all;close all;
+%clear all;%close all;
 clc;
 channel = 1;
 skip_n = 50000;

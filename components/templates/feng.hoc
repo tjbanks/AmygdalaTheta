@@ -459,7 +459,7 @@ endtemplate Cell_Cf
 
 
 begintemplate InterneuronCellf
-	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,init_mechs
+	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,insert_mechs
 	create soma[1], dend[1]
 
 	public ncl, synlist
