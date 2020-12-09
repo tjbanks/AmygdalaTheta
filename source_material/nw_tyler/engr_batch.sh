@@ -19,4 +19,4 @@
 ## send mail to this address
 #SBATCH --mail-user=tbg28@mail.missouri.edu
 
-mpirun nrniv -mpi MC_main_small_forBeta.hoc #srun
+mpirun nrniv -mpi MC_main_small_forTheta.hoc #srun

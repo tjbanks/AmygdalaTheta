@@ -370,7 +370,7 @@ static void nrn_alloc(Prop* _prop) {
  	gbar_nmda = 0.0005;
  	Cdur_ampa = 0.713;
  	AlphaTmax_ampa = 2.257;
- 	Beta_ampa = 0.0926;
+ 	Beta_ampa = 0.0263;
  	Erev_ampa = 0;
  	gbar_ampa = 0.001;
  	Cainf = 5e-05;
@@ -454,7 +454,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive[_mechtype] = _net_receive;
  pnt_receive_size[_mechtype] = 1;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 pyrD2interD_P2SOM_STFD /home/tbg28/git_stage/nw_tyler/modfiles/x86_64/pyrD2interD_P2SOM_STFD.mod\n");
+ 	ivoc_help("help ?1 pyrD2interD_P2SOM_STFD /home/tbg28/git_stage/AmygdalaTheta/source_material/nw_tyler/modfiles/x86_64/pyrD2interD_P2SOM_STFD.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -850,7 +850,7 @@ _first = 0;
 }
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/home/tbg28/git_stage/nw_tyler/modfiles/pyrD2interD_P2SOM_STFD.mod";
+static const char* nmodl_filename = "/home/tbg28/git_stage/AmygdalaTheta/source_material/nw_tyler/modfiles/pyrD2interD_P2SOM_STFD.mod";
 static const char* nmodl_file_text = 
   ":Pyramidal Cells to Interneuron Cells AMPA+NMDA with local Ca2+ pool\n"
   "\n"
@@ -894,7 +894,7 @@ static const char* nmodl_file_text =
   "\n"
   "	Cdur_ampa = 0.713 (ms)\n"
   "	AlphaTmax_ampa = 2.257(/ms) :1.1286 10.1571\n"
-  "	Beta_ampa = 0.0926 (/ms) :0.0463 0.4167\n"
+  "	Beta_ampa = 0.0263 (/ms) :0.0926 0.0463 0.4167\n"
   "	Erev_ampa = 0 (mV)\n"
   "	gbar_ampa = 1e-3 (uS)\n"
   "\n"

@@ -26,7 +26,7 @@ begintemplate SOM_Cell
     objref tlist, area_vec
 	public tlist, area_vec
     
-    external tstop
+    //external tstop
     
     proc init() {
         append_sections()
@@ -123,7 +123,7 @@ begintemplate SOM_Cell
 
             drv = new IClamp(0.5)
             drv.del = 0
-            drv.dur = tstop
+            drv.dur = 0//tstop
             drv.amp = 0.0//0.2  //nA            
 
 			ena=45  ek=-80  ehd=-45  eca = 134		

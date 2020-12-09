@@ -40,7 +40,7 @@ PARAMETER {
 
 	Cdur_ampa = 0.713 (ms)
 	AlphaTmax_ampa = 2.257(/ms) :1.1286 10.1571
-	Beta_ampa = 0.0926 (/ms) :0.0463 0.4167
+	Beta_ampa = 0.0263 (/ms) :0.0926 0.0463 0.4167
 	Erev_ampa = 0 (mV)
 	gbar_ampa = 1e-3 (uS)
 

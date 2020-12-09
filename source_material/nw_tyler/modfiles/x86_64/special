@@ -10,4 +10,4 @@ if test "" = "yes" ; then
 else
 	NRNIV="${NRNBIN}nrniv"
 fi
-"${NRNIV}" -dll "/home/tbg28/git_stage/nw_tyler/modfiles/x86_64/.libs/libnrnmech.so" "$@"
+"${NRNIV}" -dll "/home/tbg28/git_stage/AmygdalaTheta/source_material/nw_tyler/modfiles/x86_64/.libs/libnrnmech.so" "$@"

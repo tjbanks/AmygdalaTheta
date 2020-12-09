@@ -139,3 +139,5 @@ components/mechanisms/modfiles/*.o
 components/mechanisms/modfiles/*.dll
 
 *.h5
+*.c
+*.o
