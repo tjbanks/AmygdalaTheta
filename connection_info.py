@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore") # Annoying h5py read warning
 def run(df, scale=1, convergence=True):
 
     p_start = 0 * scale
-    i_start = 800 * scale
+    i_start = 900 * scale
     i_end = 1000 * scale
 
     total_p = i_start - p_start
@@ -116,6 +116,6 @@ def feng_run(path):
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
         #bmtk_run(sys.argv[-1])
-        feng_run('./source_material/nw_tyler/input/active_syn_op')
+        feng_run('./source_material/active_syn_op_new')
     else:
         bmtk_run('./network/BLA_BLA_edges.h5')
