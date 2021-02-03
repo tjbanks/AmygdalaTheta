@@ -6,7 +6,7 @@ import sys
 import warnings
 warnings.filterwarnings("ignore") # Annoying h5py read warning
 
-def run(path, scale=1, convergence=True):
+def run(df, scale=1, convergence=True):
 
     p_start = 0 * scale
     i_start = 900 * scale
@@ -15,11 +15,7 @@ def run(path, scale=1, convergence=True):
     total_p = i_start - p_start
     total_i = i_end - i_start
 
-    hdf = h5py.File(path)
-
-    src = pd.DataFrame(hdf['edges']['BLA_to_BLA']['source_node_id'],columns=['source'])
-    trg = pd.DataFrame(hdf['edges']['BLA_to_BLA']['target_node_id'],columns=['target'])
-    df = pd.concat([src,trg],axis=1)
+    
 
     p2p = df[(df.source < i_start) & (df.target < i_start)]
     p2i = df[(df.source < i_start) & (df.target >= i_start)]
@@ -82,8 +78,24 @@ def run(path, scale=1, convergence=True):
     
     import pdb;pdb.set_trace()
 
+def bmtk_run(path):
+    hdf = h5py.File(path)
+
+    src = pd.DataFrame(hdf['edges']['BLA_to_BLA']['source_node_id'],columns=['source'])
+    trg = pd.DataFrame(hdf['edges']['BLA_to_BLA']['target_node_id'],columns=['target'])
+    df = pd.concat([src,trg],axis=1)
+    run(df)
+
+def feng_run(path):
+    import pdb;pdb.set_trace()
+    #Iterate line by line in file
+    #create a dataframe with source/target columns
+    #each line is the source and each item in the line is the target, append to the df
+    #call run(df)
+
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        run(sys.argv[-1])
+        #bmtk_run(sys.argv[-1])
+        feng_run('./source_material/nw_tyler/input/active_syn_op')
     else:
-        run('./network/BLA_BLA_edges.h5')
+        bmtk_run('./network/BLA_BLA_edges.h5')
