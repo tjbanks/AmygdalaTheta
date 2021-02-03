@@ -4,6 +4,7 @@ from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xite
 import synapses
 import pdb
 import random
+import pandas as pd
 
 np.random.seed(123412)
 
@@ -11,6 +12,8 @@ np.random.seed(123412)
 net = NetworkBuilder("BLA")
 
 scale = 1
+
+all_synapses = pd.DataFrame([],columns=['source_gid','target_gid'])
 
 #Number of cells in each population
 numPN_A = 640 * scale #4114#15930
@@ -230,6 +233,7 @@ def syn_percent(source,target,p,track_list=None):
     """
     track_list: supply a list to append and track the synapses with
     """
+    global all_synapses
 
     sid = source.node_id
     tid = target.node_id
@@ -237,12 +241,27 @@ def syn_percent(source,target,p,track_list=None):
     if sid==tid:
         return None
 
+    # Do not add synapses if they already exist, we don't want duplicates
+    if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+        return None
+
     if random.random() < p:
+        all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
         if track_list is not None:#we only want to track synapses that may have a recurrent connection, will speed up build time considerably
             track_list.append({'source_gid':source['node_id'],'target_gid':target['node_id']})        
         return 1
     else:
         return 0
+
+def syn_percent_o2a(source,targets,p,track_list=None):
+    """
+    track_list: supply a list to append and track the synapses with
+    one to all connector for increased speed.
+    """
+
+    global all_synapses
+
+    import pdb;pdb.set_trace()
 
 def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
     """
@@ -254,11 +273,22 @@ def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
         b. the current target as a prevous source
     4. Return number of synapses per this connection, 0 otherwise (no connection)
     """
-    for e in all_edges:
-        if source['node_id'] == e['target_gid'] and target['node_id'] == e['source_gid']:
+    global all_synapses
+
+    sid = source.node_id
+    tid = target.node_id
+    
+    # Do not add synapses if they already exist, we don't want duplicates
+    if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+        return None
+    
+    for e in all_edges: #should probably make this a pandas df to speed up building... and use .any() to search
+        if sid == e['target_gid'] and tid == e['source_gid']:
             #print('found recurrent')
+
             if random.random() < p:
                 #print('--------------connecting')
+                all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
                 return random.randint(min_syn,max_syn)
             else:
                 return 0
@@ -292,11 +322,11 @@ p2p_props = [
 
 for p2p_prop in p2p_props:
     #dynamics_file = 'PN2PN.json'
-    dynamics_file = 'PN2PN_feng.json'
+    dynamics_file = 'PN2PN_feng_min.json'
 
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['PyrA','PyrC']},
-                iterator = 'one_to_one',
-                connection_rule=syn_percent,
+                iterator = 'one_to_all',
+                connection_rule=syn_percent_o2a,
                 connection_params={'p':p2p_prop['syn_prob']},
                 syn_weight=1,
                 delay=0.1,
@@ -342,10 +372,8 @@ if i2i_gap:
 
 # Create connections between Bask --> Bask cells
 dynamics_file = 'INT2INT.json'
-dynamics_file = 'INT2INT_feng.json'
+dynamics_file = 'INT2INT_feng_min.json'
 
-add_delays.append(True)
-min_delays.append(syn[dynamics_file]['delay'])
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_one',
@@ -371,7 +399,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 uncoupled_bi_track = []
 
-dynamics_file = 'INT2INT_feng.json'
+dynamics_file = 'INT2INT_feng_min.json'
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_one',
@@ -417,15 +445,13 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 # Create connections between Bask --> Pyr cells
 #dynamics_file = 'INT2PN.json'
-dynamics_file = 'INT2PN_feng.json'
+dynamics_file = 'INT2PN_feng_min.json'
 
-add_delays.append(True)
-min_delays.append(syn[dynamics_file]['delay'])
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_one',
               connection_rule=syn_percent,
-              connection_params={'p':0.34},
+              connection_params={'p':0.40},
               syn_weight=1,
               delay=0.1,
               dynamics_params=dynamics_file,
@@ -447,7 +473,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 # Create connections between Pyr --> Bask cells
 #dynamics_file = 'PN2INT.json'
-dynamics_file = 'PN2INT_feng.json'
+dynamics_file = 'PN2INT_feng_min.json'
 
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
               iterator = 'one_to_one',
@@ -471,14 +497,33 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 ############################### PYR2INT ##################################
 ############################ BIDIRECTIONAL ###############################
 
-
-dynamics_file = 'PN2INT_feng.json'
 pyr_int_bi_list = []
-
-conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
+dynamics_file = 'INT2PN_feng_min.json'
+conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_one',
               connection_rule=syn_percent,
               connection_params={'p':0.16,'track_list':pyr_int_bi_list},
+              syn_weight=1,
+              delay = 0.1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['somatic'],
+              sec_id=0,
+              sec_x=0.9)
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
+
+
+dynamics_file = 'PN2INT_feng_min.json'
+conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
+              iterator = 'one_to_one',
+              connection_rule=recurrent_connector,
+              connection_params={'p':1,'all_edges':pyr_int_bi_list},
               syn_weight=1,
               delay = 0.1,
               dynamics_params=dynamics_file,
@@ -494,6 +539,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
               dtypes=[np.float, np.int32, np.float])
 
 
+
+dynamics_file = 'INT2PN_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_one',
               connection_rule=recurrent_connector,

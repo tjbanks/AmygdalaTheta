@@ -1,0 +1,4 @@
+node_type_id model_type morphology mem_potential model_template pop_name
+100 biophysical  e hoc:Cell_Af PyrA
+101 biophysical  e hoc:Cell_Cf PyrC
+102 biophysical  e hoc:InterneuronCellf Bask
