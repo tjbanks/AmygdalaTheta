@@ -9,12 +9,11 @@ warnings.filterwarnings("ignore") # Annoying h5py read warning
 def run(df, scale=1, convergence=True):
 
     p_start = 0 * scale
-    i_start = 900 * scale
+    i_start = 800 * scale
     i_end = 1000 * scale
 
     total_p = i_start - p_start
     total_i = i_end - i_start
-
     
 
     p2p = df[(df.source < i_start) & (df.target < i_start)]
@@ -76,7 +75,7 @@ def run(df, scale=1, convergence=True):
     print("reciprocal I2I\t" + str(round(avg_i2i_rec/total_i*100,2)) + "%")
     print()
     
-    import pdb;pdb.set_trace()
+    #import pdb;pdb.set_trace()
 
 def bmtk_run(path):
     hdf = h5py.File(path)
@@ -87,11 +86,32 @@ def bmtk_run(path):
     run(df)
 
 def feng_run(path):
-    import pdb;pdb.set_trace()
+    
     #Iterate line by line in file
     #create a dataframe with source/target columns
     #each line is the source and each item in the line is the target, append to the df
     #call run(df)
+
+    f = open(path, 'r')
+    lines = f.readlines()
+    df = None
+
+    row = 0
+    # Strips the newline character
+    for line in lines:
+        #print("Line{}: {}".format(row, line.strip()))
+        sources = line.strip().split('\t')
+        dft = pd.DataFrame(sources,columns=['source'])
+        dft.source = dft.source.astype(int)
+        dft['target'] = row
+        if df is None:
+            df = dft
+        else:
+            df = pd.concat([df,dft],ignore_index=True)
+        row += 1
+        
+    run(df)
+    import pdb;pdb.set_trace()
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
