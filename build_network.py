@@ -474,7 +474,7 @@ dynamics_file = 'INT2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.02, 'track_list':uncoupled_bi_track},#0.03
+              connection_params={'p':0.025, 'track_list':uncoupled_bi_track},#0.03
               syn_weight=1,
     	      delay=0.1,
               dynamics_params=dynamics_file,
@@ -548,7 +548,7 @@ dynamics_file = 'PN2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.16},#{'p':0.12},
+              connection_params={'p':0.24},#{'p':0.12},
               syn_weight=1,
 	          delay = 0.1,
               dynamics_params=dynamics_file,
@@ -593,7 +593,7 @@ dynamics_file = 'PN2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
               iterator = 'one_to_all',
               connection_rule=recurrent_connector_o2a,
-              connection_params={'p':0.9,'all_edges':pyr_int_bi_list},#was 1
+              connection_params={'p':0.3,'all_edges':pyr_int_bi_list},#was 1
               syn_weight=1,
               delay = 0.1,
               dynamics_params=dynamics_file,
@@ -609,7 +609,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
               dtypes=[np.float, np.int32, np.float])
 
 
-
+"""
 dynamics_file = 'INT2PN_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
@@ -629,7 +629,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
               rule_params={'sec_id':0, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
-
+"""
 ##########################################################################
 ############################### PYR2SOM ##################################
 
