@@ -257,11 +257,40 @@ def syn_percent_o2a(source,targets,p,track_list=None):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
+    returns a list of len(targets) where the value is the number of synapses at the index=cellid
     """
 
     global all_synapses
+    sid = source.node_id 
+    tids = np.array([target.node_id for target in targets])
 
-    import pdb;pdb.set_trace()
+    #List of synapses that will be returned, initialized to 0 synapses
+    syns = np.array([0 for _ in range(len(targets))])
+
+    #Get all existing targets for that source that can't be targetted here
+    existing = all_synapses[all_synapses.source_gid == sid]
+    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+
+    #remove existing synapses from available list
+    available = tids.copy()
+    available = available[~np.isin(available,existing_list)]
+
+    # of those remaining we want p% chosen
+    n = int(len(tids)*p)
+    chosen = np.random.choice(available,size=n,replace=False) 
+
+    syns[np.isin(tids,chosen)] = 1
+    
+    #Add to lists
+    new_syns = pd.DataFrame(chosen,columns=['target_gid'])
+    new_syns['source_gid'] = sid
+    all_synapses = all_synapses.append(new_syns,ignore_index=True)
+
+    if track_list is not None:
+        track_list = track_list.append(new_syns,ignore_index=True)
+
+    #any index selected will be set to 1 and returned
+    return syns 
 
 def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
     """
