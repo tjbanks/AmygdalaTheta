@@ -287,8 +287,9 @@ def syn_percent_o2a(source,targets,p,track_list=None):
     all_synapses = all_synapses.append(new_syns,ignore_index=True)
 
     if track_list is not None:
-        track_list = track_list.append(new_syns,ignore_index=True)
-
+        #track_list = track_list.append(new_syns,ignore_index=True)
+        for target in chosen:
+            track_list.append({'source_gid':sid,'target_gid':target})
     #any index selected will be set to 1 and returned
     return syns 
 
@@ -322,6 +323,41 @@ def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
             else:
                 return 0
     return 0
+
+def recurrent_connector_o2a(source,targets,p,all_edges=[],min_syn=1,max_syn=1):
+
+    global all_synapses
+    sid = source.node_id
+    tids = np.array([target.node_id for target in targets])
+
+    #List of synapses that will be returned, initialized to 0 synapses
+    syns = np.array([0 for _ in range(len(targets))])
+
+    existing = all_synapses[all_synapses.source_gid == sid]
+    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+
+    #remove existing synapses from available list
+    available = tids.copy()
+    available = available[~np.isin(available,existing_list)]
+
+    #remove any connection that is not in the all_edges list from 'available' list
+    recur = [i['source_gid'] for i in all_edges if i['target_gid'] == sid]
+    available = available[np.isin(available,recur)]
+    #import pdb;pdb.set_trace()
+
+    # of those remaining we want p% chosen
+    n = int(len(available)*p)
+    chosen = np.random.choice(available,size=n,replace=False) 
+
+    syns[np.isin(tids,chosen)] = 1
+    
+    #Add to lists
+    new_syns = pd.DataFrame(chosen,columns=['target_gid'])
+    new_syns['source_gid'] = sid
+    all_synapses = all_synapses.append(new_syns,ignore_index=True)
+
+    #any index selected will be set to 1 and returned
+    return syns
 
 # Create connections between Pyr --> Pyr cells
 add_delays = []#Says whether the next add_edges should have delays added by distance.
@@ -405,8 +441,8 @@ dynamics_file = 'INT2INT_feng_min.json'
 
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.19},
               syn_weight=1,
 	          delay=0.1,
@@ -431,8 +467,8 @@ uncoupled_bi_track = []
 dynamics_file = 'INT2INT_feng_min.json'
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.03, 'track_list':uncoupled_bi_track},
               syn_weight=1,
     	      delay=0.1,
@@ -450,8 +486,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
-              iterator = 'one_to_one',
-              connection_rule=recurrent_connector,
+              iterator = 'one_to_all',
+              connection_rule=recurrent_connector_o2a,
               connection_params={'p':1, 'all_edges':uncoupled_bi_track},
               syn_weight=1,
     	      delay=0.1,
@@ -478,8 +514,8 @@ dynamics_file = 'INT2PN_feng_min.json'
 
 
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.40},
               syn_weight=1,
               delay=0.1,
@@ -505,8 +541,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 dynamics_file = 'PN2INT_feng_min.json'
 
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.12},
               syn_weight=1,
 	          delay = 0.1,
@@ -529,8 +565,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 pyr_int_bi_list = []
 dynamics_file = 'INT2PN_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.16,'track_list':pyr_int_bi_list},
               syn_weight=1,
               delay = 0.1,
@@ -550,8 +586,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 dynamics_file = 'PN2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
-              iterator = 'one_to_one',
-              connection_rule=recurrent_connector,
+              iterator = 'one_to_all',
+              connection_rule=recurrent_connector_o2a,
               connection_params={'p':1,'all_edges':pyr_int_bi_list},
               syn_weight=1,
               delay = 0.1,
@@ -571,8 +607,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 dynamics_file = 'INT2PN_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
-              iterator = 'one_to_one',
-              connection_rule=recurrent_connector,
+              iterator = 'one_to_all',
+              connection_rule=recurrent_connector_o2a,
               connection_params={'p':1,'all_edges':pyr_int_bi_list},
               syn_weight=1,
               delay = 0.1,
@@ -596,8 +632,8 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 if connect_som:
     dynamics_file = 'PN2SOM_tyler.json'
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'SOM'},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.309},
               syn_weight=1,
               delay=0.1,
@@ -619,8 +655,8 @@ if connect_som:
 
     dynamics_file = 'SOM2PN_tyler.json'
     conn = net.add_edges(source={'pop_name': 'SOM'}, target={'pop_name': ['PyrA','PyrC']},
-              iterator = 'one_to_one',
-              connection_rule=syn_percent,
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
               connection_params={'p':0.066},
               syn_weight=1,
               delay=0.1,
