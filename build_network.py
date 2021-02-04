@@ -253,11 +253,12 @@ def syn_percent(source,target,p,track_list=None):
     else:
         return 0
 
-def syn_percent_o2a(source,targets,p,track_list=None):
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
     returns a list of len(targets) where the value is the number of synapses at the index=cellid
+    if no_recip is set to true, any connection that has been made previously and is reciprical won't be considered
     """
 
     global all_synapses
@@ -274,7 +275,11 @@ def syn_percent_o2a(source,targets,p,track_list=None):
     #remove existing synapses from available list
     available = tids.copy()
     available = available[~np.isin(available,existing_list)]
-
+    
+    if no_recip:    
+        recur = [i['source_gid'] for i in track_list if i['target_gid'] == sid]
+        available = available[~np.isin(available,recur)]
+    
     # of those remaining we want p% chosen
     n = int(len(tids)*p)
     chosen = np.random.choice(available,size=n,replace=False) 
@@ -439,11 +444,11 @@ if i2i_gap:
 dynamics_file = 'INT2INT.json'
 dynamics_file = 'INT2INT_feng_min.json'
 
-
+temp_list = []
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.19},
+              connection_params={'p':0.22,'no_recip':True,'track_list':temp_list},#0.19
               syn_weight=1,
 	          delay=0.1,
               dynamics_params=dynamics_file,
@@ -469,7 +474,7 @@ dynamics_file = 'INT2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.03, 'track_list':uncoupled_bi_track},
+              connection_params={'p':0.02, 'track_list':uncoupled_bi_track},#0.03
               syn_weight=1,
     	      delay=0.1,
               dynamics_params=dynamics_file,
@@ -488,7 +493,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=recurrent_connector_o2a,
-              connection_params={'p':1, 'all_edges':uncoupled_bi_track},
+              connection_params={'p':1, 'all_edges':uncoupled_bi_track},#p:1
               syn_weight=1,
     	      delay=0.1,
               dynamics_params=dynamics_file,
@@ -516,7 +521,7 @@ dynamics_file = 'INT2PN_feng_min.json'
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.40},
+              connection_params={'p':0.36},#{'p':0.40},
               syn_weight=1,
               delay=0.1,
               dynamics_params=dynamics_file,
@@ -543,7 +548,7 @@ dynamics_file = 'PN2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.12},
+              connection_params={'p':0.16},#{'p':0.12},
               syn_weight=1,
 	          delay = 0.1,
               dynamics_params=dynamics_file,
@@ -588,7 +593,7 @@ dynamics_file = 'PN2INT_feng_min.json'
 conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
               iterator = 'one_to_all',
               connection_rule=recurrent_connector_o2a,
-              connection_params={'p':1,'all_edges':pyr_int_bi_list},
+              connection_params={'p':0.9,'all_edges':pyr_int_bi_list},#was 1
               syn_weight=1,
               delay = 0.1,
               dynamics_params=dynamics_file,
