@@ -2,6 +2,7 @@ from bmtk.builder import NetworkBuilder
 import numpy as np
 from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
 import synapses
+import math
 import pdb
 import random
 import pandas as pd
@@ -228,6 +229,8 @@ def syn_dist_delay_feng(source, target):
 def syn_dist_delay_feng_section(source, target, sec_id=0, sec_x=0.9):
     return syn_dist_delay_feng(source, target), sec_id, sec_x
 
+def syn_uniform_delay_section(source, target, sec_id=0, sec_x=0.9, mean=0.5,std=1):
+    return np.random.uniform(mean,std), sec_id, sec_x
 
 def syn_percent(source,target,p,track_list=None):
     """
@@ -282,6 +285,8 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False):
     
     # of those remaining we want p% chosen
     n = int(len(tids)*p)
+    extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
+    n = n + extra #This will account for half percentages
     chosen = np.random.choice(available,size=n,replace=False) 
 
     syns[np.isin(tids,chosen)] = 1
@@ -352,6 +357,8 @@ def recurrent_connector_o2a(source,targets,p,all_edges=[],min_syn=1,max_syn=1):
 
     # of those remaining we want p% chosen
     n = int(len(available)*p)
+    extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
+    n = n + extra #This will account for half percentages
     chosen = np.random.choice(available,size=n,replace=False) 
 
     syns[np.isin(tids,chosen)] = 1
@@ -399,17 +406,15 @@ for p2p_prop in p2p_props:
                 connection_rule=syn_percent_o2a,
                 connection_params={'p':p2p_prop['syn_prob']},
                 syn_weight=1,
-                delay=0.1,
+                #delay=0.1,
                 dynamics_params=dynamics_file,
                 model_template=syn[dynamics_file]['level_of_detail'],
                 distance_range=[p2p_prop['min_dist'],p2p_prop['max_dist']],
-                target_sections=['basal'],
-                sec_id=0,
-                sec_x=0.9)
+                target_sections=['basal'])
 
     conn.add_properties(names=['delay','sec_id','sec_x'],
                 rule=syn_dist_delay_feng_section,
-                rule_params={'sec_id':0, 'sec_x':0.9},
+                rule_params={'sec_id':1, 'sec_x':0.9},
                 dtypes=[np.float, np.int32, np.float])
 
 ##########################################################################
@@ -448,15 +453,13 @@ temp_list = []
 conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.22,'no_recip':True,'track_list':temp_list},#0.19
+              connection_params={'p':0.19,'no_recip':True,'track_list':temp_list},#0.19
               syn_weight=1,
 	          delay=0.1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -480,9 +483,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -499,9 +500,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['Bask']},
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -527,9 +526,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -554,13 +551,11 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['basal'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
-              rule_params={'sec_id':0, 'sec_x':0.9},
+              rule_params={'sec_id':1, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
 ##########################################################################
@@ -578,9 +573,7 @@ conn = net.add_edges(source={'pop_name': 'Bask'}, target={'pop_name': ['PyrA','P
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -599,13 +592,11 @@ conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': '
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['basal'])
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
-              rule_params={'sec_id':0, 'sec_x':0.9},
+              rule_params={'sec_id':1, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
 
@@ -645,13 +636,11 @@ if connect_som:
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['basal'])
 
     conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
-              rule_params={'sec_id':0, 'sec_x':0.9},
+              rule_params={'sec_id':1, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
 
@@ -668,9 +657,7 @@ if connect_som:
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
               distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['somatic'],
-              sec_id=0,
-              sec_x=0.9)
+              target_sections=['somatic'])
 
     conn.add_properties(names=['delay','sec_id','sec_x'],
               rule=syn_dist_delay_feng_section,
@@ -678,43 +665,68 @@ if connect_som:
               dtypes=[np.float, np.int32, np.float])
 
 
-
-
 ##########################################################################
 ######################### BACKGROUND INPUT ###############################
 
+dynamics_file='BG2PNe_feng_min.json'
+#dynamics_file = 'BG2PN_feng_min.json'
 
-
-net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
+conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
-                   delay=0.1,
+                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
-                   dynamics_params='BG2PNe_feng.json',
-                   model_template='bg2pyr',
-                   sec_x=0.9)
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+                   #dynamics_params='BG2PNe_feng.json',
+                   #model_template='bg2pyr',
+                   #sec_x=0.9)
 
-net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
-                   delay=0.1,
+                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
-                   dynamics_params='BG2PNe_feng.json',
-                   model_template='bg2pyr',
-                   sec_x=0.9)
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+                   #dynamics_params='BG2PNe_feng.json',
+                   #model_template='bg2pyr',
+                   #sec_x=0.9)
 
-net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+
+dynamics_file = 'BG2PNi_feng_min.json'
+#dynamics_file = 'BG2INT_feng_min.json'
+
+conn = net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
                    connection_rule=one_to_one_offset,
                    connection_params={'offset':numPN_A+numPN_C},
                    syn_weight=1,
                    target_sections=['basal'],
-                   delay=0.1,
+                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
-                   dynamics_params='BG2PNi_feng.json',
-                   model_template='bg2pyr',
-                   sec_x=0.9)
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+                   #dynamics_params='BG2PNi_feng.json',
+                   #model_template='bg2pyr',
+                   #sec_x=0.9)
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
 
 
 ##########################################################################

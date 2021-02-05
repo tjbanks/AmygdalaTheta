@@ -1,0 +1,712 @@
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+Additional mechanisms from files
+ bg2pyr.mod cadyn.mod cal2CA3.mod cal2.mod ca.mod capoolCA3.mod capool.mod cas.mod cat.mod currentclamp.mod function_TMonitor.mod gap.mod Gfluct_new_exc.mod Gfluct_new_inh.mod hCA3.mod h.mod imCA3.mod im.mod interD2interD_SOMPV_STFD_new.mod interD2interD_STFD_new.mod interD2pyrD_SOM2P_STFD_new.mod interD2pyrD_STFD_new_alipara.mod interD2pyrD_STFD_new.mod kadist.mod kaprox.mod kca.mod kdrca1DA.mod kdrca1.mod kdrCA3.mod kdrinter.mod leakCA3.mod leakDA.mod leakinter.mod leak.mod na3DA.mod na3.mod nainter.mod napCA3.mod nap.mod natCA3.mod nat.mod pyrD2interD_P2SOM_STFD.mod pyrD2interD_STFD.mod pyrD2pyrD_STFD_new.mod sahpCA3.mod sahp.mod sahpNE.mod synapse_inter2pyr.mod vecevent.mod xtra_imemrec.mod xtra.mod
+37 nrniv: syntax error
+37  in function_ConnectInputs_invivo_op.hoc near line 73
+37          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        37 xopen("function_C...")
+      37 execute1("{xopen("fu...")
+    37 load_file("function_C...")
+97 nrniv: syntax error
+97  in function_ConnectInputs_invivo_op.hoc near line 73
+97          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        97 xopen("function_C...")
+      97 execute1("{xopen("fu...")
+    97 load_file("function_C...")
+89 nrniv: syntax error
+89  in function_ConnectInputs_invivo_op.hoc near line 73
+89          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        89 xopen("function_C...")
+      89 execute1("{xopen("fu...")
+    89 load_file("function_C...")
+20 nrniv: syntax error
+20  in function_ConnectInputs_invivo_op.hoc near line 73
+20          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        20 xopen("function_C...")
+      20 execute1("{xopen("fu...")
+    20 load_file("function_C...")
+13 nrniv: syntax error
+13  in function_ConnectInputs_invivo_op.hoc near line 73
+13          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        13 xopen("function_C...")
+      13 execute1("{xopen("fu...")
+    13 load_file("function_C...")
+54 nrniv: syntax error
+54  in function_ConnectInputs_invivo_op.hoc near line 73
+54          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        54 xopen("function_C...")
+      54 execute1("{xopen("fu...")
+    54 load_file("function_C...")
+42 nrniv: syntax error
+42  in function_ConnectInputs_invivo_op.hoc near line 73
+42          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        42 xopen("function_C...")
+      42 execute1("{xopen("fu...")
+    42 load_file("function_C...")
+60 nrniv: syntax error
+60  in function_ConnectInputs_invivo_op.hoc near line 73
+60          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        60 xopen("function_C...")
+      60 execute1("{xopen("fu...")
+    60 load_file("function_C...")
+15 nrniv: syntax error
+15  in function_ConnectInputs_invivo_op.hoc near line 73
+15          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        15 xopen("function_C...")
+      15 execute1("{xopen("fu...")
+    15 load_file("function_C...")
+71 nrniv: syntax error
+71  in function_ConnectInputs_invivo_op.hoc near line 73
+71          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        71 xopen("function_C...")
+      71 execute1("{xopen("fu...")
+    71 load_file("function_C...")
+94 nrniv: syntax error
+94  in function_ConnectInputs_invivo_op.hoc near line 73
+94          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        94 xopen("function_C...")
+      94 execute1("{xopen("fu...")
+    94 load_file("function_C...")
+88 nrniv: syntax error
+88  in function_ConnectInputs_invivo_op.hoc near line 73
+88          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        88 xopen("function_C...")
+      88 execute1("{xopen("fu...")
+    88 load_file("function_C...")
+38 nrniv: syntax error
+38  in function_ConnectInputs_invivo_op.hoc near line 73
+38          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        38 xopen("function_C...")
+      38 execute1("{xopen("fu...")
+    38 load_file("function_C...")
+63 nrniv: syntax error
+63  in function_ConnectInputs_invivo_op.hoc near line 73
+63          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        63 xopen("function_C...")
+      63 execute1("{xopen("fu...")
+    63 load_file("function_C...")
+75 nrniv: syntax error
+75  in function_ConnectInputs_invivo_op.hoc near line 73
+75          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        75 xopen("function_C...")
+      75 execute1("{xopen("fu...")
+    75 load_file("function_C...")
+19 nrniv: syntax error
+19  in function_ConnectInputs_invivo_op.hoc near line 73
+19          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        19 xopen("function_C...")
+      19 execute1("{xopen("fu...")
+    19 load_file("function_C...")
+22 nrniv: syntax error
+22  in function_ConnectInputs_invivo_op.hoc near line 73
+22          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        22 xopen("function_C...")
+      22 execute1("{xopen("fu...")
+    22 load_file("function_C...")
+76 nrniv: syntax error
+76  in function_ConnectInputs_invivo_op.hoc near line 73
+76          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        76 xopen("function_C...")
+      76 execute1("{xopen("fu...")
+    76 load_file("function_C...")
+79 nrniv: syntax error
+79  in function_ConnectInputs_invivo_op.hoc near line 73
+79          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        79 xopen("function_C...")
+      79 execute1("{xopen("fu...")
+    79 load_file("function_C...")
+85 nrniv: syntax error
+85  in function_ConnectInputs_invivo_op.hoc near line 73
+85          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        85 xopen("function_C...")
+      85 execute1("{xopen("fu...")
+    85 load_file("function_C...")
+32 nrniv: syntax error
+32  in function_ConnectInputs_invivo_op.hoc near line 73
+32          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        32 xopen("function_C...")
+      32 execute1("{xopen("fu...")
+    32 load_file("function_C...")
+29 nrniv: syntax error
+29  in function_ConnectInputs_invivo_op.hoc near line 73
+29          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        29 xopen("function_C...")
+      29 execute1("{xopen("fu...")
+    29 load_file("function_C...")
+40 nrniv: syntax error
+40  in function_ConnectInputs_invivo_op.hoc near line 73
+40          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        40 xopen("function_C...")
+      40 execute1("{xopen("fu...")
+    40 load_file("function_C...")
+43 nrniv: syntax error
+43  in function_ConnectInputs_invivo_op.hoc near line 73
+43          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        43 xopen("function_C...")
+      43 execute1("{xopen("fu...")
+    43 load_file("function_C...")
+52 nrniv: syntax error
+52  in function_ConnectInputs_invivo_op.hoc near line 73
+52          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        52 xopen("function_C...")
+      52 execute1("{xopen("fu...")
+    52 load_file("function_C...")
+5 nrniv: syntax error
+5  in function_ConnectInputs_invivo_op.hoc near line 73
+5          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        5 xopen("function_C...")
+      5 execute1("{xopen("fu...")
+    5 load_file("function_C...")
+57 nrniv: syntax error
+57  in function_ConnectInputs_invivo_op.hoc near line 73
+57          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        57 xopen("function_C...")
+      57 execute1("{xopen("fu...")
+    57 load_file("function_C...")
+59 nrniv: syntax error
+59  in function_ConnectInputs_invivo_op.hoc near line 73
+59          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        59 xopen("function_C...")
+      59 execute1("{xopen("fu...")
+    59 load_file("function_C...")
+46 nrniv: syntax error
+46  in function_ConnectInputs_invivo_op.hoc near line 73
+46          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        46 xopen("function_C...")
+      46 execute1("{xopen("fu...")
+    46 load_file("function_C...")
+62 nrniv: syntax error
+62  in function_ConnectInputs_invivo_op.hoc near line 73
+62          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        62 xopen("function_C...")
+      62 execute1("{xopen("fu...")
+    62 load_file("function_C...")
+50 nrniv: syntax error
+50  in function_ConnectInputs_invivo_op.hoc near line 73
+50          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        50 xopen("function_C...")
+      50 execute1("{xopen("fu...")
+    50 load_file("function_C...")
+51 nrniv: syntax error
+51  in function_ConnectInputs_invivo_op.hoc near line 73
+51          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        51 xopen("function_C...")
+      51 execute1("{xopen("fu...")
+    51 load_file("function_C...")
+23 nrniv: syntax error
+23  in function_ConnectInputs_invivo_op.hoc near line 73
+23          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        23 xopen("function_C...")
+      23 execute1("{xopen("fu...")
+    23 load_file("function_C...")
+7 nrniv: syntax error
+7  in function_ConnectInputs_invivo_op.hoc near line 73
+7          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        7 xopen("function_C...")
+      7 execute1("{xopen("fu...")
+    7 load_file("function_C...")
+33 nrniv: syntax error
+33  in function_ConnectInputs_invivo_op.hoc near line 73
+33          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        33 xopen("function_C...")
+      33 execute1("{xopen("fu...")
+    33 load_file("function_C...")
+39 nrniv: syntax error
+39  in function_ConnectInputs_invivo_op.hoc near line 73
+39          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        39 xopen("function_C...")
+      39 execute1("{xopen("fu...")
+    39 load_file("function_C...")
+28 nrniv: syntax error
+28  in function_ConnectInputs_invivo_op.hoc near line 73
+28          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        28 xopen("function_C...")
+      28 execute1("{xopen("fu...")
+    28 load_file("function_C...")
+48 nrniv: syntax error
+48  in function_ConnectInputs_invivo_op.hoc near line 73
+48          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        48 xopen("function_C...")
+      48 execute1("{xopen("fu...")
+    48 load_file("function_C...")
+41 nrniv: syntax error
+41  in function_ConnectInputs_invivo_op.hoc near line 73
+41          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        41 xopen("function_C...")
+      41 execute1("{xopen("fu...")
+    41 load_file("function_C...")
+64 nrniv: syntax error
+64  in function_ConnectInputs_invivo_op.hoc near line 73
+64          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        64 xopen("function_C...")
+      64 execute1("{xopen("fu...")
+    64 load_file("function_C...")
+56 nrniv: syntax error
+56  in function_ConnectInputs_invivo_op.hoc near line 73
+56          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        56 xopen("function_C...")
+      56 execute1("{xopen("fu...")
+    56 load_file("function_C...")
+18 nrniv: syntax error
+18  in function_ConnectInputs_invivo_op.hoc near line 73
+18          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        18 xopen("function_C...")
+      18 execute1("{xopen("fu...")
+    18 load_file("function_C...")
+93 nrniv: syntax error
+93  in function_ConnectInputs_invivo_op.hoc near line 73
+93          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        93 xopen("function_C...")
+      93 execute1("{xopen("fu...")
+    93 load_file("function_C...")
+8 nrniv: syntax error
+8  in function_ConnectInputs_invivo_op.hoc near line 73
+8          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        8 xopen("function_C...")
+      8 execute1("{xopen("fu...")
+    8 load_file("function_C...")
+92 nrniv: syntax error
+92  in function_ConnectInputs_invivo_op.hoc near line 73
+92          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        92 xopen("function_C...")
+      92 execute1("{xopen("fu...")
+    92 load_file("function_C...")
+35 nrniv: syntax error
+35  in function_ConnectInputs_invivo_op.hoc near line 73
+35          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        35 xopen("function_C...")
+      35 execute1("{xopen("fu...")
+    35 load_file("function_C...")
+31 nrniv: syntax error
+31  in function_ConnectInputs_invivo_op.hoc near line 73
+31          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        31 xopen("function_C...")
+      31 execute1("{xopen("fu...")
+    31 load_file("function_C...")
+25 nrniv: syntax error
+25  in function_ConnectInputs_invivo_op.hoc near line 73
+25          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        25 xopen("function_C...")
+      25 execute1("{xopen("fu...")
+    25 load_file("function_C...")
+27 nrniv: syntax error
+27  in function_ConnectInputs_invivo_op.hoc near line 73
+27          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        27 xopen("function_C...")
+      27 execute1("{xopen("fu...")
+    27 load_file("function_C...")
+14 nrniv: syntax error
+14  in function_ConnectInputs_invivo_op.hoc near line 73
+14          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        14 xopen("function_C...")
+      14 execute1("{xopen("fu...")
+    14 load_file("function_C...")
+72 nrniv: syntax error
+72  in function_ConnectInputs_invivo_op.hoc near line 73
+72          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        72 xopen("function_C...")
+      72 execute1("{xopen("fu...")
+    72 load_file("function_C...")
+11 nrniv: syntax error
+11  in function_ConnectInputs_invivo_op.hoc near line 73
+11          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        11 xopen("function_C...")
+      11 execute1("{xopen("fu...")
+    11 load_file("function_C...")
+26 nrniv: syntax error
+26  in function_ConnectInputs_invivo_op.hoc near line 73
+26          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        26 xopen("function_C...")
+      26 execute1("{xopen("fu...")
+    26 load_file("function_C...")
+77 nrniv: syntax error
+77  in function_ConnectInputs_invivo_op.hoc near line 73
+77          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        77 xopen("function_C...")
+      77 execute1("{xopen("fu...")
+    77 load_file("function_C...")
+65 nrniv: syntax error
+65  in function_ConnectInputs_invivo_op.hoc near line 73
+65          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        65 xopen("function_C...")
+      65 execute1("{xopen("fu...")
+    65 load_file("function_C...")
+67 nrniv: syntax error
+67  in function_ConnectInputs_invivo_op.hoc near line 73
+67          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        67 xopen("function_C...")
+      67 execute1("{xopen("fu...")
+    67 load_file("function_C...")
+70 nrniv: syntax error
+70  in function_ConnectInputs_invivo_op.hoc near line 73
+70          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        70 xopen("function_C...")
+      70 execute1("{xopen("fu...")
+    70 load_file("function_C...")
+4 nrniv: syntax error
+4  in function_ConnectInputs_invivo_op.hoc near line 73
+4          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        4 xopen("function_C...")
+      4 execute1("{xopen("fu...")
+    4 load_file("function_C...")
+83 nrniv: syntax error
+83  in function_ConnectInputs_invivo_op.hoc near line 73
+83          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        83 xopen("function_C...")
+      83 execute1("{xopen("fu..."24 nrniv: syntax error
+24  in function_ConnectInputs_invivo_op.hoc near line 73
+24          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        24 xopen("function_C...")
+      24 execute1("{xopen("fu...")
+    24 load_file("function_C...")
+)
+    83 load_file("function_C...")
+10 nrniv: syntax error
+10  in function_ConnectInputs_invivo_op.hoc near line 73
+10          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        10 xopen("function_C...")
+      10 execute1("{xopen("fu...")
+    10 load_file("function_C...")
+98 nrniv: syntax error
+98  in function_ConnectInputs_invivo_op.hoc near line 73
+98          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        98 xopen("function_C...")
+      98 execute1("{xopen("fu...")
+    98 load_file("function_C...")
+84 nrniv: syntax error
+84  in function_ConnectInputs_invivo_op.hoc near line 73
+84          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        84 xopen("function_C...")
+      84 execute1("{xopen("fu...")
+    84 load_file("function_C...")
+49 nrniv: syntax error
+49  in function_ConnectInputs_invivo_op.hoc near line 73
+49          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        49 xopen("function_C...")
+      49 execute1("{xopen("fu...")
+    49 load_file(81 nrniv: syntax error
+81  in function_ConnectInputs_invivo_op.hoc near line 73
+81          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        81 xopen("function_C...")
+      81 execute1("{xopen("fu...")
+    81 load_file("function_C...")
+"function_C...")
+78 nrniv: syntax error
+78  in function_ConnectInputs_invivo_op.hoc near line 73
+78          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        78 xopen("function_C...")
+      78 execute1("{xopen("fu...")
+    78 load_file("function_C...")
+55 nrniv: syntax error
+55  in function_ConnectInputs_invivo_op.hoc near line 73
+55          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        55 xopen("function_C...")
+      55 execute1("{xopen("fu...")
+    55 load_file("function_C...")
+73 nrniv: syntax error
+73  in function_ConnectInputs_invivo_op.hoc near line 73
+73          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        73 xopen("function_C...")
+      73 execute1("{xopen("fu...")
+    73 load_file("function_C...")
+66 nrniv: syntax error
+66  in function_ConnectInputs_invivo_op.hoc near line 73
+66          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        66 xopen("function_C...")
+      66 execute1("{xopen("fu...")
+    66 load_file("function_C...")
+36 nrniv: syntax error
+36  in function_ConnectInputs_invivo_op.hoc near line 73
+36          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        36 xopen("function_C...")
+      36 execute1("{xopen("fu...")
+    36 load_file("function_C...")
+1 nrniv: syntax error
+1  in function_ConnectInputs_invivo_op.hoc near line 73
+1          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        1 xopen("function_C...")
+      1 execute1("{xopen("fu...")
+    1 load_file("function_C...")
+99 nrniv: syntax error
+99  in function_ConnectInputs_invivo_op.hoc near line 73
+99          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        99 xopen("function_C...")
+      99 execute1("{xopen("fu...")
+    16 nrniv: syntax error
+16  in function_ConnectInputs_invivo_op.hoc near line 73
+16          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        16 xopen("function_C...")
+      16 execute1("{xopen("fu...")
+    16 load_file("function_C...")
+34 nrniv: syntax error
+34  in function_ConnectInputs_invivo_op.hoc near line 73
+34          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        34 xopen("function_C...")
+      34 execute1("{xopen("fu...")
+    34 load_file("function_C...")
+99 load_file("function_C...")
+91 nrniv: syntax error
+91  in function_ConnectInputs_invivo_op.hoc near line 73
+91          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        91 xopen("function_C...")
+      91 execute1("{xopen("fu...")
+    91 load_file("function_C...")
+2 nrniv: syntax error
+2  in function_ConnectInputs_invivo_op.hoc near line 73
+2          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        2 xopen("function_C...")
+      2 execute1("{xopen("fu...")
+    2 load_file("function_C...")
+0 nrniv: syntax error
+0  in function_ConnectInputs_invivo_op.hoc near line 73
+0          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        0 xopen("function_C...")
+      0 execute1("{xopen("fu...")
+    0 load_file("function_C...")
+90 nrniv: syntax error
+90  in function_ConnectInputs_invivo_op.hoc near line 73
+90          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        90 xopen("function_C...")
+      90 execute1("{xopen("fu...")
+    90 load_file("function_C...")
+82 nrniv: syntax error
+82  in function_ConnectInputs_invivo_op.hoc near line 73
+82          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        82 xopen("function_C...")
+      82 execute1("{xopen("fu...")
+    82 load_file("function_C...")
+69 nrniv: syntax error
+69  in function_ConnectInputs_invivo_op.hoc near line 73
+69          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        69 xopen("function_C...")
+      69 execute1("{xopen("fu...")
+    69 load_file("function_C...")
+3 nrniv: syntax error
+3  in function_ConnectInputs_invivo_op.hoc near line 73
+3          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        3 xopen("function_C...")
+      3 execute1("{xopen("fu...")
+    3 load_file("function_C...")
+30 nrniv: syntax error
+30  in function_ConnectInputs_invivo_op.hoc near line 73
+30          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        30 xopen("function_C...")
+      30 execute1("{xopen("fu...")
+    30 load_file("function_C...")
+61 nrniv: syntax error
+61  in function_ConnectInputs_invivo_op.hoc near line 73
+61          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        61 xopen("function_C...")
+      61 execute1("{xopen("fu...")
+    61 load_file("function_C...")
+53 nrniv: syntax error
+53  in function_ConnectInputs_invivo_op.hoc near line 73
+53          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        53 xopen("function_C...")
+      53 execute1("{xopen("fu...")
+    53 load_file("function_C...")
+74 nrniv: syntax error
+74  in function_ConnectInputs_invivo_op.hoc near line 73
+74          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        74 xopen("function_C...")
+      74 execute1("{xopen("fu...")
+    74 load_file("function_C...")
+17 nrniv: syntax error
+17  in function_ConnectInputs_invivo_op.hoc near line 73
+17          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        17 xopen("function_C...")
+      17 execute1("{xopen("fu...")
+    17 load_file("function_C...")
+68 nrniv: syntax error
+68  in function_ConnectInputs_invivo_op.hoc near line 73
+68          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        68 xopen("function_C...")
+      68 execute1("{xopen("fu...")
+    68 load_file("function_C...")
+87 nrniv: syntax error
+87  in function_ConnectInputs_invivo_op.hoc near line 73
+87          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        87 xopen("function_C...")
+      87 execute1("{xopen("fu...")
+    87 load_file("function_C...")
+6 nrniv: syntax error
+6  in function_ConnectInputs_invivo_op.hoc near line 73
+6          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        6 xopen("function_C...")
+      6 execute1("{xopen("fu...")
+    6 load_file("function_C...")
+80 nrniv: syntax error
+80  in function_ConnectInputs_invivo_op.hoc near line 73
+80          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        80 xopen("function_C...")
+      80 execute1("{xopen("fu...")
+    80 load_file("function_C...")
+44 nrniv: syntax error
+44  in function_ConnectInputs_invivo_op.hoc near line 73
+44          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        44 xopen("function_C...")
+      44 execute1("{xopen("fu...")
+    44 load_file("function_C...")
+95 nrniv: syntax error
+95  in function_ConnectInputs_invivo_op.hoc near line 73
+95          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        95 xopen("function_C...")
+      95 execute1("{xopen("fu...")
+    95 load_file("function_C...")
+12 nrniv: syntax error
+12  in function_ConnectInputs_invivo_op.hoc near line 73
+12          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        12 xopen("function_C...")
+      12 execute1("{xopen("fu...")
+    12 load_file("function_C...")
+47 nrniv: syntax error
+47  in function_ConnectInputs_invivo_op.hoc near line 73
+47          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        47 xopen("function_C...")
+      47 execute1("{xopen("fu...")
+    47 load_file("function_C...")
+58 nrniv: syntax error
+58  in function_ConnectInputs_invivo_op.hoc near line 73
+58          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        58 xopen("function_C...")
+      58 execute1("{xopen("fu...")
+    58 load_file("function_C...")
+96 nrniv: syntax error
+96  in function_ConnectInputs_invivo_op.hoc near line 73
+96          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        96 xopen("function_C...")
+      96 execute1("{xopen("fu...")
+    96 load_file("function_C...")
+9 nrniv: syntax error
+9  in function_ConnectInputs_invivo_op.hoc near line 73
+9          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        9 xopen("function_C...")
+      9 execute1("{xopen("fu...")
+    9 load_file("function_C...")
+86 nrniv: syntax error
+86  in function_ConnectInputs_invivo_op.hoc near line 73
+86          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        86 xopen("function_C...")
+      86 execute1("{xopen("fu...")
+    86 load_file("function_C...")
+45 nrniv: syntax error
+45  in function_ConnectInputs_invivo_op.hoc near line 73
+45          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        45 xopen("function_C...")
+      45 execute1("{xopen("fu...")
+    45 load_file("function_C...")
+21 nrniv: syntax error
+21  in function_ConnectInputs_invivo_op.hoc near line 73
+21          if rc.uniform(0,1) > portion_ITNs {continue}
+             ^
+        21 xopen("function_C...")
+      21 execute1("{xopen("fu...")
+    21 load_file("function_C...")
+0 nrniv: ConnectInputs_I undefined function
+0  in function_ConnectInputs_invivo_op.hoc near line 493
+0  }   
+     ^
+        0 ConnectInputs_I(0.9, 1, 0.2)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 0

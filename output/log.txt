@@ -1,20 +1,11 @@
-2020-11-17 23:11:44,928 [INFO] Created log file
-2020-11-17 23:11:44,928 [INFO] Running NEURON with mpi (20 cores).
-2020-11-17 23:11:45,597 [INFO] Building cells.
-2020-11-17 23:11:46,354 [INFO] Building recurrent connections
-2020-11-17 23:11:52,089 [INFO] Building virtual cell stimulations for mthalamus_spikes
-2020-11-17 23:11:53,380 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
-2020-11-17 23:11:54,775 [INFO] Running simulation for 5000.000 ms with the time step 0.100 ms
-2020-11-17 23:11:54,775 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2020-11-17 23:11:54,776 [INFO] Block save every 5000 steps
-2020-11-17 23:12:45,936 [INFO]     step:5000 t_sim:500.00 ms
-2020-11-17 23:13:35,398 [INFO]     step:10000 t_sim:1000.00 ms
-2020-11-17 23:14:27,298 [INFO]     step:15000 t_sim:1500.00 ms
-2020-11-17 23:15:19,015 [INFO]     step:20000 t_sim:2000.00 ms
-2020-11-17 23:16:12,525 [INFO]     step:25000 t_sim:2500.00 ms
-2020-11-17 23:17:01,786 [INFO]     step:30000 t_sim:3000.00 ms
-2020-11-17 23:17:51,929 [INFO]     step:35000 t_sim:3500.00 ms
-2020-11-17 23:18:43,759 [INFO]     step:40000 t_sim:4000.00 ms
-2020-11-17 23:19:33,059 [INFO]     step:45000 t_sim:4500.00 ms
-2020-11-17 23:20:23,318 [INFO]     step:50000 t_sim:5000.00 ms
-2020-11-17 23:20:26,749 [INFO] Simulation completed in 8.0 minutes, 32.21 seconds 
+2021-02-03 22:18:41,563 [INFO] Created log file
+2021-02-03 22:18:45,176 [INFO] Building cells.
+2021-02-03 22:19:10,413 [INFO] Building recurrent connections
+2021-02-03 22:20:46,146 [INFO] Building virtual cell stimulations for mthalamus_spikes
+2021-02-03 22:20:58,927 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
+2021-02-03 22:21:00,286 [INFO] Running simulation for 10000.000 ms with the time step 0.050 ms
+2021-02-03 22:21:00,286 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-02-03 22:21:00,286 [INFO] Block save every 5000 steps
+2021-02-03 22:27:47,500 [INFO]     step:5000 t_sim:250.00 ms
+2021-02-03 22:34:36,837 [INFO]     step:10000 t_sim:500.00 ms
+2021-02-03 22:41:27,871 [INFO]     step:15000 t_sim:750.00 ms

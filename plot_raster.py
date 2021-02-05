@@ -8,4 +8,4 @@ if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
         plot_rast(sys.argv[-1])
     else:
-        plot_rast('simulation_config.json')
+        plot_rast('simulation_configECP.json')

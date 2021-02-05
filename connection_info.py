@@ -85,7 +85,7 @@ def bmtk_run(path):
     df = pd.concat([src,trg],axis=1)
     run(df)
 
-def feng_run(path):
+def feng_run(path,scale=1):
     
     #Iterate line by line in file
     #create a dataframe with source/target columns
@@ -110,12 +110,13 @@ def feng_run(path):
             df = pd.concat([df,dft],ignore_index=True)
         row += 1
         
-    run(df)
+    run(df,scale=scale)
     #import pdb;pdb.set_trace()
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
         #bmtk_run(sys.argv[-1])
         feng_run('./source_material/active_syn_op_new')
+        #feng_run('./source_material/FengEtAl2019/input/active_syn_op',scale=27)
     else:
         bmtk_run('./network/BLA_BLA_edges.h5')

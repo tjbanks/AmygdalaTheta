@@ -370,7 +370,7 @@ static void nrn_alloc(Prop* _prop) {
  	gbar_nmda = 0.0005;
  	Cdur_ampa = 0.713;
  	AlphaTmax_ampa = 2.257;
- 	Beta_ampa = 0.0263;
+ 	Beta_ampa = 0.0926;
  	Erev_ampa = 0;
  	gbar_ampa = 0.001;
  	Cainf = 5e-05;
@@ -894,7 +894,7 @@ static const char* nmodl_file_text =
   "\n"
   "	Cdur_ampa = 0.713 (ms)\n"
   "	AlphaTmax_ampa = 2.257(/ms) :1.1286 10.1571\n"
-  "	Beta_ampa = 0.0263 (/ms) :0.0926 0.0463 0.4167\n"
+  "	Beta_ampa = 0.0926 (/ms):0.0263 (/ms) :0.0926 0.0463 0.4167\n"
   "	Erev_ampa = 0 (mV)\n"
   "	gbar_ampa = 1e-3 (uS)\n"
   "\n"
