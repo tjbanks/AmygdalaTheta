@@ -1,0 +1,2 @@
+2021-02-06 18:30:05,441 [INFO] Created log file
+2021-02-06 18:30:06,213 [INFO] Building cells.

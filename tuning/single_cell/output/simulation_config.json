@@ -1,0 +1,90 @@
+{
+  "target_simulator": "NEURON",
+  "run": {
+    "tstart": 0.0,
+    "tstop": 1000.0,
+    "dt": 0.05,
+    "dL": 20.0,
+    "spike_threshold": -15.0,
+    "nsteps_block": 5000
+  },
+  "conditions": {
+    "celsius": 31.0,
+    "v_init": -70.0
+  },
+  "inputs": {
+    "mthalamus_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\mthalamus_spikes.h5",
+      "node_set": "mthalamus"
+    },
+    "exc_bg_bask_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\exc_bg_bask_spikes.h5",
+      "node_set": "exc_bg_bask"
+    }
+  },
+  "output": {
+    "log_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output\\log.txt",
+    "output_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output",
+    "spikes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output\\spikes.h5"
+  },
+  "reports": {
+    "v_report": {
+      "variable_name": "v",
+      "cells": "all",
+      "module": "membrane_report",
+      "sections": "soma"
+    }
+  },
+  "node_sets_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\node_sets.json",
+  "network": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\circuit_config.json",
+  "config_path": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\simulation_config.json",
+  "config_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell",
+  "components": {
+    "biophysical_neuron_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\biophysical_neuron_models",
+    "mechanisms_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\mechanisms",
+    "morphologies_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\morphologies",
+    "point_neuron_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\point_neuron_models",
+    "synaptic_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\synaptic_models",
+    "templates_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\templates",
+    "__pycache___dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\__pycache__"
+  },
+  "networks": {
+    "nodes": [
+      {
+        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\BLA_nodes.h5",
+        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\BLA_node_types.csv"
+      },
+      {
+        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_nodes.h5",
+        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_node_types.csv"
+      },
+      {
+        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_nodes.h5",
+        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_node_types.csv"
+      }
+    ],
+    "edges": [
+      {
+        "edges_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_BLA_edges.h5",
+        "edge_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_BLA_edge_types.csv"
+      },
+      {
+        "edges_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_BLA_edges.h5",
+        "edge_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_BLA_edge_types.csv"
+      }
+    ],
+    "gap_juncs": []
+  },
+  "node_sets": {
+    "biophysical_nodes": {
+      "model_type": "biophysical"
+    },
+    "point_nodes": {
+      "model_type": "point_process"
+    }
+  }
+}
