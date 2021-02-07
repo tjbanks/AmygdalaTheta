@@ -116,5 +116,5 @@ proc DisplayWindow1() { local i
 
 }// end DisplayWindow1()
 
-
+Cell.insert_mechs(123)
 DisplayWindow1()

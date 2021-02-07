@@ -16,13 +16,14 @@ nrn_load_dll("../../components/mechanisms/nrnmech.dll")
 // Load Template(s) (some may not be needed if a folder was specified and may cause problems, remove as needed)
 //{load_file("./components/templates/Feng_PVbasketcell.hoc")}
 //{load_file("./components/templates/spwr_templates.hoc")}
-{load_file("../../components/templates/feng.hoc")}
+//{load_file("../../components/templates/feng.hoc")}
+{load_file("./BLcells_template_LFP_segconsider_all_Iinject_recordingimembrane.hoc")}
 
 tstop = 250
 v_init = -65
 objref Cell // declare the primary cell object
 //Cell = new Cell_C() // build the neuron from template
-Cell = new InterneuronCellf()
+Cell = new Cell_C()//feng_typeC()
 
 NumClamps = 0
 NumStims = 1
@@ -46,8 +47,8 @@ stim[0].number=5 //(average) number of spikes
 stim[0].start=50 // ms (most likely) start time of first spike
 stim[0].noise=0.0 // range 0 to 1. Fractional randomness.
 
-Cell.dend[0] syn[0] = new bg2pyr(0.9)
-syn[0].initW = 2
+Cell.dend syn[0] = new pyrD2pyrD_STFD(0.9)
+syn[0].initW = 9
 
 delay = 0
 
@@ -77,14 +78,14 @@ proc DisplayWindow1() { local i
         newPlot(0,250,-80,50)
         graphItem.save_name("graphList[0].")
         graphList[0].append(graphItem)
-        sprint(tstr1,"%s.soma[0].v(0.5)","Cell")
+        sprint(tstr1,"%s.soma.v(0.5)","Cell")
         graphItem.addexpr(tstr1,1,1)
         
         // Widget2
         newPlot(0,250,-80,50)
         graphItem.save_name("graphList[0].")
         graphList[0].append(graphItem)
-        sprint(tstr1,"%s.soma[0].v(0.5)","Cell")
+        sprint(tstr1,"%s.soma.v(0.5)","Cell")
         graphItem.addexpr(tstr1,1,1)
         
     Window1SubVBoxObj[0].intercept(0)
@@ -92,11 +93,11 @@ proc DisplayWindow1() { local i
     // Column2
     Window1SubVBoxObj[1].intercept(1)
         // Widget1
-        Cell.soma[0] nrnsecmenu(0.5,1)
+        Cell.soma nrnsecmenu(0.5,1)
         // Widget2
-        Cell.dend[0] nrnsecmenu(0.5,1)
+        Cell.dend nrnsecmenu(0.5,1)
         // Widget3
-        //Cell.apic[0] nrnsecmenu(0.5,1)
+        Cell.p_dend nrnsecmenu(0.5,1)
     Window1SubVBoxObj[1].intercept(0)
 
     // Column3
@@ -116,5 +117,30 @@ proc DisplayWindow1() { local i
 
 }// end DisplayWindow1()
 
+objref noise_exc, noise_inh, cclA
+objref noiseRandObj_exc, noiseRandObj_inh
 
+////////////////////// Single-Point BACKGROUNG noise OR PYRAMIDAL CELLS //////////////////////
+///for exc noise/////////////
+                        noiseRandObj_exc=new Random()
+                        noiseRandObj_exc.Random123(123)
+                        noiseRandObj_exc.normal(0,1)
+
+                        Cell.soma noise_exc = new Gfluct2_exc(0.5)
+
+                        noise_exc.g_e0 = 0.0032//0.0032
+                        noise_exc.std_e = 0.003//0.003
+                        noise_exc.setRandObj(noiseRandObj_exc)
+
+                        noiseRandObj_inh=new Random()
+                        noiseRandObj_inh.Random123(123)
+                        noiseRandObj_inh.normal(0,1)
+
+                        Cell.soma noise_inh = new Gfluct2_inh(0.5)
+
+                        noise_inh.g_e0 = 0.021
+                        noise_inh.std_e = 0.008
+                        noise_inh.setRandObj(noiseRandObj_inh)
+
+//Cell.insert_mechs(123)
 DisplayWindow1()

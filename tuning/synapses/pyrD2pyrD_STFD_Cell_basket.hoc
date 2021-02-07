@@ -46,7 +46,7 @@ stim[0].number=5 //(average) number of spikes
 stim[0].start=50 // ms (most likely) start time of first spike
 stim[0].noise=0.0 // range 0 to 1. Fractional randomness.
 
-Cell.dend[0] syn[0] = new pyrD2pyrD_STFD(0.9)
+Cell.dend[0] syn[0] = new pyrD2interD_STFD(0.9)
 syn[0].initW = 2
 
 delay = 0
@@ -96,7 +96,7 @@ proc DisplayWindow1() { local i
         // Widget2
         Cell.dend[0] nrnsecmenu(0.5,1)
         // Widget3
-        Cell.apic[0] nrnsecmenu(0.5,1)
+        //Cell.apic[0] nrnsecmenu(0.5,1)
     Window1SubVBoxObj[1].intercept(0)
 
     // Column3
