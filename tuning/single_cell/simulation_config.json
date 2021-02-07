@@ -1,7 +1,7 @@
 {
   "manifest": {
     "$BASE_DIR": "${configdir}",
-    "$OUTPUT_DIR": "$BASE_DIR\\output"
+    "$OUTPUT_DIR": "$BASE_DIR/output"
   },
   "target_simulator": "NEURON",
   "run": {
@@ -20,13 +20,13 @@
     "mthalamus_spikes": {
       "input_type": "spikes",
       "module": "sonata",
-      "input_file": "$BASE_DIR\\mthalamus_spikes.h5",
+      "input_file": "$BASE_DIR/mthalamus_spikes.h5",
       "node_set": "mthalamus"
     },
     "exc_bg_bask_spikes": {
       "input_type": "spikes",
       "module": "sonata",
-      "input_file": "$BASE_DIR\\exc_bg_bask_spikes.h5",
+      "input_file": "$BASE_DIR/exc_bg_bask_spikes.h5",
       "node_set": "exc_bg_bask"
     }
   },
@@ -43,6 +43,6 @@
       "sections": "soma"
     }
   },
-  "node_sets_file": "$BASE_DIR\\node_sets.json",
-  "network": "$BASE_DIR\\circuit_config.json"
+  "node_sets_file": "$BASE_DIR/node_sets.json",
+  "network": "$BASE_DIR/circuit_config.json"
 }

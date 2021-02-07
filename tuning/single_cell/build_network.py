@@ -145,7 +145,7 @@ conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  rule_params={'sec_id':0, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
@@ -162,7 +162,7 @@ conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  rule_params={'sec_id':0, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 
@@ -185,7 +185,7 @@ conn = net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  rule_params={'sec_id':0, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 

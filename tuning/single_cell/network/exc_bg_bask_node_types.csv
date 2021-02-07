@@ -1,2 +1,2 @@
-node_type_id pop_name pop_group model_type potential
-100 tON exc_bg_bask virtual exc
+node_type_id potential pop_name model_type pop_group
+100 exc tON virtual exc_bg_bask

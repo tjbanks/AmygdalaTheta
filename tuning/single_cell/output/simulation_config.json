@@ -16,20 +16,20 @@
     "mthalamus_spikes": {
       "input_type": "spikes",
       "module": "sonata",
-      "input_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\mthalamus_spikes.h5",
+      "input_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/mthalamus_spikes.h5",
       "node_set": "mthalamus"
     },
     "exc_bg_bask_spikes": {
       "input_type": "spikes",
       "module": "sonata",
-      "input_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\exc_bg_bask_spikes.h5",
+      "input_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/exc_bg_bask_spikes.h5",
       "node_set": "exc_bg_bask"
     }
   },
   "output": {
-    "log_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output\\log.txt",
-    "output_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output",
-    "spikes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\output\\spikes.h5"
+    "log_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/output/log.txt",
+    "output_dir": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/output",
+    "spikes_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/output/spikes.h5"
   },
   "reports": {
     "v_report": {
@@ -39,42 +39,42 @@
       "sections": "soma"
     }
   },
-  "node_sets_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\node_sets.json",
-  "network": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\circuit_config.json",
-  "config_path": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\simulation_config.json",
-  "config_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell",
+  "node_sets_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/node_sets.json",
+  "network": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/circuit_config.json",
+  "config_path": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/simulation_config.json",
+  "config_dir": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell",
   "components": {
-    "biophysical_neuron_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\biophysical_neuron_models",
-    "mechanisms_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\mechanisms",
-    "morphologies_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\morphologies",
-    "point_neuron_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\point_neuron_models",
-    "synaptic_models_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\synaptic_models",
-    "templates_dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\templates",
-    "__pycache___dir": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\components\\__pycache__"
+    "__pycache___dir": "/home/tbg28/git_stage/AmygdalaTheta/components/__pycache__",
+    "biophysical_neuron_models_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/biophysical_neuron_models",
+    "mechanisms_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/mechanisms",
+    "morphologies_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/morphologies",
+    "point_neuron_models_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/point_neuron_models",
+    "synaptic_models_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/synaptic_models",
+    "templates_dir": "/home/tbg28/git_stage/AmygdalaTheta/components/templates"
   },
   "networks": {
     "nodes": [
       {
-        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\BLA_nodes.h5",
-        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\BLA_node_types.csv"
+        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/BLA_node_types.csv",
+        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/BLA_nodes.h5"
       },
       {
-        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_nodes.h5",
-        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_node_types.csv"
+        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/exc_bg_bask_node_types.csv",
+        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/exc_bg_bask_nodes.h5"
       },
       {
-        "nodes_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_nodes.h5",
-        "node_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_node_types.csv"
+        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/mthalamus_node_types.csv",
+        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/mthalamus_nodes.h5"
       }
     ],
     "edges": [
       {
-        "edges_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_BLA_edges.h5",
-        "edge_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\exc_bg_bask_BLA_edge_types.csv"
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/exc_bg_bask_BLA_edge_types.csv",
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/exc_bg_bask_BLA_edges.h5"
       },
       {
-        "edges_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_BLA_edges.h5",
-        "edge_types_file": "C:\\Users\\Tyler\\Desktop\\git_stage\\AmygdalaTheta\\tuning\\single_cell\\network\\mthalamus_BLA_edge_types.csv"
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/mthalamus_BLA_edge_types.csv",
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/network/mthalamus_BLA_edges.h5"
       }
     ],
     "gap_juncs": []
