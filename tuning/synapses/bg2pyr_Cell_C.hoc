@@ -10,19 +10,19 @@
 {load_file("nrngui.hoc")}
 
 //Loading mechanisms in other folder
-nrn_load_dll("./components/mechanisms/x86_64/.libs/libnrnmech.so")
-nrn_load_dll("./components/mechanisms/nrnmech.dll")
+nrn_load_dll("../../components/mechanisms/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("../../components/mechanisms/nrnmech.dll")
 
 // Load Template(s) (some may not be needed if a folder was specified and may cause problems, remove as needed)
 //{load_file("./components/templates/Feng_PVbasketcell.hoc")}
 //{load_file("./components/templates/spwr_templates.hoc")}
-{load_file("./components/templates/feng_typeC.hoc")}
+{load_file("../../components/templates/feng.hoc")}
 
 tstop = 250
 v_init = -65
 objref Cell // declare the primary cell object
 //Cell = new Cell_C() // build the neuron from template
-Cell = new feng_typeC()
+Cell = new Cell_Cf()//feng_typeC()
 
 NumClamps = 0
 NumStims = 1
@@ -47,7 +47,7 @@ stim[0].start=50 // ms (most likely) start time of first spike
 stim[0].noise=0.0 // range 0 to 1. Fractional randomness.
 
 Cell.dend[0] syn[0] = new bg2pyr(0.9)
-syn[0].initW = 8.5
+syn[0].initW = 9
 
 delay = 0
 
