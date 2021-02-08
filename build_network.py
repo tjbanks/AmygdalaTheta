@@ -207,7 +207,7 @@ def syn_dist_delay_feng(source, target):
     x = float(x_end - x_start)#/1000
     y = float(y_end - y_start)#/1000
     z = float(z_end - z_start)#/1000
-    max_dist = np.sqrt(x**2 + y**2 + z**2)
+    max_dist = 2.425#np.sqrt(x**2 + y**2 + z**2)
     max_delay=2.425 #////define maximum delay,ms
     #max_delay=max_dist
 
