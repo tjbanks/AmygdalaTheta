@@ -200,24 +200,35 @@ begintemplate Cell_Af
 		r = $1
 		soma[0]{
 			noiseRandObj_exc=new Random()
-			noiseRandObj_exc.Random123(r)   
-			noiseRandObj_exc.normal(0,1)
+                        noiseRandObj_exc.Random123(123)
+                        noiseRandObj_exc.normal(0,1)
 
-			noise_exc = new Gfluct2_exc(0.5)
+                        noise_exc = new Gfluct2_exc(0.5)
 
-			noise_exc.g_e0 = 0.0032//0.0032
-			noise_exc.std_e = 0.003//0.003	
-			noise_exc.setRandObj(noiseRandObj_exc)
+                        noise_exc.g_e0 = 0.0032
+                        noise_exc.g_i0 = 0
+                        noise_exc.std_e = 0.003
+                        noise_exc.std_i = 0
 
-			noiseRandObj_inh=new Random()
-			noiseRandObj_inh.Random123(r)   
-			noiseRandObj_inh.normal(0,1)
+                        //noise_exc.g_e0 = 0.0032//0.0032
+                        //noise_exc.std_e = 0.003//0.003
+                        noise_exc.setRandObj(noiseRandObj_exc)
 
-			noise_inh = new Gfluct2_inh(0.5)
+                        noiseRandObj_inh=new Random()
+                        noiseRandObj_inh.Random123(123)
+                        noiseRandObj_inh.normal(0,1)
 
-			noise_inh.g_e0 = 0.021
-			noise_inh.std_e = 0.008	
-			noise_inh.setRandObj(noiseRandObj_inh)
+                        noise_inh = new Gfluct2_inh(0.5)
+
+                        noise_inh.g_e0 = 0
+                        noise_inh.g_i0 = 0.021
+                        noise_inh.std_e = 0
+                        noise_inh.std_i = 0.008
+
+                        //noise_inh.g_e0 = 0.021
+                        //noise_inh.std_e = 0.008
+                        noise_inh.setRandObj(noiseRandObj_inh)
+
 		}
 	}
 
@@ -427,25 +438,36 @@ begintemplate Cell_Cf
 	proc insert_mechs(){
 		r = $1
 		soma[0]{
-			noiseRandObj_exc=new Random()
-			noiseRandObj_exc.Random123(r)   
-			noiseRandObj_exc.normal(0,1)
+                        noiseRandObj_exc=new Random()
+                        noiseRandObj_exc.Random123(123)
+                        noiseRandObj_exc.normal(0,1)
 
-			noise_exc = new Gfluct2_exc(0.5)
+                        noise_exc = new Gfluct2_exc(0.5)
 
-			noise_exc.g_e0 = 0.0032//0.0032
-			noise_exc.std_e = 0.003//0.003	
-			noise_exc.setRandObj(noiseRandObj_exc)
+                        noise_exc.g_e0 = 0.0032
+                        noise_exc.g_i0 = 0
+                        noise_exc.std_e = 0.003
+                        noise_exc.std_i = 0
 
-			noiseRandObj_inh=new Random()
-			noiseRandObj_inh.Random123(r)   
-			noiseRandObj_inh.normal(0,1)
+                        //noise_exc.g_e0 = 0.0032//0.0032
+                        //noise_exc.std_e = 0.003//0.003
+                        noise_exc.setRandObj(noiseRandObj_exc)
 
-			noise_inh = new Gfluct2_inh(0.5)
+                        noiseRandObj_inh=new Random()
+                        noiseRandObj_inh.Random123(123)
+                        noiseRandObj_inh.normal(0,1)
 
-			noise_inh.g_e0 = 0.021
-			noise_inh.std_e = 0.008	
-			noise_inh.setRandObj(noiseRandObj_inh)
+                        noise_inh = new Gfluct2_inh(0.5)
+
+                        noise_inh.g_e0 = 0
+                        noise_inh.g_i0 = 0.021
+                        noise_inh.std_e = 0
+                        noise_inh.std_i = 0.008
+
+                        //noise_inh.g_e0 = 0.021
+                        //noise_inh.std_e = 0.008
+                        noise_inh.setRandObj(noiseRandObj_inh)
+
 		}
 	}
 
@@ -590,26 +612,36 @@ begintemplate InterneuronCellf
 	proc insert_mechs(){
 		r = $1
 		soma[0]{
-                noiseRandObj_exc=new Random()
-                noiseRandObj_exc.Random123(r)
-                noiseRandObj_exc.normal(0,1)
+			noiseRandObj_exc=new Random()
+			noiseRandObj_exc.Random123(123)
+			noiseRandObj_exc.normal(0,1)
 
-                noise_exc = new Gfluct2_exc(0.5)
+			soma noise_exc = new Gfluct2_exc(0.5)
 
-                noise_exc.g_e0 = 0.00121//0.0032
-                noise_exc.std_e = 0.00012//0.003
-                noise_exc.setRandObj(noiseRandObj_exc)
+			noise_exc.g_e0 = 0.00121
+			noise_exc.g_i0 = 0
+			noise_exc.std_e = 0.00012
+			noise_exc.std_i = 0
 
-                noiseRandObj_inh=new Random()
-                noiseRandObj_inh.Random123(r)
-                noiseRandObj_inh.normal(0,1)
+			//noise_exc.g_e0 = 0.0032//0.0032
+			//noise_exc.std_e = 0.003//0.003
+			noise_exc.setRandObj(noiseRandObj_exc)
 
-                noise_inh = new Gfluct2_inh(0.5)
+			noiseRandObj_inh=new Random()
+			noiseRandObj_inh.Random123(123)
+			noiseRandObj_inh.normal(0,1)
 
-                noise_inh.g_i0 = 0.00573
-                noise_inh.std_i = 0.00264
-                noise_inh.setRandObj(noiseRandObj_inh)
+			noise_inh = new Gfluct2_inh(0.5)
 
+			noise_inh.g_e0 = 0
+			noise_inh.g_i0 = 0.00573
+			noise_inh.std_e = 0
+			noise_inh.std_i = 0.00264
+
+			//noise_inh.g_e0 = 0.021
+			//noise_inh.std_e = 0.008
+			noise_inh.setRandObj(noiseRandObj_inh)
+		
 		}
 	}
 	

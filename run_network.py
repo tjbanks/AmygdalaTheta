@@ -45,7 +45,7 @@ def run(config_file):
     cells = graph.get_local_cells()
     for cell in cells:
         cells[cell].hobj.insert_mechs(cells[cell].gid)
-    
+        pass
     sim.run()
     bionet.nrn.quit_execution()
 

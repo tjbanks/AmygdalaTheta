@@ -50,9 +50,9 @@ stim[0].noise=0.0 // range 0 to 1. Fractional randomness.
 Cell.dend syn[0] = new pyrD2pyrD_STFD(0.9)
 syn[0].initW = 9
 
-delay = 0
+delay = 1
 
-nc[0] = new NetCon(stim[0],syn[0],1,delay,1)
+nc[0] = new NetCon(stim[0],syn[0],0,delay,1)
 
 //Cell.soma vclamp[0] = new SEClamp(0.5)
 //vclamp[0].apmp1 = v_init
@@ -128,8 +128,13 @@ objref noiseRandObj_exc, noiseRandObj_inh
 
                         Cell.soma noise_exc = new Gfluct2_exc(0.5)
 
-                        noise_exc.g_e0 = 0.0032//0.0032
-                        noise_exc.std_e = 0.003//0.003
+                        noise_exc.g_e0 = 0.009
+                        noise_exc.g_i0 = 0
+                        noise_exc.std_e = 0.012
+                        noise_exc.std_i = 0
+
+                        //noise_exc.g_e0 = 0.0032//0.0032
+                        //noise_exc.std_e = 0.003//0.003
                         noise_exc.setRandObj(noiseRandObj_exc)
 
                         noiseRandObj_inh=new Random()
@@ -138,8 +143,13 @@ objref noiseRandObj_exc, noiseRandObj_inh
 
                         Cell.soma noise_inh = new Gfluct2_inh(0.5)
 
-                        noise_inh.g_e0 = 0.021
-                        noise_inh.std_e = 0.008
+                        noise_inh.g_e0 = 0
+                        noise_inh.g_i0 = 0.09
+                        noise_inh.std_e = 0
+                        noise_inh.std_i = 0.0264 
+
+                        //noise_inh.g_e0 = 0.021
+                        //noise_inh.std_e = 0.008
                         noise_inh.setRandObj(noiseRandObj_inh)
 
 //Cell.insert_mechs(123)
