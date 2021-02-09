@@ -7,6 +7,8 @@ from neuron import h
 import numpy as np
 
 def lognorm(mean,std):
+    mean = float(mean)
+    std = float(std)
     mean_ = np.log(mean) - 0.5 * np.log((std/mean)**2+1)
     std_ = np.sqrt(np.log((std/mean)**2 + 1))
     return float(np.random.lognormal(mean_,std_))
