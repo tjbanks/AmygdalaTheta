@@ -1,9 +1,9 @@
-edge_type_id target_query source_query model_template target_sections delay syn_weight distance_range dynamics_params
-100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" pyrD2pyrD_STFD ['basal'] NULL 1 "[0, 9999.9]" PN2PN_feng_min.json
-101 pop_name=='['Bask']' pop_name=='Bask' interD2interD_STFD ['somatic'] 0.1 1 "[0.0, 9999.9]" INT2INT_feng_min.json
-102 pop_name=='['Bask']' pop_name=='Bask' interD2interD_STFD ['somatic'] 0.1 1 "[0.0, 9999.9]" INT2INT_feng_min.json
-103 pop_name=='['Bask']' pop_name=='Bask' interD2interD_STFD ['somatic'] 0.1 1 "[0.0, 9999.9]" INT2INT_feng_min.json
-104 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' interD2pyrD_STFD ['somatic'] 0.1 1 "[0.0, 9999.9]" INT2PN_feng_min.json
-105 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" pyrD2interD_STFD ['basal'] 0.1 1 "[0.0, 9999.9]" PN2INT_feng_min.json
-106 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' interD2pyrD_STFD ['somatic'] 0.1 1 "[0.0, 9999.9]" INT2PN_feng_min.json
-107 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" pyrD2interD_STFD ['basal'] 0.1 1 "[0.0, 9999.9]" PN2INT_feng_min.json
+edge_type_id target_query source_query syn_weight target_sections distance_range model_template dynamics_params delay
+100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" 1 ['basal'] "[0, 300.0]" pyrD2pyrD_STFD PN2PN_feng_min.json NULL
+101 pop_name=='['Bask']' pop_name=='Bask' 1 ['somatic'] "[0.0, 300.0]" interD2interD_STFD INT2INT_feng_min.json 0.1
+102 pop_name=='['Bask']' pop_name=='Bask' 1 ['somatic'] "[0.0, 300.0]" interD2interD_STFD INT2INT_feng_min.json 0.1
+103 pop_name=='['Bask']' pop_name=='Bask' 1 ['somatic'] "[0.0, 300.0]" interD2interD_STFD INT2INT_feng_min.json 0.1
+104 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' 1 ['somatic'] "[0.0, 300.0]" interD2pyrD_STFD INT2PN_feng_min.json 0.1
+105 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" 1 ['basal'] "[0.0, 300.0]" pyrD2interD_STFD PN2INT_feng_min.json NULL
+106 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' 1 ['somatic'] "[0.0, 300.0]" interD2pyrD_STFD INT2PN_feng_min.json NULL
+107 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" 1 ['basal'] "[0.0, 300.0]" pyrD2interD_STFD PN2INT_feng_min.json NULL

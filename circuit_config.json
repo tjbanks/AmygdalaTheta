@@ -30,8 +30,8 @@
     ],
     "edges": [
       {
-        "edge_types_file": "$NETWORK_DIR/BLA_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/BLA_BLA_edges.h5"
+        "edges_file": "$NETWORK_DIR/BLA_BLA_edges.h5",
+        "edge_types_file": "$NETWORK_DIR/BLA_BLA_edge_types.csv"
       },
       {
         "edge_types_file": "$NETWORK_DIR/exc_bg_bask_BLA_edge_types.csv",

@@ -71,8 +71,8 @@
     ],
     "edges": [
       {
-        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_BLA_edge_types.csv",
-        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_BLA_edges.h5"
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_BLA_edges.h5",
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/BLA_BLA_edge_types.csv"
       },
       {
         "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network/exc_bg_bask_BLA_edge_types.csv",
