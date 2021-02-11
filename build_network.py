@@ -209,7 +209,7 @@ def syn_dist_delay_feng(source, target):
     dy = target['positions'][y_ind] - source['positions'][y_ind]
     dz = target['positions'][z_ind] - source['positions'][z_ind]
 
-    dist = np.sqrt(dx**2 + dy**2 + dz**2)
+    dist = np.sqrt(dx**2 + dy**2 + dz**2)/1000
     
     del_fluc = np.random.uniform(-0.1,0.1)
 

@@ -1,9 +1,9 @@
-edge_type_id target_query source_query distance_range syn_weight target_sections dynamics_params model_template
-100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" "[0, 300.0]" 1 ['basal'] PN2PN_feng_min.json pyrD2pyrD_STFD
-101 pop_name=='['Bask']' pop_name=='Bask' "[0.0, 300.0]" 1 ['somatic'] INT2INT_feng_min.json interD2interD_STFD
-102 pop_name=='['Bask']' pop_name=='Bask' "[0.0, 300.0]" 1 ['somatic'] INT2INT_feng_min.json interD2interD_STFD
-103 pop_name=='['Bask']' pop_name=='Bask' "[0.0, 300.0]" 1 ['somatic'] INT2INT_feng_min.json interD2interD_STFD
-104 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' "[0.0, 300.0]" 1 ['somatic'] INT2PN_feng_min.json interD2pyrD_STFD
-105 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" "[0.0, 300.0]" 1 ['basal'] PN2INT_feng_min.json pyrD2interD_STFD
-106 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' "[0.0, 300.0]" 1 ['somatic'] INT2PN_feng_min.json interD2pyrD_STFD
-107 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" "[0.0, 300.0]" 1 ['basal'] PN2INT_feng_min.json pyrD2interD_STFD
+edge_type_id target_query source_query target_sections syn_weight model_template dynamics_params distance_range
+100 "pop_name=='['PyrA', 'PyrC']'" "pop_name=='['PyrA', 'PyrC']'" ['basal'] 1 pyrD2pyrD_STFD PN2PN_feng_min.json "[0, 300.0]"
+101 pop_name=='['Bask']' pop_name=='Bask' ['somatic'] 1 interD2interD_STFD INT2INT_feng_min.json "[0.0, 300.0]"
+102 pop_name=='['Bask']' pop_name=='Bask' ['somatic'] 1 interD2interD_STFD INT2INT_feng_min.json "[0.0, 300.0]"
+103 pop_name=='['Bask']' pop_name=='Bask' ['somatic'] 1 interD2interD_STFD INT2INT_feng_min.json "[0.0, 300.0]"
+104 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' ['somatic'] 1 interD2pyrD_STFD INT2PN_feng_min.json "[0.0, 300.0]"
+105 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" ['basal'] 1 pyrD2interD_STFD PN2INT_feng_min.json "[0.0, 300.0]"
+106 "pop_name=='['PyrA', 'PyrC']'" pop_name=='Bask' ['somatic'] 1 interD2pyrD_STFD INT2PN_feng_min.json "[0.0, 300.0]"
+107 pop_name=='Bask' "pop_name=='['PyrA', 'PyrC']'" ['basal'] 1 pyrD2interD_STFD PN2INT_feng_min.json "[0.0, 300.0]"
