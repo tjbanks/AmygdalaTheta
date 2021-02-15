@@ -19,7 +19,7 @@ nrn_load_dll("../../components/mechanisms/nrnmech.dll")
 {load_file("../../components/templates/feng.hoc")}
 {load_file("../../source_material/FengEtAl2019/BLcells_template_LFP_segconsider_all_Iinject_recordingimembrane.hoc")}
 
-tstop = 250
+tstop = 1000
 v_init = -65
 objref Cell,FengCell // declare the primary cell object
 //Cell = new Cell_A() // build the neuron from template
@@ -43,15 +43,15 @@ objref vclamp[NumVClamps]
 
 //netstim for synapse
 stim[0]=new NetStim(0.5)
-stim[0].interval=24 // ms (mean) time between spikes
+stim[0].interval=50 // ms (mean) time between spikes
 stim[0].number=5 //(average) number of spikes
-stim[0].start=50 // ms (most likely) start time of first spike
+stim[0].start=450 // ms (most likely) start time of first spike
 stim[0].noise=0.0 // range 0 to 1. Fractional randomness.
 
-Cell.dend[0] syn[0] = new pyrD2pyrD_STFD(0.9)
+Cell.dend[0] syn[0] = new bg2pyr(0.9) //pyrD2pyrD_STFD(0.9)
 syn[0].initW = 9
 
-FengCell.dend syn[1] = new pyrD2pyrD_STFD(0.9)
+FengCell.dend syn[1] = new bg2pyr(0.9) //pyrD2pyrD_STFD(0.9)
 syn[1].initW = 9
 
 delay = 1

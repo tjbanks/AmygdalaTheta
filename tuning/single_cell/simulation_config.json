@@ -22,12 +22,6 @@
       "module": "sonata",
       "input_file": "$BASE_DIR/mthalamus_spikes.h5",
       "node_set": "mthalamus"
-    },
-    "exc_bg_bask_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/exc_bg_bask_spikes.h5",
-      "node_set": "exc_bg_bask"
     }
   },
   "output": {

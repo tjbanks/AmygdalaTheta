@@ -1,13 +1,12 @@
-2021-02-06 22:04:58,711 [INFO] Created log file
-2021-02-06 22:04:59,629 [INFO] Building cells.
-2021-02-06 22:04:59,640 [INFO] Building recurrent connections
-2021-02-06 22:05:00,620 [INFO] Building virtual cell stimulations for mthalamus_spikes
-2021-02-06 22:05:00,649 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
-2021-02-06 22:05:00,674 [INFO] Running simulation for 1000.000 ms with the time step 0.050 ms
-2021-02-06 22:05:00,674 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2021-02-06 22:05:00,674 [INFO] Block save every 5000 steps
-2021-02-06 22:05:01,514 [INFO]     step:5000 t_sim:250.00 ms
-2021-02-06 22:05:02,297 [INFO]     step:10000 t_sim:500.00 ms
-2021-02-06 22:05:03,158 [INFO]     step:15000 t_sim:750.00 ms
-2021-02-06 22:05:03,955 [INFO]     step:20000 t_sim:1000.00 ms
-2021-02-06 22:05:03,965 [INFO] Simulation completed in 3.291 seconds 
+2021-02-12 10:14:15,007 [INFO] Created log file
+2021-02-12 10:14:16,553 [INFO] Building cells.
+2021-02-12 10:14:16,564 [INFO] Building recurrent connections
+2021-02-12 10:14:18,388 [INFO] Building virtual cell stimulations for mthalamus_spikes
+2021-02-12 10:14:18,431 [INFO] Running simulation for 1000.000 ms with the time step 0.050 ms
+2021-02-12 10:14:18,432 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-02-12 10:14:18,432 [INFO] Block save every 5000 steps
+2021-02-12 10:14:19,265 [INFO]     step:5000 t_sim:250.00 ms
+2021-02-12 10:14:20,025 [INFO]     step:10000 t_sim:500.00 ms
+2021-02-12 10:14:20,811 [INFO]     step:15000 t_sim:750.00 ms
+2021-02-12 10:14:21,654 [INFO]     step:20000 t_sim:1000.00 ms
+2021-02-12 10:14:21,665 [INFO] Simulation completed in 3.234 seconds 

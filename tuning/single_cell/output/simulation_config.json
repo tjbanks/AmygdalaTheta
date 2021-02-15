@@ -18,12 +18,6 @@
       "module": "sonata",
       "input_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/mthalamus_spikes.h5",
       "node_set": "mthalamus"
-    },
-    "exc_bg_bask_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "/home/tbg28/git_stage/AmygdalaTheta/tuning/single_cell/exc_bg_bask_spikes.h5",
-      "node_set": "exc_bg_bask"
     }
   },
   "output": {

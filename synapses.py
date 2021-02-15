@@ -23,7 +23,9 @@ def Bg2Pyr(syn_params, sec_x, sec_id):
 
     lsyn = h.bg2pyr(sec_x, sec=sec_id)
 
-    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
     return lsyn
 
@@ -31,7 +33,9 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2interD_STFD(sec_x, sec=sec_id)
 
-    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
 
     return lsyn
@@ -41,7 +45,9 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2pyrD_STFD(sec_x, sec=sec_id)
 
-    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
 
     return lsyn
@@ -50,7 +56,9 @@ def pyrD2interD_STFD(syn_params, sec_x, sec_id):
     
     lsyn = h.pyrD2interD_STFD(sec_x, sec=sec_id)
 
-    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
 
     return lsyn
@@ -59,7 +67,9 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
     
     lsyn = h.pyrD2pyrD_STFD(sec_x, sec=sec_id)
 
-    if syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
         
     return lsyn

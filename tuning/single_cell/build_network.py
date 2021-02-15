@@ -78,19 +78,12 @@ net.add_nodes(N=numBask, pop_name='Bask',
 
 # External inputs
 thalamus = NetworkBuilder('mthalamus')
-thalamus.add_nodes(N=numPN_A+numPN_C,
+thalamus.add_nodes(N=numPN_A+numPN_C+numBask,
                    pop_name='tON',
                    pop_group='mthalamus',
                    potential='exc',
                    model_type='virtual')
 
-# External inputs
-exc_bg_bask = NetworkBuilder('exc_bg_bask')
-exc_bg_bask.add_nodes(N=numBask,
-                   pop_name='tON',
-                   pop_group='exc_bg_bask',
-                   potential='exc',
-                   model_type='virtual')
 
 ##############################################################################
 ############################## CONNECT CELLS #################################
@@ -128,64 +121,49 @@ def syn_uniform_delay_section(source, target, sec_id=0, sec_x=0.9, mean=0.5,std=
 ######################### BACKGROUND INPUT ###############################
 
 
-dynamics_file='BG2PNe_feng_min.json'
-#dynamics_file = 'BG2PN_feng_min.json'
+dynamics_file='BG2PNe_feng_min_initw.json'
 
 conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
-                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params=dynamics_file,
                    model_template=syn[dynamics_file]['level_of_detail'])
-                   #dynamics_params='BG2PNe_feng.json',
-                   #model_template='bg2pyr',
-                   #sec_x=0.9)
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':0, 'sec_x':0.9},
+                  rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
-                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params=dynamics_file,
                    model_template=syn[dynamics_file]['level_of_detail'])
-                   #dynamics_params='BG2PNe_feng.json',
-                   #model_template='bg2pyr',
-                   #sec_x=0.9)
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':0, 'sec_x':0.9},
+                  rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 
-dynamics_file = 'BG2PNi_feng_min.json'
-#dynamics_file = 'BG2INT_feng_min.json'
+dynamics_file = 'BG2PNi_feng_min_initw.json'
 
-conn = net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
-                   connection_rule=one_to_one_offset,
-                   connection_params={'offset':numPN_A+numPN_C},
+conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='Bask'),
+                   connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
-                   #delay=0.1,
                    distance_range=[0.0, 9999.9],
                    dynamics_params=dynamics_file,
                    model_template=syn[dynamics_file]['level_of_detail'])
-                   #dynamics_params='BG2PNi_feng.json',
-                   #model_template='bg2pyr',
-                   #sec_x=0.9)
 
 
 conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':0, 'sec_x':0.9},
+                  rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
 
@@ -208,8 +186,6 @@ print("Internal nodes and edges built")
 thalamus.build()
 thalamus.save_nodes(output_dir='network')
 
-exc_bg_bask.build()
-exc_bg_bask.save_nodes(output_dir='network')
 #
 #print("External nodes and edges built")
 t_sim = 1000.0
@@ -223,9 +199,39 @@ build_env_bionet(base_dir='./',
                 v_init = -70.0,
                 celsius = 31.0,
 		spikes_inputs=[('mthalamus',   # Name of population which spikes will be generated for
-                                'mthalamus_spikes.h5'),('exc_bg_bask','exc_bg_bask_spikes.h5')],
+                                'mthalamus_spikes.h5')],
 		components_dir='../../components',
 		compile_mechanisms=False)
 
 
-build_input.build_input(t_sim,numPN_A,numPN_C,2)
+#build_input.build_input(t_sim,numPN_A,numPN_C,2)
+
+def build_h5(filename='mthalamus_spikes.h5'):
+    """
+    >>> f.keys()
+    <KeysViewHDF5 ['spikes']>
+    >>> f['spikes'].keys()
+    <KeysViewHDF5 ['mthalamus']>
+    >>> f['spikes']['mthalamus'].keys()
+    <KeysViewHDF5 ['node_ids', 'timestamps']>
+    >>> f['spikes']['mthalamus'].keys()
+
+    """
+
+    import h5py,numpy as np
+    hf = h5py.File(filename,'w')
+
+    gbla = hf.create_group('spikes/mthalamus')
+
+    #timestamps = np.array([250, 250, 250, 500, 500, 500, 550, 550, 500, 600, 600, 600, 900, 900, 900])
+    timestamps = np.array([450, 450, 450, 500, 500, 500, 550, 550, 550, 600, 600, 600, 650, 650, 650])
+
+
+    nodes = np.array([0,1,2,0,1,2,0,1,2,0,1,2,0,1,2])
+
+    gbla.create_dataset('timestamps',data=timestamps)
+    gbla.create_dataset('node_ids',data=nodes)
+
+    hf.close()
+
+build_h5()
