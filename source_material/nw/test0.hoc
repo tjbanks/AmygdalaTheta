@@ -1,0 +1,41 @@
+objref pc
+pc = new ParallelContext()
+
+
+
+objref time,r,burst_off_time,stablized_time
+time=new Vector(10)
+burst_off_time=new Vector(10)
+stablized_time=new Vector(10)
+r= new Random(1000)
+
+if (pc.id==0) {
+
+ for i = 0, 8 {
+ time.x[i]=r.discunif(80, 120)
+ burst_off_time.x[i]=500+1000-time.x[i]
+ }
+ time.x[9]=1000-time.sum()
+ burst_off_time.x[10-1]=500+1000-time.x[10-1]
+ }
+ 
+  
+  for burstID = 0, 10-1 {  //6,10 
+  
+  if (burstID==0) {stablized_time.x[burstID]=0
+  } else {stablized_time.x[burstID]=time.sum(0, burstID-1)}
+  }
+ 
+pc.broadcast(time, 0)
+pc.broadcast(burst_off_time,0)
+
+{printf("I am %d \n", pc.id)
+time.printf()
+burst_off_time.printf()
+stablized_time.printf()
+}
+
+
+{pc.runworker()}
+{pc.done()}
+//quit()

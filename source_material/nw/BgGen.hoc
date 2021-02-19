@@ -1,0 +1,51 @@
+begintemplate BgGen
+public noise_freq,noise_start,noise_total_length,refractory_period,tone_netstim,tone_turn,noise_netstim,intfire1,TempNetCon
+objref noise_netstim,intfire1,TempNetCon,r
+ proc init() {
+
+	noise_freq = $1
+	noise_start = $2
+	noise_total_length = $3
+
+	refractory_period = $4
+
+	timestep = $5
+
+	refractory_period = refractory_period - timestep
+	
+	r = new Random()
+	r.MCellRan4(1000*($6+12))
+	r.negexp(1)
+
+	noise_netstim = new NetStim()
+	noise_netstim.interval = 1000/noise_freq
+	noise_netstim.number = 1e100 //noise_total_length*noise_freq/1000
+	noise_netstim.start = noise_start
+	noise_netstim.noise = 1
+	
+  noise_netstim.noiseFromRandom(r)
+	
+	intfire1 = new IntFire1()
+	intfire1.tau = 1e9
+	intfire1.refrac = refractory_period
+	intfire1.m = 0
+
+	intfirewgt = 1+(1e-9)
+
+	TempNetCon = new NetCon(noise_netstim,intfire1,0.5,0,intfirewgt)
+ }
+endtemplate BgGen
+/*
+////////////////////  usage   ////////////////
+
+dt = 0.01	// (ms)
+tstop = 9000	// (ms)
+
+objref trybggen
+trybggen = new BgGen(200,0,tstop,5,dt)
+
+
+objref synapseobj,netconobj
+targetcell synapseobj = new synapse(0.9)
+netconobj = new NetCon(trybggen.intfire1,synapseobj,1,delay,weight)
+*/
