@@ -1,0 +1,182 @@
+begintemplate SOM_Cell
+	//public soma, adend, bdend
+	//create soma, adend, bdend
+	public NumSoma,NumDend
+	NumSoma = 1
+	NumDend = 2
+
+	public soma, dend
+	create soma[NumSoma]
+	create dend[NumDend]
+
+	public all, somatic, basal, apical, axonal
+	objref all, somatic, basal, apical, axonal
+	objref this
+
+	//public soma, adend, bdend
+	//create soma, adend, bdend
+
+	proc init() {
+        gnat   = 0.04
+        gkdr   = 0.009
+        ga     = 0.0001
+        gh     = 0
+        cattau = 10
+        glca   = 0.1
+        gcat   = 0.0005
+        gsahp  = 5e-5
+		gnap   = 0//1e-5
+		gleak = 6e-5
+
+		//create soma, adend, bdend
+
+		all = new SectionList()
+		somatic = new SectionList()
+		basal = new SectionList()
+		apical = new SectionList()
+		axonal = new SectionList()
+
+		for i=0,NumSoma soma[i] {
+			all.append()
+			somatic.append()
+		} 
+		for i=0,NumDend dend[i] {
+			all.append()
+			basal.append()
+		}
+
+		/////// geometry ////////
+		soma[0] {
+			nseg = 1
+			L = 20 // (micrometer)
+			diam = 10 // (micrometer)
+	    	}
+		
+		dend[0] {
+			nseg = 1
+			L = 250 // (micrometer)
+			diam = 3 // (micrometer)
+			}
+			
+		dend[1] {
+			nseg = 1
+			L = 250 // (micrometer)
+			diam = 3 // (micrometer)
+			}
+			
+		/////// biophysics //////
+		
+		soma[0]{
+			cm = 1		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			insert IAOLM
+			gkAbar_IAOLM = ga
+			insert IhOLM
+			gkhbar_IhOLM = gh 		//	gkhbar_Ih = 0.001385
+			eh = -32.9
+			
+			insert ichan2OLM
+			enat = 55 ekf = -90  ek=-90  
+				
+		 	el_ichan2OLM =-60
+			gnatbar_ichan2OLM= gnat  
+			gkfbar_ichan2OLM= gkdr 
+			gl_ichan2OLM = gleak
+			
+			insert ccanlOLM
+			catau_ccanlOLM = cattau
+			caiinf_ccanlOLM = 5.e-6
+			
+			insert lcaOLM 
+			glcabar_lcaOLM= glca
+			elca=130
+			
+			insert catOLM
+			gcatbar_catOLM = gcat
+
+			insert napOLM
+			gbar_napOLM = gnap
+			
+
+	    	}
+			
+		dend[0] {
+			cm = 1.3		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			insert IAOLM
+			gkAbar_IAOLM = ga
+			insert IhOLM
+			gkhbar_IhOLM = gh
+			eh = -32.9
+
+			insert ichan2OLM
+			enat = 55 ekf = -90  ek=-90   
+
+			el_ichan2OLM =-60
+			gnatbar_ichan2OLM= gnat  
+			gkfbar_ichan2OLM= gkdr 
+			gl_ichan2OLM = gleak
+
+			insert ccanlOLM
+			catau_ccanlOLM = cattau
+			caiinf_ccanlOLM = 5.e-6
+
+			insert sAHPOLM
+			gsAHPbar_sAHPOLM= gsahp
+
+			insert lcaOLM 
+			glcabar_lcaOLM= glca
+			elca=130
+
+			insert catOLM
+			gcatbar_catOLM = gcat
+
+			insert napOLM
+			gbar_napOLM = gnap
+
+
+		}
+			
+		dend[1] {
+			cm = 1.3		// (microF/cm2)
+			Ra = 150	// (ohm-cm)
+			insert IAOLM
+			gkAbar_IAOLM = ga
+			insert IhOLM
+			gkhbar_IhOLM = gh
+			eh = -32.9
+			insert ichan2OLM
+			enat = 55 ekf = -90  ek=-90  
+
+			el_ichan2OLM =-60
+			gnatbar_ichan2OLM= gnat  
+			gkfbar_ichan2OLM= gkdr  
+			gl_ichan2OLM = gleak
+
+			insert ccanlOLM
+			catau_ccanlOLM = cattau
+			caiinf_ccanlOLM = 5.e-6
+
+			insert sAHPOLM
+			gsAHPbar_sAHPOLM= gsahp
+
+			insert lcaOLM 
+			glcabar_lcaOLM= glca
+			elca=130
+
+			insert catOLM
+			gcatbar_catOLM = gcat
+
+			insert napOLM
+			gbar_napOLM = gnap
+	
+		}
+	
+  	connect dend[0](1), soma[0](0)
+	connect dend[1](1), soma[0](0)
+	define_shape()
+
+	}
+        proc insert_mechs(){}        
+
+endtemplate SOM_Cell
