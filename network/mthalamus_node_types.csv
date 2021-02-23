@@ -1,2 +1,2 @@
-node_type_id pop_group model_type potential pop_name
-100 mthalamus virtual exc tON
+node_type_id pop_group potential pop_name model_type
+100 mthalamus exc tON virtual

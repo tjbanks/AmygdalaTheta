@@ -1,5 +1,5 @@
 begintemplate SOM_Cell
-	public NumSoma,NumDend
+	public NumSoma,NumDend,insert_mechs
 	NumSoma = 1
 	NumDend = 2
 	
@@ -29,7 +29,7 @@ begintemplate SOM_Cell
     external tstop
     
     proc init() {
-        append_sections()
+        //append_sections()
         synlist =new List()	
         conduclist = new List()
 		tlist = new List()
@@ -221,6 +221,11 @@ begintemplate SOM_Cell
 			}
 		}
  }   
+
+proc insert_mechs(){
+                r = $1
+}
+
 objref all
 proc append_sections() { local i
 	

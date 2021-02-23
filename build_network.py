@@ -34,10 +34,14 @@ if dist_constraint:
     max_conn_dist = 300.0 #9999.9# Distance constraint for all cells
 
 i2i_gap = False
-connect_som = False
+connect_som = True
+connect_cr = True
+
 
 if connect_som:
     num_cells = num_cells + numSOM
+if connect_cr:
+    num_cells = num_cells + numCR
 # Create the possible x,y,z coordinates
 
 x_start, x_end = 0,600
@@ -130,11 +134,11 @@ if connect_som:
     som_pos = pos.copy()
     nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos,som_pos])
 
-    # Add a population of numBask nodes
+    # Add a population of numCR nodes
     net.add_nodes(N=numSOM, pop_name='SOM',
               positions=positions_list(positions=pos),
-              rotation_angle_zaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
-              rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+              rotation_angle_zaxis=xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
+              rotation_angle_yaxis=xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
               model_template='hoc:SOM_Cell',
@@ -142,6 +146,31 @@ if connect_som:
 
 
     pos_list = np.delete(pos_list,inds,0)
+
+#################################################################################
+################################# SOM Cells #####################################
+
+if connect_cr:
+    # Pick new coordinates
+    inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numCR,replace=False)
+    pos = pos_list[inds,:]
+
+    cr_pos = pos.copy()
+    nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos,som_pos, cr_pos])
+
+    # Add a population of numCR nodes
+    net.add_nodes(N=numCR, pop_name='CR',
+              positions=positions_list(positions=pos),
+              rotation_angle_zaxis=xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
+              rotation_angle_yaxis=xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
+              mem_potential='e',
+              model_type='biophysical',
+              model_template='hoc:SOM_Cell',# NOTE: EARLY IMPLEMENTATIONS USE SOM instead of CR due to similarity
+              morphology=None)
+
+
+    pos_list = np.delete(pos_list,inds,0)
+
 ################################################################################
 ############################# BACKGROUND INPUTS ################################
 
@@ -610,10 +639,10 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 if connect_som:
     dynamics_file = 'PN2SOM_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'SOM'},
+    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM','CR']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.309},
+              connection_params={'p':0.0},#0.309
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -630,10 +659,10 @@ if connect_som:
 ############################### SOM2PYR ##################################
 
     dynamics_file = 'SOM2PN_tyler.json'
-    conn = net.add_edges(source={'pop_name': 'SOM'}, target={'pop_name': ['PyrA','PyrC']},
+    conn = net.add_edges(source={'pop_name': ['SOM','CR']}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.066},
+              connection_params={'p':0.0},#0.066
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -645,7 +674,46 @@ if connect_som:
               rule_params={'sec_id':0, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
+##########################################################################
+############################### INT2SOM ##################################
 
+
+if connect_som:
+    dynamics_file = 'INT2SOM_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM','CR']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['soma'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
+
+##########################################################################
+############################### SOM2INT ##################################
+
+    dynamics_file = 'SOM2INT_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['SOM','CR']}, target={'pop_name': ['Bask']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['basal'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':1, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
 ##########################################################################
 ######################### BACKGROUND INPUT ###############################
 
