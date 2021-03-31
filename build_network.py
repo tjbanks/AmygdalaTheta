@@ -639,7 +639,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 if connect_som:
     dynamics_file = 'PN2SOM_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM','CR']},
+    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
               connection_params={'p':0.0},#0.309
@@ -659,7 +659,7 @@ if connect_som:
 ############################### SOM2PYR ##################################
 
     dynamics_file = 'SOM2PN_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['SOM','CR']}, target={'pop_name': ['PyrA','PyrC']},
+    conn = net.add_edges(source={'pop_name': ['SOM']}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
               connection_params={'p':0.0},#0.066
@@ -680,7 +680,7 @@ if connect_som:
 
 if connect_som:
     dynamics_file = 'INT2SOM_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM','CR']},
+    conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
               connection_params={'p':0.0},
@@ -698,9 +698,10 @@ if connect_som:
 
 ##########################################################################
 ############################### SOM2INT ##################################
+# WARNING - NOT IN PARAMETERS TABLE
 
     dynamics_file = 'SOM2INT_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['SOM','CR']}, target={'pop_name': ['Bask']},
+    conn = net.add_edges(source={'pop_name': ['SOM']}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
               connection_params={'p':0.0},
@@ -714,6 +715,88 @@ if connect_som:
               rule=syn_dist_delay_feng_section,
               rule_params={'sec_id':1, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
+
+
+##########################################################################
+############################### PYR2CR  ##################################
+
+
+if connect_cr:
+    dynamics_file = 'PN2CR_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['CR']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},#0.183
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['basal'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':1, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
+
+##########################################################################
+############################### CR2PYR  ##################################
+
+    dynamics_file = 'CR2PN_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['PyrA','PyrC']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},#0.116
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['somatic'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':0, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
+
+##########################################################################
+############################### CR2INT  ##################################
+
+    dynamics_file = 'CR2INT_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['Bask']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},#.297
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['basal'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':1, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
+##########################################################################
+############################### CR2SOM  ##################################
+
+    dynamics_file = 'CR2SOM_tyler.json'
+    conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['SOM']},
+              iterator = 'one_to_all',
+              connection_rule=syn_percent_o2a,
+              connection_params={'p':0.0},#.764
+              syn_weight=1,
+              dynamics_params=dynamics_file,
+              model_template=syn[dynamics_file]['level_of_detail'],
+              distance_range=[min_conn_dist,max_conn_dist],
+              target_sections=['basal'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+              rule=syn_dist_delay_feng_section,
+              rule_params={'sec_id':1, 'sec_x':0.9},
+              dtypes=[np.float, np.int32, np.float])
+
 ##########################################################################
 ######################### BACKGROUND INPUT ###############################
 
