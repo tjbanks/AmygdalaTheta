@@ -9,9 +9,9 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | Source/Target  | Pyr | PV+ | SOM+ | CR+ |
 |----------------|-----|-----|------|-----|
 | Pyr            | +   | +   | +    | +   |
-| PV+            | -   |     |      |     |
+| PV+            | -   |     | -    |     |
 | SOM+           | -   |     |      |     |
-| CR+            | -   |     |      |     |
+| CR+            | -   | -   | -    |     |
 | Thalamic Input | +   |     | +    | +   |
 | VP/SI Input    | +   | +   |      |     |
 
