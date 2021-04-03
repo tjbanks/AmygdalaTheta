@@ -17,11 +17,11 @@ scale = 1
 all_synapses = pd.DataFrame([],columns=['source_gid','target_gid'])
 
 #Number of cells in each population
-numPN_A = 640 * scale #4114#15930
-numPN_C = 260 * scale #4115#6210
-numBask = 100 * scale #854#4860
-numSOM = 42 * scale
-numCR = 42 * scale
+numPN_A = 569 * scale #640 * scale #4114#15930
+numPN_C = 231 * scale #260 * scale #4115#6210
+numBask = 93 * scale #100 * scale #854#4860
+numSOM = 51 * scale #42 * scale
+numCR = 56 * scale #42 * scale
 # add_properties = False
 # do_pos = False
 num_cells = numPN_A + numPN_C + numBask
@@ -174,21 +174,45 @@ if connect_cr:
 ################################################################################
 ############################# BACKGROUND INPUTS ################################
 
-# External inputs
-thalamus = NetworkBuilder('mthalamus')
-thalamus.add_nodes(N=numPN_A+numPN_C,
+################################ VPSI INPUTS ###################################
+
+vpsi_pyr = NetworkBuilder('vpsi_pyr')
+vpsi_pyr.add_nodes(N=numPN_A+numPN_C,
                    pop_name='tON',
-                   pop_group='mthalamus',
+                   pop_group='vpsi_pyr',
                    potential='exc',
                    model_type='virtual')
 
-# External inputs
-exc_bg_bask = NetworkBuilder('exc_bg_bask')
-exc_bg_bask.add_nodes(N=numBask,
+vpsi_pv = NetworkBuilder('vpsi_pv')
+vpsi_pv.add_nodes(N=numBask,
                    pop_name='tON',
-                   pop_group='exc_bg_bask',
+                   pop_group='vpsi_pv',
                    potential='exc',
                    model_type='virtual')
+
+############################# THALAMIC INPUTS ###################################
+
+thalamus_pyr = NetworkBuilder('thalamus_pyr')
+thalamus_pyr.add_nodes(N=numPN_A+numPN_C,
+                   pop_name='tON',
+                   pop_group='thalamus_pyr',
+                   potential='exc',
+                   model_type='virtual')
+
+thalamus_som = NetworkBuilder('thalamus_som')
+thalamus_som.add_nodes(N=numSOM,
+                   pop_name='tON',
+                   pop_group='thalamus_som',
+                   potential='exc',
+                   model_type='virtual')
+
+thalamus_cr = NetworkBuilder('thalamus_cr')
+thalamus_cr.add_nodes(N=numCR,
+                   pop_name='tON',
+                   pop_group='thalamus_cr',
+                   potential='exc',
+                   model_type='virtual')
+
 
 ##############################################################################
 ############################## CONNECT CELLS #################################
@@ -800,10 +824,11 @@ if connect_cr:
 ##########################################################################
 ######################### BACKGROUND INPUT ###############################
 
-dynamics_file='BG2PNe_feng_min.json'
-#dynamics_file = 'BG2PN_feng_min.json'
+############################ VPSI INPUT ##################################
 
-conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrA'),
+dynamics_file='BG2PNe_feng_min.json'
+
+conn = net.add_edges(source=vpsi_pyr.nodes(), target=net.nodes(pop_name='PyrA'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
@@ -816,7 +841,7 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
-conn = net.add_edges(source=thalamus.nodes(), target=net.nodes(pop_name='PyrC'),
+conn = net.add_edges(source=vpsi_pyr.nodes(), target=net.nodes(pop_name='PyrC'),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
@@ -832,7 +857,56 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 
 dynamics_file = 'BG2PNi_feng_min.json'
 
-conn = net.add_edges(source=exc_bg_bask.nodes(), target=net.nodes(pop_name='Bask'),
+conn = net.add_edges(source=vpsi_pv.nodes(), target=net.nodes(pop_name='Bask'),
+                   connection_rule=one_to_one_offset,
+                   connection_params={'offset':numPN_A+numPN_C},
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+######################### THALAMIC INPUT ###############################
+
+
+dynamics_file='BG2PNe_thalamus_min.json'
+
+conn = net.add_edges(source=thalamus_pyr.nodes(), target=net.nodes(pop_name='PyrA'),
+                   connection_rule=one_to_one,
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+conn = net.add_edges(source=thalamus_pyr.nodes(), target=net.nodes(pop_name='PyrC'),
+                   connection_rule=one_to_one,
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+
+dynamics_file = 'BG2SOM_thalamus_min.json'
+
+conn = net.add_edges(source=thalamus_som.nodes(), target=net.nodes(pop_name='SOM'),
                    connection_rule=one_to_one_offset,
                    connection_params={'offset':numPN_A+numPN_C},
                    syn_weight=1,
@@ -848,6 +922,23 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
                   dtypes=[np.float, np.int32, np.float])
 
 
+dynamics_file = 'BG2CR_thalamus_min.json'
+
+conn = net.add_edges(source=thalamus_cr.nodes(), target=net.nodes(pop_name='CR'),
+                   connection_rule=one_to_one_offset,
+                   connection_params={'offset':numPN_A+numPN_C},
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
 ##########################################################################
 ###############################  BUILD  ##################################
 
@@ -858,16 +949,25 @@ net.save_edges(output_dir='network')
 
 print("Internal nodes and edges built")
 
-# Create connections between "thalamus" and Pyramidals
+# Create connections between "vpsi_pyr" and Pyramidals
 # First define the connection rule
 
 # Build and save our network
 
-thalamus.build()
-thalamus.save_nodes(output_dir='network')
+vpsi_pyr.build()
+vpsi_pyr.save_nodes(output_dir='network')
 
-exc_bg_bask.build()
-exc_bg_bask.save_nodes(output_dir='network')
+vpsi_pv.build()
+vpsi_pv.save_nodes(output_dir='network')
+
+thalamus_pyr.build()
+thalamus_pyr.save_nodes(output_dir='network')
+
+thalamus_som.build()
+thalamus_som.save_nodes(output_dir='network')
+
+thalamus_cr.build()
+thalamus_cr.save_nodes(output_dir='network')
 #
 #print("External nodes and edges built")
 t_sim = 10000.0
@@ -880,8 +980,12 @@ build_env_bionet(base_dir='./',
 		report_vars = ['v'],
                 v_init = -70.0,
                 celsius = 31.0,
-		spikes_inputs=[('mthalamus',   # Name of population which spikes will be generated for
-                                'mthalamus_spikes.h5'),('exc_bg_bask','exc_bg_bask_spikes.h5')],
+		spikes_inputs=[('vpsi_pyr','vpsi_pyr_spikes.h5'),  # Name of population which spikes will be generated for, file
+                       ('vpsi_pv','vpsi_pv_spikes.h5'),
+                       ('thalamus_pyr','thalamus_pyr_spikes.h5'),
+                       ('thalamus_som','thalamus_som_spikes.h5'),
+                       ('thalamus_cr','thalamus_cr_spikes.h5'),
+                       ],
 		components_dir='components',
 		compile_mechanisms=True)
 
