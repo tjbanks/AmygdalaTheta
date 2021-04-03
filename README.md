@@ -15,6 +15,9 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | Thalamic Input | +   |     | +    | +   |
 | VP/SI Input    | +   | +   |      |     |
 
+Current model has no connection between PV to SOM but does have connectivity between PV and PV.
+
+
 ## Running the Model
 
 ```

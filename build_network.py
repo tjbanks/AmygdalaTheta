@@ -34,13 +34,15 @@ if dist_constraint:
     max_conn_dist = 300.0 #9999.9# Distance constraint for all cells
 
 i2i_gap = False
+build_som = True # building should always take place
+build_cr = True
 connect_som = True
 connect_cr = True
 
 
-if connect_som:
+if build_som:
     num_cells = num_cells + numSOM
-if connect_cr:
+if build_cr:
     num_cells = num_cells + numCR
 # Create the possible x,y,z coordinates
 
@@ -126,7 +128,7 @@ pos_list = np.delete(pos_list,inds,0)
 #################################################################################
 ################################# SOM Cells #####################################
 
-if connect_som:
+if build_som:
     # Pick new coordinates
     inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numSOM,replace=False)
     pos = pos_list[inds,:]
@@ -148,9 +150,9 @@ if connect_som:
     pos_list = np.delete(pos_list,inds,0)
 
 #################################################################################
-################################# SOM Cells #####################################
+#################################  CR Cells #####################################
 
-if connect_cr:
+if build_cr:
     # Pick new coordinates
     inds = np.random.choice(np.arange(0,np.size(pos_list,0)),numCR,replace=False)
     pos = pos_list[inds,:]
@@ -666,7 +668,7 @@ if connect_som:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#0.309
+              connection_params={'p':0.309},#0.309
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -686,7 +688,7 @@ if connect_som:
     conn = net.add_edges(source={'pop_name': ['SOM']}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#0.066
+              connection_params={'p':0.066},#0.066
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -707,7 +709,7 @@ if connect_som:
     conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},
+              connection_params={'p':0.0},# TODO NO DATA
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -728,7 +730,7 @@ if connect_som:
     conn = net.add_edges(source={'pop_name': ['SOM']}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},
+              connection_params={'p':0.0},# TODO NO DATA
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -750,7 +752,7 @@ if connect_cr:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['CR']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#0.183
+              connection_params={'p':0.183},#0.183
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -770,7 +772,7 @@ if connect_cr:
     conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['PyrA','PyrC']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#0.116
+              connection_params={'p':0.116},#0.116
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -790,7 +792,7 @@ if connect_cr:
     conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['Bask']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#.297
+              connection_params={'p':0.297},#.297
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -809,7 +811,7 @@ if connect_cr:
     conn = net.add_edges(source={'pop_name': ['CR']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},#.764
+              connection_params={'p':0.764},#.764
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -908,7 +910,7 @@ dynamics_file = 'BG2SOM_thalamus_min.json'
 
 conn = net.add_edges(source=thalamus_som.nodes(), target=net.nodes(pop_name='SOM'),
                    connection_rule=one_to_one_offset,
-                   connection_params={'offset':numPN_A+numPN_C},
+                   connection_params={'offset':numPN_A+numPN_C+numBask},
                    syn_weight=1,
                    target_sections=['basal'],
                    distance_range=[0.0, 9999.9],
@@ -926,7 +928,7 @@ dynamics_file = 'BG2CR_thalamus_min.json'
 
 conn = net.add_edges(source=thalamus_cr.nodes(), target=net.nodes(pop_name='CR'),
                    connection_rule=one_to_one_offset,
-                   connection_params={'offset':numPN_A+numPN_C},
+                   connection_params={'offset':numPN_A+numPN_C+numBask+numSOM},
                    syn_weight=1,
                    target_sections=['basal'],
                    distance_range=[0.0, 9999.9],
