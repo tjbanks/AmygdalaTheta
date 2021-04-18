@@ -1,2 +1,2 @@
-node_type_id pop_group potential pop_name model_type
-100 vpsi_pyr exc tON virtual
+node_type_id pop_name pop_group model_type potential
+100 pyr_inp vpsi_pyr virtual exc

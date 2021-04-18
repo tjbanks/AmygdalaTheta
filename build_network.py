@@ -180,37 +180,43 @@ if build_cr:
 
 vpsi_pyr = NetworkBuilder('vpsi_pyr')
 vpsi_pyr.add_nodes(N=numPN_A+numPN_C,
-                   pop_name='tON',
+                   pop_name='pyr_inp',
                    pop_group='vpsi_pyr',
                    potential='exc',
                    model_type='virtual')
 
 vpsi_pv = NetworkBuilder('vpsi_pv')
 vpsi_pv.add_nodes(N=numBask,
-                   pop_name='tON',
+                   pop_name='pv_inp',
                    pop_group='vpsi_pv',
                    potential='exc',
+                   model_type='virtual')
+
+vpsi_inh = NetworkBuilder('vpsi_inh')
+vpsi_inh.add_nodes(N=numPN_A+numPN_C+numBask,
+                   pop_name='inh_inp',
+                   pop_group='vpsi_inh',
                    model_type='virtual')
 
 ############################# THALAMIC INPUTS ###################################
 
 thalamus_pyr = NetworkBuilder('thalamus_pyr')
 thalamus_pyr.add_nodes(N=numPN_A+numPN_C,
-                   pop_name='tON',
+                   pop_name='pyr_inp',
                    pop_group='thalamus_pyr',
                    potential='exc',
                    model_type='virtual')
 
 thalamus_som = NetworkBuilder('thalamus_som')
 thalamus_som.add_nodes(N=numSOM,
-                   pop_name='tON',
+                   pop_name='som_imp',
                    pop_group='thalamus_som',
                    potential='exc',
                    model_type='virtual')
 
 thalamus_cr = NetworkBuilder('thalamus_cr')
 thalamus_cr.add_nodes(N=numCR,
-                   pop_name='tON',
+                   pop_name='cr_inp',
                    pop_group='thalamus_cr',
                    potential='exc',
                    model_type='virtual')
@@ -874,6 +880,54 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
+dynamics_file = 'VPSI2PN_inh_tyler_min.json'
+
+conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA']),
+                   connection_rule=one_to_one,
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrC']),
+                   connection_rule=one_to_one,
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
+dynamics_file = 'VPSI2PV_inh_tyler_min.json'
+
+conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name='Bask'),
+                   iterator='one_to_all',
+                   connection_rule=syn_percent_o2a,
+                   connection_params={'p':0.012}, # We need aprox 10 aff to each PV
+                   syn_weight=1,
+                   target_sections=['basal'],
+                   distance_range=[0.0, 9999.9],
+                   dynamics_params=dynamics_file,
+                   model_template=syn[dynamics_file]['level_of_detail'])
+
+
+conn.add_properties(names=['delay','sec_id','sec_x'],
+                  rule=syn_uniform_delay_section,
+                  rule_params={'sec_id':1, 'sec_x':0.9},
+                  dtypes=[np.float, np.int32, np.float])
+
 ######################### THALAMIC INPUT ###############################
 
 
@@ -962,6 +1016,9 @@ vpsi_pyr.save_nodes(output_dir='network')
 vpsi_pv.build()
 vpsi_pv.save_nodes(output_dir='network')
 
+vpsi_inh.build()
+vpsi_inh.save_nodes(output_dir='network')
+
 thalamus_pyr.build()
 thalamus_pyr.save_nodes(output_dir='network')
 
@@ -984,6 +1041,7 @@ build_env_bionet(base_dir='./',
                 celsius = 31.0,
 		spikes_inputs=[('vpsi_pyr','vpsi_pyr_spikes.h5'),  # Name of population which spikes will be generated for, file
                        ('vpsi_pv','vpsi_pv_spikes.h5'),
+                       ('vpsi_inh','vpsi_inh_spikes.h5'),
                        ('thalamus_pyr','thalamus_pyr_spikes.h5'),
                        ('thalamus_som','thalamus_som_spikes.h5'),
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
