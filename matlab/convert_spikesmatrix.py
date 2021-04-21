@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+import matplotlib.pyplot as plt
 
 def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     matlab_file = open(inp, 'r')
@@ -27,9 +28,24 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
              
         count = count + 1
  
-    vpsi_spikes_vp.create_dataset("node_ids", data=np.array(spikes_node_ids).astype(np.int))
-    vpsi_spikes_vp.create_dataset("timestamps", data=np.array(spikes_timestamps).astype(np.float))
+    nodes=np.array(spikes_node_ids).astype(np.int)
+    timestamps=np.array(spikes_timestamps).astype(np.float)
+
+    vpsi_spikes_vp.create_dataset("node_ids", data=nodes)
+    vpsi_spikes_vp.create_dataset("timestamps", data=timestamps)
 
     vpsi.close()
+
+    # plot a scatter plot
+    fig, ax = plt.subplots()
+    ax.scatter(timestamps,nodes,s=2)
+    ax.set_xlabel('Spike Timestamp', fontsize=12)
+    ax.set_ylabel('Affrent Neuron ID', fontsize=12)
+    ax.set_title('8Hz Input', fontsize=12)
+
+    #ax.grid(True)
+    fig.tight_layout()
+    plt.show()
+    
 if __name__ == '__main__':
     convert(num_pn=800)
