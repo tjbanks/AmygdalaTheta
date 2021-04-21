@@ -209,7 +209,7 @@ thalamus_pyr.add_nodes(N=numPN_A+numPN_C,
 
 thalamus_som = NetworkBuilder('thalamus_som')
 thalamus_som.add_nodes(N=numSOM,
-                   pop_name='som_imp',
+                   pop_name='som_inp',
                    pop_group='thalamus_som',
                    potential='exc',
                    model_type='virtual')

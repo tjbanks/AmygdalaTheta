@@ -64,7 +64,7 @@ plot(data_I(:,1),data_I(:,2)+1,'r.');
 hold on; 
 plot(data_SOM(:,1),data_SOM(:,2)+1,'green.');
 hold on; 
-plot(data_CR(:,1),data_CR(:,2)+1,'purple.');
+plot(data_CR(:,1),data_CR(:,2)+1,'m.');
 axis tight;  
 legend('PN','FSI','SOM','CR');
 
