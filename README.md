@@ -5,31 +5,43 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 ## Connectivity Matrix
 * \+ : Excitatory
 * \- : Inhibitory
+* \+/\- : Both
 
 | Source/Target  | Pyr | PV+ | SOM+ | CR+ |
 |----------------|-----|-----|------|-----|
 | Pyr            | +   | +   | +    | +   |
-| PV+            | -   |     | -    |     |
+| PV+            | -   | -   | -    |     |
 | SOM+           | -   |     |      |     |
 | CR+            | -   | -   | -    |     |
 | Thalamic Input | +   |     | +    | +   |
-| VP/SI Input    | +   | +   |      |     |
+| VP/SI Input    | +/- | +/- |      |     |
 
-Current model has no connection between PV to SOM but does have connectivity between PV and PV.
+Note: current model has no connection between PV to SOM.
 
 
 ## Running the Model
 
 ```
-# Generate inputs
-python manage input generate all
+# Generate background inputs
+python generate_input.py
+
+# To regenerate rhythmic inputs (not usually needed)
+matlab &
+generatethetainputs
+
+python matlab/convert_spikematrix.py
 
 # Build the model
 python build_network.py
 
 # Run the model
 python run_bionet.py
+
+# Analyze the model
+matlab &
+analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
 ```
+
 
 ## Single Cell Profiling
 

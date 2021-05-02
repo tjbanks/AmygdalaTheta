@@ -167,7 +167,7 @@ if build_cr:
               rotation_angle_yaxis=xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
               mem_potential='e',
               model_type='biophysical',
-              model_template='hoc:SOM_Cell',# NOTE: EARLY IMPLEMENTATIONS USE SOM instead of CR due to similarity
+              model_template='hoc:CR_Cell',# NOTE: EARLY IMPLEMENTATIONS USE SOM instead of CR due to similarity
               morphology=None)
 
 
@@ -727,26 +727,6 @@ if connect_som:
               rule_params={'sec_id':0, 'sec_x':0.9},
               dtypes=[np.float, np.int32, np.float])
 
-
-##########################################################################
-############################### SOM2INT ##################################
-# WARNING - NOT IN PARAMETERS TABLE
-
-    dynamics_file = 'SOM2INT_tyler.json'
-    conn = net.add_edges(source={'pop_name': ['SOM']}, target={'pop_name': ['Bask']},
-              iterator = 'one_to_all',
-              connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},# TODO NO DATA
-              syn_weight=1,
-              dynamics_params=dynamics_file,
-              model_template=syn[dynamics_file]['level_of_detail'],
-              distance_range=[min_conn_dist,max_conn_dist],
-              target_sections=['basal'])
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-              rule=syn_dist_delay_feng_section,
-              rule_params={'sec_id':1, 'sec_x':0.9},
-              dtypes=[np.float, np.int32, np.float])
 
 
 ##########################################################################
