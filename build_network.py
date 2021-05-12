@@ -6,6 +6,7 @@ import math
 import pdb
 import random
 import pandas as pd
+import os
 
 np.random.seed(123412)
 
@@ -38,6 +39,7 @@ build_som = True # building should always take place
 build_cr = True
 connect_som = True
 connect_cr = True
+connect_vpsi_inh = True
 
 
 if build_som:
@@ -715,7 +717,7 @@ if connect_som:
     conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.0},# TODO NO DATA
+              connection_params={'p':0.1},# TODO NO DATA
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -860,9 +862,10 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
-dynamics_file = 'VPSI2PN_inh_tyler_min.json'
+if connect_vpsi_inh:
+    dynamics_file = 'VPSI2PN_inh_tyler_min.json'
 
-conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA']),
+    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA']),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
@@ -871,12 +874,12 @@ conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA']
                    model_template=syn[dynamics_file]['level_of_detail'])
 
 
-conn.add_properties(names=['delay','sec_id','sec_x'],
+    conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
-conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrC']),
+    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrC']),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
@@ -885,14 +888,14 @@ conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrC']
                    model_template=syn[dynamics_file]['level_of_detail'])
 
 
-conn.add_properties(names=['delay','sec_id','sec_x'],
+    conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
-dynamics_file = 'VPSI2PV_inh_tyler_min.json'
+    dynamics_file = 'VPSI2PV_inh_tyler_min.json'
 
-conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name='Bask'),
+    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name='Bask'),
                    iterator='one_to_all',
                    connection_rule=syn_percent_o2a,
                    connection_params={'p':0.012}, # We need aprox 10 aff to each PV
@@ -903,7 +906,7 @@ conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name='Bask'),
                    model_template=syn[dynamics_file]['level_of_detail'])
 
 
-conn.add_properties(names=['delay','sec_id','sec_x'],
+    conn.add_properties(names=['delay','sec_id','sec_x'],
                   rule=syn_uniform_delay_section,
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
@@ -978,6 +981,9 @@ conn.add_properties(names=['delay','sec_id','sec_x'],
 ##########################################################################
 ###############################  BUILD  ##################################
 
+network_dir = 'network'
+for f in os.listdir(network_dir):
+    os.remove(os.path.join(network_dir, f))
 
 net.build()
 net.save_nodes(output_dir='network')
