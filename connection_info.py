@@ -1,122 +1,76 @@
-import pandas as pd
-import h5py
-import numpy as np
 import sys
 
-import warnings
-warnings.filterwarnings("ignore") # Annoying h5py read warning
+import numpy as np
+import pandas as pd
 
-def run(df, scale=1, convergence=True):
+from bmtools.cli.plugins.util.util import relation_matrix
 
-    p_start = 0 * scale
-    i_start = 900 * scale
-    i_end = 1000 * scale
+def conn_info(**kwargs):
 
-    total_p = i_start - p_start
-    total_i = i_end - i_start
+    edges = kwargs["edges"]
+    source_id_type = kwargs["sid"]
+    target_id_type = kwargs["tid"]
+    source_id = kwargs["source_id"]
+    target_id = kwargs["target_id"]
+    t_list = kwargs["target_nodes"]
+    s_list = kwargs["source_nodes"]
     
+    cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
+    total_cons = cons.count().source_node_id
 
-    p2p = df[(df.source < i_start) & (df.target < i_start)]
-    p2i = df[(df.source < i_start) & (df.target >= i_start)]
-    i2p = df[(df.source >= i_start) & (df.target < i_start)]
-    i2i = df[(df.source >= i_start) & (df.target >= i_start)]
+    # to determine reciprocal connectivity
+    # create a copy and flip source/dest
+    cons_flip = cons.copy().rename(columns={'source_node_id':'target_node_id','target_node_id':'source_node_id'})
+    cons_flip = edges[(edges[source_id_type] == target_id) & (edges[target_id_type]==source_id)]
+    cons_flip = cons_flip.rename(columns={'source_node_id':'target_node_id','target_node_id':'source_node_id'})
+    # append to original 
+    cons_recip = cons.append(cons_flip)
 
-    cd = 'source'
-    if convergence:
-        cd = 'target'
+    # determine dropped duplicates (keep=False)
+    cons_recip_dedup = cons_recip.drop_duplicates(subset=['source_node_id','target_node_id'])
 
-    # if cd is 'source' we're counting the number of occurances for the source or divergence
-    # if cd is 'target' we're counting the number of occurances for the target or convergence
+    # note counts
+    num_bi = cons_recip.count().source_node_id - cons_recip_dedup.count().source_node_id
+    num_uni = total_cons - num_bi    
 
-    avg_p2p = np.average(list(p2p[cd].value_counts()))
-    std_p2p = np.std(list(p2p[cd].value_counts()))
+    num_sources = s_list.apply(pd.Series.value_counts)[source_id_type].dropna().sort_index().loc[source_id]
+    num_targets = t_list.apply(pd.Series.value_counts)[target_id_type].dropna().sort_index().loc[target_id]
 
-    avg_p2i = np.average(list(p2i[cd].value_counts()))
-    std_p2i = np.std(list(p2i[cd].value_counts()))
+    total = round(total_cons / (num_sources*num_targets) * 100,2)
+    uni = round(num_uni / (num_sources*num_targets) * 100,2)
+    bi = round(num_bi / (num_sources*num_targets) * 100,2)
 
-    avg_i2p = np.average(list(i2p[cd].value_counts()))
-    std_i2p = np.std(list(i2p[cd].value_counts()))
+    print(str(source_id) + '->' + str(target_id) + "\t" + str(total) + "\t" + str(uni) + "\t" + str(bi))
+    #print("total: " + str(total))
+    #print("uni:   " + str(uni))
+    #print("bi:    " + str(bi))
+    #print()
 
-    avg_i2i = np.average(list(i2i[cd].value_counts()))
-    std_i2i = np.std(list(i2i[cd].value_counts()))
+    #import pdb;pdb.set_trace()    
+    #return str(total)+','+str(uni)+','+str(bi)
+    #return {'total':total,'uni':uni,'bi':bi}
+    #return np.array([total, uni, bi])
+    return total
 
-    print()
-    print("for P avg. #P received:\t" + str(round(avg_p2p,4)) + " (" + str(round(std_p2p,4)) + ")")
-    print("for P avg. #I received:\t" + str(round(avg_i2p,4)) + " (" + str(round(std_i2p,4)) + ")")
-    print("for I avg. #P received:\t" + str(round(avg_p2i,4)) + " (" + str(round(std_p2i,4)) + ")")
-    print("for I avg. #I received:\t" + str(round(avg_i2i,4)) + " (" + str(round(std_i2i,4)) + ")")
-    print()
-    print("P2P Connectivity\t" + str(round(avg_p2p/total_p*100,2)) + "%")
-    print("I2P Connectivity\t" + str(round(avg_i2p/total_i*100,2)) + "%")
-    print("P2I Connectivity\t" + str(round(avg_p2i/total_p*100,2)) + "%")
-    print("I2I Connectivity\t" + str(round(avg_i2i/total_i*100,2)) + "%")
-    print()
+def run(config):
+
+    nodes = None
+    edges = None 
+    sources = ['BLA']
+    targets = ['BLA']
+    sids = ['a_name']
+    tids = ['a_name']
+    prepend_pop = True
     
-    
-    df1 = pd.DataFrame(columns=['source','target'])#flipped
-    df1['source'] = df.target
-    df1['target'] = df.source
-
-    dfs = df.append(df1,ignore_index=True)
-    df_rec = dfs[dfs.duplicated(keep='first')]
-    
-    p2p_rec = df_rec[(df_rec.source < i_start) & (df_rec.target < i_start)]
-    #p2i_rec = df_rec[(df_rec.source < i_start) & (df_rec.target >= i_start)]
-    p2i_rec = df_rec[((df_rec.source < i_start) & (df_rec.target >= i_start)) | ((df_rec.target < i_start) & (df_rec.source >= i_start))]
-    i2i_rec = df_rec[(df_rec.source >= i_start) & (df_rec.target >= i_start)]
-    
-    avg_p2p_rec = np.average(list(p2p_rec[cd].value_counts()))/2
-    avg_p2i_rec = np.average(list(p2i_rec[cd].value_counts()))/2
-    avg_i2i_rec = np.average(list(i2i_rec[cd].value_counts()))/2
-
-    print()
-    print("reciprocal P2P\t" + str(round(avg_p2p_rec/total_p*100,2)) + "%")
-    print("reciprocal P2I\t" + str(round(avg_p2i_rec/total_p*100,2)) + "%")
-    print("reciprocal I2I\t" + str(round(avg_i2i_rec/total_i*100,2)) + "%")
-    print()
-    
+    print("\ttotal\tuni\tbi") 
+    ret = relation_matrix(config,nodes,edges,sources,targets,sids,tids,prepend_pop,relation_func=conn_info)
+    #print(ret)
     #import pdb;pdb.set_trace()
-
-def bmtk_run(path):
-    hdf = h5py.File(path)
-
-    src = pd.DataFrame(hdf['edges']['BLA_to_BLA']['source_node_id'],columns=['source'])
-    trg = pd.DataFrame(hdf['edges']['BLA_to_BLA']['target_node_id'],columns=['target'])
-    df = pd.concat([src,trg],axis=1)
-    run(df)
-
-def feng_run(path,scale=1):
-    
-    #Iterate line by line in file
-    #create a dataframe with source/target columns
-    #each line is the source and each item in the line is the target, append to the df
-    #call run(df)
-
-    f = open(path, 'r')
-    lines = f.readlines()
-    df = None
-
-    row = 0
-    # Strips the newline character
-    for line in lines:
-        #print("Line{}: {}".format(row, line.strip()))
-        sources = line.strip().split('\t')
-        dft = pd.DataFrame(sources,columns=['source'])
-        dft.source = dft.source.astype(int)
-        dft['target'] = row
-        if df is None:
-            df = dft
-        else:
-            df = pd.concat([df,dft],ignore_index=True)
-        row += 1
-        
-    run(df,scale=scale)
-    #import pdb;pdb.set_trace()
+    return
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        #bmtk_run(sys.argv[-1])
-        feng_run('./source_material/active_syn_op_new')
-        #feng_run('./source_material/FengEtAl2019/input/active_syn_op',scale=27)
+        run(sys.argv[-1])
     else:
-        bmtk_run('./network/BLA_BLA_edges.h5')
+        run('simulation_config.json')
+

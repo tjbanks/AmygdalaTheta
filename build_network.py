@@ -70,7 +70,7 @@ pos = pos_list[inds,:]
 pyra_pos = pos.copy()
 
 # Add a population of numPN_A nodes (all of which share model_type, dynamics_params, etc.)
-net.add_nodes(N=numPN_A, pop_name='PyrA',
+net.add_nodes(N=numPN_A, pop_name='PyrA', a_name='PN',
               positions=positions_list(positions=pos),
 	      rotation_angle_zaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
 	      rotation_angle_yaxis=xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
@@ -92,7 +92,7 @@ pos = pos_list[inds,:]
 pyrc_pos = pos.copy()
 
 # Add a population of numPN_A nodes (all of which share model_type, dynamics_params, etc.)
-net.add_nodes(N=numPN_C, pop_name='PyrC',
+net.add_nodes(N=numPN_C, pop_name='PyrC', a_name='PN',
               positions=positions_list(positions=pos),
 	      rotation_angle_zaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
 	      rotation_angle_yaxis=xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
@@ -116,7 +116,7 @@ bask_pos = pos.copy()
 nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos])
 
 # Add a population of numBask nodes
-net.add_nodes(N=numBask, pop_name='Bask',
+net.add_nodes(N=numBask, pop_name='Bask', a_name='PV',
               positions=positions_list(positions=pos),
 	      rotation_angle_zaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
 	      rotation_angle_yaxis=xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
@@ -139,7 +139,7 @@ if build_som:
     nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos,som_pos])
 
     # Add a population of numCR nodes
-    net.add_nodes(N=numSOM, pop_name='SOM',
+    net.add_nodes(N=numSOM, pop_name='SOM', a_name='SOM',
               positions=positions_list(positions=pos),
               rotation_angle_zaxis=xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
               rotation_angle_yaxis=xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
@@ -163,7 +163,7 @@ if build_cr:
     nid_pos = np.concatenate([pyra_pos, pyrc_pos, bask_pos,som_pos, cr_pos])
 
     # Add a population of numCR nodes
-    net.add_nodes(N=numCR, pop_name='CR',
+    net.add_nodes(N=numCR, pop_name='CR', a_name='CR',
               positions=positions_list(positions=pos),
               rotation_angle_zaxis=xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
               rotation_angle_yaxis=xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
