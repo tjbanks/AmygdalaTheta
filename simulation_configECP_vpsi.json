@@ -18,6 +18,18 @@
     "v_init": -70.0
   },
   "inputs": {
+    "vpsi_pyr_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/vpsi_pyr_spikes.h5",
+      "node_set": "vpsi_pyr"
+    },
+    "vpsi_pv_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/vpsi_pv_spikes.h5",
+      "node_set": "vpsi_pv"
+    },
     "vpsi_inh_spikes": {
       "input_type": "spikes",
       "module": "sonata",
