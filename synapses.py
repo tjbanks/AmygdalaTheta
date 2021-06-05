@@ -96,6 +96,27 @@ def interD2pyrD_SOM2P_STFD(syn_params, sec_x, sec_id):
 
     return lsyn
 
+def pyrD2interD_P2CR_STFD(syn_params, sec_x, sec_id):
+
+    lsyn = h.pyrD2interD_P2CR_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
+
+    return lsyn
+
+def interD2pyrD_CR2P_STFD(syn_params, sec_x, sec_id):
+
+    lsyn = h.interD2pyrD_CR2P_STFD(sec_x, sec=sec_id)
+
+    if syn_params.get('initW'):
+        lsyn.initW = float(syn_params['initW'])
+    elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
+        lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
+
+    return lsyn
 
 def interD2interD_SOMPV_STFD(syn_params, sec_x, sec_id):
 
@@ -128,6 +149,13 @@ def load():
     add_synapse_model(interD2pyrD_SOM2P_STFD, overwrite=False)
     add_synapse_model(interD2interD_SOMPV_STFD, 'interD2interD_SOMPV_STFD', overwrite=False)
     add_synapse_model(interD2interD_SOMPV_STFD, overwrite=False)
+
+    #CR
+    add_synapse_model(pyrD2interD_P2CR_STFD, 'pyrD2interD_P2CR_STFD', overwrite=False)
+    add_synapse_model(pyrD2interD_P2CR_STFD, overwrite=False)
+    add_synapse_model(interD2pyrD_CR2P_STFD, 'interD2pyrD_CR2P_STFD', overwrite=False)
+    add_synapse_model(interD2pyrD_CR2P_STFD, overwrite=False)
+
 
     return
 
