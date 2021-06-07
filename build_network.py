@@ -66,20 +66,20 @@ connect_theta_generation_test = {
     "PYR2SOM":True,
     "SOM2PYR":True,
     "INT2SOM":False,
-    "PYR2CR":False,
-    "CR2PYR":False,
+    "PYR2CR":True,
+    "CR2PYR":True,
     "CR2INT":False,
     "CR2SOM":False,
     "VPSI2PYR":True,
     "VPSI2INT":False,
-    "VPSIinh2PYR":True,
+    "VPSIinh2PYR":False,
     "VPSIinh2INT":False,
-    "THALAMUS2PYR":True,
-    "THALAMUS2SOM":True,
+    "THALAMUS2PYR":False,
+    "THALAMUS2SOM":False,
     "THALAMUS2CR":False
 }
 
-connect = connect_all
+connect = connect_all#connect_theta_generation_test
 # example use: if connect["PYR2PYR"]:
 
 # Create the possible x,y,z coordinates
