@@ -37,6 +37,12 @@ def bginh(syn_params, sec_x, sec_id):
         lsyn.initW = float(syn_params['initW'])
     elif syn_params.get('initW_lognormal_mean') and syn_params.get('initW_lognormal_std'):
         lsyn.initW = lognorm(syn_params['initW_lognormal_mean'],syn_params['initW_lognormal_std'])
+    
+    if syn_params.get("AlphaTmax_gaba"):
+        lsyn.AlphaTmax_gaba = float(syn_params['AlphaTmax_gaba'])
+    if syn_params.get("Beta_gaba"):
+        lsyn.Beta_gaba = float(syn_params['Beta_gaba'])
+
     return lsyn
 
 def interD2interD_STFD(syn_params, sec_x, sec_id):
