@@ -33,7 +33,7 @@ PARAMETER {
 	
 	Cdur_gaba = 0.7254 (ms)
 	AlphaTmax_gaba = 1.52 (/ms):7.2609 (/ms): 2.2609 (/ms): 3.2609 (/ms)   : 7.2609 as original
-	Beta_gaba = 0.0014(/ms) : 0.147 (/ms) : 0.2667 (/ms):         : 0.2667 as original
+	Beta_gaba = 0.014(/ms) : 0.147 (/ms) : 0.2667 (/ms):         : 0.2667 as original
 	Erev_gaba = -75 (mV) : -75 as original
 	gbar_gaba = 0.6e-3 (uS)
 
