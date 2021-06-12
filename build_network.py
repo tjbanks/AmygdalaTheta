@@ -53,6 +53,7 @@ connect_all = {
     "VPSIinh2PYR":True,
     "VPSIinh2INT":True,
     "THALAMUS2PYR":True,
+    "THALAMUS2INT":False,#FOR TESTING ONLY
     "THALAMUS2SOM":True,
     "THALAMUS2CR":True
 }
@@ -240,6 +241,13 @@ thalamus_pyr = NetworkBuilder('thalamus_pyr')
 thalamus_pyr.add_nodes(N=numPN_A+numPN_C,
                    pop_name='pyr_inp',
                    pop_group='thalamus_pyr',
+                   potential='exc',
+                   model_type='virtual')
+
+thalamus_pv = NetworkBuilder('thalamus_pv')
+thalamus_pv.add_nodes(N=numBask,
+                   pop_name='pv_inp',
+                   pop_group='thalamus_pv',
                    potential='exc',
                    model_type='virtual')
 
@@ -997,6 +1005,25 @@ if connect["THALAMUS2PYR"]:
                     dtypes=[np.float, np.int32, np.float])
 
 
+if connect["THALAMUS2INT"]:
+
+    dynamics_file='BG2PV_thalamus_min.json'
+
+    conn = net.add_edges(source=thalamus_pv.nodes(), target=net.nodes(pop_name='Bask'),
+                    connection_rule=one_to_one_offset,
+                    connection_params={'offset':numPN_A+numPN_C},
+                    syn_weight=1,
+                    target_sections=['basal'],
+                    distance_range=[0.0, 9999.9],
+                    dynamics_params=dynamics_file,
+                    model_template=syn[dynamics_file]['level_of_detail'])
+
+    conn.add_properties(names=['delay','sec_id','sec_x'],
+                    rule=syn_uniform_delay_section,
+                    rule_params={'sec_id':1, 'sec_x':0.9},
+                    dtypes=[np.float, np.int32, np.float])
+
+
 if connect["THALAMUS2SOM"]:
 
     dynamics_file = 'BG2SOM_thalamus_min.json'
@@ -1065,6 +1092,9 @@ vpsi_inh.save_nodes(output_dir='network')
 thalamus_pyr.build()
 thalamus_pyr.save_nodes(output_dir='network')
 
+thalamus_pv.build()
+thalamus_pv.save_nodes(output_dir='network')
+
 thalamus_som.build()
 thalamus_som.save_nodes(output_dir='network')
 
@@ -1086,6 +1116,7 @@ build_env_bionet(base_dir='./',
                        ('vpsi_pv','vpsi_pv_spikes.h5'),
                        ('vpsi_inh','vpsi_inh_spikes.h5'),
                        ('thalamus_pyr','thalamus_pyr_spikes.h5'),
+                       ('thalamus_pv', 'thalamus_pv_spikes.h5'),
                        ('thalamus_som','thalamus_som_spikes.h5'),
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
                        ],

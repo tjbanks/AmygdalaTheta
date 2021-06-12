@@ -35,6 +35,13 @@ def build_input(t_sim, numPN_A = 569, numPN_C=231, numBask = 93, numSOM=51, numC
     times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
     psg.to_sonata('thalamus_pyr_spikes.h5')
 
+    psg = PoissonSpikeGenerator(population='thalamus_pv')
+    psg.add(node_ids=range(numBask),  # Have nodes to match 
+    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+    firing_rate=lognorm_fr_list(numBask,2,1),
+    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
+    psg.to_sonata('thalamus_pv_spikes.h5')
+
     psg = PoissonSpikeGenerator(population='thalamus_som')
     psg.add(node_ids=range(numSOM),  # Have nodes to match 
     #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array

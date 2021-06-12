@@ -24,6 +24,12 @@
       "input_file": "$BASE_DIR/thalamus_pyr_spikes.h5",
       "node_set": "thalamus_pyr"
     },
+    "thalamus_pv_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/thalamus_pv_spikes.h5",
+      "node_set": "thalamus_pv"
+    },
     "thalamus_som_spikes": {
       "input_type": "spikes",
       "module": "sonata",
