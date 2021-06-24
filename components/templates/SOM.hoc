@@ -116,8 +116,8 @@ begintemplate SOM_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
 
@@ -159,8 +159,8 @@ begintemplate SOM_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
 
@@ -197,8 +197,8 @@ begintemplate SOM_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
             
@@ -364,8 +364,8 @@ begintemplate CR_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
 
@@ -407,8 +407,8 @@ begintemplate CR_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
 
@@ -445,8 +445,8 @@ begintemplate CR_Cell
 			insert imCA3
 			gbar_imCA3 = gim
 
-			insert cas
-			gbar_cas = gcas
+			insert cass
+			gbar_cass = gcas
             
             insert xtraimemrec
             

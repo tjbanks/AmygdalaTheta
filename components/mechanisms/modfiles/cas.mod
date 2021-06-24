@@ -1,7 +1,7 @@
 : Persistent Ca2+ current channel(I_CaS)
 
 NEURON {
-	SUFFIX cas
+	SUFFIX cass
 	USEION ca READ eca WRITE ica
 	RANGE gbar, g
 	RANGE jainf, kinf, jatau, ktau
