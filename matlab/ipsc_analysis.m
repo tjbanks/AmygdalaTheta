@@ -4,7 +4,7 @@ function [data] = ipsc_analysis(syn_report_h5path)
 close all;
 clc;
 skip_n = 50000;
-raw_data = h5read(syn_report_h5path,'/report/BLA/data');
+data_raw = h5read(syn_report_h5path,'/report/BLA/data');
 data = sum(data_raw);
 lfp = data(skip_n:end);
 
@@ -17,3 +17,7 @@ figure(1);plot(lfp_d*1e3);
  set(gca, 'YScale', 'log');
  set(gca, 'XScale', 'log');
  %return
+ 
+ %Check on voltage traces to be sure it is clamped
+ %voltage_raw = h5read('../outputECP/cell_vars.h5','/report/BLA/data');
+ %plot(voltage_raw(1,:))

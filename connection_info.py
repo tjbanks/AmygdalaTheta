@@ -40,9 +40,9 @@ def conn_info(**kwargs):
     bi = round(num_bi / (num_sources*num_targets) * 100,2)
 
     print(str(source_id) + '->' + str(target_id) + "\t" + str(total) + "\t" + str(uni) + "\t" + str(bi))
-    if source_id == 'SOM' and target_id == 'PN':
-        import pdb;pdb.set_trace()
-        print(cons)   
+    #if source_id == 'SOM' and target_id == 'PN':
+        #import pdb;pdb.set_trace()
+        #print(cons)   
     return total
 
 def run(config):
