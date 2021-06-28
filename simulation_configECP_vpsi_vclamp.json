@@ -79,19 +79,34 @@
       "electrode_channels": "all"
       },
     "syn_report": {
-      "cells": [0,50,100,200,300,400,500,600,700,750,751],
+      "cells": [0,50,100,200,300,400,500,600,700,750],
       "variable_name": "igaba",
       "module": "netcon_report",
       "sections": "all",
       "syn_type": "interD2pyrD_SOM2P_STFD"
       },
     "membrane_report": {
-      "cells": [0,50,100,200,300,400,500,600,700,750,751],
+      "cells": [0,50,100,200,300,400,500,600,700,750],
       "module": "membrane_report",
       "sections": "soma",
       "variable_name": ["v"],
       "file_name": "cell_vars.h5"
+    },
+    "control_syn_report": {
+      "cells": [1,751],
+      "variable_name": "igaba",
+      "module": "netcon_report",
+      "sections": "all",
+      "syn_type": "interD2pyrD_SOM2P_STFD"
+      },
+    "control_membrane_report": {
+      "cells": [1,751],
+      "module": "membrane_report",
+      "sections": "soma",
+      "variable_name": ["v"],
+      "file_name": "control_cell_vars.h5"
     }
+
   },
   "node_sets_file": "$BASE_DIR/node_sets.json",
   "network": "$BASE_DIR/circuit_config.json"
