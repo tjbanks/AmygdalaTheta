@@ -48,8 +48,8 @@ connect_all = {
     "CR2PYR":True,
     "CR2INT":True,
     "CR2SOM":True,
-    "VPSI2PYR":True,
-    "VPSI2INT":True,
+    "VPSI2PYR":False,#Deemed unnecessary
+    "VPSI2INT":False,#Deemed unnecessary 
     "VPSIinh2PYR":True,
     "VPSIinh2INT":True,
     "THALAMUS2PYR":True,
