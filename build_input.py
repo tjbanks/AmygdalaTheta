@@ -26,6 +26,13 @@ def build_input(t_sim, numPN_A = 569, numPN_C=231, numBask = 93, numSOM=51, numC
     times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
     psg.to_sonata('vpsi_pv_spikes.h5')
 
+    psg = PoissonSpikeGenerator(population='vpsi_inh')
+    psg.add(node_ids=range(numPN_A+numPN_C+numBask),  # Have nodes to match mthalamus
+    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
+    firing_rate=lognorm_fr_list(numBask,3,1),
+    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
+    psg.to_sonata('vpsi_inh_spikes_nonrhythmic.h5')
+
     # THALAMUS
 
     psg = PoissonSpikeGenerator(population='thalamus_pyr')
