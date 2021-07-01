@@ -106,7 +106,22 @@ Used to print the connectivity between cell types.
 
 ```
 > python connection_info.py
-
+PN->PN	2.0	1.96	0.04
+PN->PV	26.82	11.24	15.58
+PN->SOM	31.19	29.17	2.01
+PN->CR	18.43	16.41	2.02
+PV->PN	52.0	36.42	15.58
+PV->PV	22.92	17.41	5.5
+PV->SOM	9.8	9.8	0.0
+PV->CR	0.0	0.0	0.0
+SOM->PN	6.57	4.55	2.01
+SOM->PV	0.0	0.0	0.0
+SOM->SOM	0.0	0.0	0.0
+SOM->CR	0.0	0.0	0.0
+CR->PN	11.59	9.57	2.02
+CR->PV	29.7	29.7	0.0
+CR->SOM	75.25	75.25	0.0
+CR->CR	0.0	0.0	0.0
 ```
 
 ### Other important files
