@@ -50,7 +50,7 @@ python build_network.py
 
 ### 3. Execute run script
 
-The network can be tested using any one of the simulation configuration files listed below (`python run_bionet.py [configuration file]`)
+The network can be tested using any one of the simulation configuration files listed below (`python run_network.py [configuration file]`)
 
 | Configuration file | Input Details |Notes|
 |--------------------|---------------|-----|
@@ -69,7 +69,7 @@ Primary tests **bold**
 1000 Cell models typically run for **4-6 hours** on a single core.
 
 ```
-python run_bionet.py simulation_configECP_base.json
+python run_network.py simulation_configECP_base.json
 ```
 
 #### Parallel Mode
