@@ -15,23 +15,34 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | **`thalamus_cr_spikes.h5`**         | Thalamic 2Hz poisson input CR+ cells| [`build_input.py`](./build_input.py)|
 | `vpsi_pyr_spikes.h5`         | VPSI 2Hz poisson input to Pyramidal A and C cells (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
 | `vpsi_pv_spikes.h5`         | VPSI 2Hz poisson input to Interneurons (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
-| `vpsi_inh_spikes_nonrhythmic.h5`         | VPSI poisson input for non-rhythmic inhibition | [`build_input.py`](./build_input.py)|
-| **`vpsi_inh_spikes.h5`**         | VPSI 8Hz Rhythmic 3Hz poisson input | [`matlab/generatethetainputs.m`](./matlab/generatethetainputs.m) & [`matlab/convert_spikematrix.py`](matlab/convert_spikematrix.py)|
+| `vpsi_inh_spikes_nonrhythmic.h5`         | VPSI poisson input to PN A and C for non-rhythmic inhibition | [`build_input.py`](./build_input.py)|
+| **`vpsi_inh_spikes.h5`**         | VPSI 8Hz Rhythmic 3Hz poisson input to PN A and C | [`matlab/generatethetainputs.m`](./matlab/generatethetainputs.m) & [`matlab/convert_spikesmatrix.py`](matlab/convert_spikesmatrix.py)|
 
 (primary files **bold**)
 
-
+To generate the above files first, create Thalamic and VSPI inputs using
 ```
 python generate_input.py
 
-# To regenerate rhythmic inputs (not usually needed)
+```
+
+To regenerate 8Hz rhythmic inputs (based on 
+```
 matlab &
 generatethetainputs
-
+```
+The files will then need to be converted to the Sonata format BMTK understands.
+```
 python matlab/convert_spikematrix.py
 ```
 
+Once these steps have been completed, input files **WILL NOT** need to be regenerated again.
+
 ### 2. Build network configuration files
+
+Building of the network can be customized by altering `build_network.py` configuration at the beginning of the script.
+
+To generate necessary network specification files in the `[network](./network)` directory, execute
 
 ```
 python build_network.py
@@ -41,30 +52,53 @@ python build_network.py
 
 The network can be tested using any one of the simulation configuration files listed below (`python run_bionet.py [configuration file]`)
 
-| Configuration file | Details |
-|--------------------|---------|
-| [simulation_config.json](./simulation_config.json) | 
-| [simulation_configECP.json](./simulation_configECP.json) | 
-| [simulation_configECP_base.json](./simulation_configECP_base.json) | 
-| [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) | 
-| [simulation_configECP_gamma.json](./simulation_configECP_gamma.json) | 
-| [simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json) | 
-| [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) | 
-| [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | 
+| Configuration file | Input Details |Notes|
+|--------------------|---------------|-----|
+| [simulation_config.json](./simulation_config.json) | Thalamic 2Hz to PN, INT, SOM, CR, VPSI 2Hz exc and 8Hz inh to PN/INT | **deprecated** example |
+| [simulation_configECP.json](./simulation_configECP.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 2Hz exc and 8Hz inh to PN/INT | **deprecated** example with LFP recording electrodes [linear_electrode.csv](components/recXelectrodes/linear_electrode.csv)|
+| **[simulation_configECP_base.json](./simulation_configECP_base.json)** | Thalamic 2Hz to PN, SOM, CR | Quiet-waking state, baseline configuration file |
+| [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) | Thalamic 2Hz to PN, SOM, CR | Same as [simulation_configECP_base.json](./simulation_configECP_base.json), 11 voltage clamped PN cells, igaba from SOM+ synapses are recorded and placed in `outputECP/syn_report.h5` - Analysis completed using [ipsc_analysis.m](./matlab/ipsc_analysis.m) notes below |
+| [simulation_configECP_gamma.json](./simulation_configECP_gamma.json) | | Gamma testing for original model replicated from Feng et al 2019|
+| **[simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test|
+| [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Same as [simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json), 11 voltage clamped PN cells, igaba from SOM+ synapses are recorded and placed in `outputECP/syn_report.h5` - Analysis completed using [ipsc_analysis.m](./matlab/ipsc_analysis.m) notes below
+| [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 3Hz Poisson inh to PN/INT | Testing Non-rhythmic inhibition to PN/PV|
+
+Primary tests **bold**
+
+#### Single Core Mode
+1000 Cell models typically run for **4-6 hours** on a single core.
 
 ```
-python run_bionet.py
+python run_bionet.py simulation_configECP_base.json
 ```
 
-### Analyze the model
+#### Parallel Mode
+1000 Cell models run for **5-6 minutes** on ~50 cores.
+```
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base.json
+```
 
-Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD.
+### Analysis the model
+
+Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD in **MATLAB**. Launch MATLAB using:
 ```
 matlab &
+```
+
+#### [analysis.m](./matlab/analysis.m)
+
+Plots a spike raster, mean firing rates, LFP and LFP PSD on 4 separate graphs.
+```
 analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
 ```
 
 
+#### [ipsc_analysis.m](./matlab/ipsc_analysis.m)
+
+Used in conjuction with [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) and [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) to sum igaba currents and perform a PSD to produce the raw signal and PSD plots.
+```
+ipsc_analysis('../outputECP/syn_report.h5';
+```
 
 
 ## Connectivity Matrix
@@ -136,3 +170,10 @@ git clone https://github.com/AllenInstitute/bmtk
 cd bmtk
 python setup.py develop
 ````
+
+
+## Appendix
+
+### Installing NEURON and BMTK
+
+See [https://github.com/tjbanks/easy-nrn-install](https://github.com/tjbanks/easy-nrn-install)
