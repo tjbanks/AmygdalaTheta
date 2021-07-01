@@ -78,7 +78,7 @@ python run_bionet.py simulation_configECP_base.json
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base.json
 ```
 
-### Analysis the model
+### Analysis of the model
 
 Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD in **MATLAB**. Launch MATLAB using:
 ```
@@ -99,6 +99,22 @@ Used in conjuction with [simulation_configECP_base_vclamp.json](./simulation_con
 ```
 ipsc_analysis('../outputECP/syn_report.h5';
 ```
+
+#### [connection_info.py](./connection_info.py)
+
+Used to print the connectivity between cell types.
+
+```
+> python connection_info.py
+
+```
+
+### Other important files
+
+| File | Description |
+|------|-------------|
+|[synapses.py](./synapses.py)| When adding new synapse types to be used by `build_network.py` they must be defined here |
+
 
 
 ## Connectivity Matrix
