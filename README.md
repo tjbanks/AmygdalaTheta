@@ -1,6 +1,71 @@
 # Amygdala Theta
-#### Tyler Banks and Pete Canfield
+#### Tyler Banks, Pete Canfield, and Matthew Stroud
 Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
+
+
+## Running the Model
+
+### 1. Build network input files :
+
+| Input file                    | Purpose | Generating code |
+|-------------------------------|---------|-----------------|
+| **`thalamus_pyr_spikes.h5`**         | Thalamic 2Hz poisson input to Pyramidal A and C cells | [`build_input.py`](./build_input.py)|
+| `thalamus_pv_spikes.h5`         | Thalamic 2Hz poisson input to Interneurons (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
+| **`thalamus_som_spikes.h5`**         | Thalamic 2Hz poisson input to SOM cells| [`build_input.py`](./build_input.py)|
+| **`thalamus_cr_spikes.h5`**         | Thalamic 2Hz poisson input CR+ cells| [`build_input.py`](./build_input.py)|
+| `vpsi_pyr_spikes.h5`         | VPSI 2Hz poisson input to Pyramidal A and C cells (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
+| `vpsi_pv_spikes.h5`         | VPSI 2Hz poisson input to Interneurons (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
+| `vpsi_inh_spikes_nonrhythmic.h5`         | VPSI poisson input for non-rhythmic inhibition | [`build_input.py`](./build_input.py)|
+| **`vpsi_inh_spikes.h5`**         | VPSI 8Hz Rhythmic 3Hz poisson input | [`matlab/generatethetainputs.m`](./matlab/generatethetainputs.m) & [`matlab/convert_spikematrix.py`](matlab/convert_spikematrix.py)|
+
+(primary files **bold**)
+
+
+```
+python generate_input.py
+
+# To regenerate rhythmic inputs (not usually needed)
+matlab &
+generatethetainputs
+
+python matlab/convert_spikematrix.py
+```
+
+### 2. Build network configuration files
+
+```
+python build_network.py
+```
+
+### 3. Execute run script
+
+The network can be tested using any one of the simulation configuration files listed below (`python run_bionet.py [configuration file]`)
+
+| Configuration file | Details |
+|--------------------|---------|
+| [simulation_config.json](./simulation_config.json) | 
+| [simulation_configECP.json](./simulation_configECP.json) | 
+| [simulation_configECP_base.json](./simulation_configECP_base.json) | 
+| [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) | 
+| [simulation_configECP_gamma.json](./simulation_configECP_gamma.json) | 
+| [simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json) | 
+| [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) | 
+| [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | 
+
+```
+python run_bionet.py
+```
+
+### Analyze the model
+
+Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD.
+```
+matlab &
+analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
+```
+
+
+
 
 ## Connectivity Matrix
 * \+ : Excitatory
@@ -14,40 +79,16 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | SOM+           | -   |     |      |     |
 | CR+            | -   | -   | -    |     |
 | Thalamic Input | +   |     | +    | +   |
-| VP/SI Input    | +/- | +/- |      |     |
+| VP/SI Input    | -   | -   |      |     |
 
 Note: current model has no connection between PV to SOM.
-
-
-## Running the Model
-
-```
-# Generate background inputs
-python generate_input.py
-
-# To regenerate rhythmic inputs (not usually needed)
-matlab &
-generatethetainputs
-
-python matlab/convert_spikematrix.py
-
-# Build the model
-python build_network.py
-
-# Run the model
-python run_bionet.py
-
-# Analyze the model
-matlab &
-analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
-```
-
 
 ## Single Cell Profiling
 
 Cell templates can be found in:
 ```
 ./components/templates/templates.hoc
+./components/templates/SOM.hoc
 ```
 Templates used are:
 ```
@@ -58,71 +99,7 @@ SOM_Cell
 CR_Cell
 ```
 
-### Tuning
 
-Individual tuning interfaces can be run with the following:
-```
-python manage tune
-```
-
-
-### FI Curves
-
-FI Curves can be plotted using:
-
-```
-python manage tune fi
-
-# Pyramidal 
-python manage tune fi A
-python manage tune fi C
-
-# PV+
-python manage tune fi PV
-
-# CR+
-python manage tune fi CR
-
-# SOM+
-python manage tune fi SOM
-
-bmtool util cell --template SOM_Cell vhseg --gleak gl_ichan2OLM --eleak el_ichan2OLM --segvars eh,enat,ekf,ek,el_ichan2OLM,elca,gnatbar_ichan2OLM,gkfbar_ichan2OLM,eh,gkhbar_ihOLM,gkAbar_AOLM,catau_ccanlOLM,gsAHbar_sAHPOLM,glcabar_lcaOLM,gcatbar_catOLM,gbar_napOLM --othersec dend[0],dend[1] --fminpa 44 --fmaxpa 305 --fincrement 20
-
-```
-
-### Current Clamps
-
-FI Curves can be plotted using:
-
-```
-python manage tune clamp
-
-# Pyramidal 
-python manage tune clamp A
-python manage tune clamp C
-
-# PV+
-python manage tune clamp PV
-
-# CR+
-python manage tune clamp CR
-
-# SOM+
-python manage tune clamp SOM
-```
-
-### Syanpses
-
-FI Curves can be plotted using:
-
-```
-python manage tune syn
-
-# Exp2Syn Pyramidal Cell A
-python manage tune syn exp2syn_Cell_A
-
-
-```
 
 ## Network Profiling
 
@@ -131,13 +108,6 @@ python manage tune syn exp2syn_Cell_A
 bmtool plot connection total
 ```
 
-## Appendix
-
-### Installing `manage` dependencies
-`manage` uses click for an easy to use command line interface. Install the requirements for this using:
-```
-pip install -r requirements.txt
-```
 
 ### BMTOOLS
 
@@ -159,11 +129,10 @@ bmtool util cell fi --help
 
 ### BMTK
 
-Built using [BMTK](https://github.com/AllenInstitute/bmtk) checkout 52fee.
+Built using [BMTK](https://github.com/AllenInstitute/bmtk) checkout 52fee and later. Parallel netcon recording was added 6/29/21.
 
 ```
 git clone https://github.com/AllenInstitute/bmtk
 cd bmtk
-git checkout 52fee3b230ceb14a666c46f57f2031c38f1ac5b1 .
 python setup.py develop
 ````
