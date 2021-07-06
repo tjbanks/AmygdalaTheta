@@ -770,7 +770,7 @@ if connect["INT2SOM"]:
     conn = net.add_edges(source={'pop_name': ['Bask']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.1},# TODO NO DATA
+              connection_params={'p':0.55},# Dr Unal suggested .1 -> .55 based on 7/1/21 email
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -1121,6 +1121,7 @@ build_env_bionet(base_dir='./',
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
                        ],
 		components_dir='components',
+                config_file='simulation_config.json',
 		compile_mechanisms=True)
 
 
