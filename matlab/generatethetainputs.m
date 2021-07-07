@@ -1,8 +1,3 @@
-
-,M 
-,m"?, m?? m / n/ 
-
-
 clear all;close all;
 clc;
 %%%%
@@ -12,15 +7,13 @@ clc;
 
 rng(1)
 F=8; %%%%%Hz  define rythmicity f(Hz)-main
-FR=3; %20 %%%%control mean FR of input(Hz)
+FR=8; %20 %%%%control mean FR of input(Hz)
 cell_num=893;%%%%% number of cells needed to generate, including PFC,ER and PR,1800 as original
 t_len=50000; %defind time length to generate(ms)
 sigma_FR=120;%0.2; %%Hz, to control the variability among cells' FR
 sigma_spk=30;%5; %%ms, to control the variability within one cell's spk time
 
-% mu = log((FR^2)/sqrt(sigma_FR F  ,'/
-/    R^2));
-
+mu = log((FR^2)/sqrt(sigma_FR+FR^2));
 sigma = sqrt(log(sigma_FR/(FR^2)+1));
 
 FR_cell = lognrnd(mu,sigma,[cell_num,1]); %%%randomize FR
