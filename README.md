@@ -1,5 +1,5 @@
 # Amygdala Theta
-#### Code by Tyler Banks, Pete Canfield, and Matthew Stroud. In partnership with Unal Lab (Tuna and Unal)
+#### Code by Tyler Banks and Matthew Stroud. In partnership with Unal Lab (Tuna and Unal)
 Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
 
