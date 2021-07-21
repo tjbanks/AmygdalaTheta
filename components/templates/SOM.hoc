@@ -284,12 +284,12 @@ begintemplate CR_Cell
     	area_vec = new Vector()                   
 
 		//Parameters.
-		gnat = 0.09 //0.08 //0.06
+		gnat = 0.08 //0.08 //0.06
 		ghd = 0 //1.0e-5 //1.0e-5
-		gkdr = 0.03 //0.04 //0.065 //0.03 //0.015
-		gsahp = 0.0006 //0.001 //0.005 
+		gkdr = 0.026 //0.04 //0.065 //0.03 //0.015
+		gsahp = 0 //0.0006 //0.001 //0.005 
 		gnap = 0.0014 //0.0022 //0.0022 //0.0013 //0.0009 //0.00065
-		gcal = 0.02 //0.017 //0.005 //0.017 //0.017 
+		gcal = 0 //0.017 //0.005 //0.017 //0.017 
 
 		gim  = 0.0015 //0.005 //0.007 //0.00501 //0005 //0.007 //0.009
 		gcas = 0 //0.003 //0.0005 //0.0005 //0.0005
@@ -316,7 +316,7 @@ begintemplate CR_Cell
 		connect dend[0](0), soma[0](0)
 		connect dend[1](0), soma[0](1)
 
-	    soma[0] {
+	soma[0] {
 			nseg = 1
 			L = 20 // (micrometer)
 			diam = 10 // (micrometer)
@@ -468,26 +468,26 @@ begintemplate CR_Cell
 				tlist.o(tlist.count()-1).record(&er_xtraimemrec(x),1)	
 			}
 		}
-    }   
+ }   
 
-    proc insert_mechs(){
-                    r = $1
-    }
+proc insert_mechs(){
+                r = $1
+}
 
-    objref all
-    proc append_sections() { local i
-        
-        all = new SectionList()
-        soma[0] all.append()
-        dend[0] all.append()
-        dend[1] all.append()
-        
-    }  
-                                    
-        obfunc connect2target() { localobj nc
-        soma nc = new NetCon(&v(0.5), $o1)
-        nc.threshold = 0
-        if (numarg() == 2) ($o2 = nc)
-        return nc
-        }                                       
+objref all
+proc append_sections() { local i
+	
+	all = new SectionList()
+	soma[0] all.append()
+	dend[0] all.append()
+	dend[1] all.append()
+	
+}  
+                                   
+    obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}                                       
 endtemplate CR_Cell
