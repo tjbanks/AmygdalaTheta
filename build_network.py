@@ -388,6 +388,14 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     mask = np.isin(tids,chosen)
 
     if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
+        """
+        'finding the perpendicular distance from a three dimensional vector ... the goal was simply 
+         to calculate the perpendicular distance of the target cell from the source cell’s direction vector... 
+         the Euclidean distance would be the hypotenuse of that right triangle so the 
+         perpendicular distance should be the opposite side.
+         the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
+         ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
+        """
         src_pos = np.array(source['positions'])
         trg_pos = np.array([target['positions'] for target in targets])
         src_angle_x = np.array(source['rotation_angle_zaxis'])
@@ -489,17 +497,18 @@ min_delays = []#Stores min_delay for each synapse type to be used later.
 ############################### PYR2PYR ##################################
 
 p2p_props = [
-    {'min_dist': 0, 'max_dist': 50, 'syn_prob': 0.02},    #0.03
-    {'min_dist': 51, 'max_dist': 100, 'syn_prob': 0.02},  #0.02
-    {'min_dist': 101, 'max_dist': 200, 'syn_prob': 0.02}, #0.01
-    {'min_dist': 201, 'max_dist': 300, 'syn_prob': 0.02}, #0.005
-    {'min_dist': 301, 'max_dist': 400, 'syn_prob': 0.02}, #0.005
-    {'min_dist': 401, 'max_dist': 500, 'syn_prob': 0.02}, #0.005
-    {'min_dist': 501, 'max_dist': 600, 'syn_prob': 0.02}, #0.005
+    #because we're cutting the number of conns down from 600 we need to make up for vol lost
+    {'min_dist': 0, 'max_dist': 50, 'syn_prob': 0.02},    #0.03   #0.02 before angle_dist
+    {'min_dist': 51, 'max_dist': 100, 'syn_prob': 0.02},  #0.02   #0.02 before angle_dist
+    {'min_dist': 101, 'max_dist': 200, 'syn_prob': 0.02}, #0.01   #0.02 before angle_dist
+    {'min_dist': 201, 'max_dist': 300, 'syn_prob': 0.02}, #0.005  #0.02 before angle_dist
+    {'min_dist': 301, 'max_dist': 400, 'syn_prob': 0.02}, #0.005  #0.02 before angle_dist
+    {'min_dist': 401, 'max_dist': 500, 'syn_prob': 0.02}, #0.005  #0.02 before angle_dist
+    {'min_dist': 501, 'max_dist': 600, 'syn_prob': 0.02}, #0.005  #0.02 before angle_dist
 ]
 
 p2p_props = [
-    {'min_dist':0, 'max_dist':max_conn_dist, 'syn_prob': 0.02}
+    {'min_dist':0, 'max_dist':max_conn_dist, 'syn_prob': 0.04}
 ]
 
 # What we're doing here is looping through the different connection
@@ -515,7 +524,7 @@ if connect["PYR2PYR"]:
         conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['PyrA','PyrC']},
                     iterator = 'one_to_all',
                     connection_rule=syn_percent_o2a,
-                    connection_params={'p':p2p_prop['syn_prob'], 'angle_dist':True, 'max_dist':p2p_prop['syn_prob']},
+                    connection_params={'p':p2p_prop['syn_prob'], 'angle_dist':True, 'max_dist':p2p_prop['max_dist']},
                     syn_weight=1,
                     dynamics_params=dynamics_file,
                     model_template=syn[dynamics_file]['level_of_detail'],
@@ -657,7 +666,7 @@ if connect["PYR2INT"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
                 iterator = 'one_to_all',
                 connection_rule=syn_percent_o2a,
-                connection_params={'p':0.24, 'angle_dist':True, 'max_dist':max_conn_dist},#{'p':0.12},
+                connection_params={'p':0.48, 'angle_dist':True, 'max_dist':max_conn_dist},#'p':0.24 before angle_dist
                 syn_weight=1,
                 dynamics_params=dynamics_file,
                 model_template=syn[dynamics_file]['level_of_detail'],
@@ -741,7 +750,7 @@ if connect["PYR2SOM"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.309, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309
+              connection_params={'p':0.618, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309 before angle_dist
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -806,7 +815,7 @@ if connect["PYR2CR"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['CR']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.183, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183
+              connection_params={'p':0.363, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183 before angle_dist
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
