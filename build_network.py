@@ -352,7 +352,7 @@ def syn_percent(source,target,p,track_list=None):
     else:
         return 0
 
-def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False):
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False, max_dist=300):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
@@ -384,8 +384,21 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False):
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
     chosen = np.random.choice(available,size=n,replace=False) 
+    
+    mask = np.isin(tids,chosen)
 
-    syns[np.isin(tids,chosen)] = 1
+    if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
+        src_pos = np.array(source['positions'])
+        trg_pos = np.array([target['positions'] for target in targets])
+        src_angle_x = np.array(source['rotation_angle_zaxis'])
+        src_angle_y = np.array(source['rotation_angle_yaxis'])
+
+        vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
+        perp_dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
+        
+        mask = mask & np.array(perp_dist < max_dist)
+    
+    syns[mask] = 1
     
     #Add to lists
     new_syns = pd.DataFrame(chosen,columns=['target_gid'])
@@ -502,7 +515,7 @@ if connect["PYR2PYR"]:
         conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['PyrA','PyrC']},
                     iterator = 'one_to_all',
                     connection_rule=syn_percent_o2a,
-                    connection_params={'p':p2p_prop['syn_prob']},
+                    connection_params={'p':p2p_prop['syn_prob'], 'angle_dist':True, 'max_dist':p2p_prop['syn_prob']},
                     syn_weight=1,
                     dynamics_params=dynamics_file,
                     model_template=syn[dynamics_file]['level_of_detail'],
@@ -644,7 +657,7 @@ if connect["PYR2INT"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': 'Bask'},
                 iterator = 'one_to_all',
                 connection_rule=syn_percent_o2a,
-                connection_params={'p':0.24},#{'p':0.12},
+                connection_params={'p':0.24, 'angle_dist':True, 'max_dist':max_conn_dist},#{'p':0.12},
                 syn_weight=1,
                 dynamics_params=dynamics_file,
                 model_template=syn[dynamics_file]['level_of_detail'],
@@ -728,7 +741,7 @@ if connect["PYR2SOM"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['SOM']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.309},#0.309
+              connection_params={'p':0.309, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
@@ -793,7 +806,7 @@ if connect["PYR2CR"]:
     conn = net.add_edges(source={'pop_name': ['PyrA','PyrC']}, target={'pop_name': ['CR']},
               iterator = 'one_to_all',
               connection_rule=syn_percent_o2a,
-              connection_params={'p':0.183},#0.183
+              connection_params={'p':0.183, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183
               syn_weight=1,
               dynamics_params=dynamics_file,
               model_template=syn[dynamics_file]['level_of_detail'],
