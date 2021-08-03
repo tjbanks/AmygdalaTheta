@@ -32,12 +32,14 @@ def conn_info(**kwargs):
 
     iterations = 13
     step = 25
+    ms = 15000
+    skip_ms = 5000
 
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
     total_cons = cons.count().source_node_id
     
     print(source_id + " -> " + target_id + " step " + str(step*2))
-    print("from locations => to locations : n number of cells : mean (std)")
+    print("from locations => to locations : n number of cells : connections mean (std) : spikes mean (std)")
     
     biggest_jump = 0
     biggest_jump_str = ""
@@ -60,19 +62,33 @@ def conn_info(**kwargs):
         connection_counts = connections['target_node_id'].value_counts()
         mean_connections = connection_counts.mean()
         std_connections = connection_counts.std()  
-        num_cells = len(connections.drop_duplicates(subset=['target_node_id']))
+        cells = list(connections.drop_duplicates(subset=['target_node_id'])['target_node_id'])
+        num_cells = len(cells)
         
+        cell_spikes = spikes[spikes['node_ids'].isin(cells)]
+        
+        #skip the first few ms
+        cell_spikes = cell_spikes[cell_spikes['timestamps']>skip_ms]
+        spike_counts = cell_spikes.node_ids.value_counts()
+        total_seconds = (ms-skip_ms)/1000
+        spike_counts_per_second = spike_counts / total_seconds 
+
+        spikes_mean = spike_counts_per_second.mean()
+        spikes_std = spike_counts_per_second.std()
+        
+ 
         location_str = str((min_x,min_y,min_z)) + "=>" + str((max_x,max_y,max_z)) 
         
-        print(location_str + " : " +  str(num_cells) +" cells : {:.2f}".format(mean_connections) + " ({:.2f})".format(std_connections))
+        print(location_str + " : " +  str(num_cells) +" cells : {:.2f}".format(mean_connections) + " ({:.2f})".format(std_connections) +
+              ": {:.2f}".format(spikes_mean) + " ({:.2f})".format(spikes_std))
 
-        if last-mean_connections > biggest_jump:
-            biggest_jump = last-mean_connections
+        if last-spikes_mean > biggest_jump:
+            biggest_jump = last-spikes_mean
             biggest_jump_str = last_str + " and " + location_str
-        last = mean_connections
+        last = spikes_mean
         last_str = location_str
 
-    print("Biggest jump (" + str(biggest_jump) + ") occurs between " + biggest_jump_str)
+    print("Biggest jump (" + "{:.2f}".format(biggest_jump) + ") occurs between " + biggest_jump_str)
 
 
     return 0
@@ -86,7 +102,7 @@ def run(config):
     sids = ['model_type']
     tids = ['model_type']
     #sids = ['a_name']
-    #tids = ['a_name']
+    tids = ['a_name']
     prepend_pop = True
     
     #center_x = 300
