@@ -4,7 +4,11 @@ function [data] = analysis(ecph5path,spikeh5path)
 close all;
 clc;
 channel = 1;
-skip_n = 50000;
+dt = 0.05;
+steps_per_ms = 1/dt;
+skip_seconds = 5;
+skip_ms = skip_seconds*1000
+skip_n = skip_ms * steps_per_ms;%50000;
 data = h5read(ecph5path,'/ecp/data');
 lfp = data(channel,:);
 lfp = lfp(skip_n:end);
@@ -26,8 +30,8 @@ node_ids=double(node_ids);
 
 
 data=([timestamps,node_ids]);
-data = data(data>skip_n/10,:)
-start_time=1;
+data = data(data>skip_ms,:)
+start_time=1+skip_ms;
 stop_time=max(data(:,1));  
 
 
