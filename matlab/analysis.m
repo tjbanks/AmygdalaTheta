@@ -9,6 +9,7 @@ steps_per_ms = 1/dt;
 skip_seconds = 5;
 skip_ms = skip_seconds*1000
 skip_n = skip_ms * steps_per_ms;%50000;
+end_ms = 15000
 data = h5read(ecph5path,'/ecp/data');
 lfp = data(channel,:);
 lfp = lfp(skip_n:end);
@@ -32,7 +33,7 @@ node_ids=double(node_ids);
 data=([timestamps,node_ids]);
 data = data(data>skip_ms,:)
 start_time=1+skip_ms;
-stop_time=max(data(:,1));  
+stop_time=end_ms;%max(data(:,1));  
 
 
 %load LP.mat;
@@ -57,10 +58,10 @@ Som_cell = [num_pyr+inter_num+1:num_pyr+inter_num+som_num]' - 1;
 Cr_cell = [num_pyr+inter_num+som_num+1:all_num]' - 1;
 
 figure (12)
-data_P=data(find(data(:,2)<num_pyr),:);
-data_I=data(find(data(:,2)>=num_pyr & data(:,2)<num_pyr+inter_num),:);
-data_SOM=data(find(data(:,2)>=num_pyr+inter_num & data(:,2)<num_pyr+inter_num+som_num),:);
-data_CR=data(find(data(:,2)>=num_pyr+inter_num+som_num & data(:,2)<all_num),:);
+data_P=data(find(data(:,2)<=num_pyr),:);
+data_I=data(find(data(:,2)>num_pyr & data(:,2)<=num_pyr+inter_num),:);
+data_SOM=data(find(data(:,2)>num_pyr+inter_num & data(:,2)<=num_pyr+inter_num+som_num),:);
+data_CR=data(find(data(:,2)>num_pyr+inter_num+som_num & data(:,2)<=all_num),:);
 
 plot(data_P(:,1),data_P(:,2)+1,'blue.')
 hold on; 
@@ -75,7 +76,7 @@ legend('PN','FSI','SOM','CR');
 
 data_analysis=data(data(:,1)>=start_time&data(:,1)<=stop_time,:);
 spikes_sort=sortrows(data_analysis,2);
-[n, bin] = histc(spikes_sort(:,2), unique(spikes_sort(:,2)));
+[n, bin] = histcounts(spikes_sort(:,2), unique(spikes_sort(:,2)));
 n_cum=cumsum(n);
 cell_freq=zeros(all_num,1);
 cell_freq(spikes_sort(n_cum(1),2)+1,1)=n(1)/(stop_time-start_time)*1e3;
@@ -92,14 +93,14 @@ Inter_plastic_cell_freq_mean=mean(cell_freq(num_pyr+1:num_pyr+inter_num));
 Inter_plastic_cell_freq_std=std(cell_freq(num_pyr+1:num_pyr+inter_num));
 Inter_plastic_cell_freq=cell_freq(num_pyr+1:num_pyr+inter_num);
 
-SOM_start = num_pyr+inter_num+1
-SOM_end = num_pyr+inter_num+som_num
+SOM_start = num_pyr+inter_num+1;
+SOM_end = num_pyr+inter_num+som_num;
 SOM_plastic_cell_freq_mean=mean(cell_freq(SOM_start:SOM_end));
 SOM_plastic_cell_freq_std=std(cell_freq(SOM_start:SOM_end));
 SOM_plastic_cell_freq=cell_freq(SOM_start:SOM_end);
 
-CR_start = num_pyr+inter_num+som_num+1
-CR_end = num_pyr+inter_num+som_num+cr_num
+CR_start = num_pyr+inter_num+som_num+1;
+CR_end = num_pyr+inter_num+som_num+cr_num;
 CR_plastic_cell_freq_mean=mean(cell_freq(CR_start:CR_end));
 CR_plastic_cell_freq_std=std(cell_freq(CR_start:CR_end));
 CR_plastic_cell_freq=cell_freq(CR_start:CR_end);

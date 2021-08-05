@@ -37,10 +37,10 @@ conns = conns.join(source_pos,on='source_ID',rsuffix='_x')
 conns = conns.join(target_pos,on='target_ID',rsuffix='_x')
 
 
-print(conns[(conns.source_x.astype(float)<400)&(conns.source_x.astype(float)>200)&
-      (conns.source_y.astype(float)<400)&(conns.source_y.astype(float)>200)&
-      (conns.source_z.astype(float)<400)&(conns.source_z.astype(float)>200)&
-      (conns.source_type=='PN')]['source_ID'])
+#print(conns[(conns.source_x.astype(float)<400)&(conns.source_x.astype(float)>200)&
+#      (conns.source_y.astype(float)<400)&(conns.source_y.astype(float)>200)&
+#      (conns.source_z.astype(float)<400)&(conns.source_z.astype(float)>200)&
+#      (conns.source_type=='PN')]['source_ID'])
 
 
 d = np.sqrt(np.sum((conns[['source_x', 'source_y', 'source_z']].values.astype(float)

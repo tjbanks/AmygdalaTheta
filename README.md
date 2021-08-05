@@ -80,14 +80,14 @@ mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base.json
 
 ### Analysis of the model
 
-Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD in **MATLAB**. Launch MATLAB using:
+Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD. Launch using:
 ```
-matlab &
+python analysis.py
 ```
 
 #### [analysis.m](./matlab/analysis.m)
 
-Plots a spike raster, mean firing rates, LFP and LFP PSD on 4 separate graphs.
+Plots can also be generated in MATLAB. A spike raster, mean firing rates, LFP and LFP PSD on 4 separate graphs.
 ```
 analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
 ```
@@ -113,7 +113,7 @@ PN->SOM	31.19	29.17	2.01
 PN->CR	18.43	16.41	2.02
 PV->PN	52.0	36.42	15.58
 PV->PV	22.92	17.41	5.5
-PV->SOM	9.8	  9.8	  0.0
+PV->SOM	55.8	 55.8	  0.0
 PV->CR	0.0	  0.0	  0.0
 SOM->PN	6.57	4.55	2.01
 SOM->PV	0.0	  0.0	  0.0
