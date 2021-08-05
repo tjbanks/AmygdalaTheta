@@ -73,9 +73,8 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         
         
 
-def run(config):
+def run(show_plots=False):
     
-    show_plots = True
 
     dt = 0.05
     steps_per_ms = 1/dt
@@ -123,6 +122,6 @@ def run(config):
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        run(sys.argv[-1])
+        run(False)
     else:
-        run('simulation_configECP.json')
+        run(True)
