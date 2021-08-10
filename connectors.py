@@ -1,3 +1,8 @@
+import numpy as np
+import pandas as pd
+import random
+import math
+
 all_synapses = pd.DataFrame([],columns=['source_gid','target_gid'])
 
 ##############################################################################
@@ -36,9 +41,9 @@ def syn_dist_delay_feng(source, target):
     dt = 0.05
     min_delay=0.8   #////define minmum delay,ms
     #maxdis=2.425   #/// mm sqrt((1.4)^2+(1.4)^2+(1.4)^2)
-    x = float(x_end - x_start)#/1000
-    y = float(y_end - y_start)#/1000
-    z = float(z_end - z_start)#/1000
+    #x = float(x_end - x_start)#/1000
+    #y = float(y_end - y_start)#/1000
+    #z = float(z_end - z_start)#/1000
     max_dist = 2.425#np.sqrt(x**2 + y**2 + z**2)
     max_delay=2.425 #////define maximum delay,ms
 

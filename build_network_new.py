@@ -7,7 +7,7 @@ import math
 import random
 import os
 
-from .connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng, syn_dist_delay_feng_section, syn_uniform_delay_section,
+from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent, syn_percent_o2a, recurrent_connector, recurrent_connector_o2a)
 
 np.random.seed(123412)
@@ -51,7 +51,7 @@ def build_networks(network_definitions):
         for cell in net_def['cells']:
             num_cells = cell['N']
             extra_kwargs = {}
-            if pos_list:
+            if pos_list is not None:
                 inds = np.random.choice(np.arange(0,np.size(pos_list,0)),num_cells,replace=False)
                 pos = pos_list[inds,:]
                 # Get rid of coordinates already used
@@ -67,25 +67,25 @@ def build_edges(edge_definitions,edge_params,edge_add_properties,syn=None):
     for edge in edge_definitions:
         network_name = edge['network']
         edge_src_trg = edge['edge']
-        edge_params  = edge_params[edge['param']]
-        dynamics_file = edge_params['dynamics_file']
+        edge_params_val  = edge_params[edge['param']]
+        dynamics_file = edge_params_val['dynamics_params']
         model_template = syn[dynamics_file]['level_of_detail']
 
         model_template_kwarg = {'model_template':model_template}
 
         net = networks[network_name]
 
-        conn = net.add_edges(**edge_src_trg,**edge_params,**model_template_kwarg)
+        conn = net.add_edges(**edge_src_trg,**edge_params_val,**model_template_kwarg)
         
         if edge.get('add_properties'):
-            edge_add_properties = edge['add_properties']
-            conn.add_properties(**edge_add_properties)
+            edge_add_properties_val = edge_add_properties[edge['add_properties']]
+            conn.add_properties(**edge_add_properties_val)
 
 def save_networks(networks,network_dir):
     for f in os.listdir(network_dir):
         os.remove(os.path.join(network_dir, f))
 
-    for network_name, network in enumerate(networks):
+    for i, (network_name, network) in enumerate(networks.items()):
         print('Building ' + network_name)
         network.build()
         network.save_nodes(output_dir=network_dir)
@@ -622,27 +622,27 @@ edge_params = {
         'target_sections':['basal']
     },
     'VPSIinh2PYR': {
-        'connection_rule'=one_to_one,
-        'syn_weight'=1,
-        'dynamics_params'='VPSI2PN_inh_tyler_min.json'
-        'distance_range'=[0.0, 9999.9],
-        'target_sections'=['basal'],
+        'connection_rule':one_to_one,
+        'syn_weight':1,
+        'dynamics_params':'VPSI2PN_inh_tyler_min.json',
+        'distance_range':[0.0, 9999.9],
+        'target_sections':['basal'],
     },
     'VPSIinh2INT': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.012}, # We need aprox 10 aff to each PV
         'syn_weight':1,
-        'dynamics_params'='VPSI2PV_inh_tyler_min.json',
-        'distance_range'=[0.0, 9999.9],
+        'dynamics_params':'VPSI2PV_inh_tyler_min.json',
+        'distance_range':[0.0, 9999.9],
         'target_sections':['basal']
     },
     'THALAMUS2PYR': {
-        'connection_rule'=one_to_one,
-        'syn_weight'=1,
-        'dynamics_params'='BG2PNe_thalamus_min.json',
-        'distance_range'=[0.0, 9999.9],
-        'target_sections'=['basal']
+        'connection_rule':one_to_one,
+        'syn_weight':1,
+        'dynamics_params':'BG2PNe_thalamus_min.json',
+        'distance_range':[0.0, 9999.9],
+        'target_sections':['basal']
     },
     'THALAMUS2SOM': {
         'connection_rule':one_to_one_offset,
@@ -653,12 +653,12 @@ edge_params = {
         'dynamics_params':'BG2SOM_thalamus_min.json'
     },
     'THALAMUS2CR': {
-        'connection_rule'=one_to_one_offset,
-        'connection_params'={'offset':numPN_A+numPN_C+numBask+numSOM},
-        'syn_weight'=1,
-        'target_sections'=['basal'],
-        'distance_range'=[0.0, 9999.9],
-        'dynamics_params'='BG2CR_thalamus_min.json'
+        'connection_rule':one_to_one_offset,
+        'connection_params':{'offset':numPN_A+numPN_C+numBask+numSOM},
+        'syn_weight':1,
+        'target_sections':['basal'],
+        'distance_range':[0.0, 9999.9],
+        'dynamics_params':'BG2CR_thalamus_min.json'
     }
 } # edges referenced by name
 
