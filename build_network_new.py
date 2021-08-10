@@ -15,8 +15,10 @@ np.random.seed(123412)
 network_dir = 'network'
 t_sim = 15000.0
 dt = 0.05
-
 scale = 1
+
+edge_effects = False
+
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930
 numPN_C = 231 * scale #260 * scale #4115#6210
@@ -208,6 +210,85 @@ network_definitions = [
     }
 ]
 
+##########################################################################
+############################  EDGE EFFECTS  ##############################
+
+if edge_effects:
+    core_x,core_y,core_z = (x_end-x_start),(y_end-y_start),(z_end-z_start)
+    core_volume =  core_x * core_y * core_z
+    shell_x_start,shell_y_start,shell_start = x_start - max_conn_dist, x_start - max_conn_dist, z_start - max_conn_dist
+    shell_x_end,shell_y_end,shell_z_end = x_end + max_conn_dist, y_end + max_conn_dist, z_end + max_conn_dist
+    shell_x,shell_y,shell_z = (shell_x_end-shell_x_start),(shell_y_end-shell_y_start),(shell_z_end-shell_z_start)
+    shell_volume = shell_x * shell_y * shell_z
+    shell_multiplier = (shell_volume/core_volume - 1) # Determine the size difference between core and shell
+
+    virt_numPN_A = numPN_A * shell_multiplier
+    virt_numPN_C = numPN_C * shell_multiplier
+    virt_numBask = numBask * shell_multiplier
+    virt_numSOM  = numSOM * shell_multiplier
+    virt_numCR   = numCR * shell_multiplier
+    virt_numCells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
+
+    # TODO - EXCLUDE POSITIONS IN THE CORE
+    virt_pos_list = np.random.rand(virt_num_cells,3)
+    virt_pos_list[:,0] = pos_list[:,0]*shell_x_end - shell_x_start
+    virt_pos_list[:,1] = pos_list[:,1]*shell_y_end - shell_y_start
+    virt_pos_list[:,2] = pos_list[:,2]*shell_z_end - shell_z_start
+
+
+    edge_network = {
+        'network_name':'shell',
+        'positions_list':virt_pos_list,
+        'cells':[
+            {   # Pyramidal Cells - Type A
+                'N':virt_numPN_A,
+                'pop_name':'virt_PyrA',
+                'a_name':'virt_PN',
+                'rotation_angle_zaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
+                'model_type':'virtual'
+            },
+            {   # Pyramidal Cells - Type C
+                'N':virt_numPN_C,
+                'pop_name':'virt_PyrC',
+                'a_name':'virt_PN',
+                'rotation_angle_zaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
+                'model_type':'virtual'
+            },
+            {   # Interneuron - fast spiking PV
+                'N':virt_numBask,
+                'pop_name':'virt_Bask',
+                'a_name':'virt_PV',
+                'rotation_angle_zaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
+                'model_type':'virtual'
+            },
+            {   # Interneuron - SOM Cell
+                'N':virt_numSOM,
+                'pop_name':'virt_SOM',
+                'a_name':'virt_SOM',
+                'rotation_angle_zaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
+                'model_type':'virtual'
+            },
+            {   # Interneuron - CR Cell
+                'N':virt_numCR,
+                'pop_name':'virt_CR',
+                'a_name':'virt_CR',
+                'rotation_angle_zaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
+                'model_type':'virtual'
+            }
+        ]
+    }
+
+    networks.append(edge_network)
+
+##########################################################################
+##########################################################################
+
+
 networks = build_networks(network_definitions)
 
 int2int_temp_list = []
@@ -357,7 +438,7 @@ edge_definitions = [
     {   # VPSI Inhibition to Pyramidal
         'network':'BLA',
         'edge': {
-            'source':networks['vpsi_inh'].nodes()
+            'source':networks['vpsi_inh'].nodes(),
             'target':networks['BLA'].nodes(pop_name=['PyrA','PyrC'])
         },
         'param': 'VPSIinh2PYR',
@@ -366,7 +447,7 @@ edge_definitions = [
     {   # VPSI Inhibition to PV
         'network':'BLA',
         'edge': {
-            'source':networks['vpsi_inh'].nodes()
+            'source':networks['vpsi_inh'].nodes(),
             'target':networks['BLA'].nodes(pop_name=['Bask'])
         },
         'param': 'VPSIinh2INT',
@@ -378,7 +459,7 @@ edge_definitions = [
     {   # VPSI Inhibition to Pyramidal
         'network':'BLA',
         'edge': {
-            'source':networks['thalamus_pyr'].nodes()
+            'source':networks['thalamus_pyr'].nodes(),
             'target':networks['BLA'].nodes(pop_name=['PyrA','PyrC'])
         },
         'param': 'THALAMUS2PYR',
@@ -387,7 +468,7 @@ edge_definitions = [
     {   # VPSI Inhibition to SOM
         'network':'BLA',
         'edge': {
-            'source':networks['thalamus_som'].nodes()
+            'source':networks['thalamus_som'].nodes(),
             'target':networks['BLA'].nodes(pop_name='SOM')
         },
         'param': 'THALAMUS2SOM',
@@ -396,7 +477,7 @@ edge_definitions = [
     {   # VPSI Inhibition to CR
         'network':'BLA',
         'edge': {
-            'source':networks['thalamus_cr'].nodes()
+            'source':networks['thalamus_cr'].nodes(),
             'target':networks['BLA'].nodes(pop_name='CR')
         },
         'param': 'THALAMUS2CR',
@@ -590,6 +671,121 @@ edge_add_properties = {
     }
 }
 
+##########################################################################
+############################  EDGE EFFECTS  ##############################
+
+if edge_effects:
+    
+    virt_edges = [
+        {   # Pyramidal to Pyramidal Connections
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'target':{'pop_name': ['PyrA','PyrC']}
+            },
+            'param': 'PYR2PYR',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # PV to PV Uncoupled Unidirectional
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'target':{'pop_name': ['Bask']}
+            },
+            'param': 'INT2INT',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+            # PV to PV Uncoupled Bidirectional Pair
+            # PV to PV Uncoupled Bidirectional Pair
+        {   # PV to PYR Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'target':{'pop_name': ['PyrA','PyrC']}
+            },
+            'param': 'INT2PYR',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # PYR to PV Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'target':{'pop_name': ['Bask']}
+            },
+            'param': 'PYR2INT',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+            # PV to PYR Bidirectional 
+            # PYR to PV Bidirectional    
+        {   # PYR to SOM Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'target':{'pop_name': ['SOM']}
+            },
+            'param': 'PYR2SOM',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # SOM to PYR Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_SOM']}), 
+                'target':{'pop_name': ['PyrA','PyrC']}
+            },
+            'param': 'SOM2PYR',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # INT to SOM Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'target':{'pop_name': ['SOM']}
+            },
+            'param': 'INT2SOM',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # PYR to CR Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'target':{'pop_name': ['CR']}
+            },
+            'param': 'PYR2CR',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # CR to PYR Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
+                'target':{'pop_name': ['PyrA','PyrC']}
+            },
+            'param': 'CR2PYR',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # CR to PV Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
+                'target':{'pop_name': ['BASK']}
+            },
+            'param': 'CR2INT',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        },
+        {   # CR to SOM Unidirectional 
+            'network':'BLA',
+            'edge': {
+                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
+                'target':{'pop_name': ['SOM']}
+            },
+            'param': 'CR2SOM',
+            'add_properties': 'syn_dist_delay_feng_section_default'
+        }
+    ]
+
+    edge_definitions = edge_definitions + virt_edges
+##########################################################################
+########################## END EDGE EFFECTS ##############################
+
 
 ##########################################################################
 ###############################  BUILD  ##################################
@@ -619,5 +815,3 @@ build_env_bionet(base_dir='./',
 		components_dir='components',
         config_file='simulation_config.json',
 		compile_mechanisms=True)
-
-
