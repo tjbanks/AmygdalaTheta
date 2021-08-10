@@ -48,7 +48,7 @@ def syn_dist_delay_feng(source, target):
     max_delay=2.425 #////define maximum delay,ms
 
     x_ind,y_ind,z_ind = 0,1,2
-
+    
     dx = target['positions'][x_ind] - source['positions'][x_ind]
     dy = target['positions'][y_ind] - source['positions'][y_ind]
     dz = target['positions'][z_ind] - source['positions'][z_ind]
@@ -123,7 +123,6 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
     chosen = np.random.choice(available,size=n,replace=False) 
-    
     mask = np.isin(tids,chosen)
 
     if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176

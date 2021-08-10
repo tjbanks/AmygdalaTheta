@@ -418,7 +418,7 @@ edge_definitions = [
         'network':'BLA',
         'edge': {
             'source':{'pop_name': ['CR']}, 
-            'target':{'pop_name': ['BASK']}
+            'target':{'pop_name': ['Bask']}
         },
         'param': 'CR2INT',
         'add_properties': 'syn_dist_delay_feng_section_default'
@@ -442,7 +442,7 @@ edge_definitions = [
             'target':networks['BLA'].nodes(pop_name=['PyrA','PyrC'])
         },
         'param': 'VPSIinh2PYR',
-        'add_properties': 'syn_dist_delay_feng_section_default'
+        'add_properties': 'syn_uniform_delay_section_default'
     },
     {   # VPSI Inhibition to PV
         'network':'BLA',
@@ -451,7 +451,7 @@ edge_definitions = [
             'target':networks['BLA'].nodes(pop_name=['Bask'])
         },
         'param': 'VPSIinh2INT',
-        'add_properties': 'syn_dist_delay_feng_section_default'
+        'add_properties': 'syn_uniform_delay_section_default'
     },
 
         ##################### THALAMIC INPUT #####################
@@ -463,7 +463,7 @@ edge_definitions = [
             'target':networks['BLA'].nodes(pop_name=['PyrA','PyrC'])
         },
         'param': 'THALAMUS2PYR',
-        'add_properties': 'syn_dist_delay_feng_section_default'        
+        'add_properties': 'syn_uniform_delay_section_default'        
     },
     {   # VPSI Inhibition to SOM
         'network':'BLA',
@@ -472,7 +472,7 @@ edge_definitions = [
             'target':networks['BLA'].nodes(pop_name='SOM')
         },
         'param': 'THALAMUS2SOM',
-        'add_properties': 'syn_dist_delay_feng_section_default'        
+        'add_properties': 'syn_uniform_delay_section_default'        
     },
     {   # VPSI Inhibition to CR
         'network':'BLA',
@@ -481,7 +481,7 @@ edge_definitions = [
             'target':networks['BLA'].nodes(pop_name='CR')
         },
         'param': 'THALAMUS2CR',
-        'add_properties': 'syn_dist_delay_feng_section_default'        
+        'add_properties': 'syn_uniform_delay_section_default'        
     }
 ]
 
@@ -666,6 +666,12 @@ edge_add_properties = {
     'syn_dist_delay_feng_section_default': {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_dist_delay_feng_section,
+        'rule_params':{'sec_id':1, 'sec_x':0.9},
+        'dtypes':[np.float, np.int32, np.float]
+    },
+    'syn_uniform_delay_section_default': {
+        'names':['delay','sec_id','sec_x'],
+        'rule':syn_uniform_delay_section,
         'rule_params':{'sec_id':1, 'sec_x':0.9},
         'dtypes':[np.float, np.int32, np.float]
     }
