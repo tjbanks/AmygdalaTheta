@@ -170,19 +170,6 @@ network_definitions = [
         ]
     },
     {
-        # Thalamic PV INPUTS
-        'network_name':'thalamus_pv',
-        'positions_list':None,
-        'cells':[
-            {
-                'N':numBask,
-                'pop_name':'pv_inp',
-                'pop_group':'thalamus_pv',
-                'model_type':'virtual'
-            }
-        ]
-    },
-    {
         # Thalamic SOM INPUTS
         'network_name':'thalamus_som',
         'positions_list':None,
@@ -220,7 +207,7 @@ if edge_effects:
     shell_x_end,shell_y_end,shell_z_end = x_end + max_conn_dist, y_end + max_conn_dist, z_end + max_conn_dist
     shell_x,shell_y,shell_z = (shell_x_end-shell_x_start),(shell_y_end-shell_y_start),(shell_z_end-shell_z_start)
     shell_volume = shell_x * shell_y * shell_z
-    shell_multiplier = (shell_volume/core_volume - 1) # Determine the size difference between core and shell
+    shell_multiplier = (shell_volume/core_volume) # Determine the size difference between core and shell
 
     virt_numPN_A = numPN_A * shell_multiplier
     virt_numPN_C = numPN_C * shell_multiplier
@@ -456,7 +443,7 @@ edge_definitions = [
 
         ##################### THALAMIC INPUT #####################
 
-    {   # VPSI Inhibition to Pyramidal
+    {   # Thalamus to Pyramidal
         'network':'BLA',
         'edge': {
             'source':networks['thalamus_pyr'].nodes(),
@@ -465,7 +452,7 @@ edge_definitions = [
         'param': 'THALAMUS2PYR',
         'add_properties': 'syn_uniform_delay_section_default'        
     },
-    {   # VPSI Inhibition to SOM
+    {   # Thalamus to SOM
         'network':'BLA',
         'edge': {
             'source':networks['thalamus_som'].nodes(),
@@ -474,7 +461,7 @@ edge_definitions = [
         'param': 'THALAMUS2SOM',
         'add_properties': 'syn_uniform_delay_section_default'        
     },
-    {   # VPSI Inhibition to CR
+    {   # Thalamus  to CR
         'network':'BLA',
         'edge': {
             'source':networks['thalamus_cr'].nodes(),
@@ -583,7 +570,7 @@ edge_params = {
         'syn_weight':1,
         'dynamics_params':'INT2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
-        'target_sections':['soma']
+        'target_sections':['somatic']
     },
     'PYR2CR': {
         'iterator':'one_to_all',

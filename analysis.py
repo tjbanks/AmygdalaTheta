@@ -66,7 +66,7 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         print(label)
         c = "tab:" + node['color']
         if ax:
-            ax.hist(spike_counts_per_second,n_bins,histtype='bar',label=label,color=c)
+            ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label,color=c)
     if ax:
         ax.set_xscale('log')
         ax.legend() 
