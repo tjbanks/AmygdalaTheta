@@ -151,6 +151,9 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     n = int(len(tids)*p)
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
+    
+    if len(available) < n:
+        n = len(available)
     chosen = np.random.choice(available,size=n,replace=False) 
     mask = np.isin(tids,chosen)
 

@@ -492,7 +492,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.04, 'angle_dist':True, 'max_dist':max_conn_dist},
+        'connection_params':{'p':0.06, 'angle_dist':True, 'max_dist':max_conn_dist},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],
@@ -537,7 +537,7 @@ edge_params = {
     'PYR2INT': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.48, 'angle_dist':True, 'max_dist':max_conn_dist},#'p':0.24 before angle_dist
+        'connection_params':{'p':0.65, 'angle_dist':True, 'max_dist':max_conn_dist},#'p':0.24 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -555,7 +555,7 @@ edge_params = {
     'PYR2INT_bi': {
         'iterator':'one_to_all',
         'connection_rule':recurrent_connector_o2a,
-        'connection_params':{'p':0.3,'all_edges':pyr_int_bi_list},#was 1
+        'connection_params':{'p':0.5,'all_edges':pyr_int_bi_list},#was 1
         'syn_weight':1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -564,7 +564,7 @@ edge_params = {
     'PYR2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.618, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309 before angle_dist
+        'connection_params':{'p':0.9, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -591,7 +591,7 @@ edge_params = {
     'PYR2CR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.363, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183 before angle_dist
+        'connection_params':{'p':0.58, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2CR_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
