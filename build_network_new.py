@@ -31,9 +31,9 @@ min_conn_dist = 0.0
 max_conn_dist = 300.0 #9999.9# Distance constraint for all cells
 
 # Create the possible x,y,z coordinates
-x_start, x_end = 0,600
-y_start, y_end = 0,600
-z_start, z_end = 0,600
+x_start, x_end = 0+max_conn_dist,600+max_conn_dist
+y_start, y_end = 0+max_conn_dist,600+max_conn_dist
+z_start, z_end = 0+max_conn_dist,600+max_conn_dist
 pos_list = np.random.rand(num_cells,3)
 pos_list[:,0] = pos_list[:,0]*x_end - x_start
 pos_list[:,1] = pos_list[:,1]*y_end - y_start
@@ -203,25 +203,41 @@ network_definitions = [
 if edge_effects:
     core_x,core_y,core_z = (x_end-x_start),(y_end-y_start),(z_end-z_start)
     core_volume =  core_x * core_y * core_z
-    shell_x_start,shell_y_start,shell_start = x_start - max_conn_dist, x_start - max_conn_dist, z_start - max_conn_dist
+    shell_x_start,shell_y_start,shell_z_start = x_start - max_conn_dist, x_start - max_conn_dist, z_start - max_conn_dist
     shell_x_end,shell_y_end,shell_z_end = x_end + max_conn_dist, y_end + max_conn_dist, z_end + max_conn_dist
     shell_x,shell_y,shell_z = (shell_x_end-shell_x_start),(shell_y_end-shell_y_start),(shell_z_end-shell_z_start)
     shell_volume = shell_x * shell_y * shell_z
     shell_multiplier = (shell_volume/core_volume) # Determine the size difference between core and shell
 
-    virt_numPN_A = numPN_A * shell_multiplier
-    virt_numPN_C = numPN_C * shell_multiplier
-    virt_numBask = numBask * shell_multiplier
-    virt_numSOM  = numSOM * shell_multiplier
-    virt_numCR   = numCR * shell_multiplier
-    virt_numCells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
-
-    # TODO - EXCLUDE POSITIONS IN THE CORE
+    virt_numPN_A = int(numPN_A * shell_multiplier)
+    virt_numPN_C = int(numPN_C * shell_multiplier)
+    virt_numBask = int(numBask * shell_multiplier)
+    virt_numSOM  = int(numSOM * shell_multiplier)
+    virt_numCR   = int(numCR * shell_multiplier)
+    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
+    
+    # EXCLUDE POSITIONS IN THE CORE
     virt_pos_list = np.random.rand(virt_num_cells,3)
-    virt_pos_list[:,0] = pos_list[:,0]*shell_x_end - shell_x_start
-    virt_pos_list[:,1] = pos_list[:,1]*shell_y_end - shell_y_start
-    virt_pos_list[:,2] = pos_list[:,2]*shell_z_end - shell_z_start
+    virt_pos_list[:,0] = virt_pos_list[:,0]*shell_x_end - shell_x_start
+    virt_pos_list[:,1] = virt_pos_list[:,1]*shell_y_end - shell_y_start
+    virt_pos_list[:,2] = virt_pos_list[:,2]*shell_z_end - shell_z_start
+    
+    in_core = np.where(((virt_pos_list[:,0] < x_start) | (virt_pos_list[:,0] > x_end)) & 
+                       ((virt_pos_list[:,1] < y_start) | (virt_pos_list[:,1] > y_end)) & 
+                       ((virt_pos_list[:,2] < z_start) | (virt_pos_list[:,2] > z_end)))
+    
+    virt_pos_list = np.delete(virt_pos_list,in_core,0)
+    new_virt_num_cells = len(virt_pos_list)
 
+    # Bring down the number of shell cells to create by scaling
+    virt_numPN_A = int(virt_numPN_A/virt_num_cells*new_virt_num_cells)
+    virt_numPN_C = int(virt_numPN_C/virt_num_cells*new_virt_num_cells)
+    virt_numBask = int(virt_numBask/virt_num_cells*new_virt_num_cells)
+    virt_numSOM = int(virt_numSOM/virt_num_cells*new_virt_num_cells)
+    virt_numCR = int(virt_numCR/virt_num_cells*new_virt_num_cells)
+    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
+
+    assert(virt_num_cells <= new_virt_num_cells)    
 
     edge_network = {
         'network_name':'shell',
@@ -270,7 +286,7 @@ if edge_effects:
         ]
     }
 
-    networks.append(edge_network)
+    network_definitions.append(edge_network)
 
 ##########################################################################
 ##########################################################################
