@@ -50,7 +50,6 @@ def run(config):
     nodes = None
     edges = None 
     sources = ['BLA']
-    #sources = 'all'
     targets = ['BLA']
     sids = ['a_name']
     tids = ['a_name']

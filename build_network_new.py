@@ -245,40 +245,40 @@ if edge_effects:
         'cells':[
             {   # Pyramidal Cells - Type A
                 'N':virt_numPN_A,
-                'pop_name':'virt_PyrA',
-                'a_name':'virt_PN',
+                'pop_name':'PyrA',
+                'a_name':'PN',
                 'rotation_angle_zaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
                 'rotation_angle_yaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
             },
             {   # Pyramidal Cells - Type C
                 'N':virt_numPN_C,
-                'pop_name':'virt_PyrC',
-                'a_name':'virt_PN',
+                'pop_name':'PyrC',
+                'a_name':'PN',
                 'rotation_angle_zaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
                 'rotation_angle_yaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
             },
             {   # Interneuron - fast spiking PV
                 'N':virt_numBask,
-                'pop_name':'virt_Bask',
-                'a_name':'virt_PV',
+                'pop_name':'Bask',
+                'a_name':'PV',
                 'rotation_angle_zaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
                 'rotation_angle_yaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
             },
             {   # Interneuron - SOM Cell
                 'N':virt_numSOM,
-                'pop_name':'virt_SOM',
-                'a_name':'virt_SOM',
+                'pop_name':'SOM',
+                'a_name':'SOM',
                 'rotation_angle_zaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
                 'rotation_angle_yaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
             },
             {   # Interneuron - CR Cell
                 'N':virt_numCR,
-                'pop_name':'virt_CR',
-                'a_name':'virt_CR',
+                'pop_name':'CR',
+                'a_name':'CR',
                 'rotation_angle_zaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
                 'rotation_angle_yaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
@@ -689,7 +689,7 @@ if edge_effects:
         {   # Pyramidal to Pyramidal Connections
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PyrA','PyrC']}), 
                 'target':{'pop_name': ['PyrA','PyrC']}
             },
             'param': 'PYR2PYR',
@@ -698,7 +698,7 @@ if edge_effects:
         {   # PV to PV Uncoupled Unidirectional
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
                 'target':{'pop_name': ['Bask']}
             },
             'param': 'INT2INT',
@@ -709,7 +709,7 @@ if edge_effects:
         {   # PV to PYR Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
                 'target':{'pop_name': ['PyrA','PyrC']}
             },
             'param': 'INT2PYR',
@@ -718,7 +718,7 @@ if edge_effects:
         {   # PYR to PV Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PyrA','PyrC']}), 
                 'target':{'pop_name': ['Bask']}
             },
             'param': 'PYR2INT',
@@ -729,7 +729,7 @@ if edge_effects:
         {   # PYR to SOM Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PyrA','PyrC']}), 
                 'target':{'pop_name': ['SOM']}
             },
             'param': 'PYR2SOM',
@@ -738,7 +738,7 @@ if edge_effects:
         {   # SOM to PYR Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_SOM']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['SOM']}), 
                 'target':{'pop_name': ['PyrA','PyrC']}
             },
             'param': 'SOM2PYR',
@@ -747,7 +747,7 @@ if edge_effects:
         {   # INT to SOM Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_Bask']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
                 'target':{'pop_name': ['SOM']}
             },
             'param': 'INT2SOM',
@@ -756,7 +756,7 @@ if edge_effects:
         {   # PYR to CR Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_PyrA','virt_PyrC']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PyrA','PyrC']}), 
                 'target':{'pop_name': ['CR']}
             },
             'param': 'PYR2CR',
@@ -765,7 +765,7 @@ if edge_effects:
         {   # CR to PYR Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['CR']}), 
                 'target':{'pop_name': ['PyrA','PyrC']}
             },
             'param': 'CR2PYR',
@@ -774,8 +774,8 @@ if edge_effects:
         {   # CR to PV Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
-                'target':{'pop_name': ['BASK']}
+                'source':networks['shell'].nodes(**{'pop_name': ['CR']}), 
+                'target':{'pop_name': ['Bask']}
             },
             'param': 'CR2INT',
             'add_properties': 'syn_dist_delay_feng_section_default'
@@ -783,7 +783,7 @@ if edge_effects:
         {   # CR to SOM Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['virt_CR']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['CR']}), 
                 'target':{'pop_name': ['SOM']}
             },
             'param': 'CR2SOM',
