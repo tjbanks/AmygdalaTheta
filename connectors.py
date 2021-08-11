@@ -61,10 +61,39 @@ def syn_dist_delay_feng(source, target):
 
     return delay
 
-def syn_dist_delay_feng_section(source, target, sec_id=0, sec_x=0.9):
+def get_target_sec_id(source,target):
+    # this simplified target selector could be replaced with something more 
+    # robust using a lookup table for more complicated cell types
+    
+    if source['pop_name'] == 'PyrA' or source['pop_name'] == 'PyrC':
+        return 1 # Target Dendrites
+    elif source['pop_name'] == 'Bask':
+        return 0 # Target Soma
+    elif source['pop_name'] == 'SOM':
+        return 0 # Target Soma
+    elif source['pop_name'] == 'CR':
+        if target['pop_name'] == 'PyrA' or target['pop_name'] == 'PyrC':
+            return 0 # Target Soma
+        else:
+            return 1 # Target Denditrites
+    elif source['model_type'] == 'virtual':
+        return 1 # Target Dendrites
+    else: # We really don't want a default case so we can catch errors
+        #return 0 # Target Soma by default
+        import pdb;pdb.set_trace()
+
+def syn_dist_delay_feng_section(source, target, sec_id=None, sec_x=0.9):
+
+    if sec_id is None: # allows for overriding
+        sec_id = get_target_sec_id(source, target)
+
     return syn_dist_delay_feng(source, target), sec_id, sec_x
 
-def syn_uniform_delay_section(source, target, sec_id=0, sec_x=0.9, mean=0.5,std=1):
+def syn_uniform_delay_section(source, target, sec_id=None, sec_x=0.9, mean=0.5,std=1):
+    
+    if sec_id is None: # allows for overriding
+        sec_id = get_target_sec_id(source, target)
+
     return np.random.uniform(mean,std), sec_id, sec_x
 
 def syn_percent(source,target,p,track_list=None):

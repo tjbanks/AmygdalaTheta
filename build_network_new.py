@@ -669,13 +669,13 @@ edge_add_properties = {
     'syn_dist_delay_feng_section_default': {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_dist_delay_feng_section,
-        'rule_params':{'sec_id':1, 'sec_x':0.9},
+        'rule_params':{'sec_x':0.9},
         'dtypes':[np.float, np.int32, np.float]
     },
     'syn_uniform_delay_section_default': {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_uniform_delay_section,
-        'rule_params':{'sec_id':1, 'sec_x':0.9},
+        'rule_params':{'sec_x':0.9},
         'dtypes':[np.float, np.int32, np.float]
     }
 }

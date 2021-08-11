@@ -215,20 +215,6 @@ pos_list = np.delete(pos_list,inds,0)
 
 ################################ VPSI INPUTS ###################################
 
-vpsi_pyr = NetworkBuilder('vpsi_pyr')
-vpsi_pyr.add_nodes(N=numPN_A+numPN_C,
-                   pop_name='pyr_inp',
-                   pop_group='vpsi_pyr',
-                   potential='exc',
-                   model_type='virtual')
-
-vpsi_pv = NetworkBuilder('vpsi_pv')
-vpsi_pv.add_nodes(N=numBask,
-                   pop_name='pv_inp',
-                   pop_group='vpsi_pv',
-                   potential='exc',
-                   model_type='virtual')
-
 vpsi_inh = NetworkBuilder('vpsi_inh')
 vpsi_inh.add_nodes(N=numPN_A+numPN_C+numBask,
                    pop_name='inh_inp',
@@ -241,13 +227,6 @@ thalamus_pyr = NetworkBuilder('thalamus_pyr')
 thalamus_pyr.add_nodes(N=numPN_A+numPN_C,
                    pop_name='pyr_inp',
                    pop_group='thalamus_pyr',
-                   potential='exc',
-                   model_type='virtual')
-
-thalamus_pv = NetworkBuilder('thalamus_pv')
-thalamus_pv.add_nodes(N=numBask,
-                   pop_name='pv_inp',
-                   pop_group='thalamus_pv',
                    potential='exc',
                    model_type='virtual')
 
@@ -893,61 +872,10 @@ if connect["CR2SOM"]:
 ######################### BACKGROUND INPUT ###############################
 
 ############################ VPSI INPUT ##################################
-
-if connect["VPSI2PYR"]:
-        
-    dynamics_file='BG2PNe_feng_min.json'
-
-    conn = net.add_edges(source=vpsi_pyr.nodes(), target=net.nodes(pop_name='PyrA'),
-                    connection_rule=one_to_one,
-                    syn_weight=1,
-                    target_sections=['basal'],
-                    distance_range=[0.0, 9999.9],
-                    dynamics_params=dynamics_file,
-                    model_template=syn[dynamics_file]['level_of_detail'])
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-                    rule=syn_uniform_delay_section,
-                    rule_params={'sec_id':1, 'sec_x':0.9},
-                    dtypes=[np.float, np.int32, np.float])
-
-    conn = net.add_edges(source=vpsi_pyr.nodes(), target=net.nodes(pop_name='PyrC'),
-                    connection_rule=one_to_one,
-                    syn_weight=1,
-                    target_sections=['basal'],
-                    distance_range=[0.0, 9999.9],
-                    dynamics_params=dynamics_file,
-                    model_template=syn[dynamics_file]['level_of_detail'])
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-                    rule=syn_uniform_delay_section,
-                    rule_params={'sec_id':1, 'sec_x':0.9},
-                    dtypes=[np.float, np.int32, np.float])
-
-
-if connect["VPSI2INT"]:
-
-    dynamics_file = 'BG2PNi_feng_min.json'
-
-    conn = net.add_edges(source=vpsi_pv.nodes(), target=net.nodes(pop_name='Bask'),
-                    connection_rule=one_to_one_offset,
-                    connection_params={'offset':numPN_A+numPN_C},
-                    syn_weight=1,
-                    target_sections=['basal'],
-                    distance_range=[0.0, 9999.9],
-                    dynamics_params=dynamics_file,
-                    model_template=syn[dynamics_file]['level_of_detail'])
-
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-                    rule=syn_uniform_delay_section,
-                    rule_params={'sec_id':1, 'sec_x':0.9},
-                    dtypes=[np.float, np.int32, np.float])
-
 if connect["VPSIinh2PYR"]:
     dynamics_file = 'VPSI2PN_inh_tyler_min.json'
 
-    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA']),
+    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrA','PyrC']),
                    connection_rule=one_to_one,
                    syn_weight=1,
                    target_sections=['basal'],
@@ -961,19 +889,6 @@ if connect["VPSIinh2PYR"]:
                   rule_params={'sec_id':1, 'sec_x':0.9},
                   dtypes=[np.float, np.int32, np.float])
 
-    conn = net.add_edges(source=vpsi_inh.nodes(), target=net.nodes(pop_name=['PyrC']),
-                   connection_rule=one_to_one,
-                   syn_weight=1,
-                   target_sections=['basal'],
-                   distance_range=[0.0, 9999.9],
-                   dynamics_params=dynamics_file,
-                   model_template=syn[dynamics_file]['level_of_detail'])
-
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-                  rule=syn_uniform_delay_section,
-                  rule_params={'sec_id':1, 'sec_x':0.9},
-                  dtypes=[np.float, np.int32, np.float])
 
 if connect["VPSIinh2INT"]:
     dynamics_file = 'VPSI2PV_inh_tyler_min.json'
@@ -1015,25 +930,6 @@ if connect["THALAMUS2PYR"]:
 
     conn = net.add_edges(source=thalamus_pyr.nodes(), target=net.nodes(pop_name='PyrC'),
                     connection_rule=one_to_one,
-                    syn_weight=1,
-                    target_sections=['basal'],
-                    distance_range=[0.0, 9999.9],
-                    dynamics_params=dynamics_file,
-                    model_template=syn[dynamics_file]['level_of_detail'])
-
-    conn.add_properties(names=['delay','sec_id','sec_x'],
-                    rule=syn_uniform_delay_section,
-                    rule_params={'sec_id':1, 'sec_x':0.9},
-                    dtypes=[np.float, np.int32, np.float])
-
-
-if connect["THALAMUS2INT"]:
-
-    dynamics_file='BG2PV_thalamus_min.json'
-
-    conn = net.add_edges(source=thalamus_pv.nodes(), target=net.nodes(pop_name='Bask'),
-                    connection_rule=one_to_one_offset,
-                    connection_params={'offset':numPN_A+numPN_C},
                     syn_weight=1,
                     target_sections=['basal'],
                     distance_range=[0.0, 9999.9],
@@ -1102,20 +998,11 @@ print("Internal nodes and edges built")
 
 # Build and save our network
 
-vpsi_pyr.build()
-vpsi_pyr.save_nodes(output_dir='network')
-
-vpsi_pv.build()
-vpsi_pv.save_nodes(output_dir='network')
-
 vpsi_inh.build()
 vpsi_inh.save_nodes(output_dir='network')
 
 thalamus_pyr.build()
 thalamus_pyr.save_nodes(output_dir='network')
-
-thalamus_pv.build()
-thalamus_pv.save_nodes(output_dir='network')
 
 thalamus_som.build()
 thalamus_som.save_nodes(output_dir='network')
