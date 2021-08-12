@@ -127,6 +127,7 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     returns a list of len(targets) where the value is the number of synapses at the index=cellid
     if no_recip is set to true, any connection that has been made previously and is reciprical won't be considered
     """
+    original_p = p
 
     global all_synapses
     sid = source.node_id 
@@ -146,36 +147,64 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     if no_recip:    
         recur = [i['source_gid'] for i in track_list if i['target_gid'] == sid]
         available = available[~np.isin(available,recur)]
+
+    dist = None    
+    mask_dist = None
+ 
+    if source.get('positions') is not None:
+        src_pos = np.array(source['positions'])
+        trg_pos = np.array([target['positions'] for target in targets])
     
+        if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
+            """
+            'finding the perpendicular distance from a three dimensional vector ... the goal was simply 
+             to calculate the perpendicular distance of the target cell from the source cell’s direction vector... 
+             the Euclidean distance would be the hypotenuse of that right triangle so the 
+             perpendicular distance should be the opposite side.
+             the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
+             ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
+            """
+            src_angle_x = np.array(source['rotation_angle_zaxis'])
+            src_angle_y = np.array(source['rotation_angle_yaxis'])
+
+            vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
+            dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
+        else: 
+            dist = np.linalg.norm(trg_pos - src_pos,axis=1)
+        
+        mask_dist = np.array(dist < max_dist)
+
+        # Since we cut down on the number of available cells due to distance constraints we need to scale up the p
+        avg_connected = p*len(targets)
+        # new p
+        num_available = len(np.where(mask_dist==True)[0])
+        if num_available:
+            p = avg_connected/num_available
+        else:
+            p = 1.1
+
+        if p > 1:
+            p = 1
+            sorted_dist = np.sort(dist)
+            minimum_max_dist = sorted_dist[int(avg_connected)]
+            print("Warning: distance constraint (max_dist:" + str(max_dist) + ") between gid " + str(sid) + " and target gids " +
+                  str(min(tids)) + "-" + str(max(tids)) + " prevented " + str(original_p*100) + "% overall connectivity. " +
+                  "To achive this connectivity, max_dist would have needed to be greater than " + str(minimum_max_dist))
+
     # of those remaining we want p% chosen
     n = int(len(tids)*p)
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
-    
+
     if len(available) < n:
         n = len(available)
-    chosen = np.random.choice(available,size=n,replace=False) 
+
+    chosen = np.random.choice(available,size=n,replace=False)
     mask = np.isin(tids,chosen)
-
-    if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
-        """
-        'finding the perpendicular distance from a three dimensional vector ... the goal was simply 
-         to calculate the perpendicular distance of the target cell from the source cell’s direction vector... 
-         the Euclidean distance would be the hypotenuse of that right triangle so the 
-         perpendicular distance should be the opposite side.
-         the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
-         ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
-        """
-        src_pos = np.array(source['positions'])
-        trg_pos = np.array([target['positions'] for target in targets])
-        src_angle_x = np.array(source['rotation_angle_zaxis'])
-        src_angle_y = np.array(source['rotation_angle_yaxis'])
-
-        vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
-        perp_dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
-        
-        mask = mask & np.array(perp_dist < max_dist)
     
+    if mask_dist is not None:
+        mask = mask & mask_dist
+
     syns[mask] = 1
     
     #Add to lists
