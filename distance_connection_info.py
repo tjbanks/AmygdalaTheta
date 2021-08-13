@@ -26,9 +26,9 @@ def conn_info(**kwargs):
     #step = kwargs["step"]
     #iterations = kwargs["iterations"]
     
-    center_x = 300
-    center_y = 300
-    center_z = 300
+    center_x = 600
+    center_y = 600
+    center_z = 600
 
     iterations = 13
     step = 25
@@ -46,6 +46,8 @@ def conn_info(**kwargs):
     last = 0
     last_str = ""
     
+    
+     
     for inner_dist in range(step,iterations*step,step):
         
         #cube
@@ -97,10 +99,9 @@ def run(config):
 
     nodes = None
     edges = None 
-    sources = ['BLA']
+    sources = ['BLA','shell']
     targets = ['BLA']
-    sids = ['model_type']
-    tids = ['model_type']
+    sids = ['model_type','model_type']
     #sids = ['a_name']
     tids = ['a_name']
     prepend_pop = True
