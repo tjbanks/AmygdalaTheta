@@ -35,11 +35,13 @@ x_start, x_end = 0+max_conn_dist,600+max_conn_dist
 y_start, y_end = 0+max_conn_dist,600+max_conn_dist
 z_start, z_end = 0+max_conn_dist,600+max_conn_dist
 pos_list = np.random.rand(num_cells,3)
-pos_list[:,0] = pos_list[:,0]*x_end - x_start
-pos_list[:,1] = pos_list[:,1]*y_end - y_start
-pos_list[:,2] = pos_list[:,2]*z_end - z_start
+pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
+pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
+pos_list[:,2] = pos_list[:,2]*(z_end - z_start) + z_start
 
 max_conn_dist = 9999.9
+
+
 
 def build_networks(network_definitions):
     # Build the networks
@@ -219,9 +221,9 @@ if edge_effects:
     
     # EXCLUDE POSITIONS IN THE CORE
     virt_pos_list = np.random.rand(virt_num_cells,3)
-    virt_pos_list[:,0] = virt_pos_list[:,0]*shell_x_end - shell_x_start
-    virt_pos_list[:,1] = virt_pos_list[:,1]*shell_y_end - shell_y_start
-    virt_pos_list[:,2] = virt_pos_list[:,2]*shell_z_end - shell_z_start
+    virt_pos_list[:,0] = virt_pos_list[:,0]*(shell_x_end - shell_x_start) + shell_x_start
+    virt_pos_list[:,1] = virt_pos_list[:,1]*(shell_y_end - shell_y_start) + shell_y_start
+    virt_pos_list[:,2] = virt_pos_list[:,2]*(shell_z_end - shell_z_start) + shell_z_start
     
     in_core = np.where(((virt_pos_list[:,0] < x_start) | (virt_pos_list[:,0] > x_end)) & 
                        ((virt_pos_list[:,1] < y_start) | (virt_pos_list[:,1] > y_end)) & 
