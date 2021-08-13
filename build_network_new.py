@@ -17,7 +17,7 @@ t_sim = 15000.0
 dt = 0.05
 scale = 1
 
-edge_effects = True
+edge_effects = False
 
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930
@@ -39,7 +39,7 @@ pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
 pos_list[:,2] = pos_list[:,2]*(z_end - z_start) + z_start
 
-#max_conn_dist = 9999.9
+max_conn_dist = 9999.9
 
 
 

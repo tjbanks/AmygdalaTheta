@@ -91,15 +91,15 @@ def plot_scatter(cell_to_plot):
 
     ax.scatter(pn2pn_x,pn2pn_y,pn2pn_z,marker='o',color='red')
 
-    ax.set_xlim(0,600)
-    ax.set_ylim(0,600)
-    ax.set_zlim(0,600)
+    ax.set_xlim(300,900)
+    ax.set_ylim(300,900)
+    ax.set_zlim(300,900)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 
 plot_scatter(99)
-plot_scatter(999)
+plot_scatter(801)
 
 
 # PN2PN figure #

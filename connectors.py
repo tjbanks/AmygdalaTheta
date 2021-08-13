@@ -120,7 +120,15 @@ def syn_percent(source,target,p,track_list=None):
     else:
         return 0
 
-def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False, max_dist=300):
+def points_in_cylinder(pt1, pt2, r, q):
+    #https://stackoverflow.com/questions/47932955/how-to-check-if-a-3d-point-is-inside-a-cylinder
+    vec = pt2 - pt1
+    const = r * np.linalg.norm(vec)
+    
+    return (np.dot(q - pt1, vec) >= 0 & (np.dot(q - pt2, vec) <= 0) & (np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const))
+    #return np.where(np.dot(q - pt1, vec) >= 0 and np.dot(q - pt2, vec) <= 0 and np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const)
+
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False, max_dist=300, angle_dist_radius=100):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
@@ -155,24 +163,33 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
         src_pos = np.array(source['positions'])
         trg_pos = np.array([target['positions'] for target in targets])
     
-        if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
-            """
-            'finding the perpendicular distance from a three dimensional vector ... the goal was simply 
-             to calculate the perpendicular distance of the target cell from the source cell’s direction vector... 
-             the Euclidean distance would be the hypotenuse of that right triangle so the 
-             perpendicular distance should be the opposite side.
-             the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
-             ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
-            """
+        #if angle_dist: #https://github.com/latimerb/SPWR_BMTK2/blob/master/build_network.py#L148-L176
+        #    """
+        #    'finding the perpendicular distance from a three dimensional vector ... the goal was simply 
+        #     to calculate the perpendicular distance of the target cell from the source cell’s direction vector... 
+        #     the Euclidean distance would be the hypotenuse of that right triangle so the 
+        #     perpendicular distance should be the opposite side.
+        #     the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
+        #     ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
+        #    """
+        #    src_angle_x = np.array(source['rotation_angle_zaxis'])
+        #    src_angle_y = np.array(source['rotation_angle_yaxis'])
+        #
+        #    vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
+        #    dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
+        if angle_dist:
+            # Checks if points are inside a cylinder
             src_angle_x = np.array(source['rotation_angle_zaxis'])
             src_angle_y = np.array(source['rotation_angle_yaxis'])
-
+            
             vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
-            dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
+            pt2 = vec_pos * max_dist # Furthest point (max dist away from position of cell)
+            mask_dist = points_in_cylinder(src_pos, pt2, angle_dist_radius, trg_pos)            
+            
         else: 
             dist = np.linalg.norm(trg_pos - src_pos,axis=1)
         
-        mask_dist = np.array(dist < max_dist)
+            mask_dist = np.array(dist < max_dist)
 
         # Since we cut down on the number of available cells due to distance constraints we need to scale up the p
         avg_connected = p*len(targets)
@@ -185,11 +202,12 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
 
         if p > 1:
             p = 1
-            sorted_dist = np.sort(dist)
-            minimum_max_dist = sorted_dist[int(avg_connected)]
-            print("Warning: distance constraint (max_dist:" + str(max_dist) + ") between gid " + str(sid) + " and target gids " +
-                  str(min(tids)) + "-" + str(max(tids)) + " prevented " + str(original_p*100) + "% overall connectivity. " +
-                  "To achive this connectivity, max_dist would have needed to be greater than " + str(minimum_max_dist))
+            if not angle_dist:
+                sorted_dist = np.sort(dist)
+                minimum_max_dist = sorted_dist[int(avg_connected)]
+                print("Warning: distance constraint (max_dist:" + str(max_dist) + ") between gid " + str(sid) + " and target gids " +
+                    str(min(tids)) + "-" + str(max(tids)) + " prevented " + str(original_p*100) + "% overall connectivity. " +
+                    "To achive this connectivity, max_dist would have needed to be greater than " + str(minimum_max_dist))
 
     # of those remaining we want p% chosen
     n = int(len(tids)*p)
