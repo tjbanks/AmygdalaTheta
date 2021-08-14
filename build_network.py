@@ -238,9 +238,9 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
     virt_pos_list[:,2] = virt_pos_list[:,2]*(shell_z_end - shell_z_start) + shell_z_start
     
     # EXCLUDE POSITIONS IN THE CORE - We remove all virtual cells located in the core (accounting for no -1 on shell_multiplier)
-    in_core = np.where(((virt_pos_list[:,0] < x_start) | (virt_pos_list[:,0] > x_end)) & 
-                       ((virt_pos_list[:,1] < y_start) | (virt_pos_list[:,1] > y_end)) & 
-                       ((virt_pos_list[:,2] < z_start) | (virt_pos_list[:,2] > z_end)))
+    in_core = np.where(((virt_pos_list[:,0] > x_start) & (virt_pos_list[:,0] < x_end)) & 
+                       ((virt_pos_list[:,1] > y_start) & (virt_pos_list[:,1] < y_end)) & 
+                       ((virt_pos_list[:,2] > z_start) & (virt_pos_list[:,2] < z_end)))
     virt_pos_list = np.delete(virt_pos_list,in_core,0)
 
     # Bring down the number of shell cells to create by scaling
