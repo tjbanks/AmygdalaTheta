@@ -11,11 +11,11 @@ psg = None
 t_sim = 15000
 output_h5 = 'shell_spikes.h5'
 mean_std = {
-               'PyrA':[1,1],
-               'PyrC':[1,1],
-               'Bask':[1,1],
-               'SOM':[1,1],
-               'CR':[1,1]
+               'PyrA':[1,0.8],
+               'PyrC':[1,0.8],
+               'Bask':[30,13],
+               'SOM':[2,1],
+               'CR':[20,4]
            }
 
 def add_inputs(**kwargs):
