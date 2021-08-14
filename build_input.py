@@ -9,63 +9,43 @@ def lognorm_fr_list(n,m,s):
     std = np.sqrt(np.log((s/m)**2 + 1))
     return [np.random.lognormal(mean,std) for i in range(n)]
 
-#def build_input(t_sim, numPN_A = 640, numPN_C=260, numBask = 100):
+def build_poisson_input(population,node_ids,mean,std,output_h5,t_sim=15000):
+    print('Building input for ' + population + "[" + str(len(node_ids)) + " cells at " + str(mean) + "(" + str(std) + ") Hz]")
+    psg = PoissonSpikeGenerator(population=population)
+    psg.add(node_ids=node_ids,  
+    firing_rate=lognorm_fr_list(len(node_ids),mean,std),
+    times=(0.0, t_sim/1000.0))  
+    psg.to_sonata(output_h5)
+
 def build_input(t_sim, numPN_A = 569, numPN_C=231, numBask = 93, numSOM=51, numCR=56):
-    print("Building input for " + str(t_sim) + " (ms)")
-    psg = PoissonSpikeGenerator(population='vpsi_pyr')
-    psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match mthalamus
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numPN_A+numPN_C,2,1),    
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('vpsi_pyr_spikes.h5')
-
-    psg = PoissonSpikeGenerator(population='vpsi_pv')
-    psg.add(node_ids=range(numBask),  # Have nodes to match mthalamus
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numBask,2,1),
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('vpsi_pv_spikes.h5')
-
-    psg = PoissonSpikeGenerator(population='vpsi_inh')
-    psg.add(node_ids=range(numPN_A+numPN_C+numBask),  # Have nodes to match mthalamus
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numBask,3,1),
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('vpsi_inh_spikes_nonrhythmic.h5')
+    
+    # VPSI
+    build_poisson_input(population='vpsi_inh',
+                        node_ids=range(numPN_A+numPN_C+numBask),
+                        mean=3,std=1,
+                        output_h5='vpsi_inh_spikes_nonrhythmic.h5',
+                        t_sim=t_sim)
 
     # THALAMUS
+    build_poisson_input(population='thalamus_pyr',
+                        node_ids=range(numPN_A+numPN_C),
+                        mean=4,std=1,
+                        output_h5='thalamus_pyr_spikes.h5',
+                        t_sim=t_sim)
 
-    psg = PoissonSpikeGenerator(population='thalamus_pyr')
-    psg.add(node_ids=range(numPN_A+numPN_C),  # Have nodes to match 
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numPN_A+numPN_C,4,1),    
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('thalamus_pyr_spikes.h5')
-
-    psg = PoissonSpikeGenerator(population='thalamus_pv')
-    psg.add(node_ids=range(numBask),  # Have nodes to match 
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numBask,2,1),
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('thalamus_pv_spikes.h5')
-
-    psg = PoissonSpikeGenerator(population='thalamus_som')
-    psg.add(node_ids=range(numSOM),  # Have nodes to match 
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numSOM,2,1),
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('thalamus_som_spikes.h5')
-    
-    psg = PoissonSpikeGenerator(population='thalamus_cr')
-    psg.add(node_ids=range(numCR),  # Have nodes to match 
-    #    firing_rate=2.0,    # 15 Hz, we can also pass in a nonhomoegenous function/array
-    firing_rate=lognorm_fr_list(numCR,2,1),
-    times=(0.0, t_sim/1000.0))    # Firing starts at 0 s up to 3 s
-    psg.to_sonata('thalamus_cr_spikes.h5')
+    build_poisson_input(population='thalamus_som',
+                        node_ids=range(numSOM),
+                        mean=2,std=1,
+                        output_h5='thalamus_som_spikes.h5',
+                        t_sim=t_sim) 
+ 
+    build_poisson_input(population='thalamus_cr',
+                        node_ids=range(numCR),
+                        mean=2,std=1,
+                        output_h5='thalamus_cr_spikes.h5',
+                        t_sim=t_sim)
 
     print("Done")
-
-
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
