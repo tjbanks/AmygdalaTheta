@@ -3,8 +3,9 @@ import sys
 import numpy as np
 import pandas as pd
 
+from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 from bmtools.cli.plugins.util.util import relation_matrix
-from build_inpu import lognorm_fr_list
+from build_input import lognorm_fr_list
 
 psg = None
 t_sim = 15000
@@ -28,8 +29,9 @@ def add_inputs(**kwargs):
 
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
     total_cons = cons.count().source_node_id
-
     
+    import pdb;pdb.set_trace()
+ 
     #psg.add(node_ids=node_ids,
     #    firing_rate=lognorm_fr_list(len(node_ids),mean,std),
     #    times=(0.0, t_sim/1000.0))
@@ -46,7 +48,7 @@ def run(config):
     sources = [population]
     targets = ['BLA']
     sids = ['pop_name']
-    tids = ['pop_name']
+    tids = ['model_type']
     prepend_pop = True
 
     psg = PoissonSpikeGenerator(population=population)
