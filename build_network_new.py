@@ -17,7 +17,7 @@ t_sim = 15000.0
 dt = 0.05
 scale = 1
 
-edge_effects = False
+edge_effects = True
 
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930
@@ -537,7 +537,7 @@ edge_params = {
     'PYR2INT': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.22, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24 before angle_dist
+        'connection_params':{'p':0.22, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24
         'syn_weight':1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -564,7 +564,7 @@ edge_params = {
     'PYR2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.31, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309 before angle_dist
+        'connection_params':{'p':0.31, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309
         'syn_weight':1,
         'dynamics_params':'PN2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -591,7 +591,7 @@ edge_params = {
     'PYR2CR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.185, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183 before angle_dist
+        'connection_params':{'p':0.185, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183
         'syn_weight':1,
         'dynamics_params':'PN2CR_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
