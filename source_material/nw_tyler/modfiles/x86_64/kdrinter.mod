@@ -1,1 +1,0 @@
-../kdrinter.mod

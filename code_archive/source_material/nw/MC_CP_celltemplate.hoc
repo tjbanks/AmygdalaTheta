@@ -1,0 +1,202 @@
+// Created by FF (2016)
+// 3-comp LA pyramidal cells template (with osci)
+
+
+/////====================/////
+///// CP cell borrowed from Type C cell in LA  /////
+/////===================/////
+
+begintemplate MC_CP
+	public soma, dend, p_dend, connect2target, type,drv,all,append_sections
+	create soma, dend, p_dend
+
+	public ncl, synlist,conduclist
+	objref ncl, synlist,drv,conduclist
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+    
+proc init() {			
+    append_sections()
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()
+        conduclist = new List()		
+		type = "CP"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 3.5e-4 /// 3.5e-4//modified for CP
+		gleak_dend=1.57*3.0e-4 /// 1.57*3.0e-4// modified for CP
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma 
+        //distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = 1.57*3.0e-5*2.5 Ra=RaDend cm = Cm //gleak modified for CP
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				for (x,0) {
+				//print secname(),x,L
+				//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-x*L
+				//r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+               
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 2.5e-5*2.5  Ra=RaSoma cm = Cm //gleak modified for CP
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				for (x,0) {
+				//print secname(),x
+				//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				//r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+               // rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+                
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.0//0.2  //nA
+              
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.57*3.0e-5*2.5  Ra=RaAll cm = Cm //gleak modified for CP
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtraimemrec	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				for (x,0) {
+				//print secname(),x,L
+				//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+x*L
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+                //print r
+                
+				}
+				
+				}
+		
+			
+		
+		forall {
+		insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+	//print x
+		setpointer im_xtraimemrec(x), i_membrane(x)
+		setpointer ex_xtraimemrec(x), e_extracellular(x)
+		 tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtraimemrec(x),1)
+         
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}
+
+objref all 
+proc append_sections() { local i
+
+	all = new SectionList()
+	soma all.append()
+	dend all.append()
+	p_dend all.append()
+	
+}
+
+endtemplate MC_CP
+

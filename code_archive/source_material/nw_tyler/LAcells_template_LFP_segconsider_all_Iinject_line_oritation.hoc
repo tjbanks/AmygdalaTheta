@@ -1,0 +1,2912 @@
+// Created by FF (2016)
+// 3-comp LA pyramidal cells template (with osci)
+
+/////====================/////
+///// Type A cell in LA /////
+/////===================/////
+
+begintemplate Cell_A
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_A"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+				
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+		
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		  insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			for (x, 0) {
+			setpointer im_xtra(x), i_membrane(x)
+		   setpointer ex_xtra(x), e_extracellular(x)
+		 
+		 tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+}
+	
+	}	
+			
+
+
+
+		//print x,r
+//        r = sqrt((x_xtra(x) - $1)^2 + (y_xtra(x) - $2)^2 + (z_xtra(x) - $3)^2)
+        // 0.01 converts rho's cm to um and ohm to megohm
+        // if electrode is exactly at a node, r will be 0
+        // this would be meaningless since the location would be inside the cell
+        // so force r to be at least as big as local radius
+	
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}		
+endtemplate Cell_A
+
+///////////////////////////////////////////////////////////
+
+
+
+/////====================/////
+///// Type ADA cell in LA /////
+/////===================/////
+
+begintemplate Cell_ADA
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_ADA"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+				
+		
+		forall {
+		 insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		  for (x, 0) {
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+	    tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+				
+	           }
+			   
+	}		
+			
+			
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}		
+endtemplate Cell_ADA
+///////////////////////////////////////////////////////////
+
+
+/////====================/////
+///// Type ANE cell in LA /////
+/////===================/////
+
+begintemplate Cell_ANE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_ANE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				 x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x
+               x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		   for (x, 0) {
+		  
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		 tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+		
+	           }
+			   
+			}
+			
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}		
+endtemplate Cell_ANE
+
+///////////////////////////////////////////////////////////
+
+
+/////====================/////
+///// Type ADANE cell in LA /////
+/////===================/////
+
+begintemplate Cell_ADANE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+    public tlist, area_vec
+    external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_ADANE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.05//0.0019
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				 x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+                insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+		
+		for (x, 0) {
+		   
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+	              
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}		
+endtemplate Cell_ADANE
+
+///////////////////////////////////////////////////////////
+
+
+
+/////====================/////
+///// Type B cell in LA /////
+/////===================/////
+begintemplate Cell_B
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_B"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.00091//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-x*L
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+x*L
+                r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_B
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////====================/////
+///// Type BDA cell in LA /////
+/////===================/////
+begintemplate Cell_BDA
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_BDA"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.00091//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-x*L
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+x*L
+                r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_BDA
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////====================/////
+///// Type BNE cell in LA /////
+/////===================/////
+begintemplate Cell_BNE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_BNE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.00091//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-x*L
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+x*L
+                r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		   for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+	    tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+				
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_BNE
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////====================/////
+///// Type BDANE cell in LA /////
+/////===================/////
+begintemplate Cell_BDANE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_BDANE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000559 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.00091//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-x*L
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 2000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+x*L
+                r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2
+		        rho=1/0.03//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_BDANE
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////====================/////
+///// Type C cell in LA  /////
+/////===================/////
+
+begintemplate Cell_C
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_C"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma = 0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+            
+                
+                //print r
+				
+                
+                
+                }
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x
+				//print secname(),x,L
+								x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+            
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                
+                  
+				}
+				
+				}
+		
+			
+		
+		forall {
+		
+		insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		 tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+        print rx_xtra(x),secname()
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_C
+
+/////////////////////////////////////////////////////////////////////
+
+
+
+/////====================/////
+///// Type CDA cell in LA  /////
+/////===================/////
+
+begintemplate Cell_CDA
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_CDA"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+              
+              
+              
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHP gsAHPbar_sAHP = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3DA=nash ar_na3=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHP gsAHPbar_sAHP = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+		for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		 tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+
+	           }			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_CDA
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+begintemplate Cell_CNE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+   external tstop
+	
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_CNE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leak el_leak = -72  glbar_leak = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+              
+              
+              
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leak el_leak= -72  glbar_leak = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3 sh_na3=nash ar_na3=1	gbar_na3 = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdr gbar_kdr = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		    insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdr") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+			
+			for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+
+	           }
+			   
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_CNE
+/////////////////////////////////////////////////////////////////////
+
+/////====================/////
+///// Type CDANE cell in LA  /////
+/////===================/////
+
+begintemplate Cell_CDANE
+	public soma, dend, p_dend, connect2target, type,drv
+	create soma, dend, p_dend
+
+	public ncl, synlist
+	objref ncl, synlist,drv
+	strdef type
+	objref tlist, area_vec
+   public tlist, area_vec
+	external tstop
+
+	proc init() {	
+
+	 tlist = new List()
+    area_vec = new Vector()	
+	
+		ncl = new List()
+		synlist =new List()		
+		type = "Cell_CDANE"	
+
+		gUnf_Xsoma = 2.5e-05
+		Rm = 80000 // decreased overall
+		SpineScale = 1.76371308 //2
+		SpineScale_leak = 1.763714578
+		Cm = 2.4 // 1.8 // 2 //1
+		RaAll= 150//200
+		RaSoma= 150 // 146.969697
+		RaDend = 150
+		RaAxIs = 150//100//200
+		Vpas = -72//-65//-70 // -67
+		
+		
+		
+		  ////////////////////////////////////////
+		 //         Conductance values         //
+		////////////////////////////////////////
+		
+		gna = 0.015
+		gnap = 0.000555 // 0.000551 
+		gkdr = 0.002//0.002 
+		ghd = 1.5e-5//1.5e-5
+		gca = 5.5e-4 
+		gm = 0.00224 // 0.00222  
+		gsAHP = 0.0002//0.0012
+		gkap = 0.002 
+		gleak = 2.5e-5 
+		gleak_dend=1.57*3.0e-5
+			
+		nash=10
+		Vrest = -70
+		celsius = 31.0 
+		
+		/////// topology ////////
+		connect dend(0), soma(0)
+
+        connect p_dend(0), soma(1)
+		
+		/////// geometry ////////
+		soma {L = 25 diam = 24.75 nseg = 1}		//{L = 20 diam = 20 nseg = 13}
+	    dend {diam= 3 L=270 nseg=8}     // 3.5
+		p_dend {diam =5 L=555 nseg=7} 
+		
+		access soma
+		//distance()
+		
+		p_dend {
+				insert cadyn gcabar_cadyn = gca eca = 120
+				insert leakDA el_leakDA = -72  glbar_leakDA = gleak_dend Ra=RaDend cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0  gbar_nap(1/(2*nseg)) = 0.8*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 0.8*gm
+				insert kap gkabar_kap = 0
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000-555/2
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+                x_xtra=$1*1000-(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000-(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000-(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+                      //print x_xtra,y_xtra,z_xtra
+				
+                dist_comp_x = -L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = -L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = -L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+
+		          }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+              
+              
+              
+				//print r
+				}
+								
+		}		
+		soma {	
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = 1.0*gleak   Ra=RaSoma cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd 
+				insert na3DA sh_na3DA=nash ar_na3DA=1	gbar_na3DA = 3*gna
+				insert nap gbar_nap = gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 //only in dend and p_dend
+				insert sAHPNE gsAHPbar_sAHPNE = gsAHP
+				insert im gbar_im = gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+                sigma=0.3
+				for (x,0) {
+				//print secname(),x
+				x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000
+				r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				if (r==0) r = diam(x)/2  //set limit
+		        rho=1/sigma//35.4
+                rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.01//0.01 //LFP unit is mV
+				//print r
+		drv = new IClamp(0.5)
+		drv.del = 0
+		drv.dur = tstop
+		drv.amp = 0.2//0.2  //nA
+				}
+		}	
+		
+		dend {  // need to add Spine Scale
+				insert cadyn gcabar_cadyn = gca  eca = 120
+				insert leakDA el_leakDA= -72  glbar_leakDA = gleak_dend  Ra=RaAll cm = Cm // 2.5
+				insert hd ghdbar_hd = ghd
+				insert na3DA sh_na3DA=nash ar_na3=1	gbar_na3DA = gna
+				insert nap gbar_nap = 0 gbar_nap(1/(2*nseg)) = 1.0*gnap
+				insert kdrDA gbar_kdrDA = gkdr
+				insert capool taucas = 1000  fcas_capool = 0.05 
+				insert sAHPNE gsAHPbar_sAHPNE = 0
+				insert im gbar_im = 0 gbar_im(1/(2*nseg)) = 1.0*gm
+				insert kap gkabar_kap = gkap
+				insert xtra	//x_xtra=$1*1000 y_xtra=$2*1000 z_xtra=$3*1000+270/2
+				sigma=0.3
+				for (x,0) {
+				//print secname(),x,L
+				x_xtra=$1*1000+(x*L+25/2+L/(2*nseg))*$7  y_xtra=$2*1000+(x*L+25/2+L/(2*nseg))*$8  z_xtra=$3*1000+(x*L+25/2+L/(2*nseg))*$9 //consider soma's dimension
+          
+				 //print x_xtra,y_xtra,z_xtra
+                dist_comp_x = L/(nseg)*$7//(x_xtra - x_xtra) //* 1e-6
+		        dist_comp_y = L/(nseg)*$8//(y_xtra - y_xtra) //* 1e-6
+		        dist_comp_z = L/(nseg)*$9//(-L/nseg) //* 1e-6
+                
+                sum_dist_comp = sqrt((dist_comp_x*dist_comp_x) + (dist_comp_y*dist_comp_y) + (dist_comp_z*dist_comp_z))
+                
+                if(sum_dist_comp<(diam/2)){ // setting radius limit
+					sum_dist_comp = (diam/2) + 0.1
+                     }
+                long_dist_x = ($4- x_xtra)
+		        long_dist_y = ($5- y_xtra)
+		        long_dist_z = ($6- z_xtra)
+                
+                sum_HH = (long_dist_x * dist_comp_x) + (long_dist_y * dist_comp_y) + (long_dist_z * dist_comp_z)
+                final_sum_HH = sum_HH / sum_dist_comp
+                sum_temp1 = (long_dist_x * long_dist_x) + (long_dist_y * long_dist_y) + (long_dist_z * long_dist_z)
+		        r_sq = sum_temp1 -(final_sum_HH * final_sum_HH)
+			    
+                if (r_sq<(diam/2)){   // setting radius limit
+                r_sq = (diam/2) + 0.1
+
+		          }
+                //print r_sq
+                
+		        Length_vector = final_sum_HH + sum_dist_comp
+                
+                if ((final_sum_HH<0)&&(Length_vector<=0)){
+
+			phi=log((sqrt((final_sum_HH*final_sum_HH) + r_sq) - final_sum_HH)/(sqrt((Length_vector*Length_vector)+r_sq)-Length_vector))
+
+		}else if((final_sum_HH>0)&&(Length_vector>0)){
+		
+			phi=log((sqrt((Length_vector*Length_vector)+r_sq) + Length_vector)/(sqrt((final_sum_HH*final_sum_HH)+r_sq) + final_sum_HH))
+			
+		}else{
+
+			phi=log(((sqrt((Length_vector*Length_vector)+r_sq)+Length_vector) * (sqrt((final_sum_HH*final_sum_HH)+r_sq)-final_sum_HH))/r_sq)
+			 }
+               
+                //r = sqrt((x_xtra(x) - $4)^2 + (y_xtra(x) - $5)^2 + (z_xtra(x) - $6)^2)
+				//r=100
+				//if (r==0) r = diam(x)/2
+		        //rho=1/0.03//35.4
+                //rx_xtra(x) = (rho / 4 / PI)*(1/r)*0.001//0.01
+				
+              rx_xtra(x) = 1/(4*PI*sum_dist_comp*sigma) * phi*0.01//LFP unit is mV
+                //print r
+				}
+				}
+		
+			
+		
+		forall {
+		   insert extracellular
+			v=Vrest
+			ena = 45
+			ek = -80
+			if (ismembrane("kdrDA") || ismembrane("kap") || ismembrane("kad")) {ek=-80}
+			if (ismembrane("hd") ) {ehd_hd=-45 } // change from -30 to -50
+		  
+		  for (x, 0) {
+	//print x
+		setpointer im_xtra(x), i_membrane(x)
+		setpointer ex_xtra(x), e_extracellular(x)
+		tlist.append(new Vector())
+        //int_tlist.append(new Vector()) //now int_tlist is necessarily the same length as tlist
+        area_vec.append(area(x)) // area_vec.x(i) is area of tlist.o(i)
+		//print area(x)
+        //tlist.o(tlist.count()-1).record(&i_membrane(x),1)
+		tlist.o(tlist.count()-1).record(&er_xtra(x),1)
+	           }  
+			}
+		
+	}
+obfunc connect2target() { localobj nc
+	soma nc = new NetCon(&v(0.5), $o1)
+	nc.threshold = 0
+	if (numarg() == 2) ($o2 = nc)
+	return nc
+	}	
+endtemplate Cell_CDANE
+

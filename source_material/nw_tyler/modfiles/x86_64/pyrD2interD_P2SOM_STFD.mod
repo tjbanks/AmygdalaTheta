@@ -1,1 +1,0 @@
-../pyrD2interD_P2SOM_STFD.mod
