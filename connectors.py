@@ -131,7 +131,7 @@ def points_in_cylinder(pt1, pt2, r, q):
     return c1 & c2 & c3
     #return np.where(np.dot(q - pt1, vec) >= 0 and np.dot(q - pt2, vec) <= 0 and np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const)
 
-def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100):
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100, warn=False):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
@@ -203,7 +203,7 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
 
         if p > 1:
             p = 1
-            if not angle_dist:
+            if not angle_dist and warn:
                 sorted_dist = np.sort(dist)
                 minimum_max_dist = sorted_dist[int(avg_connected)]
                 print("Warning: distance constraint (max_dist:" + str(max_dist) + ") between gid " + str(sid) + " and target gids " +
