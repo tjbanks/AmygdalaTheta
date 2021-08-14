@@ -10,11 +10,8 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | Input file                    | Purpose | Generating code |
 |-------------------------------|---------|-----------------|
 | **`thalamus_pyr_spikes.h5`**         | Thalamic 2Hz poisson input to Pyramidal A and C cells | [`build_input.py`](./build_input.py)|
-| `thalamus_pv_spikes.h5`         | Thalamic 2Hz poisson input to Interneurons (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
 | **`thalamus_som_spikes.h5`**         | Thalamic 2Hz poisson input to SOM cells| [`build_input.py`](./build_input.py)|
 | **`thalamus_cr_spikes.h5`**         | Thalamic 2Hz poisson input CR+ cells| [`build_input.py`](./build_input.py)|
-| `vpsi_pyr_spikes.h5`         | VPSI 2Hz poisson input to Pyramidal A and C cells (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
-| `vpsi_pv_spikes.h5`         | VPSI 2Hz poisson input to Interneurons (unused - TESTING ONLY) | [`build_input.py`](./build_input.py)|
 | `vpsi_inh_spikes_nonrhythmic.h5`         | VPSI poisson input to PN A and C for non-rhythmic inhibition | [`build_input.py`](./build_input.py)|
 | **`vpsi_inh_spikes.h5`**         | VPSI 8Hz Rhythmic 3Hz poisson input to PN A and C | [`matlab/generatethetainputs.m`](./matlab/generatethetainputs.m) & [`matlab/convert_spikesmatrix.py`](matlab/convert_spikesmatrix.py)|
 
@@ -84,8 +81,24 @@ Analysis of the model is primarily comprised of a spike raster, mean firing rate
 ```
 python analysis.py
 ```
+![](./images/analysis_py.png)
+
+To simply get **firing rates** for quick analysis run
+```
+python analysis.py --no-plots
+
+loading outputECP/spikes.h5
+done
+Type : mean (std)
+PN : 0.84 (0.93)
+PV : 46.33 (45.58)
+SOM : 8.67 (6.07)
+CR : 3.67 (1.37)
+```
 
 #### [analysis.m](./matlab/analysis.m)
+
+**NOT RECOMMENDED** (slow on remote servers)
 
 Plots can also be generated in MATLAB. A spike raster, mean firing rates, LFP and LFP PSD on 4 separate graphs.
 ```
@@ -129,6 +142,7 @@ CR->CR	0.0	  0.0	  0.0
 
 | File/Directory | Description |
 |------|-------------|
+|[connectors.py](./connectors.py)|This is where you should define all connection rules - keeps build_network.py clean |
 |[synapses.py](./synapses.py)| When adding new synapse types to be used by `build_network.py` they must be defined here |
 |[components/templates/feng.hoc](./components/templates/feng.hoc)| Contains the PN A, PN C and INT hoc cell templates|
 |[components/templates/SOM.hoc](./components/templates/SOM.hoc)| Contains the SOM and CR hoc cell templates|
@@ -154,6 +168,28 @@ CR->CR	0.0	  0.0	  0.0
 
 Note: current model has no connection between PV to SOM.
 
+## Tuning synaptic weights 
+For each connection, edit the mean and standard deviation of weights to adjust firing properties.
+
+| Source|Target| Synapse JSON |
+|-------|-------|--------------|
+|PN|PN|[PN2PN_feng_min.json](components/synaptic_models/PN2PN_feng_min.json)|
+|PN|PV|[PN2INT_feng_min.json](components/synaptic_models/PN2INT_feng_min.json)|
+|PN|SOM|[PN2SOM_tyler.json](components/synaptic_models/PN2SOM_tyler.json)|
+|PN|CR|[PN2CR_tyler.json](components/synaptic_models/PN2CR_tyler.json)|
+|PV|PN|[INT2PN_feng_min.json](components/synaptic_models/INT2PN_feng_min.json)|
+|PV|PV|[INT2INT_feng_min.json](components/synaptic_models/INT2INT_feng_min.json)|
+|PV|SOM|[INT2SOM_tyler.json](components/synaptic_models/INT2SOM_tyler.json)|
+|SOM|PN|[SOM2PN_tyler.json](components/synaptic_models/SOM2PN_tyler.json)|
+|CR|PN|[CR2PN_tyler.json](components/synaptic_models/CR2PN_tyler.json)|
+|CR|PV|[CR2INT_tyler.json](components/synaptic_models/CR2INT_tyler.json)|
+|CR|SOM|[CR2SOM_tyler.json](components/synaptic_models/CR2SOM_tyler.json)|
+|Thalamic | PN|[BG2PNe_thalamus_min.json](components/synaptic_models/BG2PNe_thalamus_min.json)|
+|Thalamic | SOM|[BG2SOM_thalamus_min.json](components/synaptic_models/BG2SOM_thalamus_min.json)|
+|Thalamic | CR|[BG2CR_thalamus_min.json](components/synaptic_models/BG2CR_thalamus_min.json)|
+
+
+
 ## Single Cell Profiling
 
 Cell templates can be found in:
@@ -170,14 +206,22 @@ SOM_Cell
 CR_Cell
 ```
 
-
-
 ## Network Profiling
 
 ### Plot Connection Totals
 ```
 bmtool plot connection total
 ```
+
+### Plot the connections for a single cell
+
+This is useful for verifying that your connection rules are functioning propertly, especially if they're space dependent
+
+```
+python plot_conns.py
+```
+
+
 
 
 ### BMTOOLS
