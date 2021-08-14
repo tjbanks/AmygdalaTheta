@@ -190,8 +190,7 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
             
         else: 
             dist = np.linalg.norm(trg_pos - src_pos,axis=1)
-        
-            mask_dist = np.array(dist < max_dist & dist > min_dist)
+            mask_dist = np.array((dist < max_dist) & (dist > min_dist))
 
         # Since we cut down on the number of available cells due to distance constraints we need to scale up the p
         avg_connected = p*len(targets)
