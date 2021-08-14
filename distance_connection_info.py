@@ -9,9 +9,11 @@ from bmtools.cli.plugins.util.util import relation_matrix
 f = h5py.File('outputECP/spikes.h5')
 spikes = pd.DataFrame({'node_ids':f['spikes']['BLA']['node_ids'],'timestamps':f['spikes']['BLA']['timestamps']})
 
-def conn_info(**kwargs):
+edges = None
 
-    edges = kwargs["edges"]
+def conn_info(**kwargs):
+    global edges
+    _edges = kwargs["edges"]
     source_id_type = kwargs["sid"]
     target_id_type = kwargs["tid"]
     source_id = kwargs["source_id"]
@@ -19,6 +21,11 @@ def conn_info(**kwargs):
     t_list = kwargs["target_nodes"]
     s_list = kwargs["source_nodes"]
     
+    if edges is None: #want to accumulate connections
+        edges = _edges
+    else:
+        edges = edges.append(_edges).drop_duplicates()
+
     #center_x = kwargs["center_x"]
     #center_y = kwargs["center_y"]
     #center_z = kwargs["center_z"]    
@@ -36,8 +43,10 @@ def conn_info(**kwargs):
     skip_ms = 5000
 
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
-    total_cons = cons.count().source_node_id
-    
+    # Disable this next assignment ifor most normal situatipns
+    cons = edges[(edges[target_id_type]==target_id)]
+    #total_cons = cons.count().source_node_id
+    #import pdb;pdb.set_trace() 
     print(source_id + " -> " + target_id + " step " + str(step*2))
     print("from locations => to locations : n number of cells : connections mean (std) : spikes mean (std)")
     
