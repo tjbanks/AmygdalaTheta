@@ -206,6 +206,25 @@ SOM_Cell
 CR_Cell
 ```
 
+To tune individual cells, run
+```
+cd /tuning/current_clamp
+nrngui Cell_A.hoc
+nrngui Cell_C.hoc
+nrngui PVCell.hoc
+nrngui SOM_Cell.hoc
+nrngui CR_Cell.hoc
+```
+
+To get fi curves for individual cells, run
+```
+bmtool util cell --template Cell_Af fi
+bmtool util cell --template Cell_Cf fi
+bmtool util cell --template InterneuronCellf fi
+bmtool util cell --template SOM_Cell fi
+bmtool util cell --template CR_Cell fi
+```
+
 ## Network Profiling
 
 ### Plot Connection Totals
@@ -258,3 +277,14 @@ python setup.py develop
 ### Installing NEURON and BMTK
 
 See [https://github.com/tjbanks/easy-nrn-install](https://github.com/tjbanks/easy-nrn-install)
+
+## Tuning tutorial
+
+To tune the model, several things must be in done in order.
+1. [Tune individual cells](#single-cell-profiling)
+2. [Build the network](#2-build-network-configuration-files)
+3. [Ensure connectivity is correct](#connection_infopy)
+4. [Run the network](#parallel-mode)
+5. [Analyze the network](#analysis-of-the-model)
+
+We want connectivity and base firing rates to match literature.
