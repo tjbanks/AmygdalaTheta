@@ -26,15 +26,16 @@ def add_inputs(**kwargs):
     target_id = kwargs["target_id"]
     t_list = kwargs["target_nodes"]
     s_list = kwargs["source_nodes"]
-
+    global psg
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
-    total_cons = cons.count().source_node_id
-    
-    import pdb;pdb.set_trace()
- 
-    #psg.add(node_ids=node_ids,
-    #    firing_rate=lognorm_fr_list(len(node_ids),mean,std),
-    #    times=(0.0, t_sim/1000.0))
+
+    node_ids = cons.source_node_id.unique()
+    mean = mean_std[source_id][0]
+    std = mean_std[source_id][1]
+     
+    psg.add(node_ids=node_ids,
+        firing_rate=lognorm_fr_list(len(node_ids),mean,std),
+        times=(0.0, t_sim/1000.0))
 
     return 
     
@@ -50,7 +51,7 @@ def run(config):
     sids = ['pop_name']
     tids = ['model_type']
     prepend_pop = True
-
+    global psg
     psg = PoissonSpikeGenerator(population=population)
 
     relation_matrix(config,nodes,edges,sources,targets,sids,tids,prepend_pop,relation_func=add_inputs)
