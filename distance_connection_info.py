@@ -46,8 +46,8 @@ def conn_info(**kwargs):
     last = 0
     last_str = ""
     
+    dist = np.linalg.norm(edges[['target_pos_x', 'target_pos_y', 'target_pos_z']].values.astype(float)-edges[['source_pos_x', 'source_pos_y', 'source_pos_z']].values.astype(float),axis=1) 
     
-     
     for inner_dist in range(step,iterations*step,step):
         
         #cube

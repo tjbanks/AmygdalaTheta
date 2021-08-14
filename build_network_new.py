@@ -39,9 +39,6 @@ pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
 pos_list[:,2] = pos_list[:,2]*(z_end - z_start) + z_start
 
-max_conn_dist = 9999.9
-
-
 
 def build_networks(network_definitions):
     # Build the networks
@@ -495,7 +492,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.02, 'angle_dist':True, 'max_dist':max_conn_dist},
+        'connection_params':{'p':0.02, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],
@@ -540,7 +537,7 @@ edge_params = {
     'PYR2INT': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.22, 'angle_dist':True, 'max_dist':max_conn_dist},#'p':0.24 before angle_dist
+        'connection_params':{'p':0.22, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -567,7 +564,7 @@ edge_params = {
     'PYR2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.31, 'angle_dist':True, 'max_dist':max_conn_dist},#0.309 before angle_dist
+        'connection_params':{'p':0.31, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -594,7 +591,7 @@ edge_params = {
     'PYR2CR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.185, 'angle_dist':True, 'max_dist':max_conn_dist},#0.183 before angle_dist
+        'connection_params':{'p':0.185, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183 before angle_dist
         'syn_weight':1,
         'dynamics_params':'PN2CR_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],

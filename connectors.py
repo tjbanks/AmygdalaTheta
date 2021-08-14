@@ -124,8 +124,11 @@ def points_in_cylinder(pt1, pt2, r, q):
     #https://stackoverflow.com/questions/47932955/how-to-check-if-a-3d-point-is-inside-a-cylinder
     vec = pt2 - pt1
     const = r * np.linalg.norm(vec)
-    
-    return (np.dot(q - pt1, vec) >= 0 & (np.dot(q - pt2, vec) <= 0) & (np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const))
+    c1 = np.dot(q - pt1, vec) >= 0
+    c2 = np.dot(q - pt2, vec) <= 0
+    c3 = np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const 
+
+    return c1 & c2 & c3
     #return np.where(np.dot(q - pt1, vec) >= 0 and np.dot(q - pt2, vec) <= 0 and np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const)
 
 def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False, max_dist=300, angle_dist_radius=100):
@@ -183,7 +186,8 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
             src_angle_y = np.array(source['rotation_angle_yaxis'])
             
             vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
-            pt2 = vec_pos * max_dist # Furthest point (max dist away from position of cell)
+            pt2 = src_pos + vec_pos * max_dist # Furthest point (max dist away from position of cell)
+            
             mask_dist = points_in_cylinder(src_pos, pt2, angle_dist_radius, trg_pos)            
             
         else: 
@@ -222,9 +226,10 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
     
     if mask_dist is not None:
         mask = mask & mask_dist
+        chosen = np.where(mask==True)[0]
 
     syns[mask] = 1
-    
+ 
     #Add to lists
     new_syns = pd.DataFrame(chosen,columns=['target_gid'])
     new_syns['source_gid'] = sid

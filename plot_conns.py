@@ -70,26 +70,32 @@ def plot_scatter(cell_to_plot):
     src_pos_y = float(conns[conns.source_ID==cell_to_plot]['source_y'].values[0])
     src_pos_z = float(conns[conns.source_ID==cell_to_plot]['source_z'].values[0])
 
-    ax.scatter(src_pos_x, src_pos_y, src_pos_z, marker='^',color='r')
-
+    ax.scatter(src_pos_x, src_pos_y, src_pos_z, marker='^',color='blue')
+    
     src_angle_y = y_angles[cell_to_plot]
     src_angle_x = z_angles[cell_to_plot]
     vec_line_pos = [np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)] 
     vec_line_neg = [np.cos(src_angle_x), np.sin(-src_angle_y), np.sin(src_angle_x)] 
 
-    ax.plot([vec_line_neg[0],5*src_pos_x], [vec_line_neg[1], 5*src_pos_y], [vec_line_neg[2], 5*src_pos_z],color='m')
-
+    max_dist = 300
+    #ax.plot([vec_line_neg[0],5*src_pos_x], [vec_line_neg[1], 5*src_pos_y], [vec_line_neg[2], 5*src_pos_z],color='m')
+    ax.quiver(src_pos_x,src_pos_y,src_pos_z,vec_line_pos[0],vec_line_pos[1],vec_line_pos[2],length=max_dist)
+    src_pos = np.array([src_pos_x,src_pos_y,src_pos_z])
+    
+    pt2 = src_pos + np.array(vec_line_pos) * max_dist
+    ax.scatter(pt2[0],pt2[1],pt2[2], marker='^',color='black')
+ 
     pn2itn_x = PN2ITN[PN2ITN.source_ID==cell_to_plot]['target_x'].values
     pn2itn_y = PN2ITN[PN2ITN.source_ID==cell_to_plot]['target_y'].values
     pn2itn_z = PN2ITN[PN2ITN.source_ID==cell_to_plot]['target_z'].values
 
-    ax.scatter(pn2itn_x,pn2itn_y,pn2itn_z,marker='o',color='blue')
+    ax.scatter(pn2itn_x,pn2itn_y,pn2itn_z,marker='o',color='red')
 
     pn2pn_x = PN2PN[PN2PN.source_ID==cell_to_plot]['target_x'].values
     pn2pn_y = PN2PN[PN2PN.source_ID==cell_to_plot]['target_y'].values
     pn2pn_z = PN2PN[PN2PN.source_ID==cell_to_plot]['target_z'].values
 
-    ax.scatter(pn2pn_x,pn2pn_y,pn2pn_z,marker='o',color='red')
+    ax.scatter(pn2pn_x,pn2pn_y,pn2pn_z,marker='o',color='blue')
 
     ax.set_xlim(300,900)
     ax.set_ylim(300,900)
@@ -99,8 +105,8 @@ def plot_scatter(cell_to_plot):
     ax.set_zlabel('z')
 
 plot_scatter(99)
-plot_scatter(801)
-
+#plot_scatter(100)
+plt.show()
 
 # PN2PN figure #
 plt.figure()
