@@ -492,7 +492,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.02, 'angle_dist':True, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},
+        'connection_params':{'p':0.02, 'angle_dist':True, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],

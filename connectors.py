@@ -131,7 +131,7 @@ def points_in_cylinder(pt1, pt2, r, q):
     return c1 & c2 & c3
     #return np.where(np.dot(q - pt1, vec) >= 0 and np.dot(q - pt2, vec) <= 0 and np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const)
 
-def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False, max_dist=300, angle_dist_radius=100):
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
@@ -175,9 +175,6 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
         #     the way I was thinking about it was to imagine a cylinder with its center around the [directional] vector
         #     ... and only cells that fall in the cylinder are eligible for connection' - Per Ben
         #    """
-        #    src_angle_x = np.array(source['rotation_angle_zaxis'])
-        #    src_angle_y = np.array(source['rotation_angle_yaxis'])
-        #
         #    vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
         #    dist = np.linalg.norm(np.cross((trg_pos - src_pos), (trg_pos - vec_pos)),axis=1) / np.linalg.norm((vec_pos - src_pos))
         if angle_dist:
@@ -186,14 +183,15 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=
             src_angle_y = np.array(source['rotation_angle_yaxis'])
             
             vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
+            pt1 = src_pos + vec_pos * min_dist
             pt2 = src_pos + vec_pos * max_dist # Furthest point (max dist away from position of cell)
             
-            mask_dist = points_in_cylinder(src_pos, pt2, angle_dist_radius, trg_pos)            
+            mask_dist = points_in_cylinder(pt1, pt2, angle_dist_radius, trg_pos)            
             
         else: 
             dist = np.linalg.norm(trg_pos - src_pos,axis=1)
         
-            mask_dist = np.array(dist < max_dist)
+            mask_dist = np.array(dist < max_dist & dist > min_dist)
 
         # Since we cut down on the number of available cells due to distance constraints we need to scale up the p
         avg_connected = p*len(targets)
