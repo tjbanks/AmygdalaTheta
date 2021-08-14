@@ -13,6 +13,7 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 | **`thalamus_som_spikes.h5`**         | Thalamic 2Hz poisson input to SOM cells| [`build_input.py`](./build_input.py)|
 | **`thalamus_cr_spikes.h5`**         | Thalamic 2Hz poisson input CR+ cells| [`build_input.py`](./build_input.py)|
 | `vpsi_inh_spikes_nonrhythmic.h5`         | VPSI poisson input to PN A and C for non-rhythmic inhibition | [`build_input.py`](./build_input.py)|
+| `shell_spikes.h5`   | Edge effects shell spikes" | [`build_input_shell.py`](./build_input_shell.py)|
 | **`vpsi_inh_spikes.h5`**         | VPSI 8Hz Rhythmic 3Hz poisson input to PN A and C | [`matlab/generatethetainputs.m`](./matlab/generatethetainputs.m) & [`matlab/convert_spikesmatrix.py`](matlab/convert_spikesmatrix.py)|
 
 (primary files **bold**)
@@ -43,7 +44,10 @@ To generate necessary network specification files in the `[network](./network)` 
 
 ```
 python build_network.py
+python build_input_shell.py
 ```
+
+If you have a shell of cells to deal with edge effects then the right spikes file will be generated.
 
 ### 3. Execute run script
 
