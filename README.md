@@ -20,11 +20,13 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
 To generate the above files first, create Thalamic and VSPI inputs using
 ```
-python generate_input.py
+python build_input.py
 
 ```
 
-To generate 8Hz rhythmic inputs (based on Fink et al 2015)
+To generate 8Hz rhythmic inputs (based on Fink et al 2015). Repository comes with this file so, following these
+steps isn't completely necessary. If you want to edit the parameters or rate at which the rhythmic inhibition
+is presented, run the following:
 ```
 matlab &
 generatethetainputs
@@ -44,10 +46,9 @@ To generate necessary network specification files in the `[network](./network)` 
 
 ```
 python build_network.py
-python build_input_shell.py
 ```
 
-If you have a shell of cells to deal with edge effects then the right spikes file will be generated.
+If you have a shell of cells to deal with edge effects then the `shell_spikes.h5` file will be re-generated.
 
 ### 3. Execute run script
 
@@ -58,9 +59,11 @@ The network can be tested using any one of the simulation configuration files li
 | [simulation_config.json](./simulation_config.json) | Thalamic 2Hz to PN, INT, SOM, CR, VPSI 2Hz exc and 8Hz inh to PN/INT | **deprecated** example |
 | [simulation_configECP.json](./simulation_configECP.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 2Hz exc and 8Hz inh to PN/INT | **deprecated** example with LFP recording electrodes [linear_electrode.csv](components/recXelectrodes/linear_electrode.csv)|
 | **[simulation_configECP_base.json](./simulation_configECP_base.json)** | Thalamic 2Hz to PN, SOM, CR | Quiet-waking state, baseline configuration file |
+| **[simulation_configECP_base_edge_effects.json](./simulation_configECP_base_edge_effects.json)** | Thalamic 2Hz to PN, SOM, CR | Quiet-waking state, baseline configuration file **WITH EDGE EFFECT spikes presented** |
 | [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) | Thalamic 2Hz to PN, SOM, CR | Same as [simulation_configECP_base.json](./simulation_configECP_base.json), 11 voltage clamped PN cells, igaba from SOM+ synapses are recorded and placed in `outputECP/syn_report.h5` - Analysis completed using [ipsc_analysis.m](./matlab/ipsc_analysis.m) notes below |
 | [simulation_configECP_gamma.json](./simulation_configECP_gamma.json) | | Gamma testing for original model replicated from Feng et al 2019|
 | **[simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test|
+| **[simulation_configECP_vpsi_edge_effects.json](./simulation_configECP_vpsi_edge_effects.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test **WITH EDGE EFFECT spikes presented**|
 | [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Same as [simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json), 11 voltage clamped PN cells, igaba from SOM+ synapses are recorded and placed in `outputECP/syn_report.h5` - Analysis completed using [ipsc_analysis.m](./matlab/ipsc_analysis.m) notes below
 | [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 3Hz Poisson inh to PN/INT | Testing Non-rhythmic inhibition to PN/PV|
 
@@ -70,13 +73,18 @@ Primary tests **bold**
 1000 Cell models typically run for **4-6 hours** on a single core.
 
 ```
-python run_network.py simulation_configECP_base.json
+python run_network.py simulation_configECP_base_edge_effects.json
 ```
 
 #### Parallel Mode
 1000 Cell models run for **5-6 minutes** on ~50 cores.
 ```
-mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base.json
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_edge_effects.json
+```
+
+#### Theta Test
+```
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_vpsi_edge_effects.json
 ```
 
 ### Analysis of the model
@@ -112,10 +120,12 @@ analysis('../outputECP/ecp.h5','../outputECP/spikes.h5');
 
 #### [ipsc_analysis.m](./matlab/ipsc_analysis.m)
 
-Used in conjuction with [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) and [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) to sum igaba currents and perform a PSD to produce the raw signal and PSD plots.
+Used in conjuction with [simulation_configECP_base_vclamp.json](./simulation_configECP_base_vclamp.json) and [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) to sum igaba currents and perform a PSD to produce the raw signal and PSD plots. 
 ```
 ipsc_analysis('../outputECP/syn_report.h5';
 ```
+
+*Note: use `get_som2pn_targets.py` to determine the correct PN cells to set in `node_sets.json` prior to running the simulation.*
 
 #### [connection_info.py](./connection_info.py)
 
