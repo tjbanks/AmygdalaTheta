@@ -67,7 +67,7 @@ def get_target_sec_id(source,target):
     
     if source['pop_name'] == 'PyrA' or source['pop_name'] == 'PyrC':
         return 1 # Target Dendrites
-    elif source['pop_name'] == 'Bask':
+    elif source['pop_name'] == 'PV':
         return 0 # Target Soma
     elif source['pop_name'] == 'SOM':
         return 0 # Target Soma

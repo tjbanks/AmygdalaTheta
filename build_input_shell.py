@@ -13,7 +13,7 @@ output_h5 = 'shell_spikes.h5'
 mean_std = {
                'PyrA':[1,0.8],
                'PyrC':[1,0.8],
-               'Bask':[30,13],
+               'PV':[30,13],
                'SOM':[2,1],
                'CR':[20,4]
            }
@@ -29,7 +29,7 @@ def add_inputs(**kwargs):
     global psg
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
 
-    node_ids = cons.source_node_id.unique()
+    node_ids = cons.source_node_id.unique() # Most important line - get all unique source ids 
     mean = mean_std[source_id][0]
     std = mean_std[source_id][1]
      
@@ -40,7 +40,7 @@ def add_inputs(**kwargs):
     return 
     
 
-def run(config):
+def build_shell_inputs(config='simulation_configECP.json'):
 
     population = 'shell'    
     
@@ -54,6 +54,10 @@ def run(config):
     global psg
     psg = PoissonSpikeGenerator(population=population)
 
+    # Relation matrix is kind of my secret formula for loading up all the edge files and sticking
+    # them into a nice and easy to read pandas dataframe. The 'relation_func' is what that dataframe
+    # gets sent to and called for each source/dest combination
+    # In this case for each shell cell type, and every BLA cell call add_inputs
     relation_matrix(config,nodes,edges,sources,targets,sids,tids,prepend_pop,relation_func=add_inputs)
 
     psg.to_sonata(output_h5)
@@ -62,6 +66,6 @@ def run(config):
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        run(sys.argv[-1])
+        build_shell_inputs(sys.argv[-1])
     else:
-        run('simulation_configECP.json')
+        build_shell_inputs('simulation_configECP.json')

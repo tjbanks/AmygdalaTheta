@@ -17,11 +17,11 @@ def build_poisson_input(population,node_ids,mean,std,output_h5,t_sim=15000):
     times=(0.0, t_sim/1000.0))  
     psg.to_sonata(output_h5)
 
-def build_input(t_sim, numPN_A = 569, numPN_C=231, numBask = 93, numSOM=51, numCR=56):
+def build_input(t_sim, numPN_A = 569, numPN_C=231, numPV = 93, numSOM=51, numCR=56):
     
     # VPSI
     build_poisson_input(population='vpsi_inh',
-                        node_ids=range(numPN_A+numPN_C+numBask),
+                        node_ids=range(numPN_A+numPN_C+numPV),
                         mean=3,std=1,
                         output_h5='vpsi_inh_spikes_nonrhythmic.h5',
                         t_sim=t_sim)

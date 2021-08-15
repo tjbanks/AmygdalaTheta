@@ -747,8 +747,8 @@ if edge_effects:
             'param': 'PV2PV',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
-            # PV to PV Uncoupled Bidirectional Pair
-            # PV to PV Uncoupled Bidirectional Pair
+            # PV to PV Uncoupled Bidirectional Pair N/A
+            # PV to PV Uncoupled Bidirectional Pair N/A
         {   # PV to PYR Unidirectional 
             'network':'BLA',
             'edge': {
@@ -767,8 +767,8 @@ if edge_effects:
             'param': 'PYR2PV',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
-            # PV to PYR Bidirectional 
-            # PYR to PV Bidirectional    
+            # PV to PYR Bidirectional N/A
+            # PYR to PV Bidirectional N/A
         {   # PYR to SOM Unidirectional 
             'network':'BLA',
             'edge': {
@@ -854,6 +854,18 @@ build_edges(networks, edge_definitions,edge_params,edge_add_properties,syn)
 # Save the network into the appropriate network dir
 save_networks(networks,network_dir)
 
+if edge_effects:
+    from build_input_shell import build_shell_inputs
+    
+    # This needs to be called after building and saving your networks
+    # There's an optimization in there that determines which shells in the 
+    # shell are connected to bio cells, and only delivers a spike train to
+    # those, excluding others and speeding up the simulation. 
+    # Since edges are semi-random, we want to deliver to the correct cells
+    # each time.
+    build_shell_inputs() 
+
+
 # Usually not necessary if you've already built your simulation config
 build_env_bionet(base_dir='./',
 		network_dir=network_dir,
@@ -861,14 +873,11 @@ build_env_bionet(base_dir='./',
 		report_vars = ['v'],
         v_init = -70.0,
         celsius = 31.0,
-		spikes_inputs=[('vpsi_pyr','vpsi_pyr_spikes.h5'),  # Name of population which spikes will be generated for, file
-                       ('vpsi_pv','vpsi_pv_spikes.h5'),
-                       ('vpsi_inh','vpsi_inh_spikes.h5'),
+		spikes_inputs=[('vpsi_inh','vpsi_inh_spikes.h5'),# Name of population which spikes will be generated for, file
                        ('thalamus_pyr','thalamus_pyr_spikes.h5'),
-                       ('thalamus_pv', 'thalamus_pv_spikes.h5'),
                        ('thalamus_som','thalamus_som_spikes.h5'),
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
-                       ],
+                       ('shell','shell_spikes.h5')],
 		components_dir='components',
         config_file='simulation_config.json',
 		compile_mechanisms=True)

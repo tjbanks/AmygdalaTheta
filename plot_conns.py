@@ -12,8 +12,9 @@ source = f['edges']['BLA_to_BLA']['source_node_id']
 target = f['edges']['BLA_to_BLA']['target_node_id']
 
 n_cells = 1000
-pn_ids = np.arange(0,799)
-itn_ids = np.arange(800,893)
+scale = 1
+pn_ids = np.arange(0*scale,799*scale)
+itn_ids = np.arange(800*scale,893*scale)
 
 positions = g['nodes']['BLA']['0']['positions']
 y_angles = g['nodes']['BLA']['0']['rotation_angle_yaxis']
