@@ -23,10 +23,10 @@ edge_effects = True
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930
 numPN_C = 231 * scale #260 * scale #4115#6210
-numBask = 93 * scale #100 * scale #854#4860
+numPV = 93 * scale #100 * scale #854#4860
 numSOM = 51 * scale #42 * scale
 numCR = 56 * scale #42 * scale
-num_cells = numPN_A + numPN_C + numBask + numSOM + numCR #Only used to populate an overall position list
+num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 min_conn_dist = 0.0 
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
@@ -124,11 +124,11 @@ network_definitions = [
                 'model_template':'hoc:Cell_Cf'
             },
             {   # Interneuron - fast spiking PV
-                'N':numBask,
-                'pop_name':'Bask',
+                'N':numPV,
+                'pop_name':'PV',
                 'a_name':'PV',
-                'rotation_angle_zaxis':xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numBask, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numPV, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=numPV, min_x=0.0, max_x=2*np.pi),
                 'model_type':'biophysical',
                 'model_template':'hoc:InterneuronCellf'
             },
@@ -157,7 +157,7 @@ network_definitions = [
         'positions_list':None,
         'cells':[
             {
-                'N':numPN_A+numPN_C+numBask,
+                'N':numPN_A+numPN_C+numPV,
                 'pop_name':'inh_inp',
                 'pop_group':'vpsi_inh',
                 'model_type':'virtual'
@@ -226,10 +226,10 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
     # Increase the number of original cells based on the shell_multiplier
     virt_numPN_A = int(numPN_A * shell_multiplier)
     virt_numPN_C = int(numPN_C * shell_multiplier)
-    virt_numBask = int(numBask * shell_multiplier)
+    virt_numPV = int(numPV * shell_multiplier)
     virt_numSOM  = int(numSOM * shell_multiplier)
     virt_numCR   = int(numCR * shell_multiplier)
-    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
+    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numPV + virt_numSOM + virt_numCR
     
     # Create a positions list for each cell in the shell, this includes positions in the core
     virt_pos_list = np.random.rand(virt_num_cells,3)
@@ -249,10 +249,10 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
     new_virt_num_cells = len(virt_pos_list)
     virt_numPN_A = int(virt_numPN_A/virt_num_cells*new_virt_num_cells)
     virt_numPN_C = int(virt_numPN_C/virt_num_cells*new_virt_num_cells)
-    virt_numBask = int(virt_numBask/virt_num_cells*new_virt_num_cells)
+    virt_numPV = int(virt_numPV/virt_num_cells*new_virt_num_cells)
     virt_numSOM = int(virt_numSOM/virt_num_cells*new_virt_num_cells)
     virt_numCR = int(virt_numCR/virt_num_cells*new_virt_num_cells)
-    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numBask + virt_numSOM + virt_numCR
+    virt_num_cells = virt_numPN_A + virt_numPN_C + virt_numPV + virt_numSOM + virt_numCR
 
     # This should always be true, virt_num_cells is now equal to a scaled down number
     # While new_virt_num_cells is the length of the available cells
@@ -282,11 +282,11 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
                 'model_type':'virtual'
             },
             {   # Interneuron - fast spiking PV
-                'N':virt_numBask,
-                'pop_name':'Bask',
+                'N':virt_numPV,
+                'pop_name':'PV',
                 'a_name':'PV',
-                'rotation_angle_zaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numBask, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numPV, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPV, min_x=0.0, max_x=2*np.pi),
                 'model_type':'virtual'
             },
             {   # Interneuron - SOM Cell
@@ -352,64 +352,64 @@ edge_definitions = [
     {   # PV to PV Uncoupled Unidirectional
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
-            'target':{'pop_name': ['Bask']}
+            'source':{'pop_name': ['PV']}, 
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'INT2INT',
+        'param': 'PV2PV',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PV to PV Uncoupled Bidirectional Pair
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
-            'target':{'pop_name': ['Bask']}
+            'source':{'pop_name': ['PV']}, 
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'INT2INT_bi_1',
+        'param': 'PV2PV_bi_1',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PV to PV Uncoupled Bidirectional Pair
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
-            'target':{'pop_name': ['Bask']}
+            'source':{'pop_name': ['PV']}, 
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'INT2INT_bi_2',
+        'param': 'PV2PV_bi_2',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PV to PYR Unidirectional 
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
+            'source':{'pop_name': ['PV']}, 
             'target':{'pop_name': ['PyrA','PyrC']}
         },
-        'param': 'INT2PYR',
+        'param': 'PV2PYR',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PYR to PV Unidirectional 
         'network':'BLA',
         'edge': {
             'source':{'pop_name': ['PyrA','PyrC']}, 
-            'target':{'pop_name': ['Bask']}
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'PYR2INT',
+        'param': 'PYR2PV',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PV to PYR Bidirectional 
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
+            'source':{'pop_name': ['PV']}, 
             'target':{'pop_name': ['PyrA','PyrC']}
         },
-        'param': 'INT2PYR_bi',
+        'param': 'PV2PYR_bi',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PYR to PV Bidirectional 
         'network':'BLA',
         'edge': {
             'source':{'pop_name': ['PyrA','PyrC']}, 
-            'target':{'pop_name': ['Bask']}
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'PYR2INT_bi',
+        'param': 'PYR2PV_bi',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PYR to SOM Unidirectional 
@@ -430,13 +430,13 @@ edge_definitions = [
         'param': 'SOM2PYR',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
-    {   # INT to SOM Unidirectional 
+    {   # PV to SOM Unidirectional 
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['Bask']}, 
+            'source':{'pop_name': ['PV']}, 
             'target':{'pop_name': ['SOM']}
         },
-        'param': 'INT2SOM',
+        'param': 'PV2SOM',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # PYR to CR Unidirectional 
@@ -461,9 +461,9 @@ edge_definitions = [
         'network':'BLA',
         'edge': {
             'source':{'pop_name': ['CR']}, 
-            'target':{'pop_name': ['Bask']}
+            'target':{'pop_name': ['PV']}
         },
-        'param': 'CR2INT',
+        'param': 'CR2PV',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },
     {   # CR to SOM Unidirectional 
@@ -491,9 +491,9 @@ edge_definitions = [
         'network':'BLA',
         'edge': {
             'source':networks['vpsi_inh'].nodes(),
-            'target':networks['BLA'].nodes(pop_name=['Bask'])
+            'target':networks['BLA'].nodes(pop_name=['PV'])
         },
-        'param': 'VPSIinh2INT',
+        'param': 'VPSIinh2PV',
         'add_properties': 'syn_uniform_delay_section_default'
     },
 
@@ -539,7 +539,7 @@ edge_params = {
         'distance_range':[0,max_conn_dist],
         'target_sections':['basal']
     },
-    'INT2INT': {
+    'PV2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.17,'no_recip':True,'track_list':int2int_temp_list, 'max_dist':max_conn_dist},#0.19
@@ -548,7 +548,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'INT2INT_bi_1': {
+    'PV2PV_bi_1': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.0275, 'track_list':uncoupled_bi_track, 'max_dist':max_conn_dist},#0.03
@@ -557,7 +557,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'INT2INT_bi_2': {
+    'PV2PV_bi_2': {
         'iterator':'one_to_all',
         'connection_rule':recurrent_connector_o2a,
         'connection_params':{'p':1, 'all_edges':uncoupled_bi_track},#p:1
@@ -566,7 +566,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'INT2PYR': {
+    'PV2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.40, 'max_dist':max_conn_dist},#{'p':0.40},
@@ -575,7 +575,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'PYR2INT': {
+    'PYR2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.22, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24
@@ -584,7 +584,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
     },
-    'INT2PYR_bi': {
+    'PV2PYR_bi': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.09,'track_list':pyr_int_bi_list, 'max_dist':max_conn_dist},
@@ -593,7 +593,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'PYR2INT_bi': {
+    'PYR2PV_bi': {
         'iterator':'one_to_all',
         'connection_rule':recurrent_connector_o2a,
         'connection_params':{'p':1,'all_edges':pyr_int_bi_list},#was 1
@@ -620,7 +620,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'INT2SOM': {
+    'PV2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.55, 'max_dist':max_conn_dist},# Dr Unal suggested .1 -> .55 based on 7/1/21 email
@@ -647,7 +647,7 @@ edge_params = {
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
     },
-    'CR2INT': {
+    'CR2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.297, 'max_dist':max_conn_dist},#.297
@@ -672,7 +672,7 @@ edge_params = {
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal'],
     },
-    'VPSIinh2INT': {
+    'VPSIinh2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.012}, # We need aprox 10 aff to each PV
@@ -690,7 +690,7 @@ edge_params = {
     },
     'THALAMUS2SOM': {
         'connection_rule':one_to_one_offset,
-        'connection_params':{'offset':numPN_A+numPN_C+numBask},
+        'connection_params':{'offset':numPN_A+numPN_C+numPV},
         'syn_weight':1,
         'target_sections':['basal'],
         'distance_range':[0.0, 9999.9],
@@ -698,7 +698,7 @@ edge_params = {
     },
     'THALAMUS2CR': {
         'connection_rule':one_to_one_offset,
-        'connection_params':{'offset':numPN_A+numPN_C+numBask+numSOM},
+        'connection_params':{'offset':numPN_A+numPN_C+numPV+numSOM},
         'syn_weight':1,
         'target_sections':['basal'],
         'distance_range':[0.0, 9999.9],
@@ -741,10 +741,10 @@ if edge_effects:
         {   # PV to PV Uncoupled Unidirectional
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
-                'target':{'pop_name': ['Bask']}
+                'source':networks['shell'].nodes(**{'pop_name': ['PV']}), 
+                'target':{'pop_name': ['PV']}
             },
-            'param': 'INT2INT',
+            'param': 'PV2PV',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
             # PV to PV Uncoupled Bidirectional Pair
@@ -752,19 +752,19 @@ if edge_effects:
         {   # PV to PYR Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PV']}), 
                 'target':{'pop_name': ['PyrA','PyrC']}
             },
-            'param': 'INT2PYR',
+            'param': 'PV2PYR',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
         {   # PYR to PV Unidirectional 
             'network':'BLA',
             'edge': {
                 'source':networks['shell'].nodes(**{'pop_name': ['PyrA','PyrC']}), 
-                'target':{'pop_name': ['Bask']}
+                'target':{'pop_name': ['PV']}
             },
-            'param': 'PYR2INT',
+            'param': 'PYR2PV',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
             # PV to PYR Bidirectional 
@@ -787,13 +787,13 @@ if edge_effects:
             'param': 'SOM2PYR',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
-        {   # INT to SOM Unidirectional 
+        {   # PV to SOM Unidirectional 
             'network':'BLA',
             'edge': {
-                'source':networks['shell'].nodes(**{'pop_name': ['Bask']}), 
+                'source':networks['shell'].nodes(**{'pop_name': ['PV']}), 
                 'target':{'pop_name': ['SOM']}
             },
-            'param': 'INT2SOM',
+            'param': 'PV2SOM',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
         {   # PYR to CR Unidirectional 
@@ -818,9 +818,9 @@ if edge_effects:
             'network':'BLA',
             'edge': {
                 'source':networks['shell'].nodes(**{'pop_name': ['CR']}), 
-                'target':{'pop_name': ['Bask']}
+                'target':{'pop_name': ['PV']}
             },
-            'param': 'CR2INT',
+            'param': 'CR2PV',
             'add_properties': 'syn_dist_delay_feng_section_default'
         },
         {   # CR to SOM Unidirectional 
