@@ -1,2 +1,0 @@
-edge_type_id target_query source_query syn_weight dynamics_params target_sections distance_range model_template
-118 pop_name=='Bask' * 1 BG2PNi_feng_min.json ['basal'] "[0.0, 9999.9]" bg2pyr
