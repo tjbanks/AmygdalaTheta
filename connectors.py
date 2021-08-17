@@ -127,11 +127,89 @@ def points_in_cylinder(pt1, pt2, r, q):
     c1 = np.dot(q - pt1, vec) >= 0
     c2 = np.dot(q - pt2, vec) <= 0
     c3 = np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const 
-
     return c1 & c2 & c3
-    #return np.where(np.dot(q - pt1, vec) >= 0 and np.dot(q - pt2, vec) <= 0 and np.linalg.norm(np.cross(q - pt1, vec),axis=1) <= const)
 
-def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100, warn=False):
+def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_allowed=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100):
+    """
+    track_list: supply a list to append and track the synapses with
+    one to all connector for increased speed.
+    returns a list of len(targets) where the value is the number of synapses at the index=cellid
+    if no_recip is set to true, any connection that has been made previously and is reciprical won't be considered
+    """
+    original_p = p
+
+    global all_synapses
+    sid = source.node_id
+    tids = np.array([target.node_id for target in targets])
+
+    #List of synapses that will be returned, initialized to 0 synapses
+    syns = np.array([0 for _ in range(len(targets))])
+
+    #Get all existing targets for that source that can't be targetted here
+    existing = all_synapses[all_synapses.source_gid == sid]
+    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+
+    #remove existing synapses from available list
+    available = tids.copy()
+    available = available[~np.isin(available,existing_list)]
+    
+    if not autapses_allowed:
+        available = available[~np.isin(available,sid)] #remove self from possible targets
+    
+    if no_recip:
+        recur = [i['source_gid'] for i in track_list if i['target_gid'] == sid]
+        available = available[~np.isin(available,recur)]
+
+    if source.get('positions') is not None:
+        src_pos = np.array(source['positions'])
+        trg_pos = np.array([target['positions'] for target in targets])
+
+        euclid_dist = np.linalg.norm(trg_pos - src_pos,axis=1)
+        euclid_mask_dist = np.array((euclid_dist < max_dist) & (euclid_dist > min_dist))
+        euclid_dist_available = np.argwhere(euclid_mask_dist).T[0] # Convert to indicies        
+        default_dist_available = euclid_dist_available
+
+        if angle_dist:
+            # Checks if points are inside a cylinder
+            src_angle_x = np.array(source['rotation_angle_zaxis'])
+            src_angle_y = np.array(source['rotation_angle_yaxis'])
+
+            vec_pos = np.array([np.cos(src_angle_x), np.sin(src_angle_y), np.sin(src_angle_x)])
+            pt1 = src_pos + vec_pos * min_dist
+            pt2 = src_pos + vec_pos * max_dist # Furthest point (max dist away from position of cell)
+
+            mask_dist = points_in_cylinder(pt1, pt2, angle_dist_radius, trg_pos)
+            angle_dist_available = np.argwhere(mask_dist).T[0] # Convert to indicies
+            default_dist_available = angle_dist_available
+        
+        # We now want to reduce the number available by distance 
+        available = available[np.isin(available,default_dist_available)]
+
+    # of those remaining we want p% chosen from all within the distance around in a sphere, no matter angle
+    n = int(len(euclid_dist_available)*p)
+    extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
+    n = n + extra #This will account for half percentages
+
+    if n > len(available):
+        n = len(available)
+
+    chosen = np.random.choice(available,size=n,replace=False)
+    mask = np.isin(tids,chosen)
+    syns[mask] = 1
+
+    #Add to lists
+    new_syns = pd.DataFrame(chosen,columns=['target_gid'])
+    new_syns['source_gid'] = sid
+    all_synapses = all_synapses.append(new_syns,ignore_index=True)
+
+    if track_list is not None:
+        #track_list = track_list.append(new_syns,ignore_index=True)
+        for target in chosen:
+            track_list.append({'source_gid':sid,'target_gid':target})
+    #any index selected will be set to 1 and returned
+    return syns
+
+def syn_percent_o2a_old(source,targets,p,track_list=None,no_recip=False, angle_dist=False,min_dist=0, max_dist=300, angle_dist_radius=100, warn=False):
     """
     track_list: supply a list to append and track the synapses with
     one to all connector for increased speed.
