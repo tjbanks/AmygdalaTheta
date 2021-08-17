@@ -2,6 +2,8 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
+scale=5
+
 def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     matlab_file = open(inp, 'r')
     lines = matlab_file.readlines()
@@ -48,4 +50,4 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     plt.show()
     
 if __name__ == '__main__':
-    convert(num_pn=800)
+    convert(num_pn=800*scale)

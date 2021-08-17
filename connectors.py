@@ -186,17 +186,13 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
         available = available[np.isin(available,default_dist_available)]
 
     # of those remaining we want p% chosen from all within the distance around in a sphere, no matter angle
-    n = int(len(euclid_dist_available)*p)
+    n = int(len(available)*p)
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
-
-    if n > len(available):
-        n = len(available)
 
     chosen = np.random.choice(available,size=n,replace=False)
     mask = np.isin(tids,chosen)
     syns[mask] = 1
-
     #Add to lists
     new_syns = pd.DataFrame(chosen,columns=['target_gid'])
     new_syns['source_gid'] = sid

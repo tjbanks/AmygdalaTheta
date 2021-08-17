@@ -15,7 +15,7 @@ np.random.seed(123412)
 network_dir = 'network'
 t_sim = 15000.0
 dt = 0.05
-scale = 1
+scale = 5
 
 # When enabled, a shell of virtual cells will be created around the core network.
 edge_effects = True
@@ -533,7 +533,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.02, 'angle_dist':True, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},
+        'connection_params':{'p':0.02, 'angle_dist':True, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 200},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],
