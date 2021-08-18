@@ -15,10 +15,7 @@ np.random.seed(123412)
 network_dir = 'network'
 t_sim = 15000.0
 dt = 0.05
-scale = 5
-
-# When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = True
+scale = 1
 
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930
@@ -40,6 +37,8 @@ pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
 pos_list[:,2] = pos_list[:,2]*(z_end - z_start) + z_start
 
+# When enabled, a shell of virtual cells will be created around the core network.
+edge_effects = True 
 
 def build_networks(network_definitions: list) -> dict:
     # network_definitions should be a list of dictionaries eg:[{}]
@@ -533,7 +532,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.02, 'angle_dist':True, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 200},
+        'connection_params':{'p':0.02, 'angle_dist':False, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 200},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],

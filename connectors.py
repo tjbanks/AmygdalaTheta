@@ -166,7 +166,8 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
 
         euclid_dist = np.linalg.norm(trg_pos - src_pos,axis=1)
         euclid_mask_dist = np.array((euclid_dist < max_dist) & (euclid_dist > min_dist))
-        euclid_dist_available = np.argwhere(euclid_mask_dist).T[0] # Convert to indicies        
+        euclid_dist_available_ind = np.argwhere(euclid_mask_dist).T[0] # Convert to indicies        
+        euclid_dist_available = tids[euclid_dist_available_ind]
         default_dist_available = euclid_dist_available
 
         if angle_dist:
@@ -179,7 +180,8 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
             pt2 = src_pos + vec_pos * max_dist # Furthest point (max dist away from position of cell)
 
             mask_dist = points_in_cylinder(pt1, pt2, angle_dist_radius, trg_pos)
-            angle_dist_available = np.argwhere(mask_dist).T[0] # Convert to indicies
+            angle_dist_available_ind = np.argwhere(mask_dist).T[0] # Convert to indicies
+            angle_dist_available = tids[angle_dist_available_ind]
             default_dist_available = angle_dist_available
         
         # We now want to reduce the number available by distance 
