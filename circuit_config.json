@@ -20,14 +20,6 @@
         "node_types_file": "$NETWORK_DIR/BLA_node_types.csv"
       },
       {
-        "nodes_file": "$NETWORK_DIR/vpsi_pyr_nodes.h5",
-        "node_types_file": "$NETWORK_DIR/vpsi_pyr_node_types.csv"
-      },
-      {
-        "nodes_file": "$NETWORK_DIR/vpsi_pv_nodes.h5",
-        "node_types_file": "$NETWORK_DIR/vpsi_pv_node_types.csv"
-      },
-      {
         "nodes_file": "$NETWORK_DIR/vpsi_inh_nodes.h5",
         "node_types_file": "$NETWORK_DIR/vpsi_inh_node_types.csv"
       },
@@ -36,23 +28,19 @@
         "node_types_file": "$NETWORK_DIR/thalamus_pyr_node_types.csv"
       },
       {
-        "nodes_file": "$NETWORK_DIR/thalamus_pv_nodes.h5",
-        "node_types_file": "$NETWORK_DIR/thalamus_pv_node_types.csv"
-      },
-      {
         "nodes_file": "$NETWORK_DIR/thalamus_som_nodes.h5",
         "node_types_file": "$NETWORK_DIR/thalamus_som_node_types.csv"
       },
       {
         "nodes_file": "$NETWORK_DIR/thalamus_cr_nodes.h5",
         "node_types_file": "$NETWORK_DIR/thalamus_cr_node_types.csv"
+      },
+      {
+        "nodes_file": "$NETWORK_DIR/shell_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/shell_node_types.csv"
       }
     ],
     "edges": [
-      {
-        "edge_types_file": "$NETWORK_DIR/vpsi_inh_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/vpsi_inh_BLA_edges.h5"
-      },
       {
         "edge_types_file": "$NETWORK_DIR/thalamus_som_BLA_edge_types.csv",
         "edges_file": "$NETWORK_DIR/thalamus_som_BLA_edges.h5"
@@ -62,24 +50,20 @@
         "edges_file": "$NETWORK_DIR/BLA_BLA_edges.h5"
       },
       {
-        "edge_types_file": "$NETWORK_DIR/vpsi_pv_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/vpsi_pv_BLA_edges.h5"
-      },
-      {
-        "edge_types_file": "$NETWORK_DIR/thalamus_pv_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/thalamus_pv_BLA_edges.h5"
-      },
-      {
-        "edge_types_file": "$NETWORK_DIR/thalamus_pyr_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/thalamus_pyr_BLA_edges.h5"
+        "edge_types_file": "$NETWORK_DIR/vpsi_inh_BLA_edge_types.csv",
+        "edges_file": "$NETWORK_DIR/vpsi_inh_BLA_edges.h5"
       },
       {
         "edge_types_file": "$NETWORK_DIR/thalamus_cr_BLA_edge_types.csv",
         "edges_file": "$NETWORK_DIR/thalamus_cr_BLA_edges.h5"
       },
       {
-        "edge_types_file": "$NETWORK_DIR/vpsi_pyr_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/vpsi_pyr_BLA_edges.h5"
+        "edge_types_file": "$NETWORK_DIR/thalamus_pyr_BLA_edge_types.csv",
+        "edges_file": "$NETWORK_DIR/thalamus_pyr_BLA_edges.h5"
+      },
+      {
+        "edge_types_file": "$NETWORK_DIR/shell_BLA_edge_types.csv",
+        "edges_file": "$NETWORK_DIR/shell_BLA_edges.h5"
       }
     ],
     "gap_juncs": []
