@@ -864,6 +864,8 @@ if edge_effects:
     # each time.
     build_shell_inputs() 
 
+from build_input import build_input
+build_input(t_sim,scale=scale)
 
 # Usually not necessary if you've already built your simulation config
 build_env_bionet(base_dir='./',

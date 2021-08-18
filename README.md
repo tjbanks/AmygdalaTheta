@@ -18,7 +18,7 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
 (primary files **bold**)
 
-To generate the above files first, create Thalamic and VSPI inputs using
+To generate the above files create Thalamic and VSPI inputs using
 ```
 python build_input.py
 
