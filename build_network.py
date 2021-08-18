@@ -15,7 +15,7 @@ np.random.seed(123412)
 network_dir = 'network'
 t_sim = 15000.0
 dt = 0.05
-scale = 1
+scale = 5
 
 #Number of cells in each population
 numPN_A = 569 * scale #640 * scale #4114#15930

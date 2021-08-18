@@ -5,9 +5,11 @@ import pandas as pd
 
 from bmtools.cli.plugins.util.util import relation_matrix
 
-def conn_info(**kwargs):
+edges = None
 
-    edges = kwargs["edges"]
+def conn_info(**kwargs):
+    global edges
+    _edges = kwargs["edges"]
     source_id_type = kwargs["sid"]
     target_id_type = kwargs["tid"]
     source_id = kwargs["source_id"]
@@ -15,6 +17,11 @@ def conn_info(**kwargs):
     t_list = kwargs["target_nodes"]
     s_list = kwargs["source_nodes"]
     
+    if edges is None:
+        edges = _edges
+    else:
+        edges = edges.append(_edges).drop_duplicates()
+
     cons = edges[(edges[source_id_type] == source_id) & (edges[target_id_type]==target_id)]
     total_cons = cons.count().source_node_id
     
@@ -40,7 +47,7 @@ def conn_info(**kwargs):
     bi = round(num_bi / (num_sources*num_targets) * 100,2)
 
     print(str(source_id) + '->' + str(target_id) + "\t" + str(total) + "\t" + str(uni) + "\t" + str(bi))
-    #if source_id == 'SOM' and target_id == 'PN':
+    #if source_id == 'PN' and target_id == 'PN':
         #import pdb;pdb.set_trace()
         #print(cons)   
     return total
@@ -49,9 +56,9 @@ def run(config):
 
     nodes = None
     edges = None 
-    sources = ['BLA']
+    sources = ['BLA','shell']
     targets = ['BLA']
-    sids = ['a_name']
+    sids = ['a_name','a_name']
     tids = ['a_name']
     prepend_pop = True
     
