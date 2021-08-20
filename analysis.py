@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
+scale = 5
+
 def raster(spikes_df,node_set,skip_ms=0,ax=None):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms] 
     for node in node_set:
@@ -100,10 +102,10 @@ def run(show_plots=False):
         print("done")
 
     node_set = [
-        {"name":"PN","start":0,"end":799,"color":"blue"},
-        {"name":"PV","start":800,"end":892,"color":"red"},
-        {"name":"SOM","start":893,"end":943,"color":"green"},
-        {"name":"CR","start":944,"end":999,"color":"purple"}
+        {"name":"PN","start":0*scale,"end":799*scale,"color":"blue"},
+        {"name":"PV","start":800*scale,"end":892*scale,"color":"red"},
+        {"name":"SOM","start":893*scale,"end":943*scale,"color":"green"},
+        {"name":"CR","start":944*scale,"end":999*scale,"color":"purple"}
     ]
     
     if show_plots:
