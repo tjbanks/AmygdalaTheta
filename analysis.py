@@ -75,7 +75,7 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         
         
 
-def run(show_plots=False):
+def run(show_plots=False,save_plots=False):
     
 
     dt = 0.05
@@ -92,7 +92,7 @@ def run(show_plots=False):
     spikes_df = pd.DataFrame({'node_ids':f['spikes']['BLA']['node_ids'],'timestamps':f['spikes']['BLA']['timestamps']}) 
     print("done")
 
-    if show_plots:
+    if show_plots or save_plots:
         ecp_h5_location = 'outputECP/ecp.h5'
         print("loading " + ecp_h5_location)
         ecp_channel = 0
@@ -108,22 +108,32 @@ def run(show_plots=False):
         {"name":"CR","start":944*scale,"end":999*scale,"color":"purple"}
     ]
     
-    if show_plots:
+    if show_plots or save_plots:
         print("plotting...")
         fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(15,4.8))#6.4,4.8 default
         fig.suptitle('Amygdala Theta Analysis')
         ecp_psd(ecp, skip_n=skip_n, ax=ax2)
         spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,ax=ax3)
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax1)
-        print("showing plots...")
-        fig.tight_layout()
-        plt.show()
+        if save_plots:
+            f_name = 'analysis.png'
+            print("saving " + f_name)
+            plt.savefig(f_name, bbox_inches='tight')
+        if show_plots:
+            print("showing plots...")
+            fig.tight_layout()
+            plt.show()
+         
     else:
         spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms)
 
 
 if __name__ == '__main__':
-    if __file__ != sys.argv[-1]:
-        run(False)
-    else:
-        run(True)
+    show_plots = False
+    save_plots = False
+    if '--show-plots' in sys.argv:
+        show_plots = True
+    if '--save-plots' in sys.argv:
+        save_plots = True
+        
+    run(show_plots = show_plots, save_plots = save_plots)
