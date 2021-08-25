@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH --partition Lewis
 #SBATCH -N 1
 #SBATCH -n 50
 #SBATCH --qos=normal
