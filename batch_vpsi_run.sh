@@ -13,11 +13,6 @@ END=$(date)
 
 { printf "Start: $START \nEnd:   $END\n" & python analysis.py --save-plots & printf "\n\n" & git diff components/synaptic_models/; }| mail -r tbg28@mail.missouri.edu -s "AmygdalaTheta VPSI Simulation Results" -a analysis.png tbg28@mail.missouri.edu
 
-START=$(date)
-mpiexec nrniv -mpi -quiet -python run_network.py simulation_configECP_base_edge_effects.json
-END=$(date)
-
-{ printf "Start: $START \nEnd:   $END\n" & python analysis.py --save-plots & printf "\n\n" & git diff components/synaptic_models/; }| mail -r tbg28@mail.missouri.edu -s "AmygdalaTheta Baseline Simulation Results" -a analysis.png tbg28@mail.missouri.edu
 
 
 
