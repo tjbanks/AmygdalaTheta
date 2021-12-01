@@ -1,11 +1,2 @@
-2021-02-03 22:18:41,563 [INFO] Created log file
-2021-02-03 22:18:45,176 [INFO] Building cells.
-2021-02-03 22:19:10,413 [INFO] Building recurrent connections
-2021-02-03 22:20:46,146 [INFO] Building virtual cell stimulations for mthalamus_spikes
-2021-02-03 22:20:58,927 [INFO] Building virtual cell stimulations for exc_bg_bask_spikes
-2021-02-03 22:21:00,286 [INFO] Running simulation for 10000.000 ms with the time step 0.050 ms
-2021-02-03 22:21:00,286 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2021-02-03 22:21:00,286 [INFO] Block save every 5000 steps
-2021-02-03 22:27:47,500 [INFO]     step:5000 t_sim:250.00 ms
-2021-02-03 22:34:36,837 [INFO]     step:10000 t_sim:500.00 ms
-2021-02-03 22:41:27,871 [INFO]     step:15000 t_sim:750.00 ms
+2021-08-19 19:33:25,228 [INFO] Created log file
+2021-08-19 19:33:25,258 [ERROR] Could not find any network files. Unable to build network.

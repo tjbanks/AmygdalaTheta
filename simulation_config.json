@@ -6,7 +6,7 @@
   "target_simulator": "NEURON",
   "run": {
     "tstart": 0.0,
-    "tstop": 10000.0,
+    "tstop": 15000.0,
     "dt": 0.05,
     "dL": 20.0,
     "spike_threshold": -15.0,
@@ -17,18 +17,6 @@
     "v_init": -70.0
   },
   "inputs": {
-    "vpsi_pyr_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/vpsi_pyr_spikes.h5",
-      "node_set": "vpsi_pyr"
-    },
-    "vpsi_pv_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/vpsi_pv_spikes.h5",
-      "node_set": "vpsi_pv"
-    },
     "vpsi_inh_spikes": {
       "input_type": "spikes",
       "module": "sonata",
@@ -41,12 +29,6 @@
       "input_file": "$BASE_DIR/thalamus_pyr_spikes.h5",
       "node_set": "thalamus_pyr"
     },
-    "thalamus_pv_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/thalamus_pv_spikes.h5",
-      "node_set": "thalamus_pv"
-    },
     "thalamus_som_spikes": {
       "input_type": "spikes",
       "module": "sonata",
@@ -58,6 +40,12 @@
       "module": "sonata",
       "input_file": "$BASE_DIR/thalamus_cr_spikes.h5",
       "node_set": "thalamus_cr"
+    },
+    "shell_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/shell_spikes.h5",
+      "node_set": "shell"
     }
   },
   "output": {
@@ -73,6 +61,5 @@
       "sections": "soma"
     }
   },
-  "node_sets_file": "$BASE_DIR/node_sets.json",
-  "network": "$BASE_DIR/circuit_config.json"
+  "node_sets_file": "$BASE_DIR/node_sets.json"
 }

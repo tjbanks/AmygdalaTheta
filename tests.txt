@@ -1,0 +1,4 @@
+1. Non rhythmic input VPSI - just 3Hz poisson
+2. Compare VPSI vs Base IPSC to see if theta is enhanced
+3. What is the fraction of cells that should get ACH 
+  a. Can vary 0 to 100% 

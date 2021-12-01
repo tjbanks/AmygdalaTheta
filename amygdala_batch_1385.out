@@ -1,0 +1,80 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+2021-09-10 13:52:05,488 [INFO] Created log file
+2021-09-10 13:52:05,489 [INFO] Running NEURON with mpi (50 cores).
+Additional mechanisms from files
+ modfiles/bg2pyr.mod modfiles/bginh.mod modfiles/cadyn.mod modfiles/cal2CA3.mod modfiles/cal2.mod modfiles/ca.mod modfiles/capoolCA3.mod modfiles/capool.mod modfiles/cas.mod modfiles/cat.mod modfiles/currentclamp.mod modfiles/function_TMonitor.mod modfiles/gap.mod modfiles/Gfluct_new_exc.mod modfiles/Gfluct_new_inh.mod modfiles/halfgap.mod modfiles/hCA3.mod modfiles/h.mod modfiles/imCA3.mod modfiles/im.mod modfiles/interD2interD_SOMPV_STFD_new.mod modfiles/interD2interD_STFD_new.mod modfiles/interD2pyrD_CR2P_STFD_new.mod modfiles/interD2pyrD_SOM2P_STFD_new.mod modfiles/interD2pyrD_STFD_new.mod modfiles/kadist.mod modfiles/kaprox.mod modfiles/kca.mod modfiles/kdrca1DA.mod modfiles/kdrca1.mod modfiles/kdrCA3.mod modfiles/kdrinter.mod modfiles/leakCA3.mod modfiles/leakDA.mod modfiles/leakinter.mod modfiles/leak.mod modfiles/na3DA.mod modfiles/na3.mod modfiles/nainter.mod modfiles/napCA3.mod modfiles/nap.mod modfiles/natCA3.mod modfiles/nat.mod modfiles/pyrD2interD_P2CR_STFD.mod modfiles/pyrD2interD_P2SOM_STFD.mod modfiles/pyrD2interD_STFD.mod modfiles/pyrD2pyrD_STFD_new.mod modfiles/sahpCA3.mod modfiles/sahp.mod modfiles/sahpNE.mod modfiles/vecevent.mod modfiles/xtra_imemrec.mod modfiles/xtra.mod
+2021-09-10 13:52:07,926 [INFO] Building cells.
+2021-09-10 13:52:08,715 [INFO] Building recurrent connections
+2021-09-10 13:52:30,996 [INFO] Building virtual cell stimulations for vpsi_inh_spikes
+2021-09-10 13:54:37,865 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2021-09-10 13:54:59,595 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2021-09-10 13:55:00,136 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2021-09-10 13:55:00,679 [INFO] Building virtual cell stimulations for shell_spikes
+2021-09-10 13:55:38,499 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2021-09-10 13:55:38,499 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-09-10 13:55:38,499 [INFO] Block save every 5000 steps
+2021-09-10 13:56:38,474 [INFO]     step:5000 t_sim:250.00 ms
+2021-09-10 13:57:35,336 [INFO]     step:10000 t_sim:500.00 ms
+2021-09-10 13:58:32,783 [INFO]     step:15000 t_sim:750.00 ms
+2021-09-10 13:59:29,633 [INFO]     step:20000 t_sim:1000.00 ms
+2021-09-10 14:00:26,494 [INFO]     step:25000 t_sim:1250.00 ms
+2021-09-10 14:01:25,536 [INFO]     step:30000 t_sim:1500.00 ms
+2021-09-10 14:02:23,650 [INFO]     step:35000 t_sim:1750.00 ms
+2021-09-10 14:03:20,763 [INFO]     step:40000 t_sim:2000.00 ms
+2021-09-10 14:04:17,683 [INFO]     step:45000 t_sim:2250.00 ms
+2021-09-10 14:05:16,989 [INFO]     step:50000 t_sim:2500.00 ms
+2021-09-10 14:06:15,100 [INFO]     step:55000 t_sim:2750.00 ms
+2021-09-10 14:07:16,245 [INFO]     step:60000 t_sim:3000.00 ms
+2021-09-10 14:08:15,831 [INFO]     step:65000 t_sim:3250.00 ms
+2021-09-10 14:09:13,670 [INFO]     step:70000 t_sim:3500.00 ms
+2021-09-10 14:10:11,566 [INFO]     step:75000 t_sim:3750.00 ms
+2021-09-10 14:11:10,518 [INFO]     step:80000 t_sim:4000.00 ms
+2021-09-10 14:12:10,383 [INFO]     step:85000 t_sim:4250.00 ms
+2021-09-10 14:13:08,335 [INFO]     step:90000 t_sim:4500.00 ms
+2021-09-10 14:14:05,776 [INFO]     step:95000 t_sim:4750.00 ms
+2021-09-10 14:15:03,644 [INFO]     step:100000 t_sim:5000.00 ms
+2021-09-10 14:16:01,671 [INFO]     step:105000 t_sim:5250.00 ms
+2021-09-10 14:16:58,045 [INFO]     step:110000 t_sim:5500.00 ms
+2021-09-10 14:17:53,702 [INFO]     step:115000 t_sim:5750.00 ms
+2021-09-10 14:18:50,000 [INFO]     step:120000 t_sim:6000.00 ms
+2021-09-10 14:19:46,597 [INFO]     step:125000 t_sim:6250.00 ms
+2021-09-10 14:20:42,788 [INFO]     step:130000 t_sim:6500.00 ms
+2021-09-10 14:21:39,076 [INFO]     step:135000 t_sim:6750.00 ms
+2021-09-10 14:22:36,388 [INFO]     step:140000 t_sim:7000.00 ms
+2021-09-10 14:23:33,290 [INFO]     step:145000 t_sim:7250.00 ms
+2021-09-10 14:24:30,022 [INFO]     step:150000 t_sim:7500.00 ms
+2021-09-10 14:25:29,031 [INFO]     step:155000 t_sim:7750.00 ms
+2021-09-10 14:26:26,989 [INFO]     step:160000 t_sim:8000.00 ms
+2021-09-10 14:27:24,938 [INFO]     step:165000 t_sim:8250.00 ms
+2021-09-10 14:28:23,016 [INFO]     step:170000 t_sim:8500.00 ms
+2021-09-10 14:29:20,478 [INFO]     step:175000 t_sim:8750.00 ms
+2021-09-10 14:30:17,505 [INFO]     step:180000 t_sim:9000.00 ms
+2021-09-10 14:31:15,082 [INFO]     step:185000 t_sim:9250.00 ms
+2021-09-10 14:32:13,915 [INFO]     step:190000 t_sim:9500.00 ms
+2021-09-10 14:33:12,766 [INFO]     step:195000 t_sim:9750.00 ms
+2021-09-10 14:34:10,794 [INFO]     step:200000 t_sim:10000.00 ms
+2021-09-10 14:35:07,189 [INFO]     step:205000 t_sim:10250.00 ms
+2021-09-10 14:36:05,543 [INFO]     step:210000 t_sim:10500.00 ms
+2021-09-10 14:37:03,155 [INFO]     step:215000 t_sim:10750.00 ms
+2021-09-10 14:38:00,830 [INFO]     step:220000 t_sim:11000.00 ms
+2021-09-10 14:38:58,329 [INFO]     step:225000 t_sim:11250.00 ms
+2021-09-10 14:39:56,187 [INFO]     step:230000 t_sim:11500.00 ms
+2021-09-10 14:40:53,751 [INFO]     step:235000 t_sim:11750.00 ms
+2021-09-10 14:41:51,236 [INFO]     step:240000 t_sim:12000.00 ms
+2021-09-10 14:42:49,197 [INFO]     step:245000 t_sim:12250.00 ms
+2021-09-10 14:43:47,392 [INFO]     step:250000 t_sim:12500.00 ms
+2021-09-10 14:44:45,226 [INFO]     step:255000 t_sim:12750.00 ms
+2021-09-10 14:45:43,473 [INFO]     step:260000 t_sim:13000.00 ms
+2021-09-10 14:46:41,107 [INFO]     step:265000 t_sim:13250.00 ms
+2021-09-10 14:47:39,204 [INFO]     step:270000 t_sim:13500.00 ms
+2021-09-10 14:48:37,052 [INFO]     step:275000 t_sim:13750.00 ms
+2021-09-10 14:49:34,790 [INFO]     step:280000 t_sim:14000.00 ms
+2021-09-10 14:50:32,741 [INFO]     step:285000 t_sim:14250.00 ms
+2021-09-10 14:51:31,059 [INFO]     step:290000 t_sim:14500.00 ms
+2021-09-10 14:52:28,332 [INFO]     step:295000 t_sim:14750.00 ms
+2021-09-10 14:53:26,932 [INFO]     step:300000 t_sim:15000.00 ms
+2021-09-10 14:53:30,243 [INFO] Simulation completed in 57.0 minutes, 51.75 seconds 

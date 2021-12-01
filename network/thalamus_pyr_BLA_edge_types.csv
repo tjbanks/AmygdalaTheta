@@ -1,3 +1,2 @@
-edge_type_id target_query source_query syn_weight dynamics_params target_sections distance_range model_template
-122 pop_name=='PyrA' * 1 BG2PNe_thalamus_min.json ['basal'] "[0.0, 9999.9]" bg2pyr
-123 pop_name=='PyrC' * 1 BG2PNe_thalamus_min.json ['basal'] "[0.0, 9999.9]" bg2pyr
+edge_type_id target_query source_query model_template target_sections distance_range syn_weight dynamics_params
+117 "pop_name=='['PyrA', 'PyrC']'" * bg2pyr ['basal'] "[0.0, 9999.9]" 1 BG2PNe_thalamus_min.json

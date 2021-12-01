@@ -1,0 +1,132 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+2021-08-27 17:00:41,820 [INFO] Created log file
+2021-08-27 17:00:41,821 [INFO] Running NEURON with mpi (50 cores).
+Additional mechanisms from files
+ modfiles/bg2pyr.mod modfiles/bginh.mod modfiles/cadyn.mod modfiles/cal2CA3.mod modfiles/cal2.mod modfiles/ca.mod modfiles/capoolCA3.mod modfiles/capool.mod modfiles/cas.mod modfiles/cat.mod modfiles/currentclamp.mod modfiles/function_TMonitor.mod modfiles/gap.mod modfiles/Gfluct_new_exc.mod modfiles/Gfluct_new_inh.mod modfiles/halfgap.mod modfiles/hCA3.mod modfiles/h.mod modfiles/imCA3.mod modfiles/im.mod modfiles/interD2interD_SOMPV_STFD_new.mod modfiles/interD2interD_STFD_new.mod modfiles/interD2pyrD_CR2P_STFD_new.mod modfiles/interD2pyrD_SOM2P_STFD_new.mod modfiles/interD2pyrD_STFD_new.mod modfiles/kadist.mod modfiles/kaprox.mod modfiles/kca.mod modfiles/kdrca1DA.mod modfiles/kdrca1.mod modfiles/kdrCA3.mod modfiles/kdrinter.mod modfiles/leakCA3.mod modfiles/leakDA.mod modfiles/leakinter.mod modfiles/leak.mod modfiles/na3DA.mod modfiles/na3.mod modfiles/nainter.mod modfiles/napCA3.mod modfiles/nap.mod modfiles/natCA3.mod modfiles/nat.mod modfiles/pyrD2interD_P2CR_STFD.mod modfiles/pyrD2interD_P2SOM_STFD.mod modfiles/pyrD2interD_STFD.mod modfiles/pyrD2pyrD_STFD_new.mod modfiles/sahpCA3.mod modfiles/sahp.mod modfiles/sahpNE.mod modfiles/vecevent.mod modfiles/xtra_imemrec.mod modfiles/xtra.mod
+2021-08-27 17:00:44,302 [INFO] Building cells.
+2021-08-27 17:00:46,131 [INFO] Building recurrent connections
+2021-08-27 17:01:15,837 [INFO] Building virtual cell stimulations for vpsi_inh_spikes
+2021-08-27 17:03:52,478 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2021-08-27 17:04:22,194 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2021-08-27 17:04:22,944 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2021-08-27 17:04:23,701 [INFO] Building virtual cell stimulations for shell_spikes
+2021-08-27 17:05:11,643 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2021-08-27 17:05:11,644 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-08-27 17:05:11,644 [INFO] Block save every 5000 steps
+2021-08-27 17:06:45,256 [INFO]     step:5000 t_sim:250.00 ms
+2021-08-27 17:08:19,882 [INFO]     step:10000 t_sim:500.00 ms
+2021-08-27 17:09:54,612 [INFO]     step:15000 t_sim:750.00 ms
+2021-08-27 17:11:27,911 [INFO]     step:20000 t_sim:1000.00 ms
+2021-08-27 17:12:58,804 [INFO]     step:25000 t_sim:1250.00 ms
+2021-08-27 17:14:28,964 [INFO]     step:30000 t_sim:1500.00 ms
+2021-08-27 17:16:00,841 [INFO]     step:35000 t_sim:1750.00 ms
+2021-08-27 17:17:33,252 [INFO]     step:40000 t_sim:2000.00 ms
+2021-08-27 17:19:05,525 [INFO]     step:45000 t_sim:2250.00 ms
+2021-08-27 17:20:37,302 [INFO]     step:50000 t_sim:2500.00 ms
+2021-08-27 17:22:09,345 [INFO]     step:55000 t_sim:2750.00 ms
+2021-08-27 17:23:40,354 [INFO]     step:60000 t_sim:3000.00 ms
+2021-08-27 17:25:11,762 [INFO]     step:65000 t_sim:3250.00 ms
+2021-08-27 17:26:43,909 [INFO]     step:70000 t_sim:3500.00 ms
+2021-08-27 17:28:16,049 [INFO]     step:75000 t_sim:3750.00 ms
+2021-08-27 17:29:47,982 [INFO]     step:80000 t_sim:4000.00 ms
+2021-08-27 17:31:20,918 [INFO]     step:85000 t_sim:4250.00 ms
+2021-08-27 17:32:53,162 [INFO]     step:90000 t_sim:4500.00 ms
+2021-08-27 17:34:25,250 [INFO]     step:95000 t_sim:4750.00 ms
+2021-08-27 17:35:55,263 [INFO]     step:100000 t_sim:5000.00 ms
+2021-08-27 17:37:37,704 [INFO]     step:105000 t_sim:5250.00 ms
+2021-08-27 17:39:16,654 [INFO]     step:110000 t_sim:5500.00 ms
+2021-08-27 17:40:52,320 [INFO]     step:115000 t_sim:5750.00 ms
+2021-08-27 17:42:27,290 [INFO]     step:120000 t_sim:6000.00 ms
+2021-08-27 17:44:02,055 [INFO]     step:125000 t_sim:6250.00 ms
+2021-08-27 17:45:35,746 [INFO]     step:130000 t_sim:6500.00 ms
+2021-08-27 17:47:10,799 [INFO]     step:135000 t_sim:6750.00 ms
+2021-08-27 17:48:45,733 [INFO]     step:140000 t_sim:7000.00 ms
+2021-08-27 17:50:19,895 [INFO]     step:145000 t_sim:7250.00 ms
+2021-08-27 17:51:55,271 [INFO]     step:150000 t_sim:7500.00 ms
+2021-08-27 17:53:30,339 [INFO]     step:155000 t_sim:7750.00 ms
+2021-08-27 17:55:03,171 [INFO]     step:160000 t_sim:8000.00 ms
+2021-08-27 17:56:35,098 [INFO]     step:165000 t_sim:8250.00 ms
+2021-08-27 17:58:07,098 [INFO]     step:170000 t_sim:8500.00 ms
+2021-08-27 17:59:39,357 [INFO]     step:175000 t_sim:8750.00 ms
+2021-08-27 18:01:11,796 [INFO]     step:180000 t_sim:9000.00 ms
+2021-08-27 18:02:44,750 [INFO]     step:185000 t_sim:9250.00 ms
+2021-08-27 18:04:14,682 [INFO]     step:190000 t_sim:9500.00 ms
+2021-08-27 18:05:47,601 [INFO]     step:195000 t_sim:9750.00 ms
+2021-08-27 18:07:20,620 [INFO]     step:200000 t_sim:10000.00 ms
+2021-08-27 18:08:53,423 [INFO]     step:205000 t_sim:10250.00 ms
+2021-08-27 18:10:25,876 [INFO]     step:210000 t_sim:10500.00 ms
+2021-08-27 18:11:54,768 [INFO]     step:215000 t_sim:10750.00 ms
+2021-08-27 18:13:26,064 [INFO]     step:220000 t_sim:11000.00 ms
+2021-08-27 18:14:55,898 [INFO]     step:225000 t_sim:11250.00 ms
+2021-08-27 18:16:24,126 [INFO]     step:230000 t_sim:11500.00 ms
+2021-08-27 18:17:51,511 [INFO]     step:235000 t_sim:11750.00 ms
+2021-08-27 18:19:19,744 [INFO]     step:240000 t_sim:12000.00 ms
+2021-08-27 18:20:52,536 [INFO]     step:245000 t_sim:12250.00 ms
+2021-08-27 18:22:23,489 [INFO]     step:250000 t_sim:12500.00 ms
+2021-08-27 18:23:58,473 [INFO]     step:255000 t_sim:12750.00 ms
+2021-08-27 18:25:33,446 [INFO]     step:260000 t_sim:13000.00 ms
+2021-08-27 18:27:08,693 [INFO]     step:265000 t_sim:13250.00 ms
+2021-08-27 18:28:41,169 [INFO]     step:270000 t_sim:13500.00 ms
+2021-08-27 18:30:16,619 [INFO]     step:275000 t_sim:13750.00 ms
+2021-08-27 18:31:51,424 [INFO]     step:280000 t_sim:14000.00 ms
+2021-08-27 18:33:24,916 [INFO]     step:285000 t_sim:14250.00 ms
+2021-08-27 18:34:58,861 [INFO]     step:290000 t_sim:14500.00 ms
+2021-08-27 18:36:33,850 [INFO]     step:295000 t_sim:14750.00 ms
+2021-08-27 18:38:08,761 [INFO]     step:300000 t_sim:15000.00 ms
+2021-08-27 18:38:13,763 [INFO] Simulation completed in 93.0 minutes, 2.121 seconds 
+QStandardPaths: XDG_RUNTIME_DIR points to non-existing path '/run/user/984220', please create it with 0700 permissions.
+qt.qpa.screen: QXcbConnection: Could not connect to display localhost:10.0
+Could not connect to any X display.
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+2021-08-27 18:38:17,653 [INFO] Created log file
+2021-08-27 18:38:17,660 [INFO] Running NEURON with mpi (50 cores).
+Additional mechanisms from files
+ modfiles/bg2pyr.mod modfiles/bginh.mod modfiles/cadyn.mod modfiles/cal2CA3.mod modfiles/cal2.mod modfiles/ca.mod modfiles/capoolCA3.mod modfiles/capool.mod modfiles/cas.mod modfiles/cat.mod modfiles/currentclamp.mod modfiles/function_TMonitor.mod modfiles/gap.mod modfiles/Gfluct_new_exc.mod modfiles/Gfluct_new_inh.mod modfiles/halfgap.mod modfiles/hCA3.mod modfiles/h.mod modfiles/imCA3.mod modfiles/im.mod modfiles/interD2interD_SOMPV_STFD_new.mod modfiles/interD2interD_STFD_new.mod modfiles/interD2pyrD_CR2P_STFD_new.mod modfiles/interD2pyrD_SOM2P_STFD_new.mod modfiles/interD2pyrD_STFD_new.mod modfiles/kadist.mod modfiles/kaprox.mod modfiles/kca.mod modfiles/kdrca1DA.mod modfiles/kdrca1.mod modfiles/kdrCA3.mod modfiles/kdrinter.mod modfiles/leakCA3.mod modfiles/leakDA.mod modfiles/leakinter.mod modfiles/leak.mod modfiles/na3DA.mod modfiles/na3.mod modfiles/nainter.mod modfiles/napCA3.mod modfiles/nap.mod modfiles/natCA3.mod modfiles/nat.mod modfiles/pyrD2interD_P2CR_STFD.mod modfiles/pyrD2interD_P2SOM_STFD.mod modfiles/pyrD2interD_STFD.mod modfiles/pyrD2pyrD_STFD_new.mod modfiles/sahpCA3.mod modfiles/sahp.mod modfiles/sahpNE.mod modfiles/vecevent.mod modfiles/xtra_imemrec.mod modfiles/xtra.mod
+2021-08-27 18:38:21,117 [INFO] Building cells.
+2021-08-27 18:38:21,597 [INFO] Building recurrent connections
+2021-08-27 18:38:51,970 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2021-08-27 18:39:21,395 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2021-08-27 18:39:22,157 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2021-08-27 18:39:22,901 [INFO] Building virtual cell stimulations for shell_spikes
+2021-08-27 18:40:07,915 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2021-08-27 18:40:07,915 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-08-27 18:40:07,915 [INFO] Block save every 5000 steps
+2021-08-27 18:41:24,237 [INFO]     step:5000 t_sim:250.00 ms
+2021-08-27 18:42:43,298 [INFO]     step:10000 t_sim:500.00 ms
+2021-08-27 18:44:04,611 [INFO]     step:15000 t_sim:750.00 ms
+2021-08-27 18:45:26,338 [INFO]     step:20000 t_sim:1000.00 ms
+2021-08-27 18:46:52,680 [INFO]     step:25000 t_sim:1250.00 ms
+2021-08-27 18:48:19,903 [INFO]     step:30000 t_sim:1500.00 ms
+2021-08-27 18:49:47,767 [INFO]     step:35000 t_sim:1750.00 ms
+2021-08-27 18:51:15,436 [INFO]     step:40000 t_sim:2000.00 ms
+2021-08-27 18:52:42,690 [INFO]     step:45000 t_sim:2250.00 ms
+2021-08-27 18:54:10,636 [INFO]     step:50000 t_sim:2500.00 ms
+2021-08-27 18:55:38,931 [INFO]     step:55000 t_sim:2750.00 ms
+2021-08-27 18:57:06,785 [INFO]     step:60000 t_sim:3000.00 ms
+2021-08-27 18:58:33,912 [INFO]     step:65000 t_sim:3250.00 ms
+2021-08-27 19:00:00,147 [INFO]     step:70000 t_sim:3500.00 ms
+2021-08-27 19:01:27,088 [INFO]     step:75000 t_sim:3750.00 ms
+2021-08-27 19:02:55,224 [INFO]     step:80000 t_sim:4000.00 ms
+2021-08-27 19:04:22,377 [INFO]     step:85000 t_sim:4250.00 ms
+2021-08-27 19:05:50,186 [INFO]     step:90000 t_sim:4500.00 ms
+2021-08-27 19:07:15,440 [INFO]     step:95000 t_sim:4750.00 ms
+2021-08-27 19:08:38,341 [INFO]     step:100000 t_sim:5000.00 ms
+2021-08-27 19:10:05,230 [INFO]     step:105000 t_sim:5250.00 ms
+2021-08-27 19:11:32,941 [INFO]     step:110000 t_sim:5500.00 ms
+2021-08-27 19:13:02,972 [INFO]     step:115000 t_sim:5750.00 ms
+2021-08-27 19:14:32,267 [INFO]     step:120000 t_sim:6000.00 ms
+2021-08-27 19:16:02,722 [INFO]     step:125000 t_sim:6250.00 ms
+2021-08-27 19:17:32,515 [INFO]     step:130000 t_sim:6500.00 ms
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: got SIGCONT
+slurmstepd: error: *** JOB 1293 ON engr-nelvm-res CANCELLED AT 2021-08-27T19:18:35 ***
+srun: forcing job termination
+slurmstepd: error: *** STEP 1293.1 ON engr-nelvm-res CANCELLED AT 2021-08-27T19:18:35 ***

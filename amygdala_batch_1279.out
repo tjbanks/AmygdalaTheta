@@ -1,0 +1,80 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+2021-08-26 13:21:21,393 [INFO] Created log file
+2021-08-26 13:21:21,394 [INFO] Running NEURON with mpi (50 cores).
+Additional mechanisms from files
+ modfiles/bg2pyr.mod modfiles/bginh.mod modfiles/cadyn.mod modfiles/cal2CA3.mod modfiles/cal2.mod modfiles/ca.mod modfiles/capoolCA3.mod modfiles/capool.mod modfiles/cas.mod modfiles/cat.mod modfiles/currentclamp.mod modfiles/function_TMonitor.mod modfiles/gap.mod modfiles/Gfluct_new_exc.mod modfiles/Gfluct_new_inh.mod modfiles/halfgap.mod modfiles/hCA3.mod modfiles/h.mod modfiles/imCA3.mod modfiles/im.mod modfiles/interD2interD_SOMPV_STFD_new.mod modfiles/interD2interD_STFD_new.mod modfiles/interD2pyrD_CR2P_STFD_new.mod modfiles/interD2pyrD_SOM2P_STFD_new.mod modfiles/interD2pyrD_STFD_new.mod modfiles/kadist.mod modfiles/kaprox.mod modfiles/kca.mod modfiles/kdrca1DA.mod modfiles/kdrca1.mod modfiles/kdrCA3.mod modfiles/kdrinter.mod modfiles/leakCA3.mod modfiles/leakDA.mod modfiles/leakinter.mod modfiles/leak.mod modfiles/na3DA.mod modfiles/na3.mod modfiles/nainter.mod modfiles/napCA3.mod modfiles/nap.mod modfiles/natCA3.mod modfiles/nat.mod modfiles/pyrD2interD_P2CR_STFD.mod modfiles/pyrD2interD_P2SOM_STFD.mod modfiles/pyrD2interD_STFD.mod modfiles/pyrD2pyrD_STFD_new.mod modfiles/sahpCA3.mod modfiles/sahp.mod modfiles/sahpNE.mod modfiles/vecevent.mod modfiles/xtra_imemrec.mod modfiles/xtra.mod
+2021-08-26 13:21:24,021 [INFO] Building cells.
+2021-08-26 13:21:24,807 [INFO] Building recurrent connections
+2021-08-26 13:21:49,291 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2021-08-26 13:22:10,584 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2021-08-26 13:22:11,118 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2021-08-26 13:22:11,654 [INFO] Building virtual cell stimulations for shell_spikes
+2021-08-26 13:22:48,639 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2021-08-26 13:22:48,639 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2021-08-26 13:22:48,639 [INFO] Block save every 5000 steps
+2021-08-26 13:23:41,732 [INFO]     step:5000 t_sim:250.00 ms
+2021-08-26 13:24:37,167 [INFO]     step:10000 t_sim:500.00 ms
+2021-08-26 13:25:31,399 [INFO]     step:15000 t_sim:750.00 ms
+2021-08-26 13:26:29,493 [INFO]     step:20000 t_sim:1000.00 ms
+2021-08-26 13:27:28,963 [INFO]     step:25000 t_sim:1250.00 ms
+2021-08-26 13:28:25,170 [INFO]     step:30000 t_sim:1500.00 ms
+2021-08-26 13:29:18,926 [INFO]     step:35000 t_sim:1750.00 ms
+2021-08-26 13:30:13,686 [INFO]     step:40000 t_sim:2000.00 ms
+2021-08-26 13:31:08,543 [INFO]     step:45000 t_sim:2250.00 ms
+2021-08-26 13:32:23,970 [INFO]     step:50000 t_sim:2500.00 ms
+2021-08-26 13:33:38,283 [INFO]     step:55000 t_sim:2750.00 ms
+2021-08-26 13:34:48,431 [INFO]     step:60000 t_sim:3000.00 ms
+2021-08-26 13:36:05,492 [INFO]     step:65000 t_sim:3250.00 ms
+2021-08-26 13:37:11,540 [INFO]     step:70000 t_sim:3500.00 ms
+2021-08-26 13:38:28,846 [INFO]     step:75000 t_sim:3750.00 ms
+2021-08-26 13:39:34,724 [INFO]     step:80000 t_sim:4000.00 ms
+2021-08-26 13:40:52,022 [INFO]     step:85000 t_sim:4250.00 ms
+2021-08-26 13:42:03,095 [INFO]     step:90000 t_sim:4500.00 ms
+2021-08-26 13:43:19,907 [INFO]     step:95000 t_sim:4750.00 ms
+2021-08-26 13:44:27,996 [INFO]     step:100000 t_sim:5000.00 ms
+2021-08-26 13:45:40,213 [INFO]     step:105000 t_sim:5250.00 ms
+2021-08-26 13:46:51,739 [INFO]     step:110000 t_sim:5500.00 ms
+2021-08-26 13:47:59,006 [INFO]     step:115000 t_sim:5750.00 ms
+2021-08-26 13:49:07,458 [INFO]     step:120000 t_sim:6000.00 ms
+2021-08-26 13:50:24,618 [INFO]     step:125000 t_sim:6250.00 ms
+2021-08-26 13:51:41,879 [INFO]     step:130000 t_sim:6500.00 ms
+2021-08-26 13:52:59,204 [INFO]     step:135000 t_sim:6750.00 ms
+2021-08-26 13:54:05,996 [INFO]     step:140000 t_sim:7000.00 ms
+2021-08-26 13:55:10,935 [INFO]     step:145000 t_sim:7250.00 ms
+2021-08-26 13:56:28,463 [INFO]     step:150000 t_sim:7500.00 ms
+2021-08-26 13:57:37,949 [INFO]     step:155000 t_sim:7750.00 ms
+2021-08-26 13:58:47,130 [INFO]     step:160000 t_sim:8000.00 ms
+2021-08-26 14:00:01,746 [INFO]     step:165000 t_sim:8250.00 ms
+2021-08-26 14:01:11,807 [INFO]     step:170000 t_sim:8500.00 ms
+2021-08-26 14:02:30,225 [INFO]     step:175000 t_sim:8750.00 ms
+2021-08-26 14:03:48,438 [INFO]     step:180000 t_sim:9000.00 ms
+2021-08-26 14:04:57,006 [INFO]     step:185000 t_sim:9250.00 ms
+2021-08-26 14:06:03,400 [INFO]     step:190000 t_sim:9500.00 ms
+2021-08-26 14:07:12,454 [INFO]     step:195000 t_sim:9750.00 ms
+2021-08-26 14:08:20,702 [INFO]     step:200000 t_sim:10000.00 ms
+2021-08-26 14:09:36,749 [INFO]     step:205000 t_sim:10250.00 ms
+2021-08-26 14:10:54,722 [INFO]     step:210000 t_sim:10500.00 ms
+2021-08-26 14:12:12,546 [INFO]     step:215000 t_sim:10750.00 ms
+2021-08-26 14:13:23,083 [INFO]     step:220000 t_sim:11000.00 ms
+2021-08-26 14:14:40,802 [INFO]     step:225000 t_sim:11250.00 ms
+2021-08-26 14:15:57,066 [INFO]     step:230000 t_sim:11500.00 ms
+2021-08-26 14:17:13,068 [INFO]     step:235000 t_sim:11750.00 ms
+2021-08-26 14:18:29,888 [INFO]     step:240000 t_sim:12000.00 ms
+2021-08-26 14:19:41,253 [INFO]     step:245000 t_sim:12250.00 ms
+2021-08-26 14:20:58,208 [INFO]     step:250000 t_sim:12500.00 ms
+2021-08-26 14:22:08,648 [INFO]     step:255000 t_sim:12750.00 ms
+2021-08-26 14:23:16,686 [INFO]     step:260000 t_sim:13000.00 ms
+2021-08-26 14:24:22,711 [INFO]     step:265000 t_sim:13250.00 ms
+2021-08-26 14:25:40,433 [INFO]     step:270000 t_sim:13500.00 ms
+2021-08-26 14:26:57,230 [INFO]     step:275000 t_sim:13750.00 ms
+2021-08-26 14:28:03,606 [INFO]     step:280000 t_sim:14000.00 ms
+2021-08-26 14:29:14,079 [INFO]     step:285000 t_sim:14250.00 ms
+2021-08-26 14:30:29,886 [INFO]     step:290000 t_sim:14500.00 ms
+2021-08-26 14:31:48,248 [INFO]     step:295000 t_sim:14750.00 ms
+2021-08-26 14:33:04,857 [INFO]     step:300000 t_sim:15000.00 ms
+2021-08-26 14:33:09,056 [INFO] Simulation completed in 70.0 minutes, 20.42 seconds 
+Done running model at Thu Aug 26 14:33:21 CDT 2021
