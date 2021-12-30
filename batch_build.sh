@@ -5,7 +5,7 @@
 #SBATCH --qos=normal
 #SBATCH --job-name=amygdala_theta_build
 #SBATCH --output=amygdala_batch_%j.out
-#SBATCH --time 0-12:00
+#SBATCH --time 0-2400:00
 
 START=$(date)
 python build_network.py
