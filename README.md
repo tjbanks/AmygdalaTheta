@@ -98,6 +98,12 @@ mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_edge_ef
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_vpsi_edge_effects.json
 ```
 
+#### Homogenous Tests (Base and VPSI)
+```
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_homogenous.json
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_vpsi_homogenous.json
+```
+
 ### Analysis of the model
 
 Analysis of the model is primarily comprised of a spike raster, mean firing rates, raw LFP, and LFP PSD. Launch using:
