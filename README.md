@@ -72,6 +72,11 @@ The network can be tested using any one of the simulation configuration files li
 | **[simulation_configECP_vpsi_edge_effects.json](./simulation_configECP_vpsi_edge_effects.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test **WITH EDGE EFFECT spikes presented**|
 | [simulation_configECP_vpsi_vclamp.json](./simulation_configECP_vpsi_vclamp.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Same as [simulation_configECP_vpsi.json](./simulation_configECP_vpsi.json), 11 voltage clamped PN cells, igaba from SOM+ synapses are recorded and placed in `outputECP/syn_report.h5` - Analysis completed using [ipsc_analysis.m](./matlab/ipsc_analysis.m) notes below
 | [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 3Hz Poisson inh to PN/INT | Testing Non-rhythmic inhibition to PN/PV|
+| **[simulation_configECP_base_homogenous.json](./simulation_configECP_base_homogenous.json)** | Thalamic 2Hz to PN, SOM, CR | Quiet-waking state, baseline configuration file for **HOMOGENOUS** network|
+| **[simulation_configECP_vpsi_homogenous.json](./simulation_configECP_vpsi_homogenous.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test for **HOMOGENOUS** network|
+
+
+
 
 Primary tests **bold**
 
