@@ -13,6 +13,7 @@ from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_secti
 np.random.seed(123412)
 
 network_dir = 'network'
+components_dir = 'components'
 t_sim = 15000.0
 dt = 0.05
 scale = 27
@@ -27,6 +28,14 @@ num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an
 
 min_conn_dist = 0.0 
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
+
+if __name__ == '__main__':
+    if __file__ != sys.argv[-1] and sys.argv[-1] == 'homogenous':
+        network_dir = network_dir + '_homogenous'
+        components_dir = components_dir + '_homogenous'
+        scale = 1
+        max_conn_dist = 9999.9
+        
 
 # Create the possible x,y,z coordinates
 x_start, x_end = 0+max_conn_dist,1000+max_conn_dist
@@ -879,6 +888,6 @@ build_env_bionet(base_dir='./',
                        ('thalamus_som','thalamus_som_spikes.h5'),
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
                        ('shell','shell_spikes.h5')],
-		components_dir='components',
+		components_dir=components_dir,
         config_file='simulation_config.json',
 		compile_mechanisms=True)

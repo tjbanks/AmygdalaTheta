@@ -18,7 +18,7 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
 (primary files **bold**)
 
-To generate the above files create Thalamic and VSPI inputs using
+To generate the above files create Thalamic and VSPI inputs using the following. **If you change the scale you will need to re-run this with the correct scale variable set!**
 ```
 python build_input.py
 
@@ -26,7 +26,7 @@ python build_input.py
 
 To generate 8Hz rhythmic inputs (based on Fink et al 2015). Repository comes with this file so, following these
 steps isn't completely necessary. If you want to edit the parameters or rate at which the rhythmic inhibition
-is presented, run the following:
+is presented, run the following: **If you change the scale you will need to re-run this with the correct scale variable set!**
 ```
 matlab &
 generatethetainputs
@@ -49,6 +49,12 @@ python build_network.py
 ```
 
 If you have a shell of cells to deal with edge effects then the `shell_spikes.h5` file will be re-generated.
+
+To generate a **homogenous** network then run
+
+```
+python build_network.py homogenous
+```
 
 ### 3. Execute run script
 
