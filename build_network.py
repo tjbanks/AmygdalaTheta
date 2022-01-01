@@ -5,7 +5,7 @@ from bmtk.utils.sim_setup import build_env_bionet
 import synapses
 import math
 import random
-import os
+import os, sys
 
 from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent_o2a, recurrent_connector_o2a)
@@ -18,16 +18,11 @@ t_sim = 15000.0
 dt = 0.05
 scale = 27
 
-#Number of cells in each population
-numPN_A = 569 * scale #640 * scale #4114#15930
-numPN_C = 231 * scale #260 * scale #4115#6210
-numPV = 93 * scale #100 * scale #854#4860
-numSOM = 51 * scale #42 * scale
-numCR = 56 * scale #42 * scale
-num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
-
-min_conn_dist = 0.0 
+min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
+
+# When enabled, a shell of virtual cells will be created around the core network.
+edge_effects = True
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1] and sys.argv[-1] == 'homogenous':
@@ -35,7 +30,18 @@ if __name__ == '__main__':
         components_dir = components_dir + '_homogenous'
         scale = 1
         max_conn_dist = 9999.9
-        
+        edge_effects = False
+        print('Building homogenous network')
+    else:
+        print('Building full network')
+
+#Number of cells in each population
+numPN_A = 569 * scale #640 * scale #4114#15930
+numPN_C = 231 * scale #260 * scale #4115#6210
+numPV = 93 * scale #100 * scale #854#4860
+numSOM = 51 * scale #42 * scale
+numCR = 56 * scale #42 * scale
+num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 # Create the possible x,y,z coordinates
 x_start, x_end = 0+max_conn_dist,1000+max_conn_dist
@@ -46,8 +52,6 @@ pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
 pos_list[:,2] = pos_list[:,2]*(z_end - z_start) + z_start
 
-# When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = True 
 
 def build_networks(network_definitions: list) -> dict:
     # network_definitions should be a list of dictionaries eg:[{}]
