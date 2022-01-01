@@ -22,7 +22,9 @@ min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
 
 # When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = True
+edge_effects = True 
+
+net_size = 1000#um
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1] and sys.argv[-1] == 'homogenous':
@@ -31,6 +33,8 @@ if __name__ == '__main__':
         scale = 1
         max_conn_dist = 9999.9
         edge_effects = False
+        net_size = 600
+
         print('Building homogenous network')
     else:
         print('Building full network')
@@ -44,9 +48,9 @@ numCR = 56 * scale #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 # Create the possible x,y,z coordinates
-x_start, x_end = 0+max_conn_dist,1000+max_conn_dist
-y_start, y_end = 0+max_conn_dist,1000+max_conn_dist
-z_start, z_end = 0+max_conn_dist,1000+max_conn_dist
+x_start, x_end = 0+max_conn_dist,net_size+max_conn_dist
+y_start, y_end = 0+max_conn_dist,net_size+max_conn_dist
+z_start, z_end = 0+max_conn_dist,net_size+max_conn_dist
 pos_list = np.random.rand(num_cells,3)
 pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
