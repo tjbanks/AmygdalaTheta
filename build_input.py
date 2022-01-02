@@ -3,7 +3,7 @@ import sys
 
 from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 
-scale=5
+scale=1
 
 def lognorm_fr_list(n,m,s):
     mean = np.log(m) - 0.5 * np.log((s/m)**2+1)
