@@ -31,14 +31,14 @@ def build_input(t_sim, numPN_A = 569, numPN_C=231, numPV = 93, numSOM=51, numCR=
     # THALAMUS
     build_poisson_input(population='thalamus_pyr',
                         node_ids=range((numPN_A+numPN_C)*scale),
-                        mean=4,std=1,
+                        mean=2,std=1,
                         output_h5='thalamus_pyr_spikes.h5',
                         t_sim=t_sim)
     
     # THALAMUS
     build_poisson_input(population='thalamus_pv',
                         node_ids=range((numPV)*scale),
-                        mean=4,std=1,
+                        mean=2,std=1,
                         output_h5='thalamus_pv_spikes.h5',
                         t_sim=t_sim)
  
