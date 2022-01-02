@@ -40,11 +40,11 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None):
     win = hanning(nfft, True)
 
     f,pxx = welch(lfp_d,fs,window=win,noverlap=noverlap,nfft=nfft)
-
+    
     ax.set_xscale('log')
     ax.set_yscale('log')
     ax.plot(f, pxx*1000,linewidth=0.6)
-    ax.set_ylim([0.00001,0.1])
+    ax.set_ylim([0,0.1])
     
     
     
