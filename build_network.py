@@ -23,11 +23,34 @@ max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
 
 # When enabled, a shell of virtual cells will be created around the core network.
 edge_effects = True 
-
 net_size = 1000#um
 
+#Number of cells in each population
+numPN_A = 569
+numPN_C = 231
+numPV = 93
+numSOM = 51
+numCR = 56
+
 if __name__ == '__main__':
-    if __file__ != sys.argv[-1] and sys.argv[-1] == 'homogenous':
+    if 'feng_homogenous' in sys.argv:
+        numPN_A = 640
+        numPN_C = 260
+        numPV = 100
+        numSOM = 0
+        numCR = 0
+
+        network_dir = network_dir + '_feng_homogenous'
+        components_dir = components_dir + '_feng_homogenous'
+        scale = 1
+        max_conn_dist = 9999.9
+        edge_effects = False
+        net_size = 600
+
+        print("Building Feng's original homogenous network")
+        print("Ommiting SOM and CR cells")
+
+    elif 'homogenous' in sys.argv:
         network_dir = network_dir + '_homogenous'
         components_dir = components_dir + '_homogenous'
         scale = 1
@@ -36,15 +59,16 @@ if __name__ == '__main__':
         net_size = 600
 
         print('Building homogenous network')
+
     else:
         print('Building full network')
 
-#Number of cells in each population
-numPN_A = 569 * scale #640 * scale #4114#15930
-numPN_C = 231 * scale #260 * scale #4115#6210
-numPV = 93 * scale #100 * scale #854#4860
-numSOM = 51 * scale #42 * scale
-numCR = 56 * scale #42 * scale
+#Scale the number of cells in each population
+numPN_A = numPN_A * scale #640 * scale #4114#15930
+numPN_C = numPN_C * scale #260 * scale #4115#6210
+numPV = numPV * scale #100 * scale #854#4860
+numSOM = numSOM * scale #42 * scale
+numCR = numCR * scale #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 # Create the possible x,y,z coordinates
@@ -882,20 +906,27 @@ if edge_effects:
     build_shell_inputs() 
 
 from build_input import build_input
-build_input(t_sim,scale=scale)
+
+build_input(t_sim, 
+            numPN_A = numPN_A,
+            numPN_C = numPN_C,
+            numPV = numPV,
+            numSOM = numSOM,
+            numCR = numCR,
+            scale = scale)
 
 # Usually not necessary if you've already built your simulation config
 build_env_bionet(base_dir='./',
-		network_dir=network_dir,
-		tstop=t_sim, dt = dt,
-		report_vars = ['v'],
+	network_dir=network_dir,
+	tstop=t_sim, dt = dt,
+	report_vars = ['v'],
         v_init = -70.0,
         celsius = 31.0,
-		spikes_inputs=[('vpsi_inh','vpsi_inh_spikes.h5'),# Name of population which spikes will be generated for, file
+	spikes_inputs=[('vpsi_inh','vpsi_inh_spikes.h5'),# Name of population which spikes will be generated for, file
                        ('thalamus_pyr','thalamus_pyr_spikes.h5'),
                        ('thalamus_som','thalamus_som_spikes.h5'),
                        ('thalamus_cr','thalamus_cr_spikes.h5'),
                        ('shell','shell_spikes.h5')],
-		components_dir=components_dir,
+	components_dir=components_dir,
         config_file='simulation_config.json',
-		compile_mechanisms=True)
+	compile_mechanisms=True)

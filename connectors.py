@@ -141,9 +141,12 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
     global all_synapses
     sid = source.node_id
     tids = np.array([target.node_id for target in targets])
-
+    
     #List of synapses that will be returned, initialized to 0 synapses
     syns = np.array([0 for _ in range(len(targets))])
+    
+    if not len(tids):
+        return syns
 
     #Get all existing targets for that source that can't be targetted here
     existing = all_synapses[all_synapses.source_gid == sid]

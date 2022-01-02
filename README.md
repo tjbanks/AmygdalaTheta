@@ -18,7 +18,8 @@ Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
 (primary files **bold**)
 
-To generate the above files create Thalamic and VSPI inputs using the following. **If you change the scale you will need to re-run this with the correct scale variable set!**
+To generate the above files create Thalamic and VSPI inputs using the following. 
+** `build_network.py` will run this automatically with the appropriate parameters **
 ```
 python build_input.py
 
@@ -56,6 +57,12 @@ To generate a **homogenous** network then run
 python build_network.py homogenous
 ```
 
+To generate Feng's original homogenous network
+
+```
+python build_network.py feng_homogenous
+```
+
 ### 3. Execute run script
 
 The network can be tested using any one of the simulation configuration files listed below (`python run_network.py [configuration file]`)
@@ -74,7 +81,7 @@ The network can be tested using any one of the simulation configuration files li
 | [simulation_configECP_vpsi_vclamp_nonrhythmic.json](./simulation_configECP_vpsi_vclamp_nonrhythmic.json) | Thalamic 2Hz to PN, SOM, CR, VPSI 3Hz Poisson inh to PN/INT | Testing Non-rhythmic inhibition to PN/PV|
 | **[simulation_configECP_base_homogenous.json](./simulation_configECP_base_homogenous.json)** | Thalamic 2Hz to PN, SOM, CR | Quiet-waking state, baseline configuration file for **HOMOGENOUS** network|
 | **[simulation_configECP_vpsi_homogenous.json](./simulation_configECP_vpsi_homogenous.json)** | Thalamic 2Hz to PN, SOM, CR, VPSI 8Hz rhythmic inh to PN/INT | Primary VPSP input test for **HOMOGENOUS** network|
-
+| **[simulation_configECP_base_feng_homogenous.json](./simulation_configECP_base_feng_homogenous.json)** | Thalamic 2Hz to PN | Quiet-waking state, baseline configuration file for **FENG'S ORIGINAL HOMOGENOUS NETWORK** network|
 
 
 
@@ -91,17 +98,39 @@ python run_network.py simulation_configECP_base_edge_effects.json
 1000 Cell models run for **5-6 minutes** on ~50 cores.
 ```
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_edge_effects.json
+
+OR
+
+sbatch batch_run.sh
 ```
 
 #### Theta Test
 ```
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_vpsi_edge_effects.json
+
+OR
+
+sbatch batch_vpsi_run.sh
 ```
 
 #### Homogenous Tests (Base and VPSI)
 ```
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_homogenous.json
 mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_vpsi_homogenous.json
+
+OR
+
+sbatch batch_run_hom.sh
+sbatch batch_vpsi_run_hom.sh
+```
+
+#### Feng Homogenous Tests (Base)
+```
+mpirun -n 50 nrniv -mpi -python run_network.py simulation_configECP_base_feng_homogenous.json
+
+OR
+
+sbatch batch_run_feng_hom.sh
 ```
 
 ### Analysis of the model
