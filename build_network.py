@@ -75,6 +75,12 @@ num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an
 x_start, x_end = 0+max_conn_dist,net_size+max_conn_dist
 y_start, y_end = 0+max_conn_dist,net_size+max_conn_dist
 z_start, z_end = 0+max_conn_dist,net_size+max_conn_dist
+
+if not edge_effects:
+    x_start, x_end = 0,net_size
+    y_start, y_end = 0,net_size
+    z_start, z_end = 0,net_size    
+
 pos_list = np.random.rand(num_cells,3)
 pos_list[:,0] = pos_list[:,0]*(x_end - x_start) + x_start
 pos_list[:,1] = pos_list[:,1]*(y_end - y_start) + y_start
