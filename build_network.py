@@ -218,6 +218,19 @@ network_definitions = [
         ]
     },
     {
+        # Thalamic PV INPUTS
+        'network_name':'thalamus_pv',
+        'positions_list':None,
+        'cells':[
+            {
+                'N':numPV,
+                'pop_name':'pv_inp',
+                'pop_group':'thalamus_pv',
+                'model_type':'virtual'
+            }
+        ]
+    },
+    {
         # Thalamic SOM INPUTS
         'network_name':'thalamus_som',
         'positions_list':None,
@@ -548,6 +561,15 @@ edge_definitions = [
         'param': 'THALAMUS2PYR',
         'add_properties': 'syn_uniform_delay_section_default'        
     },
+    {   # Thalamus to Pyramidal
+        'network':'BLA',
+        'edge': {
+            'source':networks['thalamus_pv'].nodes(),
+            'target':networks['BLA'].nodes(pop_name=['PV'])
+        },
+        'param': 'THALAMUS2PV',
+        'add_properties': 'syn_uniform_delay_section_default'
+    },
     {   # Thalamus to SOM
         'network':'BLA',
         'edge': {
@@ -725,6 +747,13 @@ edge_params = {
         'connection_rule':one_to_one,
         'syn_weight':1,
         'dynamics_params':'BG2PNe_thalamus_min.json',
+        'distance_range':[0.0, 9999.9],
+        'target_sections':['basal']
+    },
+    'THALAMUS2PV': {
+        'connection_rule':one_to_one,
+        'syn_weight':1,
+        'dynamics_params':'BG2PNi_feng_min.json',
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal']
     },
