@@ -46,8 +46,19 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None):
     ax.plot(f, pxx*1000,linewidth=0.6)
     ax.set_ylim([0.00001,0.1])
     
-    
-    
+    theta = pxx[np.where((f>8) & (f<12))]*1000
+    gamma = pxx[np.where((f>50) & (f<60))]*1000
+    mean_theta = theta.mean()
+    peak_theta = theta.max()
+    mean_gamma = gamma.mean()
+    peak_gamma = gamma.max()
+    print('')
+    print("Mean theta (8Hz-12Hz)  : " + str(mean_theta))
+    print("Mean gamma (50Hz-60Hz) : " + str(mean_gamma))
+    print('')
+    print("Peak theta (8Hz-12Hz)  : " + str(peak_theta))
+    print("Peak gamma (50Hz-60Hz) : " + str(peak_gamma))
+    print('')
 
 def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10):
     print("Type : mean (std)")
