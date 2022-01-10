@@ -1,0 +1,110 @@
+// Created by FF (2018)
+// Procs here are used to introduce generated external spike trains to network 
+
+
+
+
+///revise version for all cells/////
+objref Inputvecplay[TotalCellNum],Inputspikes[TotalCellNum]
+objref Inputsyn[TotalCellNum],Inputnc[TotalCellNum]
+objref rc,rc_E
+
+//objref Inputvecplay_I[Inputnum_I][I_connectnum],Inputspikes_I[Inputnum_I]
+//objref Inputsyn_I[Inputnum_I][I_connectnum],Inputnc_I[Inputnum_I][I_connectnum]
+//objref rc_E2I
+
+proc ConnectInputs_E() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target  ///connect spike trains to PNs
+		 {pc.barrier()}
+        portion_PNs=$1
+        meanwgt2PN=$2
+        varwgt2PN=$3
+
+	    for i = 0,CellNum_p-1 {
+           rc =new Random(i+1000)
+           if(rc.uniform(0,1) > portion_PNs) {continue}
+          
+        ind_start=0+2*i
+        ind_stop=1+2*i
+        
+        if (Etn_spikes_ind.x[ind_start]<=Etn_spikes_ind.x[ind_stop]) {   ///only connect when there is spikes coming
+        
+        Inputspikes[i]=Etn_spikes.at(Etn_spikes_ind.x[ind_start],Etn_spikes_ind.x[ind_stop])  ///to get all external spikes
+        
+		//for j = 0,1-1 { 
+		    
+			cellgid = i//E2P_matrix.x[i][j]
+			//if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+
+				target.dend Inputsyn[i] = new bg2pyr(0.9)//pyrD2pyrD_STFD(0.9)
+                 {rc_E = new Random(i+1000)}
+                  wgt = rc_E.lognormal(meanwgt2PN,varwgt2PN)//(9,0.05)
+                  del = rc_E.uniform(0.5,1)
+                Inputsyn[i].initW=wgt
+				Inputvecplay[i] = new VecStim() 
+				Inputvecplay[i].play(Inputspikes[i])
+
+				Inputnc[i] = new NetCon(Inputvecplay[i],Inputsyn[i])
+				
+				
+				Inputnc[i].weight = 1
+				Inputnc[i].delay = del
+
+				Inputnc[i].threshold = -10//nc.threshold = thr
+
+			//}
+			}
+		//}
+	}
+	
+	{pc.barrier()}
+}
+
+proc ConnectInputs_I() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target ///connect spike trains to FSIs
+		 {pc.barrier()}
+        portion_ITNs=$1
+        meanwgt2ITNs=$2
+        varwgt2ITNs=$3
+        
+	    for i = CellNum_p,CellNum_p+CellNum_interneuron-1{
+
+        rc =new Random(i+1000)
+        if(rc.uniform(0,1) > portion_ITNs) {continue}
+           
+        ind_start=0+2*i
+        ind_stop=1+2*i
+        if (Etn_spikes_ind.x[ind_start]<=Etn_spikes_ind.x[ind_stop]) {   ///only connect when there is spikes coming
+        Inputspikes[i]=Etn_spikes.at(Etn_spikes_ind.x[ind_start],Etn_spikes_ind.x[ind_stop])  ///to get all external spikes
+        
+		//for j = 0,I_connectnum-1 { 
+		    
+			//inputid = i
+			cellgid = i//E2I_matrix.x[i][j]
+			//if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+
+                target.dend Inputsyn[i] = new bg2pyr(0.9)//pyrD2interD_STFD(0.9)
+                 {rc_E = new Random(i+1000)}
+                  wgt = rc_E.lognormal(meanwgt2ITNs,varwgt2ITNs)//(2,0.2)
+                  del = rc_E.uniform(0.5,1)
+                Inputsyn[i].initW=wgt				
+				Inputvecplay[i] = new VecStim()                 
+				Inputvecplay[i].play(Inputspikes[i])
+				Inputnc[i] = new NetCon(Inputvecplay[i],Inputsyn[i])
+				
+				Inputnc[i].weight = 1
+				Inputnc[i].delay = del
+
+				Inputnc[i].threshold = -10//nc.threshold = thr
+				
+				
+			//}
+			}
+		//}
+	}
+
+	{pc.barrier()}
+}
+

@@ -1,0 +1,85 @@
+begintemplate BurstGen
+
+	public burst_freq,burst_start,burst_duration,burst_total_length,burst_trial_number,refractory_period,burst_netstim,burst_turn,intfire1,TempNetCon1,TempNetCon2,TempNetCon3
+	objref burst_netstim,burst_turn,intfire1,TempNetCon1,TempNetCon2,TempNetCon3,noise_random
+	
+	proc init() {
+		burst_freq = $1
+		burst_start = $2
+
+		burst_on_time = $3
+		burst_off_time = $4
+		burst_trial_number = $5
+
+		refractory_period = $6
+
+		timestep = $7
+        
+        noise_random=$o8
+
+		refractory_period = refractory_period - timestep
+
+		burst_total_length = (burst_on_time + burst_off_time)*burst_trial_number
+
+		burst_netstim = new NetStim()
+		burst_netstim.interval = 1000/burst_freq
+		burst_netstim.number = burst_total_length*burst_freq/1000
+		burst_netstim.start = burst_start//+burst_off_time
+		burst_netstim.noise = 1
+        burst_netstim.noiseFromRandom(noise_random)
+
+
+		burst_turn = new NetStim()
+		burst_turn.interval = burst_on_time+burst_off_time
+		burst_turn.number = burst_trial_number
+		burst_turn.start = burst_start//+burst_off_time
+		burst_turn.noise = 0
+
+		intfire1 = new IntFire1()
+		intfire1.tau = 1e9
+		intfire1.refrac = refractory_period
+		intfire1.m = 0
+
+		intfirewgt = 1+(1e-9)
+
+		TempNetCon1 = new NetCon(burst_turn,burst_netstim,0.5,0,1)
+		TempNetCon2 = new NetCon(burst_turn,burst_netstim,0.5,burst_on_time,-1)
+		TempNetCon3 = new NetCon(burst_netstim,intfire1,0.5,0,intfirewgt)
+	}
+	
+endtemplate BurstGen
+
+begintemplate PhasicburstSignalGen
+  
+
+    public burst
+    objref singleburst[10e3],burst,tempburst[10e3]
+    
+proc init() {
+
+    burst_low_freq=$1
+    burstfreq_increase=$2
+    burst_on_time=$3
+    burst_off_time=$4
+    burst_len=$5
+    burst_num=$6
+    stablized_time=$9
+     for i=0,burst_num-1 {
+          singleburst[i] = new BurstGen(burst_low_freq+i*burstfreq_increase,stablized_time+i*burst_len,burst_on_time,burst_off_time,1,5,$7,$o8)
+                    
+              }
+    
+    ////to link all bursts
+    //print "ddddd:", burst_num
+     if (burst_num>1) {
+    
+    tempburst[0]=new NetStimOR(singleburst[1].intfire1,singleburst[0].intfire1,$7)
+     for i=1,burst_num-2{
+         tempburst[i] = new NetStimOR(singleburst[i].intfire1,tempburst[i-1].intfire1,$7)
+    }
+     burst=new NetStimOR(singleburst[burst_num-1].intfire1,tempburst[burst_num-2].intfire1,$7)
+     } else {burst=new NetStimOR(singleburst[burst_num-1].intfire1,singleburst[burst_num-2].intfire1,$7)}
+}
+
+endtemplate PhasicburstSignalGen
+

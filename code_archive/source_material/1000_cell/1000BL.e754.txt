@@ -1,0 +1,406 @@
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+84 nrniv: cadyn is not a MECHANISM
+84  in MC_CP_celltemplate.hoc near line 77
+84  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        84 xopen("MC_CP_cell...")
+      84 execute1("{xopen("MC...")
+    84 load_file("MC_CP_cell...")
+84 nrniv: leakinter is not a MECHANISM
+84  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+84  			insert leakinter
+     86 nrniv: cadyn is not a MECHANISM
+86  in MC_CP_celltemplate.hoc near line 77
+86  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        86 xopen("MC_CP_cell...")
+      86 execute1("{xopen("MC...")
+    86 load_file("MC_CP_cell...")
+86 nrniv: leakinter is not a MECHANISM
+86  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+86  			insert leakinter
+                   ^
+        86 xopen("interneuro...")
+      86 execute1("{xopen("in...")
+    86 load_file("interneuro...")
+              ^
+        84 xopen("interneuro...")
+      84 execute1("{xopen("in...")
+    84 load_file("interneuro...")
+84 nrniv: leakCA3 is not a MECHANISM
+84  in SOM.hoc near line 90
+84  			insert leakCA3 
+                 ^
+        84 xopen("SOM.hoc")
+      84 execute1("{xopen("SO...")
+    84 load_file("SOM.hoc")
+84 nrniv: templatestack overflow
+84  in BgGen.hoc near line 1
+84  begintemplate BgGen
+                   ^
+        84 xopen("BgGen.hoc")
+      84 execute1("{xopen("Bg...")
+    84 load_file("BgGen.hoc")
+86 nrniv: leakCA3 is not a MECHANISM
+86  in SOM.hoc near line 90
+86  			insert leakCA3 
+                 ^
+        86 xopen("SOM.hoc")
+      86 execute1("{xopen("SO...")
+    86 load_file("SOM.hoc")
+86 nrniv: templatestack overflow
+86  in BgGen.hoc near line 1
+86  begintemplate BgGen
+                   ^
+        86 xopen("BgGen.hoc")
+      86 execute1("{xopen("Bg...")
+    86 load_file("BgGen.hoc")
+21 nrniv: cadyn is not a MECHANISM
+21  in MC_CP_celltemplate.hoc near line 77
+21  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        21 xopen("MC_CP_cell...")
+      21 execute1("{xopen("MC...")
+    21 load_file("MC_CP_cell...")
+21 nrniv: leakinter is not a MECHANISM
+21  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+21  			insert leakinter
+                   ^
+        21 xopen("interneuro...")
+      21 execute1("{xopen("in...")
+    21 load_file("interneuro...")
+21 nrniv: leakCA3 is not a MECHANISM
+21  in SOM.hoc near line 90
+21  			insert leakCA3 
+                 ^
+        21 xopen("SOM.hoc")
+      21 execute1("{xopen("SO...")
+    21 load_file("SOM.hoc")
+37 nrniv: cadyn is not a MECHANISM
+37  in MC_CP_celltemplate.hoc near line 77
+37  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        37 xopen("MC_CP_cell...")
+      37 execute1("{xopen("MC...")
+    37 load_file("MC_CP_cell...")
+37 nrniv: leakinter is not a MECHANISM
+37  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+37  			insert leakinter
+                   ^
+        37 xopen("interneuro...")
+      37 execute1("{xopen("in...")
+    37 load_file("interneuro...")
+37 nrniv: leakCA3 is not a MECHANISM
+37  in SOM.hoc near line 90
+37  			insert leakCA3 
+                 ^
+        37 xopen("SOM.hoc")
+      37 execute1("{xopen("SO...")
+    37 load_file("SOM.hoc")
+37 nrniv: templatestack overflow
+37  in BgGen.hoc near line 1
+37  begintemplate BgGen
+                   ^
+        37 xopen("BgGen.hoc")
+      37 execute1("{xopen("Bg...")
+    37 load_file("BgGen.hoc")
+59 nrniv: cadyn is not a MECHANISM
+59  in MC_CP_celltemplate.hoc near line 77
+59  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        59 xopen("MC_CP_cell...")
+      59 execute1("{xopen("MC...")
+    59 load_file("MC_CP_cell...")
+59 nrniv: leakinter is not a MECHANISM
+59  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+59  			insert leakinter
+                   ^
+        59 xopen("interneuro...")
+      59 execute1("{xopen("in...")
+    59 load_file("interneuro...")
+59 nrniv: leakCA3 is not a MECHANISM
+59  in SOM.hoc near line 90
+59  			insert leakCA3 
+                 ^
+        59 xopen("SOM.hoc")
+      59 execute1("{xopen("SO...")
+    59 load_file("SOM.hoc")
+59 nrniv: templatestack overflow
+59  in BgGen.hoc near line 1
+59  begintemplate BgGen
+                   ^
+        59 xopen("BgGen.hoc")
+      59 execute1("{xopen("Bg...")
+    59 load_file("BgGen.hoc")
+21 nrniv: templatestack overflow
+21  in BgGen.hoc near line 1
+21  begintemplate BgGen
+                   ^
+        21 xopen("BgGen.hoc")
+      21 execute1("{xopen("Bg...")
+    21 load_file("BgGen.hoc")
+48 nrniv: cadyn is not a MECHANISM
+48  in MC_CP_celltemplate.hoc near line 77
+48  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        48 xopen("MC_CP_cell...")
+      48 execute1("{xopen("MC...")
+    48 load_file("MC_CP_cell...")
+48 nrniv: leakinter is not a MECHANISM
+48  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+48  			insert leakinter
+                   ^
+        48 xopen("interneuro...")
+      48 execute1("{xopen("in...")
+    48 load_file("interneuro...")
+48 nrniv: leakCA3 is not a MECHANISM
+48  in SOM.hoc near line 90
+48  			insert leakCA3 
+                 ^
+        48 xopen("SOM.hoc")
+      48 execute1("{xopen("SO...")
+    48 load_file("SOM.hoc")
+48 nrniv: templatestack overflow
+48  in BgGen.hoc near line 1
+48  begintemplate BgGen
+                   ^
+        48 xopen("BgGen.hoc")
+      48 execute1("{xopen("Bg...")
+    48 load_file("BgGen.hoc")
+56 nrniv: cadyn is not a MECHANISM
+56  in MC_CP_celltemplate.hoc near line 77
+56  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        56 xopen("MC_CP_cell...")
+      56 execute1("{xopen("MC...")
+    56 load_file("MC_CP_cell...")
+56 nrniv: leakinter is not a MECHANISM
+56  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+56  			insert leakinter
+                   ^
+        56 xopen("interneuro...")
+      56 execute1("{xopen("in...")
+    56 load_file("interneuro...")
+56 nrniv: leakCA3 is not a MECHANISM
+56  in SOM.hoc near line 90
+56  			insert leakCA3 
+                 ^
+        56 xopen("SOM.hoc")
+      56 execute1("{xopen("SO...")
+    56 load_file("SOM.hoc")
+56 nrniv: templatestack overflow
+56  in BgGen.hoc near line 1
+56  begintemplate BgGen
+                   ^
+        56 xopen("BgGen.hoc")
+      56 execute1("{xopen("Bg...")
+    56 load_file("BgGen.hoc")
+1 nrniv: cadyn is not a MECHANISM
+1  in MC_CP_celltemplate.hoc near line 77
+1  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        1 xopen("MC_CP_cell...")
+      1 execute1("{xopen("MC...")
+    1 load_file("MC_CP_cell...")
+1 nrniv: leakinter is not a MECHANISM
+1  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+1  			insert leakinter
+                   ^
+        1 xopen("interneuro...")
+      1 execute1("{xopen("in...")
+    1 load_file("interneuro...")
+98 nrniv: cadyn is not a MECHANISM
+98  in MC_CP_celltemplate.hoc near line 77
+98  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        98 xopen("MC_CP_cell...")
+      98 execute1("{xopen("MC...")
+    98 load_file("MC_CP_cell...")
+98 nrniv: leakinter is not a MECHANISM
+98  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+98  			insert leakinter
+                   ^
+        98 xopen("interneuro...")
+      98 execute1("{xopen("in...")
+    98 load_file("interneuro...")
+1 nrniv: leakCA3 is not a MECHANISM
+1  in SOM.hoc near line 90
+1  			insert leakCA3 
+                 ^
+        1 xopen("SOM.hoc")
+      1 execute1("{xopen("SO...")
+    1 load_file("SOM.hoc")
+1 nrniv: templatestack overflow
+1  in BgGen.hoc near line 1
+1  begintemplate BgGen
+                   ^
+        1 xopen("BgGen.hoc")
+      1 execute1("{xopen("Bg...")
+    1 load_file("BgGen.hoc")
+53 nrniv: cadyn is not a MECHANISM
+53  in MC_CP_celltemplate.hoc near line 77
+53  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        53 xopen("MC_CP_cell...")
+      53 execute1("{xopen("MC...")
+    53 load_file("MC_CP_cell...")
+53 nrniv: leakinter is not a MECHANISM
+53  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+53  			insert leakinter
+                   ^
+        53 xopen("interneuro...")
+      53 execute1("{xopen("in...")
+    53 load_file("interneuro...")
+53 nrniv: leakCA3 is not a MECHANISM
+53  in SOM.hoc near line 90
+53  			insert leakCA3 
+                 ^
+        53 xopen("SOM.hoc")
+      53 execute1("{xopen("SO...")
+    53 load_file("SOM.hoc")
+53 nrniv: templatestack overflow
+53  in BgGen.hoc near line 1
+53  begintemplate BgGen
+                   ^
+        53 xopen("BgGen.hoc")
+      53 execute1("{xopen("Bg...")
+    53 load_file("BgGen.hoc")
+69 nrniv: cadyn is not a MECHANISM
+69  in MC_CP_celltemplate.hoc near line 77
+69  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        69 xopen("MC_CP_cell...")
+      69 execute1("{xopen("MC...")
+    69 load_file("MC_CP_cell...")
+69 nrniv: leakinter is not a MECHANISM
+69  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+69  			insert leakinter
+                   ^
+        69 xopen("interneuro...")
+      69 execute1("{xopen("in...")
+    69 load_file("interneuro...")
+69 nrniv: leakCA3 is not a MECHANISM
+69  in SOM.hoc near line 90
+69  			insert leakCA3 
+                 ^
+        69 xopen("SOM.hoc")
+      69 execute1("{xopen("SO...")
+    69 load_file("SOM.hoc")
+69 nrniv: templatestack overflow
+69  in BgGen.hoc near line 1
+69  begintemplate BgGen
+                   ^
+        69 xopen("BgGen.hoc")
+      69 execute1("{xopen("Bg...")
+    69 load_file("BgGen.hoc")
+98 nrniv: leakCA3 is not a MECHANISM
+98  in SOM.hoc near line 90
+98  			insert leakCA3 
+                 ^
+        98 xopen("SOM.hoc")
+      98 execute1("{xopen("SO...")
+    98 load_file("SOM.hoc")
+98 nrniv: templatestack overflow
+98  in BgGen.hoc near line 1
+98  begintemplate BgGen
+                   ^
+        98 xopen("BgGen.hoc")
+      98 execute1("{xopen("Bg...")
+    98 load_file("BgGen.hoc")
+13 nrniv: cadyn is not a MECHANISM
+13  in MC_CP_celltemplate.hoc near line 77
+13  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        13 xopen("MC_CP_cell...")
+      13 execute1("{xopen("MC...")
+    13 load_file("MC_CP_cell...")
+13 nrniv: leakinter is not a MECHANISM
+13  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+13  			insert leakinter
+                   ^
+        13 xopen("interneuro...")
+      13 execute1("{xopen("in...")
+    13 load_file("interneuro...")
+13 nrniv: leakCA3 is not a MECHANISM
+13  in SOM.hoc near line 90
+13  			insert leakCA3 
+                 ^
+        13 xopen("SOM.hoc")
+      13 execute1("{xopen("SO...")
+    13 load_file("SOM.hoc")
+13 nrniv: templatestack overflow
+13  in BgGen.hoc near line 1
+13  begintemplate BgGen
+                   ^
+        13 xopen("BgGen.hoc")
+      13 execute1("{xopen("Bg...")
+    13 load_file("BgGen.hoc")
+35 nrniv: cadyn is not a MECHANISM
+35  in MC_CP_celltemplate.hoc near line 77
+35  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        35 xopen("MC_CP_cell...")
+      35 execute1("{xopen("MC...")
+    35 load_file("MC_CP_cell...")
+35 nrniv: leakinter is not a MECHANISM
+35  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+35  			insert leakinter
+                   ^
+        35 xopen("interneuro...")
+      35 execute1("{xopen("in...")
+    35 load_file("interneuro...")
+35 nrniv: leakCA3 is not a MECHANISM
+35  in SOM.hoc near line 90
+35  			insert leakCA3 
+                 ^
+        35 xopen("SOM.hoc")
+      35 execute1("{xopen("SO...")
+    35 load_file("SOM.hoc")
+35 nrniv: templatestack overflow
+35  in BgGen.hoc near line 1
+35  begintemplate BgGen
+                   ^
+        35 xopen("BgGen.hoc")
+      35 execute1("{xopen("Bg...")
+    35 load_file("BgGen.hoc")
+9 nrniv: cadyn is not a MECHANISM
+9  in MC_CP_celltemplate.hoc near line 77
+9  				insert cadyn gcabar_cadyn = gca eca = 120
+                ^
+        9 xopen("MC_CP_cell...")
+      9 execute1("{xopen("MC...")
+    9 load_file("MC_CP_cell...")
+9 nrniv: leakinter is not a MECHANISM
+9  in interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc near line 52
+9  			insert leakinter
+                   ^
+        9 xopen("interneuro...")
+      9 execute1("{xopen("in...")
+    9 load_file("interneuro...")
+9 nrniv: leakCA3 is not a MECHANISM
+9  in SOM.hoc near line 90
+9  			insert leakCA3 
+                 ^
+        9 xopen("SOM.hoc")
+      9 execute1("{xopen("SO...")
+    9 load_file("SOM.hoc")
+9 nrniv: templatestack overflow
+9  in BgGen.hoc near line 1
+9  begintemplate BgGen
+                   ^
+        9 xopen("BgGen.hoc")
+      9 execute1("{xopen("Bg...")
+    9 load_file("BgGen.hoc")
+84 nrniv: Segmentation violation
+84  in BgGen.hoc near line 203
+84  }
+  ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 84
+86 nrniv: Segmentation violation
+86  in BgGen.hoc near line 203
+86  }
+  ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 86
