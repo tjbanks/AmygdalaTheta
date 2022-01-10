@@ -6,6 +6,7 @@ load_file("nrngui.hoc")
 //load_file("LAcells_template_LFP_segconsider_all_Iinject_recordingimembrane.hoc")
 load_file("MC_CP_celltemplate.hoc")
 load_file("interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc")
+load_file("feng.hoc")
 load_file("SOM.hoc")
 //load_file("shockcondi.hoc")
 //load_file("shocknocondi.hoc")
@@ -156,41 +157,18 @@ for(i=pc.id;i<TotalCellNum;i+=pc.nhost) {              // Distribute the cells e
 	if (i < CellNum_p){								// LAdd cell ratio A:B:C = 6:3:1
 			
 		if (Cell_type_ind <= 5){
-			//if (NM_ind == 0){
-				cell = new MC_CP()
+                                cell = new Cell_Af()
 				cell.drv.amp=0.0//P_amp_random.repick()
 
-		/* }else if(Cell_type_ind <= 8){
-				cell = new Cell_B()
-				cell.drv.amp=0.0//P_amp_random.repick()
 			
 		}else{
-			//if (NM_ind == 0){
-				cell = new Cell_C()
+				cell = new Cell_Cf()
 				cell.drv.amp=0.0//P_amp_random.repick()
-			//}else if (NM_ind == 1){
-				//cell = new Cell_CDA()
-                //cell = new Cell_C()
-				//cell.drv.amp=0.0//P_amp_random.repick()
-			//}else if (NM_ind == 2){
-				//cell = new Cell_CNE()
-                //cell = new Cell_C()
-				//cell.drv.amp=0.0//P_amp_random.repick()
-			//}else{
-				//cell = new Cell_CDANE()
-                //cell = new Cell_C()
-				//cell.drv.amp=0.0//P_amp_random.repick()
-			//}*/
 		} 
 	}else{  ///for ITN and SOM
-        if (Cell_type_ind <= 150) {
-		cell = new InterneuronCell()            // Create 100 Interneuron cells 
-	    cell.drv.amp=0.0//I_amp_random.repick()
-        } else {
-        cell = new SOM_Cell()            // Create 43 SOM cells 
+            cell = new InterneuronCell()            // Create 100 Interneuron cells 
 	    cell.drv.amp=0.0//I_amp_random.repick()
         }
-	}
 	cells.append(cell)                          // Add this cell to the list (otherwise its lost!)
 	pc.set_gid2node(i, pc.id)                   // 
 												// nc = (create netcon object on cell)
@@ -706,7 +684,7 @@ saveM.close()
 }
 
 {load_file("function_ConnectTwoCells.hoc")}
-{load_file("function_ConnectInternal_simplify_online_op.hoc")}
+{load_file("function_ConnectInternal_simplify_online_op_gamma.hoc")}
 Location.muls(1e-3)
 for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
 		if (rank==pc.id) {
@@ -1009,7 +987,8 @@ pc.allreduce(LFPrecording_len,1)
 
 //objref LFP_multi[elec_coords.nrow()]   ///store LFP for multiple electordes
 objref LFP_per_core  ////to record sum of LFP per core based on the same electrode
-objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN]
+//objref LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
 objref LFP_single_file
 
 
@@ -1050,13 +1029,13 @@ LFP_per_core=new Vector(LFPrecording_len.x[0])    ////to record sum of LFP per c
                    LFP_per_core.add(LFP_comp_temp_ITN[op-CellNum_p][i])  ///LFP_single is summed up per node
                    } 
               } else {  ////for SOM
-                     for (i=0; i<cellid.tlist.count(); i+=1) {  ///i stands for segment
-                   conduct=calcconduc_SOM(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
-                   LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i]=new Vector(LFPrecording_len.x[0])
-                   LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i].copy(cellid.tlist.o(i))
-                   LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i].mul(conduct)
-                   LFP_per_core.add(LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i])  ///LFP_single is summed up per node
-                   } 
+               //      for (i=0; i<cellid.tlist.count(); i+=1) {  ///i stands for segment
+               //    conduct=calcconduc_SOM(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
+               //    LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i]=new Vector(LFPrecording_len.x[0])
+               //    LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i].copy(cellid.tlist.o(i))
+               //    LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i].mul(conduct)
+               //    LFP_per_core.add(LFP_comp_temp_SOM[op-CellNum_p-CellNum_interneuron][i])  ///LFP_single is summed up per node
+               //    } 
               
               }
 

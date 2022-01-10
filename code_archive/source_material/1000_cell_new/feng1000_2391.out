@@ -1,0 +1,31 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+Additional mechanisms from files
+ bg2pyr.mod cadyn.mod cal2.mod ca.mod capool.mod function_TMonitor.mod gap.mod Gfluct_new_exc.mod Gfluct_new_inh.mod halfgap.mod h.mod im.mod interD2interD_STFD_new.mod interD2pyrD_STFD_new.mod kadist.mod kaprox.mod kdrca1DA.mod kdrca1.mod kdrinter.mod leakDA.mod leakinter.mod leak.mod na3DA.mod na3.mod nainter.mod nap.mod nat.mod pyrD2interD_STFD.mod pyrD2pyrD_STFD_new.mod sahp.mod sahpNE.mod vecevent.mod xtra_imemrec.mod xtra.mod
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	0 
+18 nrniv: ./input/sim_length :file is not open
+18  in BL_main.hoc near line 55
+18  Sim_length_rec.scanf(Sim_length_file)
+                                      ^
+        18 Vector[3].scanf(File[0])
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 18
+	1 
+	1 

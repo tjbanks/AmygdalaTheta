@@ -1,0 +1,1657 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+	1 
+	0 
+	0 
+Additional mechanisms from files
+ bg2pyr.mod cadyn.mod cal2CA3.mod cal2.mod ca.mod capoolCA3.mod capool.mod cas.mod cat.mod currentclamp.mod function_TMonitor.mod gap.mod Gfluct_new_exc.mod Gfluct_new_inh.mod hCA3.mod h.mod imCA3.mod im.mod interD2interD_SOMPV_STFD_new.mod interD2interD_STFD_new.mod interD2pyrD_SOM2P_STFD_new.mod interD2pyrD_STFD_new_alipara.mod interD2pyrD_STFD_new.mod kadist.mod kaprox.mod kca.mod kdrca1DA.mod kdrca1.mod kdrCA3.mod kdrinter.mod leakCA3.mod leakDA.mod leakinter.mod leak.mod na3DA.mod na3.mod nainter.mod napCA3.mod nap.mod natCA3.mod nat.mod pyrD2interD_P2SOM_STFD.mod pyrD2interD_STFD.mod pyrD2pyrD_STFD_new.mod sahpCA3.mod sahp.mod sahpNE.mod synapse_inter2pyr.mod vecevent.mod xtra_imemrec.mod xtra.mod
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	1 
+	0 
+		0 
+	1 
+	0 
+	0 
+	1 
+0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	Matrix[1] 
+	1 
+	0 
+	1 
+	0 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	0 
+	0 
+	0 
+	0 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+		1 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+1 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	Matrix[1] 
+	1 
+	1000 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+		1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	3000 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1000 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	89106 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	89106 
+	1000 
+	1000 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	3000 
+	3000 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1000 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	3000 
+	1000 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	89106 
+	1 
+	89106 
+	89106 
+	1 
+	89106 
+	3000 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	89106 
+	89106 
+	3000 
+	89106 
+	3000 
+	1 
+	1 
+	Matrix[1] 
+	89106 
+	1 
+	Matrix[1] 
+	1 
+	3000 
+	1 
+	Matrix[1] 
+	3000 
+	3000 
+	Matrix[1] 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1000 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	89106 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	3000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	Matrix[1] 
+	1000 
+	89106 
+	89106 
+	Matrix[1] 
+	1000 
+	1000 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	3000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	89106 
+	89106 
+	89106 
+	89106 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	89106 
+	3000 
+	89106 
+	89106 
+	89106 
+	3000 
+	3000 
+	3000 
+	3000 
+	3000 
+	3000 
+	1 
+	1 
+	3000 
+	3000 
+	89106 
+	3000 
+	3000 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	3000 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	89106 
+	3000 
+	Matrix[1] 
+	89106 
+	3000 
+	89106 
+	Matrix[1] 
+	3000 
+	89106 
+	3000 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	89106 
+	3000 
+	89106 
+	3000 
+	89106 
+	3000 
+	Matrix[1] 
+	89106 
+	3000 
+	Matrix[1] 
+	Matrix[1] 
+	3000 
+	Matrix[1] 
+	Matrix[1] 
+	89106 
+	89106 
+	89106 
+	3000 
+	3000 
+	3000 
+	89106 
+	Matrix[1] 
+	3000 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+0.000000 percent is done!
+1.000000 percent is done!
+2.000000 percent is done!
+3.000000 percent is done!
+4.000000 percent is done!
+5.000000 percent is done!
+6.000000 percent is done!
+7.000000 percent is done!
+8.000000 percent is done!
+9.000000 percent is done!
+10.000000 percent is done!
+11.000000 percent is done!
+12.000000 percent is done!
+13.000000 percent is done!
+14.000000 percent is done!
+15.000000 percent is done!
+16.000000 percent is done!
+17.000000 percent is done!
+18.000000 percent is done!
+19.000000 percent is done!
+20.000000 percent is done!
+21.000000 percent is done!
+22.000000 percent is done!
+23.000000 percent is done!
+24.000000 percent is done!
+25.000000 percent is done!
+26.000000 percent is done!
+27.000000 percent is done!
+28.000000 percent is done!
+29.000000 percent is done!
+30.000000 percent is done!
+31.000000 percent is done!
+32.000000 percent is done!
+33.000000 percent is done!
+34.000000 percent is done!
+35.000000 percent is done!
+36.000000 percent is done!
+37.000000 percent is done!
+38.000000 percent is done!
+39.000000 percent is done!
+40.000000 percent is done!
+41.000000 percent is done!
+42.000000 percent is done!
+43.000000 percent is done!
+44.000000 percent is done!
+45.000000 percent is done!
+46.000000 percent is done!
+47.000000 percent is done!
+48.000000 percent is done!
+49.000000 percent is done!
+50.000000 percent is done!
+51.000000 percent is done!
+52.000000 percent is done!
+53.000000 percent is done!
+54.000000 percent is done!
+55.000000 percent is done!
+56.000000 percent is done!
+57.000000 percent is done!
+58.000000 percent is done!
+59.000000 percent is done!
+60.000000 percent is done!
+61.000000 percent is done!
+62.000000 percent is done!
+63.000000 percent is done!
+64.000000 percent is done!
+65.000000 percent is done!
+66.000000 percent is done!
+67.000000 percent is done!
+68.000000 percent is done!
+69.000000 percent is done!
+70.000000 percent is done!
+71.000000 percent is done!
+72.000000 percent is done!
+73.000000 percent is done!
+74.000000 percent is done!
+75.000000 percent is done!
+76.000000 percent is done!
+77.000000 percent is done!
+78.000000 percent is done!
+79.000000 percent is done!
+80.000000 percent is done!
+81.000000 percent is done!
+82.000000 percent is done!
+83.000000 percent is done!
+84.000000 percent is done!
+85.000000 percent is done!
+86.000000 percent is done!
+87.000000 percent is done!
+88.000000 percent is done!
+89.000000 percent is done!
+90.000000 percent is done!
+91.000000 percent is done!
+92.000000 percent is done!
+93.000000 percent is done!
+94.000000 percent is done!
+95.000000 percent is done!
+96.000000 percent is done!
+97.000000 percent is done!
+98.000000 percent is done!
+99.000000 percent is done!
+	0.002276659 
+	1.6689301e-05 
+	0 
+	0.0055303574 
+	0 
+	0.0055165291 
+	0 
+	9.8228455e-05 
+	0 
+	0.0002913475 
+	0 
+	0.005569458 
+	0 
+	0.0055401325 
+	0 
+	0.0055396557 
+	0 
+	0.0055403709 
+	0 
+	0.0055260658 
+	0 
+	0.0055317879 
+	0 
+	0.00018024445 
+	0 
+	0.005521059 
+	0 
+	0.0055360794 
+	0 
+	4.3869019e-05 
+	0 
+	2.5033951e-05 
+	0 
+	0.00021600723 
+	0 
+	0.0055308342 
+	0 
+	0.0055718422 
+	0 
+	0.00021624565 
+	0 
+	0.0055308342 
+	0 
+	0.0055413246 
+	0 
+	0.0055291653 
+	0 
+	0.0055317879 
+	0 
+	0.0002553463 
+	0 
+	0.0055315495 
+	0 
+	0.0055370331 
+	0 
+	0.0055279732 
+	0 
+	0.0055274963 
+	0 
+	0.005559206 
+	0 
+	3.4093857e-05 
+	0 
+	8.2492828e-05 
+	0 
+	0.0055716038 
+	0 
+	0.0055713654 
+	0 
+	2.1457672e-05 
+	0 
+	0.0055668354 
+	0 
+	0.0055332184 
+	0 
+	4.0531158e-05 
+	0 
+	0.0055732727 
+	0 
+	0.0055298805 
+	0 
+	0.005572319 
+	0 
+	0.0002758503 
+	0 
+	0.0055713654 
+	0 
+	1.1205673e-05 
+	0 
+	3.2186508e-05 
+	0 
+	0.0055413246 
+	0 
+	0.005543232 
+	0 
+	0.0055396557 
+	0 
+	0.0055246353 
+	0 
+	0 
+0 nrniv: subscript < 1 LFP_comp_temp_SOM
+0  in MC_main_small_forGamma.hoc near line 1012
+0  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 0
+1 nrniv: subscript < 1 LFP_comp_temp_SOM
+1  in MC_main_small_forGamma.hoc near line 1012
+1  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 1
+2 nrniv: subscript < 1 LFP_comp_temp_SOM
+2  in MC_main_small_forGamma.hoc near line 1012
+2  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 2
+3 nrniv: subscript < 1 LFP_comp_temp_SOM
+3  in MC_main_small_forGamma.hoc near line 1012
+3  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 3
+4 nrniv: subscript < 1 LFP_comp_temp_SOM
+4  in MC_main_small_forGamma.hoc near line 1012
+4  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 4
+5 nrniv: subscript < 1 LFP_comp_temp_SOM
+5  in MC_main_small_forGamma.hoc near line 1012
+5  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 5
+6 nrniv: subscript < 1 LFP_comp_temp_SOM
+6  in MC_main_small_forGamma.hoc near line 1012
+6  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 6
+7 nrniv: subscript < 1 LFP_comp_temp_SOM
+7  in MC_main_small_forGamma.hoc near line 1012
+7  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 7
+8 nrniv: subscript < 1 LFP_comp_temp_SOM
+8  in MC_main_small_forGamma.hoc near line 1012
+8  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 8
+9 nrniv: subscript < 1 LFP_comp_temp_SOM
+9  in MC_main_small_forGamma.hoc near line 1012
+9  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 9
+10 nrniv: subscript < 1 LFP_comp_temp_SOM
+10  in MC_main_small_forGamma.hoc near line 1012
+10  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 10
+11 nrniv: subscript < 1 LFP_comp_temp_SOM
+11  in MC_main_small_forGamma.hoc near line 1012
+11  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 11
+12 nrniv: subscript < 1 LFP_comp_temp_SOM
+12  in MC_main_small_forGamma.hoc near line 1012
+12  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 12
+13 nrniv: subscript < 1 LFP_comp_temp_SOM
+13  in MC_main_small_forGamma.hoc near line 1012
+13  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 13
+14 nrniv: subscript < 1 LFP_comp_temp_SOM
+14  in MC_main_small_forGamma.hoc near line 1012
+14  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 14
+15 nrniv: subscript < 1 LFP_comp_temp_SOM
+15  in MC_main_small_forGamma.hoc near line 1012
+15  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 15
+16 nrniv: subscript < 1 LFP_comp_temp_SOM
+16  in MC_main_small_forGamma.hoc near line 1012
+16  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 16
+17 nrniv: subscript < 1 LFP_comp_temp_SOM
+17  in MC_main_small_forGamma.hoc near line 1012
+17  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 17
+18 nrniv: subscript < 1 LFP_comp_temp_SOM
+18  in MC_main_small_forGamma.hoc near line 1012
+18  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 18
+19 nrniv: subscript < 1 LFP_comp_temp_SOM
+19  in MC_main_small_forGamma.hoc near line 1012
+19  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 19
+20 nrniv: subscript < 1 LFP_comp_temp_SOM
+20  in MC_main_small_forGamma.hoc near line 1012
+20  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 20
+21 nrniv: subscript < 1 LFP_comp_temp_SOM
+21  in MC_main_small_forGamma.hoc near line 1012
+21  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 21
+22 nrniv: subscript < 1 LFP_comp_temp_SOM
+22  in MC_main_small_forGamma.hoc near line 1012
+22  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 22
+23 nrniv: subscript < 1 LFP_comp_temp_SOM
+23  in MC_main_small_forGamma.hoc near line 1012
+23  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 23
+24 nrniv: subscript < 1 LFP_comp_temp_SOM
+24  in MC_main_small_forGamma.hoc near line 1012
+24  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 24
+25 nrniv: subscript < 1 LFP_comp_temp_SOM
+25  in MC_main_small_forGamma.hoc near line 1012
+25  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 25
+26 nrniv: subscript < 1 LFP_comp_temp_SOM
+26  in MC_main_small_forGamma.hoc near line 1012
+26  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 26
+27 nrniv: subscript < 1 LFP_comp_temp_SOM
+27  in MC_main_small_forGamma.hoc near line 1012
+27  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 27
+28 nrniv: subscript < 1 LFP_comp_temp_SOM
+28  in MC_main_small_forGamma.hoc near line 1012
+28  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 28
+29 nrniv: subscript < 1 LFP_comp_temp_SOM
+29  in MC_main_small_forGamma.hoc near line 1012
+29  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 29
+30 nrniv: subscript < 1 LFP_comp_temp_SOM
+30  in MC_main_small_forGamma.hoc near line 1012
+30  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 30
+31 nrniv: subscript < 1 LFP_comp_temp_SOM
+31  in MC_main_small_forGamma.hoc near line 1012
+31  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 31
+32 nrniv: subscript < 1 LFP_comp_temp_SOM
+32  in MC_main_small_forGamma.hoc near line 1012
+32  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 32
+33 nrniv: subscript < 1 LFP_comp_temp_SOM
+33  in MC_main_small_forGamma.hoc near line 1012
+33  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 33
+34 nrniv: subscript < 1 LFP_comp_temp_SOM
+34  in MC_main_small_forGamma.hoc near line 1012
+34  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 34
+35 nrniv: subscript < 1 LFP_comp_temp_SOM
+35  in MC_main_small_forGamma.hoc near line 1012
+35  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 35
+36 nrniv: subscript < 1 LFP_comp_temp_SOM
+36  in MC_main_small_forGamma.hoc near line 1012
+36  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 36
+37 nrniv: subscript < 1 LFP_comp_temp_SOM
+37  in MC_main_small_forGamma.hoc near line 1012
+37  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 37
+38 nrniv: subscript < 1 LFP_comp_temp_SOM
+38  in MC_main_small_forGamma.hoc near line 1012
+38  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 38
+39 nrniv: subscript < 1 LFP_comp_temp_SOM
+39  in MC_main_small_forGamma.hoc near line 1012
+39  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 39
+40 nrniv: subscript < 1 LFP_comp_temp_SOM
+40  in MC_main_small_forGamma.hoc near line 1012
+40  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 40
+41 nrniv: subscript < 1 LFP_comp_temp_SOM
+41  in MC_main_small_forGamma.hoc near line 1012
+41  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 41
+42 nrniv: subscript < 1 LFP_comp_temp_SOM
+42  in MC_main_small_forGamma.hoc near line 1012
+42  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 42
+43 nrniv: subscript < 1 LFP_comp_temp_SOM
+43  in MC_main_small_forGamma.hoc near line 1012
+43  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 43
+44 nrniv: subscript < 1 LFP_comp_temp_SOM
+44  in MC_main_small_forGamma.hoc near line 1012
+44  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 44
+45 nrniv: subscript < 1 LFP_comp_temp_SOM
+45  in MC_main_small_forGamma.hoc near line 1012
+45  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 45
+46 nrniv: subscript < 1 LFP_comp_temp_SOM
+46  in MC_main_small_forGamma.hoc near line 1012
+46  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 46
+47 nrniv: subscript < 1 LFP_comp_temp_SOM
+47  in MC_main_small_forGamma.hoc near line 1012
+47  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 47
+48 nrniv: subscript < 1 LFP_comp_temp_SOM
+48  in MC_main_small_forGamma.hoc near line 1012
+48  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 48
+49 nrniv: subscript < 1 LFP_comp_temp_SOM
+49  in MC_main_small_forGamma.hoc near line 1012
+49  objref LFP_comp_temp_PN[CellNum_p][modelcompartment_num],LFP_comp_temp_ITN[CellNum_interneuron][modelcompartment_num_ITN],LFP_comp_temp_SOM[CellNum_SOM][modelcompartment_num_SOM]
+                                                                                                                                                                                   ^
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 49

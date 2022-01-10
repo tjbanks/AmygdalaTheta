@@ -1,0 +1,1046 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+Additional mechanisms from files
+ bg2pyr.mod cadyn.mod cal2CA3.mod cal2.mod ca.mod capoolCA3.mod capool.mod cas.mod cat.mod currentclamp.mod function_TMonitor.mod gap.mod Gfluct_new_exc.mod Gfluct_new_inh.mod hCA3.mod h.mod imCA3.mod im.mod interD2interD_SOMPV_STFD_new.mod interD2interD_STFD_new.mod interD2pyrD_SOM2P_STFD_new.mod interD2pyrD_STFD_new_alipara.mod interD2pyrD_STFD_new.mod kadist.mod kaprox.mod kca.mod kdrca1DA.mod kdrca1.mod kdrCA3.mod kdrinter.mod leakCA3.mod leakDA.mod leakinter.mod leak.mod na3DA.mod na3.mod nainter.mod napCA3.mod nap.mod natCA3.mod nat.mod pyrD2interD_P2SOM_STFD.mod pyrD2interD_STFD.mod pyrD2pyrD_STFD_new.mod sahpCA3.mod sahp.mod sahpNE.mod synapse_inter2pyr.mod vecevent.mod xtra_imemrec.mod xtra.mod
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	0 
+	0 
+	1 
+		0 
+	0 
+	1 
+	0 
+	0 
+1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 	0 
+	0 
+
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+		0 
+	0 
+1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	0 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	0 
+	1 
+	0 
+	0 
+	0 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	0 
+	0 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1000 
+	1000 
+	1000 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1000 
+	1 
+	1000 
+	Matrix[1] 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	1 
+	1000 
+	Matrix[1] 
+	1000 
+	1000 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+1 nrniv: File not open: ./input/elec_coords.txt
+1  in MC_main_small_forGamma.hoc near line 142
+1  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        1 Matrix[5].scanf(File[3], 1, 3)
+      1 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 1
+	1 
+36 nrniv: File not open: ./input/elec_coords.txt
+36  in MC_main_small_forGamma.hoc near line 142
+36  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        36 Matrix[5].scanf(File[3], 1, 3)
+      36 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 36
+	Matrix[1] 
+	1000 
+	1 
+	1 
+0 nrniv: File not open: ./input/elec_coords.txt
+0  in MC_main_small_forGamma.hoc near line 142
+0  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        0 Matrix[5].scanf(File[3], 1, 3)
+      0 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 0
+	1000 
+	1 
+	1000 
+34 nrniv: File not open: ./input/elec_coords.txt
+34  in MC_main_small_forGamma.hoc near line 142
+34  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        34 Matrix[5].scanf(File[3], 1, 3)
+      34 LoadMatrix("./input/el...", 35 nrniv: File not open: ./input/elec_coords.txt
+35  in MC_main_small_forGamma.hoc near line 142
+35  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        35 Matrix[5].scanf(File[3], 4 nrniv: File not open: ./input/elec_coords.txt
+4  in MC_main_small_forGamma.hoc near line 142
+4  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+          29 nrniv: File not open: ./input/elec_coords.txt
+29  in MC_main_small_forGamma.hoc near line 142
+29  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                      1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 34
+1, 3)
+      35 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 35
+	1 
+                                        ^
+        4 Matrix[5].scanf(File[3], 1, 3)
+      4 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 4
+                            ^
+        29 Matrix[5].scanf(File[3], 1, 3)
+      29 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 29
+	1 
+	1 
+	Matrix[1] 
+	1 
+10 nrniv: File not open: ./input/elec_coords.txt
+10  in MC_main_small_forGamma.hoc near line 142
+10  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        10 Matrix[5].scanf(File[3], 1, 3)
+      10 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 10
+12 nrniv: File not open: ./input/elec_coords.txt
+12  in MC_main_small_forGamma.hoc near line 142
+12  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        12 Matrix[5].scanf(File[3], 1, 3)
+      12 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 12
+	Matrix[1] 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+3 nrniv: File not open: ./input/elec_coords.txt
+3  in MC_main_small_forGamma.hoc near line 142
+3  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        3 Matrix[5].scanf(File[3], 1, 3)
+      3 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 3
+18 nrniv: File not open: ./input/elec_coords.txt
+18  in MC_main_small_forGamma.hoc near line 142
+18  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        18 Matrix[5].scanf(File[3], 1, 3)
+      18 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 18
+	1 
+	1000 
+	1 
+	1 
+	1 
+25 nrniv: File not open: ./input/elec_coords.txt
+25  in MC_main_small_forGamma.hoc near line 142
+25  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        25 Matrix[5].scanf(File[3], 1, 3)
+      25 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 25
+33 nrniv: File not open: ./input/elec_coords.txt
+33  in MC_main_small_forGamma.hoc near line 142
+33  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        33 Matrix[5].scanf(File[3], 1, 3)
+      33 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 33
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+15 nrniv: File not open: ./input/elec_coords.txt
+15  in MC_main_small_forGamma.hoc near line 142
+15  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        15 Matrix[5].scanf(File[3], 1, 3)
+      15 LoadMatrix("./input/el...", 1, 3)
+	1 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 15
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+2 nrniv: File not open: ./input/elec_coords.txt
+2  in MC_main_small_forGamma.hoc near line 142
+2  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                           	1 
+                       ^
+        2 Matrix[5].scanf(File[3], 1, 3)
+  	1 
+    2 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 2
+37 nrniv: File not open: ./input/elec_coords.txt
+37  in MC_main_small_forGamma.hoc near line 142
+37  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        37 Matrix[5].scanf(File[3], 1, 3)
+      37 LoadMatrix("./input/el...", 1, 3)
+	1000 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 37
+	1 
+	1 
+	1 
+	1 
+43 nrniv: File not open: ./input/elec_coords.txt
+43  in MC_main_small_forGamma.hoc near line 142
+43  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                        	1 
+	1 
+                          ^
+        43 Matrix[5].scanf(File[3], 1, 3)
+      	Matrix[1] 
+	1 
+43 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 43
+	1 
+	1 
+	1 
+	1 
+23 nrniv: File not open: ./input/elec_coords.txt
+23  in MC_main_small_forGamma.hoc near line 142
+23  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                     42 nrniv: File not open: ./input/elec_coords.txt
+42  in MC_main_small_forGamma.hoc near line 142
+42  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                        	1 
+	1 
+                             ^
+                                  ^
+      23 Matrix[5].scanf(File[3], 1, 3)
+      23 LoadMatrix("./input/el...", 1, 3)
+  42 Matrix[5].scanf(File[3], 1, 3)
+      42 LoadMatrix("./input/el...", 1, 3)
+	1 
+	1 
+	1 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 23
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 42
+5 nrniv: File not open: ./input/elec_coords.txt
+5  in MC_main_small_forGamma.hoc near line 142
+5  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        5 Matrix[5].scanf(File[3], 1, 3)
+      5 LoadMatrix("./input/el...", 1, 	1 
+3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 5
+	1 
+	1 
+22 nrniv: File not open: ./input/elec_coords.txt
+22  in MC_main_small_forGamma.hoc near line 142
+22  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                         	1 
+	1 
+                         ^
+        22 Matrix[5].scanf(File[3], 1, 3)
+      22 LoadMatrix("./input/el...", 1, 3)
+40 nrniv: File not open: ./input/elec_coords.txt
+40  in MC_main_small_forGamma.hoc near line 142
+40  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                  	1 
+	1 
+	1 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 22
+                                ^
+        40 Matrix[5].scanf(File[3], 1, 3)
+      40 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 40
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1000 
+31 nrniv: File not open: ./input/elec_coords.txt
+31  in MC_main_small_forGamma.hoc near line 142
+31  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        31 Matrix[5].scanf(File[3], 1, 3)
+      31 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 31
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+6 nrniv: File not open: ./input/elec_coords.txt
+6  in MC_main_small_forGamma.hoc near line 142
+6  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        	1 
+6 Matrix[5].scanf(File[3], 1, 3)
+      6 LoadMatrix("./input/el...", 1, 3)
+	Matrix[1] 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 6
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1000 
+49 nrniv: File not open: ./input/elec_coords.txt
+49  in MC_main_small_forGamma.hoc near line 142
+49  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                      	1 
+            ^
+        49 Matrix[5].scanf(File[3], 1, 3)
+      49 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 49
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+19 nrniv: File not open: ./input/elec_coords.txt
+19  in MC_main_small_forGamma.hoc near line 142
+19  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        19 Matrix[5].scanf(File[3], 1, 3)
+      19 LoadMatrix("./input/el...", 1, 3)
+	1000 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 19
+28 nrniv: File not open: ./input/elec_coords.txt
+28  in MC_main_small_forGamma.hoc near line 142
+28  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        28 Matrix[5].scanf(File[3], 1, 3)
+      28 LoadMatrix(	1 
+"./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 28
+	1000 
+39 nrniv: File not open: ./input/elec_coords.txt
+39  in MC_main_small_forGamma.hoc near line 142
+39  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        39 Matrix[5].scanf(File[3], 1, 3)
+      39 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 39
+	1 
+11 nrniv: File not open: ./input/elec_coords.txt
+11  in MC_main_small_forGamma.hoc near line 142
+11  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                         	1 
+                         ^
+        11 Matrix[5].scanf(File[3], 1, 3)
+      11 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 11
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+14 nrniv: File not open: ./input/elec_coords.txt
+14  in MC_main_small_forGamma.hoc near line 142
+14  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+              47 nrniv: File not open: ./input/elec_coords.txt
+47  in MC_main_small_forGamma.hoc near line 142
+47  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                	1 
+                                                             ^
+        14 Matrix[5].scanf(File[3], 1, 3         ^
+        47 Matrix[5].scanf(File[3], 1, 3)
+  )
+      14 LoadMatrix("./input/el...", 1, 3)
+    47 LoadMatrix("./input/el...", 1, 3)
+	1 
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 14
+27 nrniv: File not open: ./input/elec_coords.txt
+27  in MC_main_small_forGamma.hoc near line 142
+27  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+41 nrniv: File not open: ./input/elec_coords.txt
+41  in MC_main_small_forGamma.hoc near line 142
+41  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+  application called MPI_Abort(MPI_COMM_WORLD, -1) - process 47
+	Matrix[1] 
+        27 Matrix[5].scanf(File[3], 1, 3)
+      27 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 27
+      41 Matrix[5].scanf(File[3], 1, 3)
+      41 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 41
+	1000 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+8 nrniv: File not open: ./input/elec_coords.txt
+8  in MC_main_small_forGamma.hoc near line 142
+8  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        8 Matrix[5].scanf(File[3], 1, 3)
+      8 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 8
+	1000 
+	Matrix[1] 
+30 nrniv: File not open: ./input/elec_coords.txt
+30  in MC_main_small_forGamma.hoc near line 142
+30  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        30 Matrix[5].scanf(File[3], 1, 3)
+      30 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 30
+	Matrix[1] 
+	Matrix[1] 
+17 nrniv: File not open: ./input/elec_coords.txt
+17  in MC_main_small_forGamma.hoc near line 142
+17  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+               	1 
+                                   ^
+        17 Matrix[5].scanf(File[3], 1, 3)
+      17 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 17
+	1 
+	1 
+	Matrix[1] 
+	1000 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+44 nrniv: File not open: ./input/elec_coords.txt
+44  in MC_main_small_forGamma.hoc near line 142
+44  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+  7 nrniv: File not open: ./input/elec_coords.txt
+7  in MC_main_small_forGamma.hoc near line 142
+7  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                           44 Matrix[5].scanf(File[3], 1, 3)
+      44 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 44
+                             ^
+        7 Matrix[5].scanf(File[3], 1, 3)
+      7 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 7
+	1 
+48 nrniv: File not open: ./input/elec_coords.txt
+48  in MC_main_small_forGamma.hoc near line 142
+48  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                  9 nrniv: File not open: ./input/elec_coords.txt
+9  in MC_main_small_forGamma.hoc near line 142
+9  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                      	1000 
+	1 
+	1000 
+                          ^
+        9 Matrix[5].scanf(File[3], 1, 3)
+      9 LoadMatrix("./input/el..."  ^
+        48 Matrix[5].scanf(File[3], 1, 3)
+      48 LoadMatrix("./input/el...", 1, 3)
+, 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 9
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 48
+	1 
+	1 
+	Matrix[1] 
+21 nrniv: File not open: ./input/elec_coords.txt
+21  in MC_main_small_forGamma.hoc near line 142
+21  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        21 Matrix[5].scanf(File[3], 1, 3)
+      21 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 21
+46 nrniv: File not open: ./input/elec_coords.txt
+46  in MC_main_small_forGamma.hoc near line 142
+46  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        46 Matrix[5].scanf(File[3], 1, 3)
+      46 LoadMatrix("./input/el...", 1, 	1000 
+3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 46
+	1 
+	1 
+	1 
+13 nrniv: File not open: ./input/elec_coords.txt
+13  in MC_main_small_forGamma.hoc near line 142
+13  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        13 Matrix[5].scanf(File[3], 1, 3)
+      13 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 13
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+38 nrniv: File not open: ./input/elec_coords.txt
+38  in MC_main_small_forGamma.hoc near line 142
+38  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+      24 nrniv: File not open: ./input/elec_coords.txt
+24  in MC_main_small_forGamma.hoc near line 142
+24  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                  38 Matrix[5].scanf(File[3], 1, 3)
+      38 LoadMatrix("./input/el...", 1, 3)
+                                  ^
+        24 Matrix[5].scanf(File[3], 1, 3)
+      24 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 24
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 38
+	1 
+	1 
+	1 
+26 nrniv: File not open: ./input/elec_coords.txt
+26  in MC_main_small_forGamma.hoc near line 142
+26  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                    	1 
+              ^
+        26 Matrix[5].scanf(File[3], 1, 3)
+      26 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 26
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	Matrix[1] 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+20 nrniv: File not open: ./input/elec_coords.txt
+20  in MC_main_small_forGamma.hoc near line 142
+20  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        20 Matrix[5].scanf(File[3], 1, 3)
+      20 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 20
+	1 
+32 nrniv: File not open: ./input/elec_coords.txt
+32  in MC_main_small_forGamma.hoc near line 142
+32  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        32 Matrix[5].scanf(File[3], 1, 3)
+      32 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 32
+45 nrniv: File not open: ./input/elec_coords.txt
+45  in MC_main_small_forGamma.hoc near line 142
+45  elec_coords = LoadMatrix(elec_coords_str,1*1*1,3)
+                                                  ^
+        45 Matrix[5].scanf(File[3], 1, 3)
+      45 LoadMatrix("./input/el...", 1, 3)
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 45
+	1 
+	1 
+	1 
+	1 
+	1 

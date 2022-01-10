@@ -1,0 +1,86 @@
+// Created by FF (2018)
+// Procs here are used to have electrical coupling between ITNs
+
+
+objref par_gaps  
+par_gaps= new List()
+    proc par_gap_create1() {localobj c, g
+	c = pc.gid2obj($1)
+	c.soma {
+		g = new HalfGap(.5)
+		par_gaps.append(g)
+		pc.target_var(g, &g.vgap, $2)
+		pc.source_var(&v(.5), $3)
+		g.r = 5000    ///set resistances between cells
+	}
+}
+
+/*
+//example//
+//0<-->2////
+    tgid=0
+    id_0=0
+    objref tcell,gapt
+    if(pc.gid_exists(tgid)) {
+    
+    par_gap_create1(tgid,id_0+1,id_0)
+    }
+        
+    tgid=2
+
+    if(pc.gid_exists(tgid)) {
+    par_gap_create1(tgid,id_0,id_0+1)
+    }
+ ////0<-->1////
+   
+    tgid=0
+    id_0=2
+    objref tcell,gapt
+    if(pc.gid_exists(tgid)) {
+    
+    par_gap_create1(tgid,id_0+1,id_0)
+    }
+    
+        tgid=1
+    objref tcell,gapt
+    if(pc.gid_exists(tgid)) {
+    
+    par_gap_create1(tgid,id_0,id_0+1)
+    }
+*/
+    
+objref precell, postcell
+
+proc ConnectInternal_gj_simplify() { local i,j,postid,preid,synid_gj,postid_real,preid_real localobj GAPsynidvec
+                                              ///this proc is used to connect ITNs via gap junction
+    for i = 0,CellNum_interneuron-1 {
+        ind_start=0+2*i
+        ind_stop=1+2*i
+        preid=i+CellNum_p
+        
+        if (GAP_ind.x[ind_start]<=GAP_ind.x[ind_stop]) {
+        
+        GAPsynidvec=GAP_connect.at(GAP_ind.x[ind_start],GAP_ind.x[ind_stop])
+         for j=0,GAPsynidvec.size()-1 {
+          postid=GAPsynidvec.x[j]
+          preid_gap_start=2*GAP_transferID.x[i]    //// gid only used for gap junction transfer
+        ///pre-->post///
+         if(pc.gid_exists(preid)) {               
+        par_gap_create1(preid,preid_gap_start+2*j+1,preid_gap_start+2*j+2)
+         }
+        ///pre<--post///
+         if(pc.gid_exists(postid)) {
+        par_gap_create1(postid,preid_gap_start+2*j+2,preid_gap_start+2*j+1)
+         }
+                
+        }
+        
+    }
+	
+			}
+    }
+
+
+
+
+

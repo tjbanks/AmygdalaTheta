@@ -1,0 +1,96 @@
+// Created by FF (2018)
+// Procs here are used to introduce generated external spike trains to network 
+
+
+objref Inputvecplay_E[Inputnum_E][E_connectnum],Inputspikes_E[Inputnum_E]
+objref Inputsyn_E[Inputnum_E][E_connectnum],Inputnc_E[Inputnum_E][E_connectnum]
+objref rc_E2P
+
+objref Inputvecplay_I[Inputnum_I][I_connectnum],Inputspikes_I[Inputnum_I]
+objref Inputsyn_I[Inputnum_I][I_connectnum],Inputnc_I[Inputnum_I][I_connectnum]
+objref rc_E2I
+
+
+
+proc ConnectInputs_E() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target  ///connect spike trains to PNs
+		 {pc.barrier()}
+	    for i = 0,Inputnum_E-1 {
+
+        ind_start=0+2*i
+        ind_stop=1+2*i
+        
+        if (Etn_spikes_ind.x[ind_start]<=Etn_spikes_ind.x[ind_stop]) {   ///only connect when there is spikes coming
+        
+        Inputspikes_E[i]=Etn_spikes.at(Etn_spikes_ind.x[ind_start],Etn_spikes_ind.x[ind_stop])  ///to get all external spikes
+        
+		for j = 0,E_connectnum-1 { 
+		    
+			cellgid = E2P_matrix.x[i][j]
+			if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+
+				target.dend Inputsyn_E[i][j] = new pyrD2pyrD_STFD(0.9)
+                 {rc_E2P = new Random(i*E_connectnum+j+1)}
+                  wgt = rc_E2P.lognormal(9,0.05)
+                  del = rc_E2P.uniform(0.5,1)
+                Inputsyn_E[i][j].initW=wgt
+				Inputvecplay_E[i][j] = new VecStim() 
+				Inputvecplay_E[i][j].play(Inputspikes_E[i])
+
+				Inputnc_E[i][j] = new NetCon(Inputvecplay_E[i][j],Inputsyn_E[i][j])
+				
+				
+				Inputnc_E[i][j].weight = 1
+				Inputnc_E[i][j].delay = del
+
+				Inputnc_E[i][j].threshold = -10//nc.threshold = thr
+
+			}
+			}
+		}
+	}
+	
+	{pc.barrier()}
+}
+
+proc ConnectInputs_I() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target ///connect spike trains to FSIs
+		 {pc.barrier()}
+	    for i = 0,Inputnum_I-1 {
+
+        ind_start=0+2*i
+        ind_stop=1+2*i
+        if (Etn_spikes_ind.x[ind_start]<=Etn_spikes_ind.x[ind_stop]) {   ///only connect when there is spikes coming
+        Inputspikes_I[i]=Etn_spikes.at(Etn_spikes_ind.x[ind_start],Etn_spikes_ind.x[ind_stop])  ///to get all external spikes
+        
+		for j = 0,I_connectnum-1 { 
+		    
+			//inputid = i
+			cellgid = E2I_matrix.x[i][j]
+			if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+
+                target.dend Inputsyn_I[i][j] = new pyrD2interD_STFD(0.9)
+                 {rc_E2I = new Random(i*I_connectnum+j+1)}
+                  wgt = rc_E2I.lognormal(2,0.2)
+                  del = rc_E2I.uniform(0.5,1)
+                Inputsyn_I[i][j].initW=wgt				
+				Inputvecplay_I[i][j] = new VecStim()                 
+				Inputvecplay_I[i][j].play(Inputspikes_I[i])
+				Inputnc_I[i][j] = new NetCon(Inputvecplay_I[i][j],Inputsyn_I[i][j])
+				
+				Inputnc_I[i][j].weight = 1
+				Inputnc_I[i][j].delay = del
+
+				Inputnc_I[i][j].threshold = -10//nc.threshold = thr
+				
+				
+			}
+			}
+		}
+	}
+
+	{pc.barrier()}
+}
+

@@ -1,0 +1,169 @@
+// Created by FF (2018)
+// Functions here are used to calculate extracellular conductances for PNs and ITNs
+func calcconduc_PN() { local x_pos,y_pos,z_pos,sec,dmin,dmin2,H,r_sq,ds_comp,Ls,h,l,phi,conduct,r localobj x_end,x_comp,d_end,orilocal,locationlocal,eleclocal
+                     
+                     x_end = new Vector(3)
+                     d_end = new Vector(3)
+                     x_comp = new Vector(3)
+                     dmin = diam_soma_p/2 + diam_shank/2 + extralimit
+                     dmin2=dmin*dmin    ///set limit for electrodes
+                     sec=$2 //sec=0 for soma,1-8 for adend, 9-15 for pdend
+                     if (sec==0) {
+				       x_pos=$o1.x[0] y_pos=$o1.x[1] z_pos=$o1.x[2]   ///location of soma
+                       xe=$o4.x[0] ye=$o4.x[1] ze=$o4.x[2]   ///location of elec
+                       dis_soma=$5
+                         if (dis_soma<dmin) {
+                         dis_soma=dmin
+                         }
+                         r = dis_soma
+                        } else if (sec>=9) {       ///calculate for pdend
+                      ds_comp = abs(pdend_L_p/nseg_pdend_p)
+                      x_end.x[0] = $o1.x[0]-((sec-nseg_adend_p)*ds_comp+diam_soma_p/2)*$o3.x[0]
+                      x_end.x[1] = $o1.x[1]-((sec-nseg_adend_p)*ds_comp+diam_soma_p/2)*$o3.x[1]
+                      x_end.x[2] = $o1.x[2]-((sec-nseg_adend_p)*ds_comp+diam_soma_p/2)*$o3.x[2]
+                      x_comp.x[0] = $o3.x[0]*(-ds_comp)
+                      x_comp.x[1] = $o3.x[1]*(-ds_comp)
+                      x_comp.x[2] = $o3.x[2]*(-ds_comp)
+                      
+                     d_end.x[0] = $o4.x[0]-x_end.x[0]
+                     d_end.x[1] = $o4.x[1]-x_end.x[1]
+                     d_end.x[2] = $o4.x[2]-x_end.x[2]
+                     H = (d_end.x[0]*x_comp.x[0]+d_end.x[1]*x_comp.x[1]+d_end.x[2]*x_comp.x[2])/ds_comp
+                     r_sq = (d_end.x[0]*d_end.x[0]+d_end.x[1]*d_end.x[1]+d_end.x[2]*d_end.x[2])-H*H
+                      Ls = H + ds_comp
+                      
+                             if (H*Ls>0) {
+                                  if (abs(H)>abs(Ls)) {
+                                     h = abs(H)
+                                     l = abs(Ls)
+                                   } else {
+                                     h = abs(Ls)
+                                     l = abs(H)
+                                       }
+                                  if (l*l+r_sq<dmin2) {
+                                l = sqrt(dmin2-r_sq)   //set limit
+                                h = l+ds_comp
+                                //n = n+1;
+                                     }
+                         phi = log((sqrt((h*h)+r_sq)+h)/(sqrt((l*l)+r_sq)+l))
+                             } else {
+                          
+                               if (r_sq<dmin2) {    //set limit
+                                  r_sq = dmin2
+                                  }
+                         phi = log(((sqrt((Ls*Ls)+r_sq)+Ls)*(sqrt((H*H)+r_sq)-H))/r_sq)
+                              }
+                              r = ds_comp/phi
+                 
+                 }  else {     ////calculate for a_dend
+                       ds_comp = abs(adend_L_p/nseg_adend_p)
+                                          
+                      x_end.x[0] = $o1.x[0]+(sec*ds_comp+diam_soma_p/2)*$o3.x[0]
+                      x_end.x[1] = $o1.x[1]+(sec*ds_comp+diam_soma_p/2)*$o3.x[1]
+                      x_end.x[2] = $o1.x[2]+(sec*ds_comp+diam_soma_p/2)*$o3.x[2]
+
+                      x_comp.x[0] = $o3.x[0]*(ds_comp)
+                      x_comp.x[1] = $o3.x[1]*(ds_comp)
+                      x_comp.x[2] = $o3.x[2]*(ds_comp)
+                       
+                     d_end.x[0] = $o4.x[0]-x_end.x[0]
+                     d_end.x[1] = $o4.x[1]-x_end.x[1]
+                     d_end.x[2] = $o4.x[2]-x_end.x[2]
+
+                      H = (d_end.x[0]*x_comp.x[0]+d_end.x[1]*x_comp.x[1]+d_end.x[2]*x_comp.x[2])/ds_comp
+
+                      r_sq = (d_end.x[0]*d_end.x[0]+d_end.x[1]*d_end.x[1]+d_end.x[2]*d_end.x[2])-H*H
+                      Ls = H + ds_comp
+                             if (H*Ls>0) {
+                                  if (abs(H)>abs(Ls)) {
+                                     h = abs(H)
+                                     l = abs(Ls)
+                                   } else {
+                                     h = abs(Ls)
+                                     l = abs(H)
+                                       }
+                                  if (l*l+r_sq<dmin2) {
+                                l = sqrt(dmin2-r_sq)   //set limit
+                                h = l+ds_comp
+                                //n = n+1;
+                                     }
+                         phi = log((sqrt((h*h)+r_sq)+h)/(sqrt((l*l)+r_sq)+l))
+                            } else {
+                               if (r_sq<dmin2) {     //set limit
+                                  r_sq = dmin2
+                                  }
+                         phi = log( ((sqrt((Ls*Ls)+r_sq)+Ls)*(sqrt((H*H)+r_sq)-H))/r_sq )
+                              }
+                              r = ds_comp/phi
+                 }
+                 
+                 conduct = 1/(4*PI*r*sigma)*0.1  //LFP unit is 100uV.
+                 return conduct
+}       
+ 
+ func calcconduc_ITN() { local x_pos,y_pos,z_pos,sec,dmin,dmin2,H,r_sq,ds_comp,Ls,h,l,phi,conduct localobj x_end,x_comp,d_end,orilocal,locationlocal,eleclocal
+                     
+                     x_end = new Vector(3)
+                     d_end = new Vector(3)
+                     x_comp = new Vector(3)
+                     dmin = diam_soma_I/2 + diam_shank/2 + extralimit                     dmin2=dmin*dmin    ///set limit for electrodes
+                     sec=$2 //sec=0 for soma,otherwise for adend
+                     if (sec==0) {
+				       x_pos=$o1.x[0] y_pos=$o1.x[1] z_pos=$o1.x[2]   ///location of soma
+                       xe=$o4.x[0] ye=$o4.x[1] ze=$o4.x[2]   ///location of elec
+                       dis_soma=$5
+                         if (dis_soma<dmin) {
+                         dis_soma=dmin
+                         }
+                         r = dis_soma
+                        } else {     ////calculate for dend
+                       ds_comp = abs(dend_L_I/nseg_dend_I)
+
+                      
+                      x_end.x[0] = $o1.x[0]+(sec*ds_comp+diam_soma_I/2)*$o3.x[0]
+                      x_end.x[1] = $o1.x[1]+(sec*ds_comp+diam_soma_I/2)*$o3.x[1]
+                      x_end.x[2] = $o1.x[2]+(sec*ds_comp+diam_soma_I/2)*$o3.x[2]
+
+                      x_comp.x[0] = $o3.x[0]*(ds_comp)
+                      x_comp.x[1] = $o3.x[1]*(ds_comp)
+                      x_comp.x[2] = $o3.x[2]*(ds_comp)
+                      
+
+                      
+                     d_end.x[0] = $o4.x[0]-x_end.x[0]
+                     d_end.x[1] = $o4.x[1]-x_end.x[1]
+                     d_end.x[2] = $o4.x[2]-x_end.x[2]
+
+                      H = (d_end.x[0]*x_comp.x[0]+d_end.x[1]*x_comp.x[1]+d_end.x[2]*x_comp.x[2])/ds_comp
+
+                      r_sq = (d_end.x[0]*d_end.x[0]+d_end.x[1]*d_end.x[1]+d_end.x[2]*d_end.x[2])-H*H
+                      Ls = H + ds_comp
+                             if (H*Ls>0) {
+                                  if (abs(H)>abs(Ls)) {
+                                     h = abs(H)
+                                     l = abs(Ls)
+                                   } else {
+                                     h = abs(Ls)
+                                     l = abs(H)
+                                       }
+                                  if (l*l+r_sq<dmin2) {
+                                l = sqrt(dmin2-r_sq)   //set limit
+                                h = l+ds_comp
+                               
+                                     }
+                         phi = log((sqrt((h*h)+r_sq)+h)/(sqrt((l*l)+r_sq)+l))
+                            } else {
+                               if (r_sq<dmin2) {     //set limit
+                                  r_sq = dmin2
+                                  }
+                         phi = log( ((sqrt((Ls*Ls)+r_sq)+Ls)*(sqrt((H*H)+r_sq)-H))/r_sq )
+                              }
+                              r = ds_comp/phi
+                 }
+                 
+                 conduct = 1/(4*PI*r*sigma)*0.1  //LFP unit is 100uV.
+                 return conduct
+}       
+               
+///////////////////////////////////////////////////////////
+

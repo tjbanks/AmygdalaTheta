@@ -1,0 +1,6614 @@
+numprocs=50
+NEURON -- VERSION 7.7.2 7.7 (2b7985ba) 2019-06-20
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2018
+See http://neuron.yale.edu/neuron/credits
+
+Additional mechanisms from files
+ bg2pyr.mod cadyn.mod cal2.mod ca.mod capool.mod function_TMonitor.mod gap.mod Gfluct_new_exc.mod Gfluct_new_inh.mod halfgap.mod h.mod im.mod interD2interD_STFD_new.mod interD2pyrD_STFD_new.mod kadist.mod kaprox.mod kdrca1DA.mod kdrca1.mod kdrinter.mod leakDA.mod leakinter.mod leak.mod na3DA.mod na3.mod nainter.mod nap.mod nat.mod pyrD2interD_STFD.mod pyrD2pyrD_STFD_new.mod sahp.mod sahpNE.mod vecevent.mod xtra_imemrec.mod xtra.mod
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+	1 
+
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1000 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1000 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1000 
+		1 
+	1 
+1 
+	1000 
+	1000 
+	1000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	341 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+		1 
+	1 
+1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1000 
+	1 
+	89106 
+	1 
+		1 
+1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1000 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	3000 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	3000 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	341 
+	1 
+	200 
+	101 
+	341 
+	1000 
+	1000 
+	200 
+	89106 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	89106 
+	1000 
+	1000 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	341 
+	200 
+	89106 
+	101 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	341 
+	200 
+	1 
+	1 
+	1 
+	101 
+	341 
+	200 
+	101 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1000 
+	200 
+	1 
+	1000 
+	101 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+	1 
+	1 
+	1 
+	1 
+
+	1000 
+	89106 
+	1000 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	89106 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	89106 
+	1000 
+	1 
+	1000 
+		1 
+	1 
+	1 
+	1 
+	1 
+1 
+	1000 
+	1000 
+	1 
+	1000 
+	1000 
+	341 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	200 
+	1 
+	1 
+	1 
+	101 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	341 
+	200 
+	1000 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1 
+	101 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	1 
+	1 	101 
+	1 
+	1 
+
+	341 
+	1 
+	1 
+	200 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	101 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1 
+	200 
+	1 
+	1 
+	101 
+	1000 
+	1000 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	89106 
+	1000 
+	1000 
+	89106 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	3000 
+	101 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	341 
+	101 
+	200 
+	1 
+	101 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1000 
+	1000 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1000 
+	1000 
+	341 
+	200 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+	1 
+
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1 
+	1 
+	200 
+	101 
+	341 
+	200 
+	101 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	341 
+	200 
+	101 
+	200 
+	101 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	89106 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	89106 
+	341 
+	200 
+	3000 
+	101 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	341 
+	1 
+	1 
+	1 
+	200 
+	1 
+	1 
+	1 
+	101 
+	341 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	200 
+	341 
+	101 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	89106 
+
+	1 
+	1 
+	1 
+	341 
+	89106 
+	200 
+	101 
+	89106 
+	341 
+	200 
+	101 
+	89106 
+	89106 
+	3000 
+	89106 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 	1 
+
+	341 
+	200 
+	341 
+	101 
+	341 
+	200 
+	3000 
+	200 
+	1 
+	1 
+	101 
+	101 
+	1 
+	1 
+	1 
+	1 
+	3000 
+	1 
+	1 
+	1 
+	341 
+	1 
+	1 
+	1 
+	200 
+	101 
+	341 
+	3000 
+	89106 
+	1 
+	1 
+	1 
+	89106 
+	200 
+	101 
+	1 
+	1 
+	1 
+	341 
+	200 
+	101 
+	3000 
+	3000 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	341 
+	341 
+	200 
+	200 
+	101 
+	101 
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+0.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+1.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+2.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+3.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+4.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+5.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+6.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+7.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+8.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+9.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+10.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+11.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+12.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+13.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+14.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+15.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+16.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+17.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+18.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+19.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+20.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+21.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+22.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+23.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+24.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+25.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+26.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+27.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+28.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+29.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+30.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+31.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+32.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+33.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+34.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+35.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+36.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+37.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+38.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+39.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+40.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+41.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+42.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+43.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+44.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+45.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+46.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+47.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+48.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+49.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+50.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+51.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+52.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+53.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+54.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+55.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+56.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+57.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+58.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+59.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+60.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+61.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+62.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+63.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+64.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+65.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+66.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+67.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+68.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+69.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+70.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+71.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+72.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+73.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+74.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+75.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+76.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+77.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+78.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+79.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+80.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+81.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+82.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+83.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+84.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+85.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+86.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+87.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+88.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+89.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+90.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+91.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+92.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+93.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+94.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+95.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+96.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+97.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+98.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+99.000000 percent is done!
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	Matrix[1] 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	0.00022363663 
+	1 
+	0.0001115799 
+	1 
+	0.00022101402 
+	0 
+	1 
+	9.5367432e-06 
+	0 
+	0.00013780594 
+	0 
+	0.0087954998 
+	0 
+	0.0085759163 
+	0 
+	0.0087313652 
+	0 
+	0.0089800358 
+	0 
+	0.0084028244 
+	0 
+	0.008923769 
+	0 
+	0.00032401085 
+	0 
+	0.0084619522 
+	0 
+	0.0089316368 
+	0 
+	0.0088477135 
+	0 
+	0.0085017681 
+	0 
+	0.0085413456 
+	0 
+	1 
+	1.8835068e-05 
+	0 
+	0.00018167496 
+	0 
+	0.00010561943 
+	0 
+	0.00024747849 
+	0 
+	0.00011730194 
+	0 
+	0.0085587502 
+	0 
+	0.0084428787 
+	0 
+	0.0089428425 
+	0 
+	0.0089232922 
+	0 
+	0.00037455559 
+	0 
+	0.00024819374 
+	0 
+	1 
+	5.7458878e-05 
+	0 
+	0.00043201447 
+	0 
+	0.00032186508 
+	0 
+	0.00030875206 
+	0 
+	0.0090687275 
+	0 
+	0.0088441372 
+	0 
+	0.0085802078 
+	0 
+	0.0057826042 
+	0 
+	0.0089421272 
+	0 
+	1 
+	8.4161758e-05 
+	0 
+	0.0085024834 
+	0 
+	0.0090670586 
+	0 
+	0.00018191338 
+	0 
+	1 
+	2.3841858e-05 
+	0 
+	0.0088341236 
+	0 
+	0.0085089207 
+	0 
+	0.00021743774 
+	0 
+	1 
+	5.6266785e-05 
+	0 
+	0.0089797974 
+	0 
+	1 
+	5.3167343e-05 
+	0 
+	0 
+	0 
+	0.0088880062 
+	0 
+	1 
+	4.0054321e-05 
+	0 
+0 nrniv: ./LFPs/LFP_elec_0 :file is not open
+0  in BL_main.hoc near line 556
+0  multiLFP()
+           ^
+        0 Vector[437].printf(File[13])
+      0 multiLFP()
+application called MPI_Abort(MPI_COMM_WORLD, -1) - process 0
