@@ -1,0 +1,39 @@
+//By Pirate Henry 2011 and modified by Feng and Keyang 2014
+
+/* obfunc LoadMatrix() { local nrow,ncol localobj mat,datafile		nrow = $2	ncol = $3	datafile = new File()	datafile.ropen($s1)	mat = new Matrix()	mat.scanf(datafile,nrow,ncol)	//print mat.nrow, mat.ncol	datafile.close()	return mat
+}*/
+
+objref InternalSynMatrix,InternalThrMatrix,InternalWgtMatrix,InternalDelMatrix
+InternalSynMatrix = new Matrix()//InternalThrMatrix = new Matrix()InternalWgtMatrix = new Matrix()InternalDelMatrix = new Matrix()
+InternalSynMatrix = LoadMatrix(FileLocationStr_InternalSynConns,TotalCellNum,TotalCellNum)
+//InternalThrMatrix = LoadMatrix(FileLocationStr_InternalThrConns,TotalCellNum,TotalCellNum)
+InternalWgtMatrix = LoadMatrix(FileLocationStr_InternalWgtConns,TotalCellNum,TotalCellNum)InternalDelMatrix = LoadMatrix(FileLocationStr_InternalDelConns,TotalCellNum,TotalCellNum)
+objref InternalsynList,InternalncList,fih,rdmInternalsynList = new List()InternalncList = new List()//rdm = new Random()
+proc ConnectInternal() { local i,j,cellgid,inputid,synid,thr,wgt,del	{pc.barrier()}
+	for j = 0,TotalCellNum-1 {
+		//cellgid = CellList.o(j).mygid
+		cellgid = j
+		if(!pc.gid_exists(cellgid)) { continue }
+		for i = 0,TotalCellNum-1 {
+			//Rdm_D = rdm.discunif(1, 5)						// random number generator for different delay
+			inputid = i
+			synid = InternalSynMatrix.x[inputid][cellgid]
+			//print(synid)
+			if (synid != 0) {
+				//print(synid)
+				//printf("The cell #%d gets input from Cell #%d with synid #%d!\n",cellgid,inputid,synid)
+				//thr = InternalThrMatrix.x[inputid][cellgid]
+				wgt = InternalWgtMatrix.x[inputid][cellgid]
+				del = InternalDelMatrix.x[inputid][cellgid]
+				//printf("%f,%f,%f\n",thr,wgt,del)
+				//if (del<dt) {
+				//	print del
+				//}                
+				ConnectTwoCells(inputid,cellgid,synid,wgt,del,InternalsynList,InternalncList)
+				//ConnectTwoCells(inputid,cellgid,synid,Rdm_D,InternalsynList,InternalncList)
+			}
+		}
+	}     	
+	{pc.barrier()}     saveM.close()
+
+}

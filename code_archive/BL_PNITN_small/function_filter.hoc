@@ -1,0 +1,54 @@
+// Created by FF (2018)
+filter_order=2
+func filter_realtime() { local seq_electrode,order,mmm,filtered_value localobj LFP_temp_list,LFP_filtered_list,LFP_snippet,LFP_filtered_snippet,aFilt,bFilt
+  LFP_temp_list=$o1
+  LFP_filtered_list=$o2
+  order=$3
+  seq_electrode=$4
+  
+  ////filter parameters from matlab////
+  bFilt=new Vector(2*order+1)
+  aFilt=new Vector(2*order+1)
+  
+  bFilt.x[0]=0.00362168151492775	
+  bFilt.x[1]=0	
+  bFilt.x[2]=-0.00724336302985550	
+  bFilt.x[3]=0	
+  bFilt.x[4]=0.00362168151492775
+  
+  aFilt.x[0]=1	
+  aFilt.x[1]=-3.56127922522600	
+  aFilt.x[2]=4.99912436309223	
+  aFilt.x[3]=-3.25791125356514	
+  aFilt.x[4]=0.837181651256021
+  
+  ///////////
+  LFP_snippet=new Vector(1+2*order)
+  //print LFP.size()
+  for mmm=0,2*order {
+  LFP_snippet.x[mmm]=LFP_temp_list.o(LFP_temp_list.count()-1-mmm).x[seq_electrode]
+  }
+  //LFP_snippet=LFP_snippet.reverse()
+  
+  LFP_filtered_snippet=new Vector(2*filter_order)
+  for mmm=0,2*order-1 {
+  LFP_filtered_snippet.x[mmm]=LFP_filtered_list.o(LFP_filtered_list.count()-1-mmm).x[seq_electrode]
+  }
+  
+   LFP_filtered_snippet.mul(aFilt.at(1,aFilt.size()-1))
+   LFP_snippet.mul(bFilt)
+  //filtered_signal_snippet=filtered_signal.at(filtered_signal.size()-1-2*filter_order+1,filtered_signal.size()-1)
+  //filtered_signal_snippet=filtered_signal_snippet.reverse()
+  //temp=bFilt.x[0]*LFP(n)+bFilt.x[1]*data_LFP_fill(n-1)+bFilt.x[2]*data_LFP_fill(n-2)+bFilt.x[3]*data_LFP_fill(n-3)+bFilt.x[4]*LFP_snippet.x[0]...
+       //-aFilt(2)*y(n-1)-aFilt(3)*y(n-2)-aFilt(4)*y(n-3)-aFilt(5)*y(n-4);
+       //print LFP_snippet.size(),filtered_signal_snippet.size()
+ 
+  
+  filtered_value=LFP_snippet.sum()-LFP_filtered_snippet.sum()   ///filtered LFP at current time step
+  //print temp
+  //filtered_signal.append(temp)
+  //filtered_signal.printf
+  return filtered_value
+}       
+ 
+ 

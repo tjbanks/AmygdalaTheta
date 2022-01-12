@@ -1,0 +1,88 @@
+//By Pirate Henry 2011 and modified by Dongbeom
+
+
+//objref InternalSynMatrix_gj
+//InternalSynMatrix_gj = new Matrix()
+//InternalThrMatrix = new Matrix()
+//InternalWgtMatrix = new Matrix()
+//InternalDelMatrix = new Matrix()
+
+//InternalSynMatrix_gj = LoadMatrix(gj_matrix,CellNum_interneuron,CellNum_interneuron)
+
+//InternalThrMatrix = LoadMatrix(FileLocationStr_InternalThrConns,TotalCellNum,TotalCellNum)
+//InternalWgtMatrix = LoadMatrix(FileLocationStr_InternalWgtConns,TotalCellNum,TotalCellNum)
+objref precell,postcell,rC_I2I_general
+prob_I2I_general=26
+prob_I2I_bi=5 
+seed=123
+//{rC_I2I_general = new Random(seed)} 
+proc ConnectInternal_I2I_general() { local i,j,postid,preid,synid,wgt,del
+	{pc.barrier()}
+	for j = 0,CellNum_interneuron-1 {
+
+        cellgid=j+CellNum_p
+		if(!pc.gid_exists(cellgid)) { continue }
+        {rC_I2I_general = new Random(cellgid+1000)}           //postcell = pc.gid2cell(postid_real) 
+          
+          for i = 0,CellNum_interneuron-1 {
+		if (i!=j && rC_I2I_general.uniform(0,100) < prob_I2I_general) {
+            
+            
+		    preid=i+CellNum_p
+			synid=4
+            
+            if (rC_I2I_general.uniform(0,100) < prob_I2I_bi) {                     ////bi-directional
+            
+            wgt=rC_I2I_general.lognormal(20,10)
+            del=rC_I2I_general.uniform(0.5,5)
+            ConnectTwoCells(preid,cellgid,synid,wgt,del,InternalsynList,InternalncList)
+            
+            wgt=rC_I2I_general.lognormal(20,10)
+            del=rC_I2I_general.uniform(0.5,5)
+            //ConnectTwoCells(cellgid,preid,synid,wgt,del,InternalsynList,InternalncList)
+            
+            }else {                                                              ////uni-directional
+            wgt=rC_I2I_general.lognormal(20,10)
+            del=rC_I2I_general.uniform(0.5,5)
+            ConnectTwoCells(preid,cellgid,synid,wgt,del,InternalsynList,InternalncList)
+            }
+            
+		    //postcell.connect_gap(precell) 
+            //precell.connect_gap(postcell)	
+            }
+			}
+		}
+     {pc.barrier()}
+	}
+    
+    
+   prob_I2I_bi=5 
+    proc ConnectInternal_I2I_bi() { local i,j,postid,preid,postid_real,preid_real,delay localobj nc,syn
+	{pc.barrier()}
+	for j = 0,CellNum_interneuron-1 {
+
+        cellgid=j+CellNum_p
+		if(!pc.gid_exists(cellgid)) { continue }
+          //postcell = pc.gid2cell(postid_real) 
+          
+          for i = 0,CellNum_interneuron-1 {
+		if (i!=j && rC_I2I_general.uniform(0,100) < prob_I2I_bi) {
+            
+		    preid=i+CellNum_p
+			synid=4
+            wgt=rC_P2P_general.lognormal(20,10)
+            del=rC_P2P_general.uniform(0.5,5)
+            ConnectTwoCells(preid,cellgid,synid,wgt,del,InternalsynList,InternalncList)
+            
+            wgt=rC_P2P_general.lognormal(20,10)
+            del=rC_P2P_general.uniform(0.5,5)
+            ConnectTwoCells(cellgid,preid,synid,wgt,del,InternalsynList,InternalncList)
+            
+		    //postcell.connect_gap(precell) 
+            //precell.connect_gap(postcell)	
+            }
+			}
+		}
+     {pc.barrier()}
+	}
+

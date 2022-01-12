@@ -1,0 +1,50 @@
+//By Pirate Henry 2011 and modified by Dongbeom
+
+
+//objref InternalSynMatrix_gj
+//InternalSynMatrix_gj = new Matrix()
+//InternalThrMatrix = new Matrix()
+//InternalWgtMatrix = new Matrix()
+//InternalDelMatrix = new Matrix()
+
+//InternalSynMatrix_gj = LoadMatrix(gj_matrix,CellNum_interneuron,CellNum_interneuron)
+
+//InternalThrMatrix = LoadMatrix(FileLocationStr_InternalThrConns,TotalCellNum,TotalCellNum)
+//InternalWgtMatrix = LoadMatrix(FileLocationStr_InternalWgtConns,TotalCellNum,TotalCellNum)
+objref precell,postcell,rC_P2P_general
+prob_P2P_general=2
+seed=123
+
+objref InternalsynList,InternalncList,fih,rdm
+InternalsynList = new List()
+InternalncList = new List()
+
+
+proc ConnectInternal_P2P_general() { local i,j,postid,preid,synid,wgt,del 
+	  {pc.barrier()}
+      //nclist=new List()
+    	for j = 0,CellNum_p-1 {
+		//cellgid = CellList.o(j).mygid
+		//postid = j
+        cellgid=j+0
+		if(!pc.gid_exists(cellgid)) { continue }
+          {rC_P2P_general = new Random(cellgid+1000)} 
+		for i = 0,CellNum_p-1 {
+		if (i!=j && rC_P2P_general.uniform(0,100) < prob_P2P_general) {
+            
+		    preid=i
+			synid=1
+            wgt=rC_P2P_general.lognormal(5,2)
+            del=rC_P2P_general.uniform(0.5,5)
+            ConnectTwoCells(preid,cellgid,synid,wgt,del,InternalsynList,InternalncList)
+            
+		    //postcell.connect_gap(precell) 
+            //precell.connect_gap(postcell)	
+            }
+			}
+		}
+     {pc.barrier()}
+    }
+    
+    
+   

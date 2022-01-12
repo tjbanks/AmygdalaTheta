@@ -1,0 +1,177 @@
+//{load_file("function_CreateSynapses.hoc")}
+/*
+obfunc LoadMatrix() { local nrow,ncol localobj mat,datafile
+	nrow = $2
+	ncol = $3
+	datafile = new File()
+	datafile.ropen($s1)
+	mat = new Matrix()
+	mat.scanf(datafile,nrow,ncol)
+	//print mat.nrow, mat.ncol
+	datafile.close()
+
+	return mat
+}
+*/
+
+//objref InputsynList,InputncList
+//InputsynList = new List()
+//InputncList = new List()
+
+objref Inputvecplay_PR[Inputnum_PR][PR_connectnum],Inputspikes_PR[Inputnum_PR]
+objref Inputsyn_PR[Inputnum_PR][PR_connectnum],Inputnc_PR[Inputnum_PR][PR_connectnum]
+objref rc_PR2P,rc_ER2P
+proc ConnectInputs_PR() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target
+         //printf("%d cells on this host\n",CellNum)
+		 {pc.barrier()}
+		 //k=0
+	    for i = 0,Inputnum_PR-1 {
+        //InputsynListpercell=new List()		
+		//cellgid = cells.o(j).mygid
+		//target = cells.o(j)
+		for j = 0,PR_connectnum-1 { 
+		    
+			//inputid = i
+			cellgid = PR2P_matrix.x[i][j]
+			if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+				//printf("The cell #%d gets input from input #%d with synid #%d!\n",cellgid,inputid,synid)
+				//thr = InputThrMatrix.x[inputid][cellgid]
+				//wgt = InputWgtMatrix.x[inputid][cellgid]
+				//del = InputDelMatrix.x[inputid][cellgid]
+				target.dend Inputsyn_PR[i][j] = new pyrD2pyrD_STFD(0.9)
+                {rc_PR2P = new Random(i*PR_connectnum+j+1)}
+                  wgt = rc_PR2P.lognormal(20,2)
+                  del = rc_PR2P.uniform(0.5,5)
+                Inputsyn_PR[i][j].initW=wgt
+				//syn.pregid = inputid
+				//syn.postgid = cellgid
+				//syn.initW = wgt
+				//vec = new Vector()
+				
+				//vec = InputList.o(inputid)
+				//vecplay = new VecStim()  
+				//vecplay.play()         //to clear Vecstim
+				
+				//Inputvec[inputid] = InputList.o(inputid)
+				Inputvecplay_PR[i][j] = new VecStim() 
+                Inputspikes_PR[i]=spikesmatrix_PR_matrix.getcol(i)
+				Inputvecplay_PR[i][j].play(Inputspikes_PR[i])
+				//tVecList.o(inputid).play(Inputvec[inputid])
+
+				Inputnc_PR[i][j] = new NetCon(Inputvecplay_PR[i][j],Inputsyn_PR[i][j])
+				
+				
+				//nc = new NetCon(nil,syn)
+				Inputnc_PR[i][j].weight = 1
+				Inputnc_PR[i][j].delay = del
+				//if (del<dt) {
+					//print del
+				//}
+				Inputnc_PR[i][j].threshold = -10//nc.threshold = thr
+				//InputsynList.append(syn)
+				//InputncList.append(nc)
+				//target.InputsynListpercell.append(syn)
+				//target.ncl.append(nc)
+
+				//saveInput.printf("%d %d %f %f %d %d\n",syn.postgid, syn.pregid, syn.initW, nc.delay, nc.threshold,synid)
+				//k=k+1
+			}
+			
+		}
+	}
+	//fih = new FInitializeHandler("loadqueue()")
+	//loadqueue() 
+	{pc.barrier()}
+	//saveInput.close()
+}
+
+objref Inputvecplay_ER[Inputnum_ER][ER_connectnum],Inputspikes_ER[Inputnum_ER]
+objref Inputsyn_ER[Inputnum_ER][ER_connectnum],Inputnc_ER[Inputnum_ER][ER_connectnum]
+
+proc ConnectInputs_ER() { local i,j,k,cellgid,inputid,synid,thr,wgt,del localobj target
+         //printf("%d cells on this host\n",CellNum)
+		 {pc.barrier()}
+		 //k=0
+	    for i = 0,Inputnum_ER-1 {
+        //InputsynListpercell=new List()		
+		//cellgid = cells.o(j).mygid
+		//target = cells.o(j)
+		for j = 0,ER_connectnum-1 { 
+		    
+			//inputid = i
+			cellgid = ER2P_matrix.x[i][j]
+			if (cellgid >= 0) {
+            if(!pc.gid_exists(cellgid)) { continue }
+            target = pc.gid2cell(cellgid)
+				//printf("The cell #%d gets input from input #%d with synid #%d!\n",cellgid,inputid,synid)
+				//thr = InputThrMatrix.x[inputid][cellgid]
+				//wgt = InputWgtMatrix.x[inputid][cellgid]
+				//del = InputDelMatrix.x[inputid][cellgid]
+				target.dend Inputsyn_ER[i][j] = new pyrD2pyrD_STFD(0.9)
+                 {rc_ER2P = new Random(i*ER_connectnum+j+1+PR_connectnum*Inputnum_ER)}
+                  wgt = rc_ER2P.lognormal(20,2)
+                  del = rc_ER2P.uniform(0.5,5)
+                Inputsyn_ER[i][j].initW=wgt
+				//syn.pregid = inputid
+				//syn.postgid = cellgid
+				//syn.initW = wgt
+				//vec = new Vector()
+				
+				//vec = InputList.o(inputid)
+				//vecplay = new VecStim()  
+				//vecplay.play()         //to clear Vecstim
+				
+				//Inputvec[inputid] = InputList.o(inputid)
+				Inputvecplay_ER[i][j] = new VecStim() 
+                Inputspikes_ER[i]=spikesmatrix_ER_matrix.getcol(i)
+				Inputvecplay_ER[i][j].play(Inputspikes_ER[i])
+				//tVecList.o(inputid).play(Inputvec[inputid])
+
+				Inputnc_ER[i][j] = new NetCon(Inputvecplay_ER[i][j],Inputsyn_ER[i][j])
+				
+				
+				//nc = new NetCon(nil,syn)
+				Inputnc_ER[i][j].weight = 1
+				Inputnc_ER[i][j].delay = del
+				//if (del<dt) {
+					//print del
+				//}
+				Inputnc_ER[i][j].threshold = -10//nc.threshold = thr
+				//InputsynList.append(syn)
+				//InputncList.append(nc)
+				//target.InputsynListpercell.append(syn)
+				//target.ncl.append(nc)
+
+				//saveInput.printf("%d %d %f %f %d %d\n",syn.postgid, syn.pregid, syn.initW, nc.delay, nc.threshold,synid)
+				//k=k+1
+			}
+			
+		}
+	}
+	//fih = new FInitializeHandler("loadqueue()")
+	//loadqueue() 
+	{pc.barrier()}
+	//saveInput.close()
+}
+/*
+proc loadqueue() { local i,j,NodencNumber,input_index localobj vec,nc
+	NodencNumber = InputncList.count()
+	if (NodencNumber!=0) {
+		for i = 0,NodencNumber-1 {
+			input_index = InputsynList.o(i).pregid
+			vec = InputList.o(input_index)
+			nc = InputncList.o(i)
+			for j=0,vec.size()-1 { nc.event(vec.x[j])
+	        //printf("%d cells on this host\n",CellNum)
+		    //saveevent.printf("%dth event\n",j)
+
+			//printf("%dth event ",j)
+			}
+
+		}
+	}
+	//saveevent.close()
+}
+*/

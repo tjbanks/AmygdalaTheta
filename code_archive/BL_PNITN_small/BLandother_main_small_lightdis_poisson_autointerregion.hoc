@@ -1,0 +1,1417 @@
+load_file("nrngui.hoc")
+load_file("LAcells_template_LFP_segconsider_all_Iinject_recordingimembrane.hoc")
+load_file("interneuron_template_gj_LFP_Iinject_recordingimembrane.hoc")
+//load_file("shockcondi.hoc")
+//load_file("shocknocondi.hoc")
+load_file("BgGen.hoc")
+//load_file("function_ToneGen.hoc")
+load_file("function_NetStimOR.hoc")
+//load_file("function_ToneSignalGen_Th.hoc")
+//load_file("function_ToneSignalGen_Ctx.hoc")
+load_file("function_LoadMatrix.hoc")
+//load_file("function_calcconduc.hoc")
+{load_file("netparmpi.hoc")}
+
+strdef sim_type,pulse_fake
+sim_type="randompulses"    ///change simulation type here,trough,peak,randompulses,nopulses
+pulse_fake="true"  //// to indicate either generate a fake pulse (only for comparison pulses in TE), set true in other situations
+
+if (strcmp(sim_type,"trough")==0) {
+detectphasetype_ind=1
+} else if (strcmp(sim_type,"peak")==0) {
+detectphasetype_ind=2
+} else if (strcmp(sim_type,"nopulses")==0) {
+detectphasetype_ind=3
+} else if (strcmp(sim_type,"randompulses")==0) {
+detectphasetype_ind=4
+random_f=10//28//7
+}
+
+
+////cell number for each region
+///region1
+upscale=1
+NCELL_1 = 1000*upscale
+CellNum_p_1=900*upscale
+CellNum_interneuron_1 = 100*upscale
+///region2
+NCELL_2 = 1000*upscale
+CellNum_p_2=900*upscale
+CellNum_interneuron_2 = 100*upscale
+
+TotalCellNum = NCELL_1+NCELL_2
+
+///p_cell morphology///
+adend_L_p=270 //um
+nseg_adend_p=8 //num of seg 
+pdend_L_p=555  //um
+nseg_pdend_p=7
+nseg_soma_p=1
+diam_soma_p = 25 //um
+diam_soma_p1 = 24.75 //um
+diam_adend_p = 3 
+diam_pdend_p = 5 
+
+nseg_all_p=nseg_adend_p+nseg_pdend_p+nseg_soma_p
+
+modelcompartment_num=nseg_all_p
+////I_cell morphology////
+dend_L_I=150  ///um
+nseg_dend_I=1  ///num of seg 
+nseg_soma_I=1 
+diam_soma_I = 15   ////um
+diam_dend_I = 10     ////um
+nseg_all_I=nseg_dend_I+nseg_soma_I
+modelcompartment_num_ITN=nseg_all_I
+
+diam_shank = 25    //20-50um
+extralimit = 50
+
+objref pc,cells,cell[TotalCellNum],nc,nil//,r
+pc = new ParallelContext()
+
+cells = new List()
+
+celsius = 31.0  
+
+objref Sim_length_file
+objref Sim_length_rec
+Sim_length_file = new File()
+Sim_length_file.ropen("./input/sim_length")
+Sim_length_rec = new Vector()
+Sim_length_rec.scanf(Sim_length_file)
+
+
+tstop = 100000//Sim_length_rec.x[0]//96000//10000//276000//5000//276000
+
+if (tstop>5000) {
+savingspikesep=1   ///to indicate whether need to store spks seperately
+}else{
+savingspikesep=1   ///to indicate whether need to store spks seperately
+}
+
+
+if (pc.id==0) {
+{load_file("function_TimeMonitor.hoc")}
+}  ///only report on the first node
+dt = (1/2)^5//0.05//0.05//0.2//0.01
+
+steps_per_ms= 1/dt//20//20
+
+v_init = -70
+//t0 = startsw()
+//r = new Random()
+/*strdef FileLocationStr_InternalSynConns
+FileLocationStr_InternalSynConns = "Syn_Matrix.txt"
+
+strdef FileLocationStr_InternalWgtConns,FileLocationStr_InternalDelConns
+FileLocationStr_InternalWgtConns = "Data_InternalWgtConns.txt"
+FileLocationStr_InternalDelConns = "Data_InternalDelConns.txt"
+*/
+
+
+//strdef gj_matrix
+
+//gj_matrix = "gj_matrix.txt"
+//////////////////////// Choose the cell type & cells applied Neuromodulation/////////////////////
+
+strdef preface, dirstr
+preface = "."
+
+sprint(dirstr, "", preface)
+
+
+//// Read Cell_type.txt ////
+objref Cell_type_file
+objref Cell_type_rec
+Cell_type_file = new File()
+Cell_type_file.ropen("./input/Cell_type.txt")
+Cell_type_rec = new Vector()
+Cell_type_rec.scanf(Cell_type_file)
+
+//// Read NM.txt ////   Randomly choosen number to decide whether cell has DA and NE or not
+//objref NM_file
+//objref NM_rec
+//NM_file = new File()
+//NM_file.ropen("./input/NM.txt")
+//NM_rec = new Vector()
+//NM_rec.scanf(NM_file)
+
+////Read 3D-Location information(soma)////
+objref Location
+Location = new Matrix()
+strdef locationstr
+locationstr="./input/location_noapart.txt"
+
+Location = LoadMatrix(locationstr,TotalCellNum,3)
+
+/*
+////Read 3D-Location oritation(for 2dends)////
+objref oritation
+oritation = new Matrix()
+strdef oritationstr
+oritationstr="oritation.txt"
+
+oritation = LoadMatrix(oritationstr,TotalCellNum,3)
+
+////Define electrode position////
+XE = 1250 // um    //3D space dimension is 2.5*1*0.6  (1250,500,300)is the oringal pos of electrode
+YE = 500
+ZE = 2000//300, -1300 for low, 2000 for high   
+*/
+
+////Define random current injection////
+//objref P_amp_random,I_amp_random
+//P_amp_random = new Random()
+//P_amp_random.normal(0.2, 0.05)    //nA,amplitude of current injection follow random distribution
+
+//I_amp_random = new Random()
+//I_amp_random.normal(0.0, 0.00)    //nA,amplitude of current injection follow random distribution
+
+////load electrode array positions and rotation info of soma for each neuron
+objref oritation,elec_coords
+oritation = new Matrix()
+
+elec_coords=new Vector(3) ///only define one electrode
+elec_coords.fill(300)///fill in the electrode location
+
+strdef oritationstr//,elec_coords_str
+oritationstr="./input/oritation.txt"
+
+elec_num=2///define electro number here
+Location.muls(1e3)  //convert to um
+oritation = LoadMatrix(oritationstr,TotalCellNum,3)
+load_file("function_calcconduc.hoc")
+
+objref Location_single,oritation_single//,elec_single
+Location_single = new Vector()
+oritation_single = new Vector()
+//elec_single = new Vector()
+sigma=0.3
+
+
+for(i=pc.id;i<TotalCellNum;i+=pc.nhost) {              // Distribute the cells evenly among nodes
+	//NM_ind = NM_rec.x[i]
+//locationx=Location.x[i][0]
+//locationy=Location.x[i][1]
+//locationz=Location.x[i][2]
+
+//oritationx=oritation.x[i][0]
+//oritationy=oritation.x[i][1]
+//oritationz=oritation.x[i][2]
+
+	//if (i < CellNum_p){								// LAdd cell ratio A:B:C = 6:3:1
+		Cell_type_ind = Cell_type_rec.x[i]	
+		if (Cell_type_ind <= 5){
+			//if (NM_ind == 0){
+				cell = new Cell_A()
+				cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 1){
+				//cell = new Cell_ADA()
+                //cell = new Cell_A()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 2){
+				//cell = new Cell_ANE()
+                //cell = new Cell_A()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else{
+				//cell = new Cell_ADANE()
+                //cell = new Cell_A()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}
+		}else if(Cell_type_ind <= 8){
+			//if (NM_ind == 0){
+				cell = new Cell_B()
+				cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 1){
+				//cell = new Cell_BDA()
+                //cell = new Cell_B()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 2){
+				//cell = new Cell_BNE()
+                //cell = new Cell_B()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else{
+				//cell = new Cell_BDANE()
+                //cell = new Cell_B()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}
+		}else if(Cell_type_ind <= 20){
+			//if (NM_ind == 0){
+				cell = new Cell_C()
+				cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 1){
+				//cell = new Cell_CDA()
+                //cell = new Cell_C()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else if (NM_ind == 2){
+				//cell = new Cell_CNE()
+                //cell = new Cell_C()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}else{
+				//cell = new Cell_CDANE()
+                //cell = new Cell_C()
+				//cell.drv.amp=0.0//P_amp_random.repick()
+			//}
+		} else {
+        	cell = new InterneuronCell()            // Create 200 Interneuron cells (cell 800 ~ cell 999) 
+	       cell.drv.amp=0.0//I_amp_random.repick()
+        }
+
+	cells.append(cell)                          // Add this cell to the list (otherwise its lost!)
+	pc.set_gid2node(i, pc.id)                   // Associate “i?with this node id
+												// nc = (create netcon object on cell)
+	nc = cell.connect2target(nil) 				// attach spike detector $
+	nc.delay = 2
+	nc.weight = 1
+	pc.cell(i, nc)								// associate gid i with spike detector
+												// Associate i with the netcon (so that the cluster 
+	 		                                    // knows where the spikes are coming from)													
+}
+
+//////////////////////////////////////////////////////////////
+//////////////  Connections for LA NET  //////////////////////
+//////////////////////////////////////////////////////////////
+
+
+objref nclist, cellid,bgnclist,Inplist
+
+
+objref fluc[TotalCellNum][2]
+
+
+Inplist = new List()
+nclist = new List()
+
+bgnclist = new List()
+
+//// Read Cell_list--- list of files whose output,weight changes and ca+ concentration, will be printed ////
+	objref op_file
+	objref op_rec
+	op_file = new File()
+	op_file.ropen("./input/Cell_list.txt")
+	op_rec = new Vector()
+	op_rec.scanf(op_file)
+	cell_plots = op_rec.size
+    
+    
+	
+
+
+/////////////////////////////////////////////////////////
+///////////////Pyramid cells connections/////////////////	
+/////////////////////////////////////////////////////////
+objref noiseRandObj[TotalCellNum][2]
+
+////////////////////// Single-Point BACKGROUNG noise OR PYRAMIDAL CELLS //////////////////////
+
+///region1
+proc bg_input_PN_region1 () { local randseed
+randseed=$1
+
+for m = 0, CellNum_p_1-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+													// on the node ("continue") skips rest of code
+	cellid = pc.gid2cell(m)                     	// get GID object from ID	
+	///for exc noise///////////////
+	noiseRandObj[m][0]=new Random()
+    noiseRandObj[m][0].Random123(m+randseed)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][0].normal(0,1)
+	
+	cellid.soma fluc[m][0] = new Gfluct2_exc(0.5)
+    
+    fluc[m][0].g_e0 = 0.0032//0.010//0.015//0.009//0.009//0.009   cannot be too high, otherwise would saturate, same for interneuron
+    fluc[m][0].std_e = 0.003//0.002//0.002//0.012		// 4 times larger
+    fluc[m][0].setRandObj(noiseRandObj[m][0])
+
+///for inh noise///////////////
+	noiseRandObj[m][1]=new Random()
+    noiseRandObj[m][1].Random123(m+randseed+TotalCellNum)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][1].normal(0,1)
+	
+	cellid.soma fluc[m][1] = new Gfluct2_inh(0.5)
+    //fluc[m][1].std_e = 0.012//0.012		// 4 times larger   
+    //fluc[m][1].g_e0 = 0.009//0.009
+    fluc[m][1].g_i0 = 0.021//0.07//0.09//0.09
+    fluc[m][1].std_i = 0.008//0.02//0.02//0.02//0.02//0.0264
+fluc[m][1].setRandObj(noiseRandObj[m][1])
+	
+}
+}
+//bg_input_PN_region1 (100)
+///region2
+///region2
+proc bg_input_PN_region2 () { local randseed
+randseed=$1
+
+for m = NCELL_1, NCELL_1+CellNum_p_2-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+													// on the node ("continue") skips rest of code
+	cellid = pc.gid2cell(m)                     	// get GID object from ID	
+	///for exc noise///////////////
+	noiseRandObj[m][0]=new Random()
+    noiseRandObj[m][0].Random123(m+randseed)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][0].normal(0,1)
+	
+	cellid.soma fluc[m][0] = new Gfluct2_exc(0.5)
+    
+    fluc[m][0].g_e0 = 0.0032//0.010//0.015//0.009//0.009//0.009   cannot be too high, otherwise would saturate, same for interneuron
+    fluc[m][0].std_e = 0.003//0.002//0.002//0.012		// 4 times larger
+    fluc[m][0].setRandObj(noiseRandObj[m][0])
+
+///for inh noise///////////////
+	noiseRandObj[m][1]=new Random()
+    noiseRandObj[m][1].Random123(m+randseed+TotalCellNum)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][1].normal(0,1)
+	
+	cellid.soma fluc[m][1] = new Gfluct2_inh(0.5)
+    fluc[m][1].g_i0 = 0.021//0.07//0.09//0.09
+    fluc[m][1].std_i = 0.008//0.02//0.02//0.02//0.02//0.0264
+    fluc[m][1].setRandObj(noiseRandObj[m][1])
+	
+}
+}
+//bg_input_PN_region2 (100)
+
+obfunc noisegen() { local i localobj rlocal
+rlocal = new Random()
+i=$1
+//j=$2
+rlocal.MCellRan4(1000*(i)+1)
+rlocal.negexp(1)
+return rlocal
+}
+
+objref rc_Poisson2E,noise_stim[TotalCellNum],noise_random[TotalCellNum]
+objref bg2LAsyn[TotalCellNum],bg2LAcon[TotalCellNum]
+
+////Poission input-region1
+proc Poi_input_PN_region1 () { local randseed
+randseed=$1                       
+   for m = 0, CellNum_p_1-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+	cellid = pc.gid2cell(m) 											// on the node ("continue") skips rest of code
+	noise_stim[m]= new NetStim(0.9)
+	noise_stim[m].start = 0
+    noise_stim[m].number = 1e1000//10//5
+    
+    rc_Poisson2E=new Random(m+randseed)
+    Rdm_F = rc_Poisson2E.lognormal(2,1)
+    noise_stim[m].interval = 1000/Rdm_F//50//100
+    
+    noise_stim[m].noise = 1
+    noise_random[m]=noisegen(m)
+	noise_stim[m].noiseFromRandom(noise_random[m])
+
+    cellid.dend bg2LAsyn[m] = new bg2pyr(0.9)
+    
+    
+    bg2LAsyn[m].initW = rc_Poisson2E.lognormal(8.5,2)//(8.5,2)
+    
+    del=rc_Poisson2E.uniform(0.5,1)
+	bg2LAcon[m]= new NetCon(noise_stim[m],bg2LAsyn[m],1,del,1)
+    
+    }
+    
+    }
+//Poi_input_PN_region1(1000)
+ ////Poission input-region2
+
+proc Poi_input_PN_region2 () { local randseed
+randseed=$1   
+    for m = NCELL_1, NCELL_1+CellNum_p_2-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+	cellid = pc.gid2cell(m) 											// on the node ("continue") skips rest of code
+	noise_stim[m]= new NetStim(0.9)
+	noise_stim[m].start = 0
+    noise_stim[m].number = 1e1000//10//5
+    
+    rc_Poisson2E=new Random(m+randseed)
+    Rdm_F = rc_Poisson2E.lognormal(2,1)
+    noise_stim[m].interval = 1000/Rdm_F//50//100
+    
+    noise_stim[m].noise = 1
+    noise_random[m]=noisegen(m)
+	noise_stim[m].noiseFromRandom(noise_random[m])
+
+    cellid.dend bg2LAsyn[m] = new bg2pyr(0.9)
+    
+    
+    bg2LAsyn[m].initW = rc_Poisson2E.lognormal(8.5,2)//(8.5,2)
+    //bg2LAsyn[m].initW = 10e-7
+    del=rc_Poisson2E.uniform(0.5,1)
+	bg2LAcon[m]= new NetCon(noise_stim[m],bg2LAsyn[m],1,del,1)
+    
+    }
+}
+//Poi_input_PN_region2(1000)
+////////////////////////////////////////////////////
+//////////   Interneuroncell connection  ///////////
+////////////////////////////////////////////////////
+
+//////////////////////single point BACKGROUNG fluctuation FOR INTERNEURONS//////////////////////
+///region1
+proc bg_input_ITN_region1 () { local randseed
+randseed=$1                                                                      
+for m = CellNum_p_1, NCELL_1-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+													// on the node ("continue") skips rest of code		
+	//bggen[m] = new BgGen(5,0,tstop,20,dt,m)
+	cellid = pc.gid2cell(m)                     	// get GID object from ID	
+     ///for exc noise///////////////
+	noiseRandObj[m][0]=new Random()
+    noiseRandObj[m][0].Random123(m+randseed)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][0].normal(0,1)
+	
+	cellid.soma fluc[m][0] = new Gfluct2_exc(0.5)
+	fluc[m][0].g_e0 = 0.00121//0.005//0.0121//0.4//0.12//0.09//0.009//0.0121
+    fluc[m][0].std_e = 0.00012//0.003//0.012//0.012		// 4 times larger
+    //fluc[m][0].std_i = 0.0264//0.0264
+    
+    //fluc[m][0].g_i0 = 0.09//0.09
+    fluc[m][0].setRandObj(noiseRandObj[m][0])
+
+///for inh noise///////////////
+	noiseRandObj[m][1]=new Random()
+    noiseRandObj[m][1].Random123(m+randseed+TotalCellNum)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][1].normal(0,1)
+	
+	cellid.soma fluc[m][1] = new Gfluct2_inh(0.5)
+    //fluc[m][1].std_e = 0.012//0.012		// 4 times larger
+	fluc[m][1].g_i0 = 0.00573//0.003//0.0573//0.0573
+    fluc[m][1].std_i = 0.00264//0.0005//0.0264//0.0264
+    //fluc[m][1].g_e0 = 0.009//0.009
+
+    fluc[m][1].setRandObj(noiseRandObj[m][1])
+}
+}
+//bg_input_ITN_region1(100)
+///region2
+
+proc bg_input_ITN_region2 () { local randseed
+randseed=$1
+
+for m = NCELL_1+CellNum_p_1, NCELL_1+NCELL_2-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+													// on the node ("continue") skips rest of code		
+	//bggen[m] = new BgGen(5,0,tstop,20,dt,m)
+	cellid = pc.gid2cell(m)                     	// get GID object from ID	
+     ///for exc noise///////////////
+	noiseRandObj[m][0]=new Random()
+    noiseRandObj[m][0].Random123(m+randseed)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][0].normal(0,1)
+	
+	cellid.soma fluc[m][0] = new Gfluct2_exc(0.5)
+	fluc[m][0].g_e0 = 0.00121//0.005//0.0121//0.4//0.12//0.09//0.009//0.0121
+    fluc[m][0].std_e = 0.00012//0.003//0.012//0.012		// 4 times larger
+    //fluc[m][0].std_i = 0.0264//0.0264
+    
+    //fluc[m][0].g_i0 = 0.09//0.09
+    fluc[m][0].setRandObj(noiseRandObj[m][0])
+
+///for inh noise///////////////
+	noiseRandObj[m][1]=new Random()
+    noiseRandObj[m][1].Random123(m+randseed+TotalCellNum)  //# set lowindex to gid, set highindex to what?   
+    noiseRandObj[m][1].normal(0,1)
+	
+	cellid.soma fluc[m][1] = new Gfluct2_inh(0.5)
+    //fluc[m][1].std_e = 0.012//0.012		// 4 times larger
+	fluc[m][1].g_i0 = 0.00573//0.003//0.0573//0.0573
+    fluc[m][1].std_i = 0.00264//0.0005//0.0264//0.0264
+    //fluc[m][1].g_e0 = 0.009//0.009
+
+    fluc[m][1].setRandObj(noiseRandObj[m][1])
+}
+}
+//bg_input_ITN_region2(100)
+////Poission input
+///region1
+proc Poi_input_ITN_region1 () { local randseed
+randseed=$1
+
+   for m = CellNum_p_1, NCELL_1-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+	cellid = pc.gid2cell(m) 											// on the node ("continue") skips rest of code
+	noise_stim[m]= new NetStim(0.9)
+	noise_stim[m].start = 0
+    noise_stim[m].number = 1e1000//10//5
+    
+    rc_Poisson2E=new Random(m+randseed)
+    Rdm_F = rc_Poisson2E.lognormal(2,1)
+    noise_stim[m].interval = 1000/Rdm_F//50//100
+    
+    noise_stim[m].noise = 1
+    noise_random[m]=noisegen(m)
+	noise_stim[m].noiseFromRandom(noise_random[m])
+
+    cellid.dend bg2LAsyn[m] = new bg2pyr(0.9)
+    
+    
+    bg2LAsyn[m].initW = rc_Poisson2E.lognormal(0.5,0.05)//(1,0.2)
+    
+    del=rc_Poisson2E.uniform(0.5,1)
+	bg2LAcon[m]= new NetCon(noise_stim[m],bg2LAsyn[m],1,del,1)
+    
+    }
+ }
+//Poi_input_ITN_region1(1000)
+ 
+///region2
+proc Poi_input_ITN_region2 () { local randseed
+randseed=$1
+
+   for m = NCELL_1+CellNum_p_1, NCELL_1+NCELL_2-1{
+    if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+	cellid = pc.gid2cell(m) 											// on the node ("continue") skips rest of code
+	noise_stim[m]= new NetStim(0.9)
+	noise_stim[m].start = 0
+    noise_stim[m].number = 1e1000//10//5
+    
+    rc_Poisson2E=new Random(m+randseed)
+    Rdm_F = rc_Poisson2E.lognormal(2,1)
+    noise_stim[m].interval = 1000/Rdm_F//50//100
+    
+    noise_stim[m].noise = 1
+    noise_random[m]=noisegen(m)
+	noise_stim[m].noiseFromRandom(noise_random[m])
+
+    cellid.dend bg2LAsyn[m] = new bg2pyr(0.9)
+    
+    
+    bg2LAsyn[m].initW = rc_Poisson2E.lognormal(0.5,0.05)//(1,0.2)
+    
+    del=rc_Poisson2E.uniform(0.5,1)
+	bg2LAcon[m]= new NetCon(noise_stim[m],bg2LAsyn[m],1,del,1)
+    
+    }
+ } 
+ //Poi_input_ITN_region2(1000)
+////select cells to inject optogenetic current, for control purposes////
+	objref opto_file
+	objref opto_rec
+	///for group 1 PNs
+    opto_file = new File()
+	opto_file.ropen("./input/IDs_opto_PNITN.txt")
+	opto_rec = new Vector()
+	opto_rec.scanf(opto_file)
+////////////    
+ ////load light intensity file for each cell
+objref lightinten_file
+objref lightinten_rec
+lightinten_file = new File()
+lightinten_file.ropen("./input/cell_inten.txt")
+lightinten_rec = new Vector()
+lightinten_rec.scanf(lightinten_file)
+
+objref opto_syn[TotalCellNum],opto_con[TotalCellNum]
+
+for j = 0, opto_rec.size()-1{
+    m=opto_rec.x[j]
+    //dis=sqrt((elec_single.x[0]-Location.x[m][0])^2+(elec_single.x[1]-Location.x[m][1])^2+(elec_single.x[2]-Location.x[m][2])^2)   ///calculate dis to electrode
+	if(!pc.gid_exists(m)) { continue }				// Can't connect to target if it doesn't exist 
+													// on the node ("continue") skips rest of code
+		cellid = pc.gid2cell(m)                     	// get GID object from ID
+		cellid.soma opto_syn[m] = new ChR2_william_event(0.5)
+
+        if (m<CellNum_p_1) { ////PN
+        opto_syn[m].nPulses=1
+        opto_syn[m].Dt_on=2
+        opto_syn[m].Dt_off=1/10*1000-5
+        opto_syn[m].gmax=0.05//0.04
+        opto_syn[m].tauChR2=0.4
+        opto_syn[m].Gd1=0.25
+        opto_syn[m].Gd2=0.5
+        }else {   ////interneuron
+        opto_syn[m].nPulses=1
+        opto_syn[m].Dt_on=2
+        opto_syn[m].Dt_off=1/10*1000-5
+        opto_syn[m].gmax=0.15//0.04
+        opto_syn[m].tauChR2=0.4
+        opto_syn[m].Gd1=0.25
+        opto_syn[m].Gd2=0.5
+        }
+        opto_syn[m].light_intensity=2*lightinten_rec.x[m]//0.18
+
+        /*if (dis<200) {     ///set light intensity
+        opto_syn[m].light_intensity=5
+          } else if (dis>=200&&dis<500) {
+        opto_syn[m].light_intensity=3  
+          } else if (dis>=500&&dis<800) {
+         opto_syn[m].light_intensity=1  
+          } else {
+          opto_syn[m].light_intensity=0.5
+          }
+          */
+        
+        opto_con[m] = new NetCon(nil,opto_syn[m],0,0,1) 
+                             
+        }
+       
+
+////load several files for connection/////
+//strdef E2E_syn_str,I2I_syn_str,I2P_syn_str,P2I_syn_str,GAP_syn_str
+//strdef PP_size_str,II_size_str,IP_size_str,PI_size_str,GAP_size_str
+//strdef GAP_syn_str,GAP_size_str
+//strdef E2E_wgt_str,I2I_wgt_str,I2P_wgt_str,P2I_wgt_str
+//strdef E2E_del_str,I2I_del_str,I2P_del_str,P2I_del_str
+
+strdef syn_str,syn_ind_str
+sprint(syn_str,"./input/active_syn_op_nointerregion")
+sprint(syn_ind_str,"./input/active_syn_ind_nointerregion")
+
+objref syn_connect_file,syn_ind_file
+syn_connect_file=new File()
+syn_ind_file=new File()
+syn_connect_file.ropen(syn_str)
+syn_ind_file.ropen(syn_ind_str)
+
+objref syn_connect,syn_ind
+syn_connect=new Vector()
+syn_ind=new Vector()
+syn_connect.scanf(syn_connect_file)
+syn_ind.scanf(syn_ind_file)
+
+
+/* objref saveM
+saveM = new File()
+
+if(pc.id==0){     //"wopen" once by node 0 to clear the contents of the file
+saveM.wopen("Matrix_NEW")
+saveM.close()
+} */
+ objref saveM
+saveM = new File()
+ if(pc.id==0){     //"wopen" once by node 0 to clear the contents of the file
+saveM.wopen("Matrix_NEW")
+saveM.close()
+}  
+
+{load_file("function_ConnectTwoCells_dual.hoc")}
+{load_file("function_ConnectInternal_simplify_online_op_dual_local.hoc")}
+{load_file("function_Connectinterregion_online_dual.hoc")}
+//Location.muls(1e-3)
+//t0 = startsw()
+proc _makeinternalconnect() {
+for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+		if (rank==pc.id) {
+		//saveM.aopen("Matrix_NEW")
+ConnectInternal()
+
+}
+pc.barrier()
+}
+}
+//_makeinternalconnect()
+/*for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+		if (rank==pc.id) {
+		saveM.aopen("Matrix_NEW")
+ConnectInterregion()
+
+}
+pc.barrier()
+}*/
+
+//t1 = startsw()
+//print "model connection time ", t1-t0
+
+//Location.muls(1e3)
+
+
+//////voltage record by Feng////////////////////////////////////////////////////////////////////////////
+objref Volrec[TotalCellNum], vollist
+vollist = new List()
+
+proc RecVol() {  local i
+for i=0,NCELL_1-1{
+op = op_rec.x[i]
+if(pc.gid_exists(op)){
+cellid = pc.gid2cell(op)
+Volrec[op] = new Vector()
+Volrec[op].record(&cellid.soma.v(0.5),1)
+vollist.append(Volrec[op])
+}
+}
+}
+//RecVol()
+
+
+objref tvec, idvec 										// will be Vectors that record all spike times (tvec)
+														// and the corresponding id numbers of the cells that spiked (idvec)
+proc spikerecord() {local i localobj nc, nil
+
+	tvec = new Vector()
+	idvec = new Vector()
+	for i=0, cells.count-1 {
+	  nc = cells.object(i).connect2target(nil)
+	  nc.record(tvec, idvec, nc.srcgid)
+														// the Vector will continue to record spike times even after the NetCon has been destroyed
+	}
+}
+
+spikerecord()
+//{pc.set_maxstep(10)}
+//stdinit()
+//t1 = startsw()
+//{pc.psolve(tstop)}
+//t2 = startsw()
+
+//print "model setup time ", t1-t0, " run time ", t2-t1, " total ", t2-t0
+
+
+
+/////record input////
+objref f_Bg
+strdef Input
+
+proc recinput() {
+for i = 0,CellNum_p-1 {
+if(!pc.gid_exists(i)) { continue }
+cellid = pc.gid2cell(i)
+if (cellid.baglist.count()>0) {
+for j=0,cellid.baglist.count()-1{
+    f_Bg = new File()
+	sprint(Input,"/data/ffeng/inputs/inputs_%d_%d",i,j)
+	f_Bg.wopen(Input)
+	cellid.baglist.o[j].printf(f_Bg)
+	f_Bg.close()
+}
+}
+}
+}
+//recinput()
+
+
+proc precalc_conduc()  { local m,op,dis_inter localobj conduct_comp_PN,conduct_comp_ITN,elec_single////pre calculate conductance for each cell
+elec_single=new Vector()
+elec_single.copy(elec_coords)
+dis_inter=$1
+for (m=0; m<elec_num;m+=1) { // calculate LFP per electrode
+
+if (m!=0) {
+elec_single.x[0]=elec_single.x[0]+dis_inter
+//elec_single.add(dis_inter)
+} //defind the interregion distance
+
+//print "elec_single=",elec_single.printf
+
+//LFP_per_core=new Vector(LFPrecording_len.x[0])    ////to record sum of LFP per core based on the same electrode
+//print LFP_per_core.size()
+ //print LFP_per_core.size() 
+       
+       ///////////////for region1//////////////////
+       
+       for op = 0,NCELL_1-1 {  ////for region1
+       //op = op_rec_LFP.x[j]
+        if(pc.gid_exists(op)){ 
+         dis=sqrt((elec_single.x[0]-Location.x[op][0])^2+(elec_single.x[1]-Location.x[op][1])^2+(elec_single.x[2]-Location.x[op][2])^2)
+         
+         //print "dis to reigion1=,electro=",dis,m+1
+          
+          //if (dis<=10e120)  {    //only cells within 500um of electrodes will be counted
+         cellid = pc.gid2cell(op)
+         Location_single=Location.bcopy(op,0,1,3).to_vector()   ///copy single cell' location info.
+         oritation_single=oritation.bcopy(op,0,1,3).to_vector() ///copy single cell' oritation info.
+  
+             
+             conduct_comp_PN=new Vector(modelcompartment_num)
+             conduct_comp_ITN=new Vector(modelcompartment_num_ITN)
+
+             if (op<CellNum_p_1) {  /// for PNs               
+                 for (i=0; i<modelcompartment_num; i+=1) {  ///i stands for segment
+                 
+                conduct_comp_PN.x[i]=calcconduc_PN(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
+                                  
+                    }
+                    
+                 cellid.conduclist.insrt(m,conduct_comp_PN)   
+                    
+                } else {  /// for ITNs 
+                  for (i=0; i<modelcompartment_num_ITN; i+=1) {  ///i stands for segment
+                  conduct_comp_ITN.x[i]=calcconduc_ITN(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
+                   
+                   }
+                  cellid.conduclist.insrt(m,conduct_comp_ITN)
+              } 
+               
+            }
+           }  
+           
+           ///////////////for region2//////////////////
+           
+           for op = NCELL_1,TotalCellNum-1 {  ////for region2
+            if(pc.gid_exists(op)){
+        
+         Location_single=Location.bcopy(op,0,1,3).to_vector()   ///copy single cell' location info.
+         Location_single.x[0]=Location_single.x[0]+dis_inter
+         dis=sqrt((elec_single.x[0]-Location_single.x[0])^2+(elec_single.x[1]-Location_single.x[1])^2+(elec_single.x[2]-Location_single.x[2])^2)
+          //print "dis to reigion2=,electro=",dis,m+1
+          //print "elec_single2=,Location_single2=",elec_single.x[0],Location_single.x[0]
+          //if (dis<=10e120)  {    //only cells within 500um of electrodes will be counted
+         cellid = pc.gid2cell(op)
+         oritation_single=oritation.bcopy(op,0,1,3).to_vector() ///copy single cell' oritation info.
+  
+             
+             conduct_comp_PN=new Vector(modelcompartment_num)
+             conduct_comp_ITN=new Vector(modelcompartment_num_ITN)
+
+             if (op>=NCELL_1&&op<=NCELL_1+CellNum_p_2-1) {  /// for PNs               
+                 for (i=0; i<modelcompartment_num; i+=1) {  ///i stands for segment
+                 
+                conduct_comp_PN.x[i]=calcconduc_PN(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
+                                  
+                    }
+                    
+                 cellid.conduclist.insrt(m,conduct_comp_PN)   
+                    
+                } else {  /// for ITNs 
+                  for (i=0; i<modelcompartment_num_ITN; i+=1) {  ///i stands for segment
+                  conduct_comp_ITN.x[i]=calcconduc_ITN(Location_single,i,oritation_single,elec_single,dis)  //i=0 for soma, 1-8 for adend, 9-15 for pdend
+                   
+                   }
+                  cellid.conduclist.insrt(m,conduct_comp_ITN)
+              } 
+               
+            }
+           }  
+
+}
+}
+
+
+
+objref LFPvec,lfplist,LFPvec_filtered//,vlfp
+//objref LFPvec_amp,lfplist_amp,LFPvec_filtered_amp                                           
+lfp_dt=1  ///define time step for calculating
+         // For this time step, create a vector with entries of time and average LFP
+lfplist=new List()
+LFPvec=new List()
+LFPvec_filtered=new List()
+
+//lfplist_amp=new List()
+//LFPvec_amp=new List()
+//LFPvec_filtered_amp=new List()                      
+load_file("function_filter&detection.hoc")
+
+objref filtered_signal,pulse_times//,filtered_signal_amp
+
+proc initLFPvec () {   ////initilize LFP,pulses-related vec
+pulse_times=new Vector() ///to store real time of pulse at each LFP step
+
+if (pc.id==0) {
+ //print filtered_signal.size()
+ //for (m=0; m<elec_coords.nrow();m+=1) {
+  ////for phase detection 
+LFPvec=new List()
+LFPvec_filtered=new List()
+  
+ for i=0,2*filter_order-1 {
+ filtered_signal=new Vector(elec_num)  //tstop+1+2*filter_order
+ //filtered_signal.x[0]=append(0)   ////fill in zeros
+ LFPvec.append(filtered_signal)
+ LFPvec_filtered.append(filtered_signal)
+ }
+  ////for amp detection
+ /*for i=0,2*filter_order_amp-1 {
+ filtered_signal_amp=new Vector(elec_coords.nrow())  //tstop+1+2*filter_order
+ //filtered_signal.x[0]=append(0)   ////fill in zeros
+ LFPvec_amp.append(filtered_signal_amp)
+ LFPvec_filtered_amp.append(filtered_signal)
+ }
+  */                   
+ //}
+}
+pc.barrier()
+}
+
+
+////define for detection
+objref pulse,pulseSnip//,pulse_times_actual
+t_window=100  ////time moving window for detection
+pulse_window=10   /////to make sure pulse interval is greater than pulse_window
+
+
+
+pulse=new Vector(pulse_window+1)  ///to store pulse logic at each LFP step
+//pulse_times=new Vector() ///to store real time of pulse at each LFP step
+pulseSnip=new Vector() ///snippet of pulse within pulse interval window
+//pulse_times_actual=new Vector()///to store actual evoked pulse time                      
+
+objref random_t               
+
+proc calc_LFP() { localobj vlfp
+vlfp=new Vector(elec_num)  
+for (m=0; m<elec_num;m+=1) { // calculate LFP per electrode
+     //vlfp.x[m] = 0 // Initialize the LFP variable
+     
+for op = 0,TotalCellNum-1 {
+       //op = op_rec_LFP.x[j]
+        if (pc.gid_exists(op)) { 
+        cellid = pc.gid2cell(op)
+        //access cellid.soma
+         j=0
+        forsec cellid.all {
+        
+         if (ismembrane("extracellular")){
+     
+               //print secname()
+            for (x,0) {
+			vlfp.x[m] = vlfp.x[m] + (er_xtraimemrec(x) * cellid.conduclist.o(m).x[j])
+            //print x,secname(),j//cellid.conduclist.o(m).x[j],
+            //print er_xtraimemrec(x)
+			j = j + 1        
+                      }
+                }    
+                              }
+                       }
+                                       }
+                                       }
+ 
+ pc.barrier()
+ pc.allreduce(vlfp,1) 
+ 
+ if (pc.id==0) {
+ //LFPvec = new List()
+               //access cell_3.dend
+               //print secname()
+//return vlfp
+  LFPvec.append(vlfp)
+  filtered_signal=new Vector(elec_num)
+
+  //filtered_signal_amp=new Vector(elec_coords.nrow())
+ for (mm=0; mm<elec_num;mm+=1) {
+  filtered_signal.x[mm]=filter_realtime(LFPvec,LFPvec_filtered,filter_order,mm)
+  
+                                          }
+  
+  LFPvec_filtered.append(filtered_signal)
+  }
+  pc.barrier()
+
+//cvode_active(1)
+
+/////for detection//////
+   
+if (pc.id==0&&t>=t_window+1) {
+   if (detectphasetype_ind<3) {
+pulseSnip=pulse.at((pulse.size()-1-pulse_window),pulse.size()-1)
+if (pulseSnip.sum()>=1) {    // check if a pulse has been delivered within the last 10 ms, and if so, don't generate a new pulse
+        pulse.append(0) 
+    } else {
+
+    //print "hello"
+    trigerNow=detect(LFPvec_filtered,t_window,thres=0.04,type=detectphasetype_ind,electro_seq=0,sigv=4)   ///type 1 trough, 2 peak
+    pulse.append(trigerNow)
+    if (trigerNow>0&&t>1000) {
+    //print t
+    pulse_times.append(t)
+    }
+}
+
+} else (detectphasetype_ind==4) {  ////for random pulses
+
+    if (t>1000) {
+    //print t
+    //random_t=new Random(loooo)  ///if random pulses, loooo to make each run have different random seeds
+    if (random_f*lfp_dt>(1000*random_t.uniform(0,1))){    ///poisson random pulses
+     pulse_times.append(t)
+     if (pulse_times.size()>=2&&((pulse_times.x[pulse_times.size()-1]-pulse_times.x[pulse_times.size()-2])<=pulse_window)) {
+     pulse_times.remove(pulse_times.size()-1)  ///remove pulses interval greater than 10ms
+     }
+     
+    }
+    
+    }
+    
+
+}
+
+}
+
+
+pc.broadcast(pulse_times,0)   ///broadcast pulsetime to all host
+pc.barrier()
+ 
+if (detectphasetype_ind!=3&&(strcmp(pulse_fake,"fake")!=0)) {  ///only generate event when type is trough or peak or random
+
+if (pulse_times.size()>0) {
+//if (pc.id==1) {
+//print 	"pulsetimes on id1: ", pulse_times.printf
+//}
+ if (pulse_times.x[pulse_times.size()-1]>=t) {
+for j = 0, opto_rec.size()-1{
+       op=opto_rec.x[j]
+	if(!pc.gid_exists(op)) { continue }
+     //print 	"pulsetimes: ", pulse_times.x[pulse_times.size()-1]
+     //print "t ", t
+    opto_con[op].event(pulse_times.x[pulse_times.size()-1])
+    //print "PCID: ", pc.id
+    //print "m: ", m
+}
+}
+}
+
+}
+pc.barrier()
+
+cvode.event(t + lfp_dt, "calc_LFP()")		
+
+}
+
+
+    
+
+///calculate LFP real-time////
+
+////P2P-interregion///
+P2P_inter_conn_rate=0.3
+P2P_inter_wgt_mean=0.5
+P2P_inter_wgt_var=0.05
+
+////P2I-interregion///
+P2I_inter_conn_rate=0.3
+P2I_inter_wgt_mean=5
+P2I_inter_wgt_var=1
+
+////dis///
+stepsize_loop_dis=1e3 
+min_loop_dis=3e3 
+max_loop_dis=16e3
+
+objref loopitem_dis
+loopitem_dis=new Vector()
+_start_dis=min_loop_dis
+_stop_dis=max_loop_dis
+_stepsize_dis=stepsize_loop_dis
+loopitem_dis.indgen(_start_dis,_stop_dis,_stepsize_dis)
+
+//loopitem_dis.append(max_loop_dis)
+
+////conn///
+stepsize_loop_conn=0.1
+min_loop_conn=0.1
+max_loop_conn=0.5
+objref loopitem_conn
+loopitem_conn=new Vector()
+_start_conn=min_loop_conn
+_stop_conn=max_loop_conn
+_stepsize_conn=stepsize_loop_conn
+
+//loopitem_conn.indgen(_start_conn,_stop_conn,_stepsize_conn)
+loopitem_conn.append(0.3)
+
+////P2I wgt///
+stepsize_loop_P2Iwgt=1
+min_loop_P2Iwgt=2
+max_loop_P2Iwgt=15
+objref loopitem_P2Iwgt
+loopitem_P2Iwgt=new Vector()
+_start_P2Iwgt=min_loop_P2Iwgt
+_stop_P2Iwgt=max_loop_P2Iwgt
+_stepsize_P2Iwgt=stepsize_loop_P2Iwgt
+
+//loopitem_P2Iwgt.indgen(_start_P2Iwgt,_stop_P2Iwgt,_stepsize_P2Iwgt)
+loopitem_P2Iwgt.append(2)
+
+
+proc _makeinterregionconnect() {
+
+ for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+		if (rank==pc.id) {
+		/* saveM.aopen("Matrix_NEW_%d",$1) */
+ConnectInterregion(P2P_inter_conn_rate,P2I_inter_conn_rate,P2P_inter_wgt_mean,P2P_inter_wgt_var,P2I_inter_wgt_mean,P2I_inter_wgt_var,inter_dis)
+
+}
+pc.barrier()
+}
+}
+
+proc _remove_synnc() {   ////procedure to remove all syn from a tagrt cell
+
+for i = 0,TotalCellNum-1 {
+if(!pc.gid_exists(i)) { continue }
+cellid = pc.gid2cell(i)
+cellid.synlist.remove_all()
+}
+for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+		if (rank==pc.id) {
+		/* saveM.aopen("Matrix_NEW_%d",$1) */
+       //print "count at pc.id before removal ", InternalncList.count(),pc.id
+InternalncList.remove_all()//nclist.remove_all()
+ //print "count at pc.id after removal ", InternalncList.count(),pc.id
+}
+pc.barrier()
+}
+}
+
+objref pulse_file
+
+if(pc.id==0){     //open write files on host 0
+   strdef pulse_time
+   sprint(pulse_time,"./pulse/pulsetime") 
+   pulse_file=new File()
+   pulse_file.wopen(pulse_time)
+   } ///to save generated pulses in different situation
+
+  proc pulsewrite() {local expnum localobj pulse_file
+  pulse_file=$o1
+  //randomburst=$2
+  expnum=$2
+  //detec_type=$4
+  
+  if(pc.id==0){     //open write files on host 0
+    /*strdef pulse_time
+   sprint(pulse_time,"./pulse/pulsetime_combine") 
+   pulse_file=new File()
+   pulse_file.wopen(pulse_time)*/
+   //pulse_file.printf("%g\t",randomburst) ///put pulse num first
+   pulse_file.printf("%g\t",expnum) ///put pulse num second
+   //pulse_file.printf("%g\t",detec_type) ///put detect type third
+   //if (pulse_times.size()==0) {
+   //pulse_file.printf("%g\t\n",-tstop) ///fill in negative pulse if no pulses evoked
+   //} else {
+   pulse_times.printf(pulse_file,"%g\t")//}
+
+ 
+        
+   //pulse_file.close()
+   }
+   
+  }   
+  
+objref pararecord,paralist
+ 
+paralist=new List()
+
+objref LFP_allruns,LFP_filtered_allruns
+LFP_allruns=new List()  ///store all LFPs during different runs
+LFP_filtered_allruns= new List() ///store all LFPs during different runs
+objref fih2
+
+proc rrun(){									// Run the network simulation and write out the results
+loooo=0
+for loo1=0,loopitem_dis.size()-1 {
+     
+     //inter_dis=loopitem_dis.x[loo1]
+     
+for loo2=0,loopitem_conn.size()-1 {
+        
+        
+   for loo3=0, loopitem_P2Iwgt.size()-1 {
+          
+          loooo+=1
+          random_t=new Random(loooo) //for random pulses generation
+          
+      if (pc.id==0) { print "runs#=", loooo}
+     
+     inter_dis=loopitem_dis.x[loo1]
+     P2P_inter_conn_rate=loopitem_conn.x[loo2]
+     P2I_inter_conn_rate=loopitem_conn.x[loo2]
+     P2I_inter_wgt_mean=loopitem_P2Iwgt.x[loo3]
+    
+    //_makecell()
+      bg_input_PN_region1(100)
+    bg_input_PN_region2(100)
+    
+     Poi_input_PN_region1(1000)
+    Poi_input_PN_region2(1000) 
+    
+    bg_input_ITN_region1(100)
+    bg_input_ITN_region2(100) 
+    
+     Poi_input_ITN_region1(1000)
+    Poi_input_ITN_region2(1000)  
+    
+     _remove_synnc()
+    pc.barrier()
+    _makeinternalconnect() 
+    _makeinterregionconnect() 
+    
+     
+     precalc_conduc(inter_dis) 
+     initLFPvec()
+     
+     fih2 = new FInitializeHandler("calc_LFP()") 
+     //print "LFPvec:", LFPvec.o(0).printf
+    {pc.set_maxstep(10)}
+    pc.barrier()
+    stdinit()	
+    pc.barrier()
+    pc.psolve(tstop)  // Equivalent to calling cvode.solve(tstop) but for parallel NEURON;
+    
+    if (pc.id==0) {                    ////otherwise record
+            
+          pararecord=new Vector()             
+          pararecord.append(loopitem_dis.x[loo1])
+          pararecord.append(loopitem_conn.x[loo2])
+          pararecord.append(loopitem_P2Iwgt.x[loo3])
+          
+          paralist.append(pararecord)//record criterio-passed burst ID
+
+          
+          LFP_allruns.append(LFPvec)
+          
+          LFP_filtered_allruns.append(LFPvec_filtered)
+          
+          pulsewrite(pulse_file,loooo)
+          }
+
+    }
+  }  
+    }
+    }
+
+rrun()
+////write LFP results////
+//objref LFP_single_file,LFP_filter_file
+//objref lfpvec,lfpvec_filter
+proc LFPwrite() {localobj LFP_single_file,LFP_filter_file,lfpvec,lfpvec_filter,loopfile//,lfpvec_filter_amp
+ if(pc.id==0){     //open write files on host 0
+   strdef LFPs,LFPs_filter//,LFPs_filter_amp
+   sprint(LFPs,"./LFPs/LFP_elec_combine") 
+   sprint(LFPs_filter,"./LFPs/LFP_elec_combine_filter")
+   strdef loopitem_name
+   sprint(loopitem_name,"./LFPs/loopitem") 
+   
+   //sprint(LFPs_filter_amp,"./LFPs/LFP_elec_combine_filter_amp")
+   k=0   ////to count 
+   LFP_single_file=new File()
+   LFP_single_file.wopen(LFPs)
+   
+   LFP_filter_file=new File()
+   LFP_filter_file.wopen(LFPs_filter)
+   
+   loopfile=new File()
+   loopfile.wopen(loopitem_name)
+   
+   
+   //LFP_filter_amp_file=new File()
+   //LFP_filter_amp_file.wopen(LFPs_filter_amp)  
+   
+   for para_size=0,paralist.count()-1 {
+   paralist.o(para_size).printf(loopfile,"%g\t")
+   for i=2*filter_order, LFPvec.count()-1 {   ///excluding zero paddings
+        
+        lfpvec = LFP_allruns.o(k).o(i)
+        lfpvec.printf(LFP_single_file,"%g\t")
+        
+        lfpvec_filter=LFP_filtered_allruns.o(k).o(i)
+        lfpvec_filter.printf(LFP_filter_file,"%g\t")
+
+        
+    }
+    k=k+1   ///to count LFP list
+    
+    }
+    
+   
+        
+   LFP_single_file.close()
+   LFP_filter_file.close()
+   }
+   
+  } 
+  
+  LFPwrite()
+  
+/*   proc pulsewrite() {localobj pulse_file
+ if(pc.id==0){     //open write files on host 0
+   strdef pulse_time
+   sprint(pulse_time,"./pulse/pulsetime") 
+   pulse_file=new File()
+   pulse_file.wopen(pulse_time)
+
+   pulse_times.printf(pulse_file)
+
+ 
+        
+   pulse_file.close()
+   }
+   
+  }
+  pulsewrite() */
+   
+  //pc.barrier () 
+  //}
+
+/*strdef cmd
+proc writeLFP() { localobj f, lfpvec, lfptrace
+    sprint(cmd,"lfp_realtime.dat")
+    f = new File(cmd)
+    f.wopen()
+    
+    // Open for appending to file
+    for i=0, lfplist.count()-1 {
+        lfpvec = lfplist.o(i)
+		f.printf("%g\t%g\n", lfpvec.x[0], lfpvec.x[1])	// Prints time and average LFP value
+    }
+    f.close()
+ }
+ 
+ writeLFP() */
+ 
+ /////save voltage////
+objref f_volt
+strdef vols
+
+proc SavVol() { local i,d 
+
+for i = 0,NCELL_1-1 {
+op = op_rec.x[i]
+if(pc.gid_exists(op)){
+sprint(vols,"./volts/volts_%d",op) 
+f_volt = new File()
+f_volt.wopen(vols)
+d = vollist.index(Volrec[op])
+vollist.o[d].printf(f_volt)
+f_volt.close()  
+}
+}
+}
+//SavVol()
+
+
+// PROCEDURE TO SEND SPIKES TO A FILE "SPIKERASTER"--------
+objref spikefile
+
+spikefile = new File("data")
+
+if(pc.id==0){     //"wopen" once by node 0 to clear the contents of the file
+spikefile.wopen()
+spikefile.close()
+}
+
+
+proc spikefileout() { local i, rank
+pc.barrier() // wait for all hosts to get to this point
+
+for rank=0, pc.nhost-1 { // host 0 first, then 1, 2, etc.
+
+if (rank==pc.id) {
+for i=0, tvec.size-1 {
+spikefile.aopen()                               //"aopen" to append data
+spikefile.printf("%8.4f\t %d\n", tvec.x[i], idvec.x[i])
+spikefile.close()
+}
+}
+pc.barrier() // wait for all hosts to get to this point
+}
+}
+
+ strdef cmd
+proc spikefileout_parallel() {local i  localobj f
+	sprint(cmd,"./spkresults/spkraster_%g.dat", pc.id)
+	f = new File(cmd)
+	f.wopen()
+	for i=0, idvec.size-1 {
+		f.printf("%8.4f\t %d\n", tvec.x[i], idvec.x[i])	// Print the spike time and spiking cell gid
+	}
+}
+
+if (savingspikesep==0) {         
+spikefileout()
+}else {
+spikefileout_parallel()
+}
+
+{pc.runworker()}
+{pc.done()}

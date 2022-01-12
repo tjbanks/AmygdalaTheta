@@ -1,0 +1,32 @@
+//By Pirate Henry 2011 and modified by Dongbeom
+
+
+objref InternalSynMatrix_gj
+InternalSynMatrix_gj = new Matrix()
+//InternalThrMatrix = new Matrix()
+//InternalWgtMatrix = new Matrix()
+//InternalDelMatrix = new Matrix()
+
+InternalSynMatrix_gj = LoadMatrix(gj_matrix,CellNum_interneuron,CellNum_interneuron)
+
+//InternalThrMatrix = LoadMatrix(FileLocationStr_InternalThrConns,TotalCellNum,TotalCellNum)
+//InternalWgtMatrix = LoadMatrix(FileLocationStr_InternalWgtConns,TotalCellNum,TotalCellNum)
+objref precell, postcell
+
+proc ConnectInternal_gj() { local i,j,postid,preid,synid_gj,postid_real,preid_real
+	{pc.barrier()}
+	for j = 0,CellNum_interneuron-1 {
+		//cellgid = CellList.o(j).mygid
+		postid = j        postid_real=postid+CellNum_p
+		if(!pc.gid_exists(postid_real)) { continue }          postcell = pc.gid2cell(postid_real) 
+		for i = 0,CellNum_interneuron-1 {				    preid=i
+			synid_gj = InternalSynMatrix_gj.x[preid][postid]
+			//print(synid)
+			if (synid_gj == 1) {			preid_real=preid+CellNum_p			if(!pc.gid_exists(preid_real)) { continue }			precell = pc.gid2cell(preid_real) 
+		    postcell.connect_gap(precell)             //precell.connect_gap(postcell)	
+			}
+		}
+	}
+	{pc.barrier()}
+
+}

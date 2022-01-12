@@ -1,0 +1,43 @@
+//By Pirate Henry 2011 and modified by Dongbeom
+
+
+//objref InternalSynMatrix_gj
+//InternalSynMatrix_gj = new Matrix()
+//InternalThrMatrix = new Matrix()
+//InternalWgtMatrix = new Matrix()
+//InternalDelMatrix = new Matrix()
+
+//InternalSynMatrix_gj = LoadMatrix(gj_matrix,CellNum_interneuron,CellNum_interneuron)
+
+//InternalThrMatrix = LoadMatrix(FileLocationStr_InternalThrConns,TotalCellNum,TotalCellNum)
+//InternalWgtMatrix = LoadMatrix(FileLocationStr_InternalWgtConns,TotalCellNum,TotalCellNum)
+objref precell, postcell
+
+proc ConnectInternal_gj_simplify() { local i,j,postid,preid,synid_gj,postid_real,preid_real
+	{pc.barrier()}
+	for j = 0,GAP_size_matrix.x[0][1]-1 {
+		//cellgid = CellList.o(j).mygid
+		//postid = j
+        //postid_real=postid+CellNum_p
+        for i = 0,CellNum_interneuron-1 {
+        	cellgid = GAP_syn_matrix.x[i][j]
+           if (cellgid>0) {              
+		if(!pc.gid_exists(cellgid)) { continue }
+          postcell = pc.gid2cell(cellgid) 
+		//for i = 0,CellNum_interneuron-1 
+		
+		    preid=i+CellNum_p
+			//synid_gj = InternalSynMatrix_gj.x[preid][postid]
+			//print(synid)
+			//if (synid_gj == 1) {
+			//preid_real=preid+CellNum_p
+			if(!pc.gid_exists(preid)) { continue }
+			precell = pc.gid2cell(preid) 
+		    postcell.connect_gap(precell) 
+            //precell.connect_gap(postcell)	
+			}
+		}
+	}
+	{pc.barrier()}
+
+}
