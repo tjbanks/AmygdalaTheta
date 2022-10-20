@@ -1,0 +1,88 @@
+{
+  "manifest": {
+    "$BASE_DIR": "${configdir}",
+    "$OUTPUT_DIR": "$BASE_DIR/outputECP",
+    "$COMPONENTS_DIR": "$BASE_DIR/components_homogenous"
+  },
+  "target_simulator": "NEURON",
+  "run": {
+    "tstart": 0.0,
+    "tstop": 15000.0,
+    "dt": 0.05,
+    "dL": 200000.0,
+    "spike_threshold": -15.0,
+    "nsteps_block": 5000
+  },
+  "conditions": {
+    "celsius": 31.0,
+    "v_init": -70.0
+  },
+  "inputs": {
+    "vpsi_inh_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/vpsi_inh_spikes.h5",
+      "node_set": "vpsi_inh"
+    },
+    "thalamus_pyr_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/thalamus_pyr_spikes.h5",
+      "node_set": "thalamus_pyr"
+    },
+    "thalamus_som_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/thalamus_som_spikes.h5",
+      "node_set": "thalamus_som"
+    },
+    "thalamus_cr_spikes": {
+      "input_type": "spikes",
+      "module": "sonata",
+      "input_file": "$BASE_DIR/thalamus_cr_spikes.h5",
+      "node_set": "thalamus_cr"
+    },
+    "ach_pn_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pn",
+      "amp": 0.150,
+      "delay": 7000.0,
+      "duration": 15000.0
+    },
+    "ach_pv_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pv",
+      "amp": 0.150,
+      "delay": 7000.0,
+      "duration": 15000.0
+    },
+    "ach_som_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_som",
+      "amp": 0.150,
+      "delay": 7000.0,
+      "duration": 15000.0
+    }
+  },
+  "output": {
+    "log_file": "log.txt",
+    "output_dir": "$OUTPUT_DIR",
+    "spikes_file": "spikes.h5"
+  },
+  "reports": {
+
+    "ecp": {
+      "cells": "all",
+      "variable_name": "v",
+      "module": "extracellular",
+      "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
+      "file_name": "ecp.h5",
+      "electrode_channels": "all"
+      }
+  },
+  "node_sets_file": "$BASE_DIR/node_sets.json",
+  "network": "$BASE_DIR/circuit_config.json"
+}
