@@ -1,4 +1,4 @@
 {   "level_of_detail": "interD2interD_SOMPV_STFD",
-    "initW_lognormal_mean": "2",
-    "initW_lognormal_std": "0.5"
+    "initW_lognormal_mean": "1",
+    "initW_lognormal_std": "0.05"
 }
