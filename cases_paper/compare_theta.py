@@ -35,10 +35,10 @@ def mean_ecp(ecps,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0):
 
     return f,pxx
 
-def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2=''):
+def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0):
 
-    f1,pxx1 = mean_ecp(first_ecps)    
-    f2,pxx2 = mean_ecp(second_ecps)
+    f1,pxx1 = mean_ecp(first_ecps,skip_n)    
+    f2,pxx2 = mean_ecp(second_ecps,skip_n)
 
     fx1 = f1[np.where((f1>8) & (f1<12))]
     theta1 = pxx1[np.where((f1>8) & (f1<12))]
@@ -98,6 +98,14 @@ if __name__ == '__main__':
         ecp = get_ecp(args.second_case + '/' + run + '/ecp.h5')
         second_run_ecps.append(ecp)
 
+
+    dt = 0.05
+    steps_per_ms = 1/dt
+    skip_seconds = 5
+    skip_ms = skip_seconds*1000
+    skip_n = int(skip_ms * steps_per_ms)
+    end_ms = 15000
+
     fig, (ax1) = plt.subplots(1,1)#,figsize=(15,4.8))#6.4,4.8 default
     #fig.suptitle('Amygdala Analysis')    
     
@@ -105,7 +113,7 @@ if __name__ == '__main__':
     ax1.set_title("Theta Comparison")
     ax1.set_xlabel("Hz")
     ax1.set_ylabel("PSD [V^2/Hz]")
-    
-    ecp_psd(first_run_ecps, second_run_ecps, ax=ax1, label1=args.first_case_label, label2=args.second_case_label)
-
+    print('plotting...') 
+    ecp_psd(first_run_ecps, second_run_ecps, ax=ax1, label1=args.first_case_label, label2=args.second_case_label,skip_n=skip_n)
+    ax1.legend()
     plt.show()
