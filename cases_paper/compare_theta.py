@@ -35,7 +35,7 @@ def mean_ecp(ecps,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0):
 
     return f,pxx
 
-def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0):
+def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0,third_ecps=None,label3=''):
 
     f1,pxx1 = mean_ecp(first_ecps,skip_n)    
     f2,pxx2 = mean_ecp(second_ecps,skip_n)
@@ -50,8 +50,20 @@ def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0):
     ax.plot(fx1, theta1*1000,linewidth=0.6,label=label1)
     ax.plot(fx2, theta2*1000,linewidth=0.6,label=label2)
     #ax.set_ylim([0,0.1])
+    f_arr = [f1, f2]
+    pxx_arr = [pxx1,pxx2]
+    label_arr = [label1,label2]
 
-    for f,pxx,label in zip([f1, f2],[pxx1,pxx2],[label1,label2]):
+    if third_ecps:
+        f3,pxx3 = mean_ecp(third_ecps,skip_n)
+        fx3 = f3[np.where((f3>8) & (f3<12))]
+        theta3 = pxx3[np.where((f3>8) & (f3<12))]
+        ax.plot(fx3, theta3*1000,linewidth=0.6,label=label3)
+        f_arr.append(f3)
+        pxx_arr.append(pxx3)
+        label_arr.append(label3)
+
+    for f,pxx,label in zip(f_arr,pxx_arr,label_arr):
 
         theta = pxx[np.where((f>8) & (f<12))]*1000
         gamma = pxx[np.where((f>50) & (f<60))]*1000
@@ -84,11 +96,15 @@ if __name__ == '__main__':
     parser.add_argument('--second-case')
     parser.add_argument('--second-case-runs')
     parser.add_argument('--second-case-label')
+    parser.add_argument('--third-case')
+    parser.add_argument('--third-case-runs')
+    parser.add_argument('--third-case-label')
 
     args = parser.parse_args()
 
     first_run_ecps = []
     second_run_ecps = []
+    third_run_ecps = []
 
     for run in args.first_case_runs.split(','):
         ecp = get_ecp(args.first_case + '/' + run + '/ecp.h5')
@@ -97,7 +113,10 @@ if __name__ == '__main__':
     for run in args.second_case_runs.split(','):
         ecp = get_ecp(args.second_case + '/' + run + '/ecp.h5')
         second_run_ecps.append(ecp)
-
+    if args.third_case_runs:
+        for run in args.third_case_runs.split(','):
+            ecp = get_ecp(args.third_case + '/' + run + '/ecp.h5')
+            third_run_ecps.append(ecp)
 
     dt = 0.05
     steps_per_ms = 1/dt
@@ -114,6 +133,6 @@ if __name__ == '__main__':
     ax1.set_xlabel("Hz")
     ax1.set_ylabel("PSD [V^2/Hz]")
     print('plotting...') 
-    ecp_psd(first_run_ecps, second_run_ecps, ax=ax1, label1=args.first_case_label, label2=args.second_case_label,skip_n=skip_n)
+    ecp_psd(first_run_ecps, second_run_ecps, ax=ax1, label1=args.first_case_label, label2=args.second_case_label,skip_n=skip_n, third_ecps=third_run_ecps, label3=args.third_case_label)
     ax1.legend()
     plt.show()
