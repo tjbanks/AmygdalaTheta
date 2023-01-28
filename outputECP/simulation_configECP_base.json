@@ -41,7 +41,8 @@
     "ecp": {
       "cells": "all",
       "variable_name": "v",
-      "module": "extracellular",
+      "module": "ecp",
+      "tmp_dir": "outputECP",
       "electrode_positions": "/home/tyler/git_stage/amygdalatheta/components/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"
