@@ -1,7 +1,8 @@
 import numpy as np
 import sys
 
-from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
+#from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
+from spike_trains_original import PoissonSpikeGenerator
 
 scale=1
 

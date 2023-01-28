@@ -225,7 +225,7 @@ NET_RECEIVE(dummy_weight) {
     }
 	
 if (flag == 0) {  : Short term plasticity was implemented(Varela et. al 1997):
-	rp = unirand()	
+	:rp = unirand()	
 	
 	:F  = 1 + (F-1)* exp(-(t - tsyn)/tauF)
 	D1 = 1 - (1-D1)*exp(-(t - tsyn)/tauD1)
@@ -620,6 +620,6 @@ FUNCTION GAP1(GAPstart1 (ms), GAPstop1 (ms)) {
 	else if (t >= GAPstop1 ) {GAP1 = 1}					: During the Gap, apply lamda2*2
 	else  {	GAP1 = 1}
 }
-FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
-}
+:FUNCTION unirand() {    : uniform random numbers between 0 and 1
+:        unirand = scop_random()
+:}

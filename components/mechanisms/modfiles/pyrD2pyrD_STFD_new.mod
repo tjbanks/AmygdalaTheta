@@ -227,6 +227,9 @@ NET_RECEIVE(dummy_weight) {
     }
 	         
 	if (flag == 0) {   : Short term plasticity was implemented(Varela et. al 1997):
+
+	rp = unirand()	
+
 	D1 = 1 - (1-D1)*exp(-(t - tsyn)/tauD1)
 	D2 = 1 - (1-D2)*exp(-(t - tsyn)/tauD2)
 	tsyn = t
@@ -433,5 +436,5 @@ FUNCTION DA2(DAstart2 (ms), DAstop2 (ms)) {
 		else  {	DA2 = 1.0}
 }
 FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
+        unirand = 0
 }

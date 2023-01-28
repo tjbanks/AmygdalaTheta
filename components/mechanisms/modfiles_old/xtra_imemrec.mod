@@ -81,11 +81,11 @@ solution step, and that the recorded potential is computed after.
 ENDCOMMENT
 
 NEURON {
-	SUFFIX xtra
+	SUFFIX xtraimemrec
 	RANGE rx, er
 	RANGE x, y, z,LFPtemp
-	GLOBAL is,LFP
-	POINTER im, ex:
+	RANGE is,LFP
+	RANGE im, ex:
 }
 
 PARAMETER {
@@ -109,7 +109,7 @@ ASSIGNED {
 
 INITIAL {
 	ex = is*rx*(1e6)
-	er = (10)*rx*im*area
+	er = (10)*0.1*im*area
 	LFP = LFP + er
 	LFPtemp=LFP
 : this demonstrates that area is known
@@ -140,7 +140,7 @@ BEFORE BREAKPOINT { : before each cy' = f(y,t) setup
   :print LFPtemp
 }
 AFTER SOLVE { : after each solution step
-  er = (10)*rx*im*area
+  er = (10)*0.1*im*area
   LFP = LFP + er
   LFPtemp=LFP
   :print LFPtemp

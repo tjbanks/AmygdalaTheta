@@ -109,12 +109,8 @@ DERIVATIVE states {
 }
 
 NET_RECEIVE(wgt) {
-        LOCAL x
+	LOCAL x
 	x = wgt
-	state_discontinuity(An,An+x)
-	state_discontinuity(Bn,Bn+x)
-	state_discontinuity(Aa,Aa+x)
-	state_discontinuity(Ba,Ba+x)
 }
 
 :::::::::::: FUNCTIONs and PROCEDUREs ::::::::::::

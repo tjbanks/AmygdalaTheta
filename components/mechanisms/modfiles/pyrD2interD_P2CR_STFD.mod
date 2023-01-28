@@ -282,5 +282,5 @@ FUNCTION omega(Cani (mM), threshold1 (uM), threshold2 (uM)) {
 	else {omega = -sqrt(r*r-(Cacon-mid)*(Cacon-mid))}
 }
 FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
+        unirand = 0 : can be set to 0 since thr_rp is set to 1 anyway
 }

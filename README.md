@@ -1,7 +1,16 @@
 # Amygdala Theta
-#### Code by Tyler Banks and Matthew Stroud. In partnership with Unal Lab (Tuna and Unal)
+#### Code by Tyler Banks. In partnership with Unal Lab (Tuna and Unal)
 Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
+## Core Neuron Update
+
+
+```
+cd ./components/mechanisms
+nrnivmodl -coreneuron modfiles
+cd -
+./components/mechanisms/x86_64/special run_network.py simulation_configECP_base.json
+```
 
 ## Running the Model
 

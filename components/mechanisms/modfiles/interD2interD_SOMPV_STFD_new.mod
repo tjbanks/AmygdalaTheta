@@ -623,5 +623,5 @@ FUNCTION GAP1(GAPstart1 (ms), GAPstop1 (ms)) {
 	else  {	GAP1 = 1}
 }
 FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
+        unirand = 0 : can be set to 0 since thr_rp is set to 1 anyway
 }

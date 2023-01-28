@@ -1,4 +1,7 @@
-from bmtk.builder import NetworkBuilder, network
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+from bmtk.builder import NetworkBuilder
 import numpy as np
 from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
 from bmtk.utils.sim_setup import build_env_bionet
@@ -16,7 +19,7 @@ network_dir = 'network'
 components_dir = 'components'
 t_sim = 15000.0
 dt = 0.05
-scale = 27
+scale = 1
 
 min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
@@ -787,13 +790,13 @@ edge_add_properties = {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_dist_delay_feng_section,
         'rule_params':{'sec_x':0.9},
-        'dtypes':[np.float, np.int32, np.float]
+        'dtypes':[float, np.int32, float]
     },
     'syn_uniform_delay_section_default': {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_uniform_delay_section,
         'rule_params':{'sec_x':0.9},
-        'dtypes':[np.float, np.int32, np.float]
+        'dtypes':[float, np.int32, float]
     }
 }
 

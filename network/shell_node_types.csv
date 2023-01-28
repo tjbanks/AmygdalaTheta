@@ -1,0 +1,6 @@
+node_type_id model_type a_name pop_name
+100 virtual PN PyrA
+101 virtual PN PyrC
+102 virtual PV PV
+103 virtual SOM SOM
+104 virtual CR CR

@@ -4,6 +4,7 @@ import numpy as np
 import synapses
 import warnings
 
+import corebmtk
 
 def run(config_file):
 
@@ -37,7 +38,8 @@ def run(config_file):
     for node in pop.get_nodes():
         node._node._node_type_props['morphology'] = node.model_template[1]
 
-    sim = bionet.BioSimulator.from_config(conf, network=graph)
+    #sim = bionet.BioSimulator.from_config(conf, network=graph)
+    sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=True)
     
     # This calls insert_mechs() on each cell to use its gid as a seed
     # to the random number generator, so that each cell gets a different
