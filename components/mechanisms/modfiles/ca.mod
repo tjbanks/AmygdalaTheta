@@ -20,6 +20,7 @@ NEURON {
 	RANGE m, h, gca, gbar
 	RANGE minf, hinf, mtau, htau
 	RANGE q10, temp, tadj, vmin, vmax, vshift
+	RANGE mexp, hexp
 }
 
 PARAMETER {
@@ -63,7 +64,6 @@ ASSIGNED {
 STATE { m h }
 
 INITIAL { 
-	trates(v+vshift)
 	m = minf
 	h = hinf
 }
@@ -74,31 +74,24 @@ BREAKPOINT {
 	ica = (1e-4) * gca * (v - eca)
 } 
 
-LOCAL mexp, hexp
+
 
 PROCEDURE states() {
-        trates(v+vshift)      
-        m = m + mexp*(minf-m)
-        h = h + hexp*(hinf-h)
-}
 
+        LOCAL mexp, hexp, tinc
 
-PROCEDURE trates(v) {  
-                      
-        LOCAL tinc
-        TABLE minf, mexp, hinf, hexp
-	DEPEND dt, celsius, temp
-	
-	FROM vmin TO vmax WITH 199
-
-	rates(v): not consistently executed from here if usetable == 1
+		rates(v+vshift): not consistently executed from here if usetable == 1
 
         tadj = q10^((celsius - temp)/10)
         tinc = -dt * tadj
 
         mexp = 1 - exp(tinc/mtau)
         hexp = 1 - exp(tinc/htau)
+
+        m = m + mexp*(minf-m)
+        h = h + hexp*(hinf-h)
 }
+
 
 
 PROCEDURE rates(vm) {  

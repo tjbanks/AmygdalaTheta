@@ -22,7 +22,7 @@ UNITS {
         (nA) = (nanoamp)
 	(uS) = (microsiemens)
 	FARADAY = 96485 (coul)
-	pi = 3.141592 (1)
+	pilocal = 3.141592 (1)
 }
 
 PARAMETER {
@@ -153,7 +153,7 @@ INITIAL {
 	dW_gaba = 0
 
 	capoolcon = Cainf
-	Afactor	= 1/(z*FARADAY*4/3*pi*(pooldiam/2)^3)*(1e6)
+	Afactor	= 1/(z*FARADAY*4/3*pilocal*(pooldiam/2)^3)*(1e6)
 
     tsyn=0      
 	fa =0
@@ -195,7 +195,7 @@ if ((eta(capoolcon)*(lambda1*omega(capoolcon, threshold1, threshold2)-lambda2*GA
     igaba = W*g_gaba*(v - Erev_gaba)
     irecord=igaba
 	ICag = P0g*g_gaba*(v - eca)	
-	Icatotal = ICag + k*ica*4*pi*((15/2)^2)*(0.01)    :  icag+k*ica*Area of soma*unit change
+	Icatotal = ICag + k*ica*4*pilocal*((15/2)^2)*(0.01)    :  icag+k*ica*Area of soma*unit change
 
 	
 }

@@ -1,2 +1,2 @@
-edge_type_id target_query source_query model_template syn_weight distance_range target_sections dynamics_params
-118 pop_name=='['PV']' * bg2pyr 1 "[0.0, 9999.9]" ['basal'] BG2PNi_feng_min.json
+edge_type_id target_query source_query dynamics_params distance_range syn_weight model_template target_sections
+118 pop_name=='['PV']' * BG2PNi_feng_min.json "[0.0, 9999.9]" 1 bg2pyr ['basal']

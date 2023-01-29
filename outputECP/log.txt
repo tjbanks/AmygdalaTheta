@@ -1,12 +1,14 @@
-2023-01-28 13:12:45,416 [INFO] Created log file
-2023-01-28 13:12:45,496 [WARNING] Unable to load NEURON mechanisms.
-2023-01-28 13:12:45,711 [INFO] Building cells.
-2023-01-28 13:12:49,848 [INFO] Building recurrent connections
-2023-01-28 13:12:51,213 [INFO] Running core neuron sim
-2023-01-28 13:12:51,213 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
-2023-01-28 13:12:51,902 [INFO] Building virtual cell stimulations for thalamus_som_spikes
-2023-01-28 13:12:51,959 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
-2023-01-28 13:12:52,042 [WARNING] Unrecognized module ecp, skipping.
-2023-01-28 13:12:52,968 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
-2023-01-28 13:12:52,968 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2023-01-28 13:12:52,968 [INFO] Block save every 5000 steps
+2023-01-28 19:48:37,812 [INFO] Created log file
+2023-01-28 19:48:37,844 [WARNING] Unable to load NEURON mechanisms.
+2023-01-28 19:48:37,964 [INFO] Building cells.
+2023-01-28 19:48:40,047 [INFO] Building recurrent connections
+2023-01-28 19:48:40,740 [INFO] Running core neuron sim
+2023-01-28 19:48:40,740 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2023-01-28 19:48:41,007 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2023-01-28 19:48:41,031 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2023-01-28 19:48:41,057 [WARNING] Unrecognized module ecp, skipping.
+2023-01-28 19:48:41,485 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2023-01-28 19:48:41,486 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2023-01-28 19:48:41,486 [INFO] Block save every 5000 steps
+2023-01-28 19:56:38,023 [INFO] Node saving ecp report to ecp.h5
+2023-01-28 20:09:40,930 [INFO] Simulation completed in 20.0 minutes, 59.45 seconds 

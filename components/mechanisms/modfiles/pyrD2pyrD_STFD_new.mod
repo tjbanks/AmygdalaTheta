@@ -22,7 +22,7 @@ UNITS {
         (nA) = (nanoamp)
 	(uS) = (microsiemens)
 	FARADAY = 96485 (coul)
-	pi = 3.141592 (1)
+	pilocal = 3.141592 (1)
 }
 
 PARAMETER {
@@ -147,7 +147,7 @@ INITIAL {
 	dW_ampa = 0
 
 	capoolcon = Cainf
-	Afactor	= 1/(z*FARADAY*4/3*pi*(pooldiam/2)^3)*(1e6)
+	Afactor	= 1/(z*FARADAY*4/3*pilocal*(pooldiam/2)^3)*(1e6)
 
 	fa =0
 	F = 1
