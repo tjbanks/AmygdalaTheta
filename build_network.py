@@ -67,11 +67,11 @@ if __name__ == '__main__':
         print('Building full network')
 
 #Scale the number of cells in each population
-numPN_A = numPN_A * scale #640 * scale #4114#15930
-numPN_C = numPN_C * scale #260 * scale #4115#6210
-numPV = numPV * scale #100 * scale #854#4860
-numSOM = numSOM * scale #42 * scale
-numCR = numCR * scale #42 * scale
+numPN_A = int(numPN_A * scale) #640 * scale #4114#15930
+numPN_C = int(numPN_C * scale) #260 * scale #4115#6210
+numPV = int(numPV * scale) #100 * scale #854#4860
+numSOM = int(numSOM * scale) #42 * scale
+numCR = int(numCR * scale) #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 # Create the possible x,y,z coordinates
@@ -967,4 +967,4 @@ build_env_bionet(base_dir='./',
                        ('shell','shell_spikes.h5')],
 	components_dir=components_dir,
         config_file='simulation_config.json',
-	compile_mechanisms=True)
+	compile_mechanisms=False)

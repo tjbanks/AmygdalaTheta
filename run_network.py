@@ -1,3 +1,4 @@
+from neuron import coreneuron
 import os, sys
 from bmtk.simulator import bionet
 import numpy as np
@@ -39,7 +40,7 @@ def run(config_file):
         node._node._node_type_props['morphology'] = node.model_template[1]
 
     #sim = bionet.BioSimulator.from_config(conf, network=graph)
-    sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=True)
+    sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=False)
     
     # This calls insert_mechs() on each cell to use its gid as a seed
     # to the random number generator, so that each cell gets a different

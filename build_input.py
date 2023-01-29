@@ -24,34 +24,34 @@ def build_input(t_sim, numPN_A = 569, numPN_C=231, numPV = 93, numSOM=51, numCR=
     if numPN_A or numPN_C or numPV:
         # VPSI
         build_poisson_input(population='vpsi_inh',
-                        node_ids=range((numPN_A+numPN_C+numPV)*scale),
+                        node_ids=range(int((numPN_A+numPN_C+numPV)*scale)),
                         mean=3,std=1,
                         output_h5='vpsi_inh_spikes_nonrhythmic.h5',
                         t_sim=t_sim)
 
     # THALAMUS
     build_poisson_input(population='thalamus_pyr',
-                        node_ids=range((numPN_A+numPN_C)*scale),
+                        node_ids=range(int((numPN_A+numPN_C)*scale)),
                         mean=2,std=1,
                         output_h5='thalamus_pyr_spikes.h5',
                         t_sim=t_sim)
     
     # THALAMUS
     build_poisson_input(population='thalamus_pv',
-                        node_ids=range((numPV)*scale),
+                        node_ids=range(int((numPV)*scale)),
                         mean=2,std=1,
                         output_h5='thalamus_pv_spikes.h5',
                         t_sim=t_sim)
  
     if numSOM:
         build_poisson_input(population='thalamus_som',
-                        node_ids=range((numSOM)*scale),
+                        node_ids=range(int((numSOM)*scale)),
                         mean=2,std=1,
                         output_h5='thalamus_som_spikes.h5',
                         t_sim=t_sim) 
     if numCR:
         build_poisson_input(population='thalamus_cr',
-                        node_ids=range((numCR)*scale),
+                        node_ids=range(int((numCR)*scale)),
                         mean=2,std=1,
                         output_h5='thalamus_cr_spikes.h5',
                         t_sim=t_sim)
