@@ -116,7 +116,7 @@ PARAMETER {
 	std_e	= 0.0030 (umho)	: standard dev of excitatory conductance
 	std_i	= 0.0066 (umho)	: standard dev of inhibitory conductance
 
-	tau_e	= 2.728	(ms)	: time constant of excitatory conductance
+	tau_e	= 3	(ms)	: time constant of excitatory conductance
 	tau_i	= 10.49	(ms)	: time constant of inhibitory conductance
 }
 
@@ -133,6 +133,7 @@ ASSIGNED {
 	exp_i
 	amp_e	(umho)
 	amp_i	(umho)
+  noise
 
         donotuse
 }
@@ -152,29 +153,33 @@ INITIAL {
 	}
 }
 
+BEFORE BREAKPOINT {
+    noise = normrand123()
+    :printf("%g\n",noise)
+}
+
 BREAKPOINT {
 	SOLVE oup
 	if(tau_e==0) {
-	   g_e = std_e * normrand123()
+	   g_e = std_e * noise
 	}
 	if(tau_i==0) {
-	   g_i = std_i * normrand123()
+	   g_i = std_i * noise
 	}
 	g_e = g_e0 + g_e1
 	if(g_e < 0) { g_e = 0 }
 	g_i = g_i0 + g_i1
 	if(g_i < 0) { g_i = 0 }
-	:i = g_e * (v - E_e) + g_i * (v - E_i) we only want excitatory in this modfile
 	i = g_e * (v - E_e)
 }
 
 
 PROCEDURE oup() {		: use Scop function normrand(mean, std_dev)
    if(tau_e!=0) {
-	g_e1 =  exp_e * g_e1 + amp_e * normrand123()
+	g_e1 =  exp_e * g_e1 + amp_e * noise
    }
    if(tau_i!=0) {
-	g_i1 =  exp_i * g_i1 + amp_i * normrand123()
+	g_i1 =  exp_i * g_i1 + amp_i * noise
    }
 }
 
@@ -199,7 +204,7 @@ VERBATIM
 ENDVERBATIM
 }
 
-PROCEDURE noiseFromRandom() {
+PROCEDURE setRandObj() {
 VERBATIM
 #if !NRNBBCORE
  {
@@ -219,27 +224,30 @@ static void bbcore_write(double* x, int* d, int* xx, int *offset, _threadargspro
 #if !NRNBBCORE
 	/* error if using the legacy normrand */
 	if (!_p_donotuse) {
-		fprintf(stderr, "Gfluct: cannot use the legacy normrand generator for the random stream.\n");
+		fprintf(stderr, "orn: cannot use the legacy normrand generator for the random stream.\n");
 		assert(0);
 	}
 	if (d) {
 		uint32_t* di = ((uint32_t*)d) + *offset;
 		Rand** pv = (Rand**)(&_p_donotuse);
-		/* error if not using Random123 generator */
+			/* error if not using Random123 generator */
 		if (!nrn_random_isran123(*pv, di, di+1, di+2)) {
-			fprintf(stderr, "Gfluct: Random123 generator is required\n");
+			fprintf(stderr, "orn: Random123 generator is required\n");
 			assert(0);
 		}
-		/*printf("Gfluct bbcore_write %d %d %d\n", di[0], di[1], di[3]);*/
+		/*printf("orn bbcore_write %d %d %d\n", di[0], di[1], di[3]);*/
 	}
-	*offset += 3;
 #endif
+	*offset += 3;
 }
-
 static void bbcore_read(double* x, int* d, int* xx, int* offset, _threadargsproto_) {
-	assert(!_p_donotuse);
 	uint32_t* di = ((uint32_t*)d) + *offset;
 	nrnran123_State** pv = (nrnran123_State**)(&_p_donotuse);
+#if !NRNBBCORE
+    if(*pv) {
+        nrnran123_deletestream(*pv);
+    }
+#endif
 	*pv = nrnran123_newstream3(di[0], di[1], di[2]);
 	*offset += 3;
 }

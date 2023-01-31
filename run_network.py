@@ -29,7 +29,7 @@ def run(config_file):
     add_weight_function(gaussianBL)
 
 
-    conf = bionet.Config.from_json(config_file, validate=True)
+    conf = corebmtk.Config.from_json(config_file, validate=True)
     conf.build_env()
 
     graph = bionet.BioNetwork.from_config(conf)

@@ -1,4 +1,4 @@
-TITLE Fluctuating conductances
+TITLE Fluctuating    conductances
 
 COMMENT
 -----------------------------------------------------------------------------
@@ -55,16 +55,12 @@ PARAMETERS
   The mechanism takes the following parameters:
 
      E_e = 0  (mV)		: reversal potential of excitatory conductance
-     E_i = -75 (mV)		: reversal potential of inhibitory conductance
 
      g_e0 = 0.0121 (umho)	: average excitatory conductance
-     g_i0 = 0.0573 (umho)	: average inhibitory conductance
 
      std_e = 0.0030 (umho)	: standard dev of excitatory conductance
-     std_i = 0.0066 (umho)	: standard dev of inhibitory conductance
 
      tau_e = 2.728 (ms)		: time constant of excitatory conductance
-     tau_i = 10.49 (ms)		: time constant of inhibitory conductance
 
 
 Gfluct3: conductance cannot be negative
@@ -89,12 +85,13 @@ ENDCOMMENT
 INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 
 NEURON {
-	POINT_PROCESS Gfluct_inh
-	RANGE g_e, g_i, E_e, E_i, g_e0, g_i0, g_e1, g_i1
-	RANGE std_e, std_i, tau_e, tau_i, D_e, D_i
-	NONSPECIFIC_CURRENT i
-        
         THREADSAFE : only true if every instance has its own distinct Random
+	POINT_PROCESS Gfluct_inh
+	RANGE g_e, g_e_max, cc_peak, g_e_baseline
+  RANGE g_i, E_e, E_i, g_e0, g_i0, g_e1, g_i1
+	RANGE std_e, std_i, tau_e, tau_i, D_e, D_i
+	GLOBAL net_receive_on
+	NONSPECIFIC_CURRENT i
         BBCOREPOINTER donotuse
 }
 
@@ -105,7 +102,13 @@ UNITS {
 }
 
 PARAMETER {
-	dt		(ms)
+	dt		  (ms)
+        
+	g_e_max	= 75e-3 (umho)          : average excitatory conductance
+  cc_peak = 0     : (affinity*odor cc)
+        
+  g_e_baseline    = 0       (umho)          : background noise
+	net_receive_on = 0
 
 	E_e	= 0 	(mV)	: reversal potential of excitatory conductance
 	E_i	= -75 	(mV)	: reversal potential of inhibitory conductance
@@ -124,86 +127,151 @@ ASSIGNED {
 	v	(mV)		: membrane voltage
 	i 	(nA)		: fluctuating current
 	g_e	(umho)		: total excitatory conductance
-	g_i	(umho)		: total inhibitory conductance
 	g_e1	(umho)		: fluctuating excitatory conductance
-	g_i1	(umho)		: fluctuating inhibitory conductance
 	D_e	(umho umho /ms) : excitatory diffusion coefficient
-	D_i	(umho umho /ms) : inhibitory diffusion coefficient
 	exp_e
-	exp_i
 	amp_e	(umho)
-	amp_i	(umho)
-
+  exp_i
+  amp_i
+  g_i1
+  g_i
+  D_i
+        
         donotuse
 }
 
+STATE { O C D }
+
 INITIAL {
+	initstream()
 	g_e1 = 0
-	g_i1 = 0
 	if(tau_e != 0) {
 		D_e = 2 * std_e * std_e / tau_e
 		exp_e = exp(-dt/tau_e)
 		amp_e = std_e * sqrt( (1-exp(-2*dt/tau_e)) )
 	}
-	if(tau_i != 0) {
+  if(tau_i != 0) {
 		D_i = 2 * std_i * std_i / tau_i
 		exp_i = exp(-dt/tau_i)
 		amp_i = std_i * sqrt( (1-exp(-2*dt/tau_i)) )
 	}
+        
+        O = 0
+        C = 1
+        D = 0
 }
 
 BREAKPOINT {
+        LOCAL SORN
 	SOLVE oup
-	if(tau_e==0) {
-	   g_e = std_e * normrand123()
-	}
-	if(tau_i==0) {
-	   g_i = std_i * normrand123()
-	}
-	g_e = g_e0 + g_e1
-	if(g_e < 0) { g_e = 0 }
-	g_i = g_i0 + g_i1
-	if(g_i < 0) { g_i = 0 }
-	:i = g_e * (v - E_e) + g_i * (v - E_i) only whant inhibitory
-	i = g_i * (v - E_i)
+        SOLVE states METHOD derivimplicit
+        
+        SORN = O * (1-D)
+        
+        g_e = g_e1 + SORN * cc_peak * g_e0 + g_e_baseline
+          
+
+        g_i = g_i0 + g_i1
+        if(g_i < 0) { g_i = 0 }
+        i = g_i * (v - E_i)
+}
+
+DERIVATIVE states {
+  LOCAL KO, KC1, KC2, KD1, KD2
+  KO = 1/100
+  KC1 = 1/100
+  KC2 = 1e-4
+  KD1 = 1/6000
+  KD2 = 1/100
+  O' = KO*(1-C-O)
+  C' = KC1*(1-C)*C + KC2*(1-C)
+  D' = KD1*O*(1-D) - KD2*D*(1-O)
+}
+
+PROCEDURE oup() {		: use Scop function normrand(mean, std_dev)
+   if(tau_i!=0) {
+  g_i1 =  exp_i * g_i1 + amp_i * normrand123()
+   }
+}
+
+NET_RECEIVE(peak, base, gemax, stde) {
+  INITIAL {} : do not want to initialize base, etc. to 0.0
+  C = 0
+  : off for original implementation where OdorStim fills in following
+  : at the interpreter level and then does a direct NetCon.event
+  : This is here to allow debugging with prcellstate.
+  if (net_receive_on) {
+    cc_peak = peak
+    g_e_baseline = base
+    g_e_max = gemax
+    std_e = stde
+  }
 }
 
 
-PROCEDURE oup() {		: use Scop function normrand(mean, std_dev)
-   if(tau_e!=0) {
-	g_e1 =  exp_e * g_e1 + amp_e * normrand123()
-   }
-   if(tau_i!=0) {
-	g_i1 =  exp_i * g_i1 + amp_i * normrand123()
-   }
+VERBATIM
+#if !NRNBBCORE /* running in NEURON */
+/*
+   1 means noiseFromRandom was called when _ran_compat was previously 0 .
+   2 means noiseFromRandom123 was called when _ran_compat was previously 0.
+*/
+static int _ran_compat; /* specifies the noise style for all instances */
+#endif /* running in NEURON */
+ENDVERBATIM
+
+PROCEDURE initstream() {
+VERBATIM
+  if (_p_donotuse) {
+    uint32_t id1, id2, id3;
+    #if NRNBBCORE
+      nrnran123_setseq((nrnran123_State*)_p_donotuse, 0, 0);
+    #else
+      if (_ran_compat == 1) {
+        nrn_random_reset((Rand*)_p_donotuse);
+      }else{
+        nrnran123_setseq((nrnran123_State*)_p_donotuse, 0, 0);
+      }
+    #endif
+  }	
+ENDVERBATIM
 }
 
 FUNCTION normrand123() {
 VERBATIM
-	if (_p_donotuse) {
-		/*
-		:Supports separate independent but reproducible streams for
-		: each instance. However, the corresponding hoc Random
-		: distribution MUST be set to Random.negexp(1)
-		*/
-        #if !NRNBBCORE
-		_lnormrand123 = nrn_random_pick((Rand*)_p_donotuse);
-        #else
-        #pragma acc routine(nrnran123_normal) seq
+  if (_p_donotuse) {
+    /*
+      :Supports separate independent but reproducible streams for
+      : each instance. However, the corresponding hoc Random
+      : distribution MUST be set to Random.negexp(1)
+    */
+    #if !NRNBBCORE
+      if(_ran_compat == 1) {
+        _lnormrand123 = nrn_random_pick((Rand*)_p_donotuse);
+      }else{
         _lnormrand123 = nrnran123_normal((nrnran123_State*)_p_donotuse);
-        #endif
-	}else{
-		/* only use Random123 */
-        assert(0);
-	}
+      }
+    #else
+      #pragma acc routine(nrnran123_normal) seq
+      _lnormrand123 = nrnran123_normal((nrnran123_State*)_p_donotuse);
+    #endif
+  }else{
+    /* only use Random123 */
+    assert(0);
+  }
 ENDVERBATIM
 }
 
-PROCEDURE noiseFromRandom() {
+
+PROCEDURE setRandObj() {
 VERBATIM
 #if !NRNBBCORE
  {
 	void** pv = (void**)(&_p_donotuse);
+	if (_ran_compat == 2) {
+		fprintf(stderr, "orn.noiseFromRandom123 was previously called\n");
+		assert(0);
+	}
+	_ran_compat = 1;
 	if (ifarg(1)) {
 		*pv = nrn_random_arg(1);
 	}else{
@@ -214,33 +282,67 @@ VERBATIM
 ENDVERBATIM
 }
 
+PROCEDURE noiseFromRandom123() {
+VERBATIM
+#if !NRNBBCORE
+ {
+        nrnran123_State** pv = (nrnran123_State**)(&_p_donotuse);
+        if (_ran_compat == 1) {
+          fprintf(stderr, "orn.noiseFromRandom was previously called\n");
+          assert(0);
+        }
+        _ran_compat = 2;
+        if (*pv) {
+          nrnran123_deletestream(*pv);
+          *pv = (nrnran123_State*)0;
+        }
+        if (ifarg(3)) {
+	      *pv = nrnran123_newstream3((uint32_t)*getarg(1), (uint32_t)*getarg(2), (uint32_t)*getarg(3));
+        }else if (ifarg(2)) {
+	      *pv = nrnran123_newstream((uint32_t)*getarg(1), (uint32_t)*getarg(2));
+        }
+ }
+#endif
+ENDVERBATIM
+}
+
 VERBATIM
 static void bbcore_write(double* x, int* d, int* xx, int *offset, _threadargsproto_) {
 #if !NRNBBCORE
 	/* error if using the legacy normrand */
 	if (!_p_donotuse) {
-		fprintf(stderr, "Gfluct: cannot use the legacy normrand generator for the random stream.\n");
+		fprintf(stderr, "orn: cannot use the legacy normrand generator for the random stream.\n");
 		assert(0);
 	}
 	if (d) {
 		uint32_t* di = ((uint32_t*)d) + *offset;
-		Rand** pv = (Rand**)(&_p_donotuse);
-		/* error if not using Random123 generator */
-		if (!nrn_random_isran123(*pv, di, di+1, di+2)) {
-			fprintf(stderr, "Gfluct: Random123 generator is required\n");
-			assert(0);
+		if (_ran_compat == 1) {
+			Rand** pv = (Rand**)(&_p_donotuse);
+			/* error if not using Random123 generator */
+			if (!nrn_random_isran123(*pv, di, di+1, di+2)) {
+				fprintf(stderr, "orn: Random123 generator is required\n");
+				assert(0);
+			}
+		}else{
+			nrnran123_State** pv = (nrnran123_State**)(&_p_donotuse);
+			nrnran123_getids3(*pv, di, di+1, di+2);
 		}
-		/*printf("Gfluct bbcore_write %d %d %d\n", di[0], di[1], di[3]);*/
+		/*printf("orn bbcore_write %d %d %d\n", di[0], di[1], di[3]);*/
 	}
-	*offset += 3;
 #endif
+	*offset += 3;
 }
 
 static void bbcore_read(double* x, int* d, int* xx, int* offset, _threadargsproto_) {
-	assert(!_p_donotuse);
 	uint32_t* di = ((uint32_t*)d) + *offset;
 	nrnran123_State** pv = (nrnran123_State**)(&_p_donotuse);
+#if !NRNBBCORE
+    if(*pv) {
+        nrnran123_deletestream(*pv);
+    }
+#endif
 	*pv = nrnran123_newstream3(di[0], di[1], di[2]);
 	*offset += 3;
 }
 ENDVERBATIM
+
