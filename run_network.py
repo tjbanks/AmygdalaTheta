@@ -7,7 +7,7 @@ import warnings
 
 import corebmtk
 
-def run(config_file):
+def run(config_file, coreneuron=True):
 
     warnings.simplefilter(action='ignore', category=FutureWarning)
     synapses.load()
@@ -29,7 +29,11 @@ def run(config_file):
     add_weight_function(gaussianBL)
 
 
-    conf = corebmtk.Config.from_json(config_file, validate=True)
+    if coreneuron:
+        conf = corebmtk.Config.from_json(config_file, validate=True)        
+    else:
+        conf = bionet.Config.from_json(config_file, validate=True)
+
     conf.build_env()
 
     graph = bionet.BioNetwork.from_config(conf)
@@ -39,8 +43,10 @@ def run(config_file):
     for node in pop.get_nodes():
         node._node._node_type_props['morphology'] = node.model_template[1]
 
-    #sim = bionet.BioSimulator.from_config(conf, network=graph)
-    sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=False)
+    if coreneuron:
+        sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=False)
+    else:
+        sim = bionet.BioSimulator.from_config(conf, network=graph)
     
     # This calls insert_mechs() on each cell to use its gid as a seed
     # to the random number generator, so that each cell gets a different
@@ -55,6 +61,6 @@ def run(config_file):
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        run(sys.argv[-1])
+        run(sys.argv[-1], coreneuron=False)
     else:
         run('simulation_config.json')
