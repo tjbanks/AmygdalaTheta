@@ -10,6 +10,10 @@ cd ./components/mechanisms
 nrnivmodl -coreneuron modfiles
 cd -
 ./components/mechanisms/x86_64/special run_network.py simulation_configECP_base.json
+
+# Running with MPI
+mpiexec -n 8 ./components/mechanisms/x86_64/special -mpi run_network.py simulation_configECP_base.json
+
 ```
 
 ## Running the Model
