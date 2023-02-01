@@ -111,6 +111,16 @@ DERIVATIVE states {
 NET_RECEIVE(wgt) {
 	LOCAL x
 	x = wgt
+
+	: state_discontinuity(varname, expression)
+	: inside a NET_RECEIVE block is equivalent to the assignment statement
+	: varname = expression
+	: https://neuron.yale.edu/forum/viewtopic.php?t=1602
+
+	An = An+x : state_discontinuity(An,An+x)
+	Bn = Bn+x : state_discontinuity(Bn,Bn+x)
+	Aa = Aa+x : state_discontinuity(Aa,Aa+x)
+	Ba = Ba+x : state_discontinuity(Ba,Ba+x)
 }
 
 :::::::::::: FUNCTIONs and PROCEDUREs ::::::::::::
