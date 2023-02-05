@@ -7,7 +7,7 @@ import warnings
 
 import corebmtk
 
-def run(config_file, coreneuron=True):
+def run(config_file, coreneuron=True, gpu=False):
 
     warnings.simplefilter(action='ignore', category=FutureWarning)
     synapses.load()
@@ -44,7 +44,7 @@ def run(config_file, coreneuron=True):
         node._node._node_type_props['morphology'] = node.model_template[1]
 
     if coreneuron:
-        sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=False)
+        sim = corebmtk.CoreBioSimulator.from_config(conf, network=graph, gpu=gpu)
     else:
         sim = bionet.BioSimulator.from_config(conf, network=graph)
     
@@ -61,6 +61,6 @@ def run(config_file, coreneuron=True):
 
 if __name__ == '__main__':
     if __file__ != sys.argv[-1]:
-        run(sys.argv[-1], coreneuron=False)
+        run(sys.argv[-1], coreneuron=True, gpu=False)
     else:
         run('simulation_config.json')
