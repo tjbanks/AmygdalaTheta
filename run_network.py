@@ -5,6 +5,7 @@ import numpy as np
 import synapses
 import warnings
 
+import argparse
 import corebmtk
 
 def run(config_file, coreneuron=True, gpu=False):
@@ -53,14 +54,18 @@ def run(config_file, coreneuron=True, gpu=False):
     # random seed for the point-conductance noise
     cells = graph.get_local_cells()
     for cell in cells:
-        #cells[cell].hobj.insert_mechs(cells[cell].gid)
-        pass
+        cells[cell].hobj.insert_mechs(cells[cell].gid)
+    
     sim.run()
     bionet.nrn.quit_execution()
 
 
 if __name__ == '__main__':
-    if __file__ != sys.argv[-1]:
-        run(sys.argv[-1], coreneuron=True, gpu=False)
-    else:
-        run('simulation_config.json')
+
+    parser = argparse.ArgumentParser()
+    parser.add_arguments("config")
+    parser.add_arguments("coreneuron", action="store_true", help="Use CoreNeuron for simulation")
+    parser.add_arguments("gpu", action="store_true", help="Use GPU for simulation")
+    args = parser.parse_args()
+    
+    run(args.config, coreneuron=args.coreneuron, gpu=args.gpu)

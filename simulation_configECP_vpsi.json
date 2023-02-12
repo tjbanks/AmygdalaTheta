@@ -53,7 +53,7 @@
     "ecp": {
       "cells": "all",
       "variable_name": "v",
-      "module": "extracellular",
+      "module": "ecp",
       "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"

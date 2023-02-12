@@ -47,6 +47,30 @@
       "module": "sonata",
       "input_file": "$BASE_DIR/shell_spikes.h5",
       "node_set": "shell"
+    },
+    "ach_pn_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pn",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
+    },
+    "ach_pv_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pv",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
+    },
+    "ach_som_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_som",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
     }
   },
   "output": {

@@ -18,12 +18,6 @@
     "v_init": -70.0
   },
   "inputs": {
-    "vpsi_inh_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/vpsi_inh_spikes.h5",
-      "node_set": "vpsi_inh"
-    },
     "thalamus_pyr_spikes": {
       "input_type": "spikes",
       "module": "sonata",
@@ -42,11 +36,29 @@
       "input_file": "$BASE_DIR/thalamus_cr_spikes.h5",
       "node_set": "thalamus_cr"
     },
-    "shell_spikes": {
-      "input_type": "spikes",
-      "module": "sonata",
-      "input_file": "$BASE_DIR/shell_spikes.h5",
-      "node_set": "shell"
+    "ach_pn_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pn",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
+    },
+    "ach_pv_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_pv",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
+    },
+    "ach_som_cclamp": {
+      "input_type": "current_clamp",
+      "module": "IClamp",
+      "node_set": "ach_som",
+      "amp": 0.0125,
+      "delay": 0.0,
+      "duration": 15000.0
     }
   },
   "output": {
