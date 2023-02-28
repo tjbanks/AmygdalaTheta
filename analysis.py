@@ -11,6 +11,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
+try:
+    import scienceplots
+    plt.style.use('science')
+    #plt.style.use(['science','ieee'])
+except:
+    print("SciencePlots not installed")
+
 scale = 1
 
 def raster(spikes_df,node_set,skip_ms=0,ax=None):
