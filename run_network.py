@@ -1,4 +1,3 @@
-from neuron import coreneuron
 import os, sys
 from bmtk.simulator import bionet
 import numpy as np
@@ -6,7 +5,11 @@ import synapses
 import warnings
 
 import argparse
-import corebmtk
+
+try:
+    import corebmtk
+except:
+    pass
 
 def run(config_file, coreneuron=True, gpu=False):
 
@@ -54,7 +57,8 @@ def run(config_file, coreneuron=True, gpu=False):
     # random seed for the point-conductance noise
     cells = graph.get_local_cells()
     for cell in cells:
-        cells[cell].hobj.insert_mechs(cells[cell].gid)
+        #cells[cell].hobj.insert_mechs(cells[cell].gid)
+        pass
     
     sim.run()
     bionet.nrn.quit_execution()
@@ -62,10 +66,11 @@ def run(config_file, coreneuron=True, gpu=False):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser()
-    parser.add_arguments("config")
-    parser.add_arguments("coreneuron", action="store_true", help="Use CoreNeuron for simulation")
-    parser.add_arguments("gpu", action="store_true", help="Use GPU for simulation")
-    args = parser.parse_args()
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument("config")
+    #parser.add_argument("coreneuron", action="store_true", help="Use CoreNeuron for simulation")
+    #parser.add_argument("gpu", action="store_true", help="Use GPU for simulation")
+    #args = parser.parse_args()
     
-    run(args.config, coreneuron=args.coreneuron, gpu=args.gpu)
+    #run(args.config, coreneuron=False, gpu=False)
+    run(sys.argv[-1])
