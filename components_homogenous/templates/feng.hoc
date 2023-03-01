@@ -200,7 +200,7 @@ begintemplate Cell_Af
 		r = $1
 		soma[0]{
 			noiseRandObj_exc=new Random()
-                        noiseRandObj_exc.Random123(123)
+                        noiseRandObj_exc.Random123(r)
                         noiseRandObj_exc.normal(0,1)
 
                         noise_exc = new Gfluct_exc(0.5)
@@ -208,10 +208,10 @@ begintemplate Cell_Af
                         noise_exc.g_i0 = 0
                         noise_exc.std_e = 0.003
                         noise_exc.std_i = 0
-                        //noise_exc.setRandObj(noiseRandObj_exc)
+                        noise_exc.setRandObj(noiseRandObj_exc)
 
                         noiseRandObj_inh=new Random()
-                        noiseRandObj_inh.Random123(123)
+                        noiseRandObj_inh.Random123(r)
                         noiseRandObj_inh.normal(0,1)
 
                         noise_inh = new Gfluct_inh(0.5)
@@ -219,7 +219,7 @@ begintemplate Cell_Af
                         noise_inh.g_i0 = 0.021
                         noise_inh.std_e = 0
                         noise_inh.std_i = 0.008
-                        //noise_inh.setRandObj(noiseRandObj_inh)
+                        noise_inh.setRandObj(noiseRandObj_inh)
 
 		}
 	}
@@ -431,7 +431,7 @@ begintemplate Cell_Cf
 		r = $1
 		soma[0]{
                         noiseRandObj_exc=new Random()
-                        noiseRandObj_exc.Random123(123)
+                        noiseRandObj_exc.Random123(r)
                         noiseRandObj_exc.normal(0,1)
 
                         noise_exc = new Gfluct_exc(0.5)
@@ -439,10 +439,10 @@ begintemplate Cell_Cf
                         noise_exc.g_i0 = 0
                         noise_exc.std_e = 0.003
                         noise_exc.std_i = 0
-                        //noise_exc.setRandObj(noiseRandObj_exc)
+                        noise_exc.setRandObj(noiseRandObj_exc)
 
                         noiseRandObj_inh=new Random()
-                        noiseRandObj_inh.Random123(123)
+                        noiseRandObj_inh.Random123(r)
                         noiseRandObj_inh.normal(0,1)
 
                         noise_inh = new Gfluct_inh(0.5)
@@ -450,7 +450,7 @@ begintemplate Cell_Cf
                         noise_inh.g_i0 = 0.021
                         noise_inh.std_e = 0
                         noise_inh.std_i = 0.008
-                        //noise_inh.setRandObj(noiseRandObj_inh)
+                        noise_inh.setRandObj(noiseRandObj_inh)
 
 		}
 	}
@@ -597,7 +597,7 @@ begintemplate InterneuronCellf
 		r = $1
 		soma[0]{
 			noiseRandObj_exc=new Random()
-			noiseRandObj_exc.Random123(123)
+			noiseRandObj_exc.Random123(r)
 			noiseRandObj_exc.normal(0,1)
 
 			noise_exc = new Gfluct_exc(0.5)
@@ -605,10 +605,10 @@ begintemplate InterneuronCellf
 			noise_exc.g_i0 = 0
 			noise_exc.std_e = 0.00012
 			noise_exc.std_i = 0
-			//noise_exc.setRandObj(noiseRandObj_exc)
+			noise_exc.setRandObj(noiseRandObj_exc)
 
 			noiseRandObj_inh=new Random()
-			noiseRandObj_inh.Random123(123)
+			noiseRandObj_inh.Random123(r)
 			noiseRandObj_inh.normal(0,1)
 
 			noise_inh = new Gfluct_inh(0.5)
@@ -616,7 +616,7 @@ begintemplate InterneuronCellf
 			noise_inh.g_i0 = 0.00573
 			noise_inh.std_e = 0
 			noise_inh.std_i = 0.00264
-			//noise_inh.setRandObj(noiseRandObj_inh)
+			noise_inh.setRandObj(noiseRandObj_inh)
 		
 		}
 	}
