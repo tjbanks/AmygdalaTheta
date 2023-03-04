@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import scipy
 
 #setting up mock population of presynaptic neurons
-
+just_plot = False
 scale = 1
 
 mean_fr = 1   # mean firing rate
@@ -131,6 +131,9 @@ plt.plot(100*depth_of_mod*np.sin(2 * np.pi * f * t)+500)
 plt.xlabel('time(ms)')
 plt.ylabel('node ID')
 
+if just_plot:
+    plt.show()
+    exit()
 
 out = 'vpsi_inh_spikes.h5'
 vpsi = h5py.File(out, 'w')

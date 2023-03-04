@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1
-#SBATCH -n 8
+#SBATCH -n 24
 #SBATCH --qos=normal
 #SBATCH --job-name=amygdala_theta
 #SBATCH --output=amygdala_batch_%j.out
