@@ -54,5 +54,5 @@
       }
   },
   "node_sets_file": "$BASE_DIR/node_sets.json",
-  "network": "$BASE_DIR/circuit_config.json"
+  "network": "$BASE_DIR/circuit_config_homogenous.json"
 }

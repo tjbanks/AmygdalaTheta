@@ -968,4 +968,5 @@ build_env_bionet(base_dir='./',
                        ('shell','shell_spikes.h5')],
 	components_dir=components_dir,
         config_file='simulation_config.json',
-	compile_mechanisms=False)
+	compile_mechanisms=False,
+        overwrite_config=True)

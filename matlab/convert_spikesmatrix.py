@@ -30,8 +30,8 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
              
         count = count + 1
  
-    nodes=np.array(spikes_node_ids).astype(np.int)
-    timestamps=np.array(spikes_timestamps).astype(np.float)
+    nodes=np.array(spikes_node_ids).astype(int)
+    timestamps=np.array(spikes_timestamps).astype(float)
 
     vpsi_spikes_vp.create_dataset("node_ids", data=nodes)
     vpsi_spikes_vp.create_dataset("timestamps", data=timestamps)

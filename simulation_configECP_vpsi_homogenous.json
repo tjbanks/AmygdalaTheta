@@ -24,7 +24,7 @@
       "input_file": "$BASE_DIR/vpsi_inh_spikes.h5",
       "node_set": "vpsi_inh"
     },
-      "thalamus_pyr_spikes": {
+    "thalamus_pyr_spikes": {
       "input_type": "spikes",
       "module": "sonata",
       "input_file": "$BASE_DIR/thalamus_pyr_spikes.h5",
@@ -60,5 +60,5 @@
       }
   },
   "node_sets_file": "$BASE_DIR/node_sets.json",
-  "network": "$BASE_DIR/circuit_config.json"
+  "network": "$BASE_DIR/circuit_config_homogenous.json"
 }

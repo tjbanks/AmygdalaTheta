@@ -34,10 +34,6 @@
       {
         "nodes_file": "$NETWORK_DIR/thalamus_cr_nodes.h5",
         "node_types_file": "$NETWORK_DIR/thalamus_cr_node_types.csv"
-      },
-      {
-        "nodes_file": "$NETWORK_DIR/shell_nodes.h5",
-        "node_types_file": "$NETWORK_DIR/shell_node_types.csv"
       }
     ],
     "edges": [
@@ -60,10 +56,6 @@
       {
         "edge_types_file": "$NETWORK_DIR/thalamus_pyr_BLA_edge_types.csv",
         "edges_file": "$NETWORK_DIR/thalamus_pyr_BLA_edges.h5"
-      },
-      {
-        "edge_types_file": "$NETWORK_DIR/shell_BLA_edge_types.csv",
-        "edges_file": "$NETWORK_DIR/shell_BLA_edges.h5"
       }
     ],
     "gap_juncs": []
