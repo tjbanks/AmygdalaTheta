@@ -21,6 +21,7 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     for line in lines:
         times = line.strip().split('\t')
         if len(times)==1 and times[0]=='':
+            count = count + 1
             continue # There were no spikes for this cell
         
         ids = [count for _ in range(len(times))]
