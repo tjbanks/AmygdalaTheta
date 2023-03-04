@@ -24,7 +24,7 @@
       "input_file": "$BASE_DIR/vpsi_inh_spikes.h5",
       "node_set": "vpsi_inh"
     },
-    "thalamus_pyr_spikes": {
+      "thalamus_pyr_spikes": {
       "input_type": "spikes",
       "module": "sonata",
       "input_file": "$BASE_DIR/thalamus_pyr_spikes.h5",
@@ -49,11 +49,11 @@
     "spikes_file": "spikes.h5"
   },
   "reports": {
-
     "ecp": {
       "cells": "all",
       "variable_name": "v",
-      "module": "extracellular",
+      "module": "ecp",
+      "tmp_dir": "$OUTPUT_DIR",
       "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"
