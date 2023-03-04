@@ -1,1 +1,0 @@
-../modfiles/halfgap.mod

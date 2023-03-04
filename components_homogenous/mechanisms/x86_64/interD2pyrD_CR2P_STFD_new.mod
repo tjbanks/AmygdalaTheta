@@ -1,1 +1,0 @@
-../modfiles/interD2pyrD_CR2P_STFD_new.mod
