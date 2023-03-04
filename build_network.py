@@ -1,14 +1,15 @@
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-from bmtk.builder import NetworkBuilder
 import numpy as np
-from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
-from bmtk.utils.sim_setup import build_env_bionet
 import synapses
 import math
 import random
 import os, sys
+
+from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
+from bmtk.utils.sim_setup import build_env_bionet
+from bmtk.builder import NetworkBuilder
 
 from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent_o2a, recurrent_connector_o2a)
