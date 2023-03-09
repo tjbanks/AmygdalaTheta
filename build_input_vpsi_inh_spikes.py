@@ -9,8 +9,8 @@ import scipy
 just_plot = False
 scale = 1
 
-mean_fr = 1   # mean firing rate
-std_fr = 2     # std firing rate
+mean_fr = 2   # mean firing rate
+std_fr = 1     # std firing rate
 
 t_stop = 15 #seconds
 n_cells = 893 * scale
