@@ -20,7 +20,7 @@ tstop = 250
 v_init = -65
 objref Cell // declare the primary cell object
 Cell = new CR_Cell() // build the neuron from template
-Cell.insert_mechs(0)
+Cell.insert_mechs(123)
 
 NumClamps = 1
 NumStims = 0

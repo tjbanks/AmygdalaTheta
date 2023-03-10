@@ -10,13 +10,13 @@
 {load_file("nrngui.hoc")}
 
 //Loading mechanisms in other folder
-nrn_load_dll("./components/mechanisms/x86_64/.libs/libnrnmech.so")
-nrn_load_dll("./components/mechanisms/nrnmech.dll")
+nrn_load_dll("./components_homogenous/mechanisms/x86_64/.libs/libnrnmech.so")
+nrn_load_dll("./components_homogenous/mechanisms/nrnmech.dll")
 
 // Load Template(s) (some may not be needed if a folder was specified and may cause problems, remove as needed)
-//{load_file("./components/templates/templates.hoc")}
-//{load_file("./components/templates/class_basket.hoc")}
-{load_file("./components/templates/feng.hoc")}
+//{load_file("./components_homogenous/templates/templates.hoc")}
+//{load_file("./components_homogenous/templates/class_basket.hoc")}
+{load_file("./components_homogenous/templates/feng.hoc")}
 
 tstop = 250
 v_init = -65
