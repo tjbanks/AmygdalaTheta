@@ -1,6 +1,6 @@
-node_type_id pop_name mem_potential model_template model_type morphology
-100 PyrA e hoc:Cell_Af biophysical 
-101 PyrC e hoc:Cell_Cf biophysical 
-102 Bask e hoc:InterneuronCellf biophysical 
-103 SOM e hoc:SOM_Cell biophysical 
-104 CR e hoc:SOM_Cell biophysical 
+node_type_id model_type pop_name model_template a_name
+100 biophysical PyrA hoc:Cell_Af PN
+101 biophysical PyrC hoc:Cell_Cf PN
+102 biophysical PV hoc:InterneuronCellf PV
+103 biophysical SOM hoc:SOM_Cell SOM
+104 biophysical CR hoc:CR_Cell CR

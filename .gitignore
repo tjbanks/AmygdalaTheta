@@ -141,3 +141,6 @@ components/mechanisms/modfiles/*.dll
 *.h5
 *.c
 *.o
+components_homogenous/mechanisms/x86_64
+amygdala_batch_*
+outputECP/*

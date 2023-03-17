@@ -7,7 +7,7 @@ NEURON {
 	SUFFIX na3
 	USEION na READ ena WRITE ina
 	RANGE  gbar, ar2
-	GLOBAL minf, hinf, mtau, htau, sinf, taus,qinf, thinf
+	RANGE minf, hinf, mtau, htau, sinf, taus,qinf, thinf
 }
 
 PARAMETER {

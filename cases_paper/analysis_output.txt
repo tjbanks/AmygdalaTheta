@@ -1,0 +1,128 @@
+(py36) [tbg28@engr-nelvm-res cases]$ python analysis_hom.py 
+loading case1/spikes.h5
+done
+loading case1/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.00043084343653955384
+Mean gamma (50Hz-60Hz) : 0.0011773206419638893
+
+Peak theta (8Hz-12Hz)  : 0.0004586445533710098
+Peak gamma (50Hz-60Hz) : 0.0015529871357014158
+
+Type : mean (std)
+PN : 0.65 (0.30)
+PV : 21.70 (11.33)
+SOM : 3.07 (0.97)
+CR : 11.40 (1.36)
+saving case1_analysis.png
+loading case2/spikes.h5
+done
+loading case2/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.0007018106408698552
+Mean gamma (50Hz-60Hz) : 0.0013727057970163545
+
+Peak theta (8Hz-12Hz)  : 0.0009275829591138383
+Peak gamma (50Hz-60Hz) : 0.0020775803821709168
+
+Type : mean (std)
+PN : 0.54 (0.33)
+PV : 8.95 (9.28)
+SOM : 6.65 (1.22)
+CR : 6.83 (1.00)
+saving case2_analysis.png
+loading case3/spikes.h5
+done
+loading case3/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.0006402525852099701
+Mean gamma (50Hz-60Hz) : 0.001346384664118854
+
+Peak theta (8Hz-12Hz)  : 0.0008469562665004687
+Peak gamma (50Hz-60Hz) : 0.002194356649158832
+
+Type : mean (std)
+PN : 0.54 (0.34)
+PV : 9.86 (10.71)
+SOM : 6.61 (1.39)
+CR : 7.09 (0.96)
+saving case3_analysis.png
+loading case4/spikes.h5
+done
+loading case4/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.0006549852253826913
+Mean gamma (50Hz-60Hz) : 0.0013504095058670684
+
+Peak theta (8Hz-12Hz)  : 0.0008772362386551174
+Peak gamma (50Hz-60Hz) : 0.002192231157360216
+
+Type : mean (std)
+PN : 0.54 (0.33)
+PV : 9.24 (9.69)
+SOM : 6.67 (1.30)
+CR : 6.84 (0.96)
+saving case4_analysis.png
+loading case5/spikes.h5
+done
+loading case5/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.00037712147216106086
+Mean gamma (50Hz-60Hz) : 0.001292313274085658
+
+Peak theta (8Hz-12Hz)  : 0.00040349357630409954
+Peak gamma (50Hz-60Hz) : 0.001973488850989688
+
+Type : mean (std)
+PN : 0.66 (0.31)
+PV : 22.42 (11.82)
+SOM : 3.24 (1.05)
+CR : 11.60 (1.47)
+saving case5_analysis.png
+loading case6/spikes.h5
+done
+loading case6/ecp.h5
+done
+plotting...
+analysis_hom.py:47: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  ax.set_ylim([0,0.1])
+
+Mean theta (8Hz-12Hz)  : 0.0003972246551384439
+Mean gamma (50Hz-60Hz) : 0.0012458354544598806
+
+Peak theta (8Hz-12Hz)  : 0.0004630253556223773
+Peak gamma (50Hz-60Hz) : 0.0024253734535069262
+
+Type : mean (std)
+PN : 0.67 (0.32)
+PV : 22.11 (10.71)
+SOM : 3.17 (1.08)
+CR : 11.78 (1.37)
+saving case6_analysis.png
+

@@ -2,7 +2,8 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
-scale=5
+scale=1
+maxtime = 15000
 
 def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     matlab_file = open(inp, 'r')
@@ -21,8 +22,10 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
     for line in lines:
         times = line.strip().split('\t')
         if len(times)==1 and times[0]=='':
+            count = count + 1
             continue # There were no spikes for this cell
-        
+        times = [int(time) for time in times if int(time) < maxtime]
+        times.sort()
         ids = [count for _ in range(len(times))]
 
         spikes_timestamps = spikes_timestamps + times
@@ -30,8 +33,8 @@ def convert(num_pn,inp='./spikesmatrix_op_ryt', out='../vpsi_inh_spikes.h5'):
              
         count = count + 1
  
-    nodes=np.array(spikes_node_ids).astype(np.int)
-    timestamps=np.array(spikes_timestamps).astype(np.float)
+    nodes=np.array(spikes_node_ids).astype(int)
+    timestamps=np.array(spikes_timestamps).astype(float)
 
     vpsi_spikes_vp.create_dataset("node_ids", data=nodes)
     vpsi_spikes_vp.create_dataset("timestamps", data=timestamps)

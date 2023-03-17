@@ -1,11 +1,15 @@
-from bmtk.builder import NetworkBuilder, network
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 import numpy as np
-from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
-from bmtk.utils.sim_setup import build_env_bionet
 import synapses
 import math
 import random
 import os, sys
+
+from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xiter_random
+from bmtk.utils.sim_setup import build_env_bionet
+from bmtk.builder import NetworkBuilder
 
 from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent_o2a, recurrent_connector_o2a)
@@ -16,7 +20,7 @@ network_dir = 'network'
 components_dir = 'components'
 t_sim = 15000.0
 dt = 0.05
-scale = 27
+scale = 1
 
 min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
@@ -64,11 +68,11 @@ if __name__ == '__main__':
         print('Building full network')
 
 #Scale the number of cells in each population
-numPN_A = numPN_A * scale #640 * scale #4114#15930
-numPN_C = numPN_C * scale #260 * scale #4115#6210
-numPV = numPV * scale #100 * scale #854#4860
-numSOM = numSOM * scale #42 * scale
-numCR = numCR * scale #42 * scale
+numPN_A = int(numPN_A * scale) #640 * scale #4114#15930
+numPN_C = int(numPN_C * scale) #260 * scale #4115#6210
+numPV = int(numPV * scale) #100 * scale #854#4860
+numSOM = int(numSOM * scale) #42 * scale
+numCR = int(numCR * scale) #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
 
 # Create the possible x,y,z coordinates
@@ -787,13 +791,13 @@ edge_add_properties = {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_dist_delay_feng_section,
         'rule_params':{'sec_x':0.9},
-        'dtypes':[np.float, np.int32, np.float]
+        'dtypes':[float, np.int32, float]
     },
     'syn_uniform_delay_section_default': {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_uniform_delay_section,
         'rule_params':{'sec_x':0.9},
-        'dtypes':[np.float, np.int32, np.float]
+        'dtypes':[float, np.int32, float]
     }
 }
 
@@ -964,4 +968,5 @@ build_env_bionet(base_dir='./',
                        ('shell','shell_spikes.h5')],
 	components_dir=components_dir,
         config_file='simulation_config.json',
-	compile_mechanisms=True)
+	compile_mechanisms=False,
+        overwrite_config=True)

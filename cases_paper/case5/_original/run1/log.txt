@@ -1,0 +1,71 @@
+2022-10-23 12:54:16,897 [INFO] Created log file
+2022-10-23 12:54:16,898 [INFO] Running NEURON with mpi (50 cores).
+2022-10-23 12:54:17,546 [INFO] Building cells.
+2022-10-23 12:54:17,711 [INFO] Building recurrent connections
+2022-10-23 12:54:21,333 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2022-10-23 12:54:22,693 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2022-10-23 12:54:22,871 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2022-10-23 12:54:24,318 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2022-10-23 12:54:24,318 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2022-10-23 12:54:24,318 [INFO] Block save every 5000 steps
+2022-10-23 12:54:29,309 [INFO]     step:5000 t_sim:250.00 ms
+2022-10-23 12:54:34,374 [INFO]     step:10000 t_sim:500.00 ms
+2022-10-23 12:54:39,553 [INFO]     step:15000 t_sim:750.00 ms
+2022-10-23 12:54:44,602 [INFO]     step:20000 t_sim:1000.00 ms
+2022-10-23 12:54:49,631 [INFO]     step:25000 t_sim:1250.00 ms
+2022-10-23 12:54:54,828 [INFO]     step:30000 t_sim:1500.00 ms
+2022-10-23 12:54:59,933 [INFO]     step:35000 t_sim:1750.00 ms
+2022-10-23 12:55:05,217 [INFO]     step:40000 t_sim:2000.00 ms
+2022-10-23 12:55:10,326 [INFO]     step:45000 t_sim:2250.00 ms
+2022-10-23 12:55:15,425 [INFO]     step:50000 t_sim:2500.00 ms
+2022-10-23 12:55:20,293 [INFO]     step:55000 t_sim:2750.00 ms
+2022-10-23 12:55:25,065 [INFO]     step:60000 t_sim:3000.00 ms
+2022-10-23 12:55:29,985 [INFO]     step:65000 t_sim:3250.00 ms
+2022-10-23 12:55:34,985 [INFO]     step:70000 t_sim:3500.00 ms
+2022-10-23 12:55:40,016 [INFO]     step:75000 t_sim:3750.00 ms
+2022-10-23 12:55:44,823 [INFO]     step:80000 t_sim:4000.00 ms
+2022-10-23 12:55:49,613 [INFO]     step:85000 t_sim:4250.00 ms
+2022-10-23 12:55:54,672 [INFO]     step:90000 t_sim:4500.00 ms
+2022-10-23 12:55:59,406 [INFO]     step:95000 t_sim:4750.00 ms
+2022-10-23 12:56:04,329 [INFO]     step:100000 t_sim:5000.00 ms
+2022-10-23 12:56:09,273 [INFO]     step:105000 t_sim:5250.00 ms
+2022-10-23 12:56:14,030 [INFO]     step:110000 t_sim:5500.00 ms
+2022-10-23 12:56:19,068 [INFO]     step:115000 t_sim:5750.00 ms
+2022-10-23 12:56:24,047 [INFO]     step:120000 t_sim:6000.00 ms
+2022-10-23 12:56:28,893 [INFO]     step:125000 t_sim:6250.00 ms
+2022-10-23 12:56:33,647 [INFO]     step:130000 t_sim:6500.00 ms
+2022-10-23 12:56:38,387 [INFO]     step:135000 t_sim:6750.00 ms
+2022-10-23 12:56:43,314 [INFO]     step:140000 t_sim:7000.00 ms
+2022-10-23 12:56:48,249 [INFO]     step:145000 t_sim:7250.00 ms
+2022-10-23 12:56:53,296 [INFO]     step:150000 t_sim:7500.00 ms
+2022-10-23 12:56:58,059 [INFO]     step:155000 t_sim:7750.00 ms
+2022-10-23 12:57:02,808 [INFO]     step:160000 t_sim:8000.00 ms
+2022-10-23 12:57:07,666 [INFO]     step:165000 t_sim:8250.00 ms
+2022-10-23 12:57:12,637 [INFO]     step:170000 t_sim:8500.00 ms
+2022-10-23 12:57:17,544 [INFO]     step:175000 t_sim:8750.00 ms
+2022-10-23 12:57:22,544 [INFO]     step:180000 t_sim:9000.00 ms
+2022-10-23 12:57:27,521 [INFO]     step:185000 t_sim:9250.00 ms
+2022-10-23 12:57:32,433 [INFO]     step:190000 t_sim:9500.00 ms
+2022-10-23 12:57:37,297 [INFO]     step:195000 t_sim:9750.00 ms
+2022-10-23 12:57:42,254 [INFO]     step:200000 t_sim:10000.00 ms
+2022-10-23 12:57:47,232 [INFO]     step:205000 t_sim:10250.00 ms
+2022-10-23 12:57:52,142 [INFO]     step:210000 t_sim:10500.00 ms
+2022-10-23 12:57:57,071 [INFO]     step:215000 t_sim:10750.00 ms
+2022-10-23 12:58:01,955 [INFO]     step:220000 t_sim:11000.00 ms
+2022-10-23 12:58:06,871 [INFO]     step:225000 t_sim:11250.00 ms
+2022-10-23 12:58:11,822 [INFO]     step:230000 t_sim:11500.00 ms
+2022-10-23 12:58:16,803 [INFO]     step:235000 t_sim:11750.00 ms
+2022-10-23 12:58:21,740 [INFO]     step:240000 t_sim:12000.00 ms
+2022-10-23 12:58:26,806 [INFO]     step:245000 t_sim:12250.00 ms
+2022-10-23 12:58:31,691 [INFO]     step:250000 t_sim:12500.00 ms
+2022-10-23 12:58:36,629 [INFO]     step:255000 t_sim:12750.00 ms
+2022-10-23 12:58:41,597 [INFO]     step:260000 t_sim:13000.00 ms
+2022-10-23 12:58:46,460 [INFO]     step:265000 t_sim:13250.00 ms
+2022-10-23 12:58:51,391 [INFO]     step:270000 t_sim:13500.00 ms
+2022-10-23 12:58:56,442 [INFO]     step:275000 t_sim:13750.00 ms
+2022-10-23 12:59:01,260 [INFO]     step:280000 t_sim:14000.00 ms
+2022-10-23 12:59:06,167 [INFO]     step:285000 t_sim:14250.00 ms
+2022-10-23 12:59:11,061 [INFO]     step:290000 t_sim:14500.00 ms
+2022-10-23 12:59:16,045 [INFO]     step:295000 t_sim:14750.00 ms
+2022-10-23 12:59:20,987 [INFO]     step:300000 t_sim:15000.00 ms
+2022-10-23 12:59:23,657 [INFO] Simulation completed in 4.0 minutes, 59.34 seconds 

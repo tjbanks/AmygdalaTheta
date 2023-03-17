@@ -1,7 +1,42 @@
 # Amygdala Theta
-#### Code by Tyler Banks and Matthew Stroud. In partnership with Unal Lab (Tuna and Unal)
+#### Code by Tyler Banks. In partnership with Unal Lab (Tuna and Unal)
 Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
+## Core Neuron Update
+
+
+```
+cd ./components/mechanisms
+nrnivmodl -coreneuron modfiles
+cd -
+./components/mechanisms/x86_64/special run_network.py simulation_configECP_base.json
+
+# Running with MPI
+mpiexec -n 8 ./components/mechanisms/x86_64/special -mpi run_network.py simulation_configECP_base.json
+
+```
+
+## Installing the environment
+```
+## See https://github.com/BlueBrain/CoreNeuron
+module load mpi/mpich-x86_64 # also add to your .bashrc
+git config --global core.autocrlf input
+cd
+python3.9 venv neuro-venv
+source neuro-venv/bin/activate #place in your .bashrc
+mkdir -p core_nrn_install/install
+cd core_nrn_install
+git clone https://github.com/neuronsimulator/nrn
+cd nrn
+mkdir build
+cd build
+cmake ..  -DNRN_ENABLE_CORENEURON=ON -DCORENRN_ENABLE_NMODL=ON  -DNRN_ENABLE_INTERVIEWS=OFF  -DNRN_ENABLE_MPI=ON  -DNRN_ENABLE_RX3D=OFF  -DCMAKE_INSTALL_PREFIX=${HOME}/core_nrn_install/install -DPYTHON_EXECUTABLE=$(which python) -DCMAKE_C_COMPILER=$(which cc) -DCMAKE_CXX_COMPILER=$(which c++)
+cmake --build . --parallel 8 --target install
+
+Add the following to your bashrc
+export PYTHONPATH=$HOME/core_nrn_install/install/lib/python:$PYTHONPATH
+export PATH=$HOME/core_nrn_install/install/bin:$PATH
+```
 
 ## Running the Model
 

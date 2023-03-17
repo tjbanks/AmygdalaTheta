@@ -15,13 +15,16 @@ nrn_load_dll("./components/mechanisms/nrnmech.dll")
 
 // Load Template(s) (some may not be needed if a folder was specified and may cause problems, remove as needed)
 //{load_file("./components/templates/templates.hoc")}
-{load_file("./components/templates/feng_typeC.hoc")}
+//{load_file("./components/templates/feng_typeC.hoc")}
+{load_file("./components/templates/feng.hoc")}
 
 tstop = 250
 v_init = -65
 objref Cell // declare the primary cell object
 //Cell = new Cell_C() // build the neuron from template
-Cell = new feng_typeC()
+//Cell = new feng_typeC()
+Cell = new Cell_Cf()
+Cell.insert_mechs(123) // COMMENT TO DISABLE 
 
 NumClamps = 1
 NumStims = 0

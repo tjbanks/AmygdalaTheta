@@ -40,14 +40,18 @@
   "output": {
     "log_file": "log.txt",
     "output_dir": "$OUTPUT_DIR",
-    "spikes_file": "spikes.h5"
+    "spikes_file": "spikes.h5",
+    "spikes_file_csv": "spikes.csv",
+    "spikes_sort_order": "time",
+    "overwrite_output_dir": true
   },
   "reports": {
 
     "ecp": {
       "cells": "all",
       "variable_name": "v",
-      "module": "extracellular",
+      "module": "ecp",
+      "tmp_dir": "outputECP",
       "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"

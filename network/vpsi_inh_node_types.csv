@@ -1,2 +1,2 @@
-node_type_id model_type pop_name pop_group
-100 virtual inh_inp vpsi_inh
+node_type_id pop_name pop_group model_type
+100 inh_inp vpsi_inh virtual

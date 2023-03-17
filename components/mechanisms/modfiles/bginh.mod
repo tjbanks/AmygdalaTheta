@@ -22,7 +22,7 @@ UNITS {
         (nA) = (nanoamp)
 	(uS) = (microsiemens)
 	FARADAY = 96485 (coul)
-	pi = 3.141592 (1)
+	pilocal = 3.141592 (1)
 }
 
 PARAMETER {
@@ -152,7 +152,7 @@ INITIAL {
 	dW_gaba = 0
 
 	capoolcon = Cainf
-	Afactor	= 1/(z*FARADAY*4/3*pi*(pooldiam/2)^3)*(1e6)
+	Afactor	= 1/(z*FARADAY*4/3*pilocal*(pooldiam/2)^3)*(1e6)
 
 	fa =0
 	F = 1
@@ -183,9 +183,9 @@ if ((eta(capoolcon)*(lambda1*omega(capoolcon, threshold1, threshold2)-lambda2*GA
 	    if (neuroM==1) {
 	g_gaba = gbar_gaba*r_gaba*facfactor*DA1(DAstart1,DAstop1)*DA2(DAstart2,DAstop2)   : Dopamine effect on GABA	
 	} else if (neuroM==2) {
-	g_gaba = gbar_gaba*r_gaba*facfactor*NEn(NEstart1,NEstop1)*NE2(NEstart2,NEstop2)   : Norepinephrine effect on GABA		    	
+	g_gaba = gbar_gaba*r_gaba*facfactor*NEn(NEstart1,NEstop1)*NE2(NEstart2,NEstop2)   : Norepilocalnephrine effect on GABA		    	
 	} else if (neuroM==3) {
-	g_gaba = gbar_gaba*r_gaba*facfactor*DA1(DAstart1,DAstop1)*DA2(DAstart2,DAstop2)*NEn(NEstart1,NEstop1)*NE2(NEstart2,NEstop2)   : Dopamine & Norepinephrine effect on GABA		    
+	g_gaba = gbar_gaba*r_gaba*facfactor*DA1(DAstart1,DAstop1)*DA2(DAstart2,DAstop2)*NEn(NEstart1,NEstop1)*NE2(NEstart2,NEstop2)   : Dopamine & Norepilocalnephrine effect on GABA		    
 	} else {
 	g_gaba = gbar_gaba*r_gaba*facfactor
 	}
@@ -193,7 +193,7 @@ if ((eta(capoolcon)*(lambda1*omega(capoolcon, threshold1, threshold2)-lambda2*GA
     igaba = W*g_gaba*(v - Erev_gaba)
 
 	ICag = P0g*g_gaba*(v - eca)	
-	Icatotal = ICag + k*ica*4*pi*((15/2)^2)*(0.01)    :  icag+k*ica*Area of soma*unit change
+	Icatotal = ICag + k*ica*4*pilocal*((15/2)^2)*(0.01)    :  icag+k*ica*Area of soma*unit change
 
 	
 }
@@ -210,7 +210,7 @@ DERIVATIVE release {
 }
 
 NET_RECEIVE(dummy_weight) {
-      if (flag==0) {           :a spike arrived, start onset state if not already on
+      if (flag==0) {           :a spilocalke arrived, start onset state if not already on
          if ((!on_gaba)){       :this synpase joins the set of synapses in onset state
            t0=t
 	      on_gaba=1		
@@ -225,7 +225,7 @@ NET_RECEIVE(dummy_weight) {
     }
 	
 if (flag == 0) {  : Short term plasticity was implemented(Varela et. al 1997):
-	rp = unirand()	
+	:rp = unirand()	
 	
 	:F  = 1 + (F-1)* exp(-(t - tsyn)/tauF)
 	D1 = 1 - (1-D1)*exp(-(t - tsyn)/tauD1)
@@ -620,6 +620,6 @@ FUNCTION GAP1(GAPstart1 (ms), GAPstop1 (ms)) {
 	else if (t >= GAPstop1 ) {GAP1 = 1}					: During the Gap, apply lamda2*2
 	else  {	GAP1 = 1}
 }
-FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
-}
+:FUNCTION unirand() {    : uniform random numbers between 0 and 1
+:        unirand = scop_random()
+:}

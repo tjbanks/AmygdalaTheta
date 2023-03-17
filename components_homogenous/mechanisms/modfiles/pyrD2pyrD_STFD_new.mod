@@ -22,7 +22,7 @@ UNITS {
         (nA) = (nanoamp)
 	(uS) = (microsiemens)
 	FARADAY = 96485 (coul)
-	pi = 3.141592 (1)
+	pilocal = 3.141592 (1)
 }
 
 PARAMETER {
@@ -147,7 +147,7 @@ INITIAL {
 	dW_ampa = 0
 
 	capoolcon = Cainf
-	Afactor	= 1/(z*FARADAY*4/3*pi*(pooldiam/2)^3)*(1e6)
+	Afactor	= 1/(z*FARADAY*4/3*pilocal*(pooldiam/2)^3)*(1e6)
 
 	fa =0
 	F = 1
@@ -227,6 +227,9 @@ NET_RECEIVE(dummy_weight) {
     }
 	         
 	if (flag == 0) {   : Short term plasticity was implemented(Varela et. al 1997):
+
+	rp = unirand()	
+
 	D1 = 1 - (1-D1)*exp(-(t - tsyn)/tauD1)
 	D2 = 1 - (1-D2)*exp(-(t - tsyn)/tauD2)
 	tsyn = t
@@ -433,5 +436,5 @@ FUNCTION DA2(DAstart2 (ms), DAstop2 (ms)) {
 		else  {	DA2 = 1.0}
 }
 FUNCTION unirand() {    : uniform random numbers between 0 and 1
-        unirand = scop_random()
+        unirand = 0
 }

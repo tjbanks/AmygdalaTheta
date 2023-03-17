@@ -3,15 +3,22 @@ A python implementation of matlab/analysis.m
 
 TB - 8/4/21
 """
-
-from scipy.signal import hanning,welch,decimate
+from scipy.signal.windows import hann as hanning
+from scipy.signal import welch,decimate
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-scale = 5
+try:
+    import scienceplots
+    plt.style.use('science')
+    #plt.style.use(['science','ieee'])
+except:
+    print("SciencePlots not installed")
+
+scale = 1
 
 def raster(spikes_df,node_set,skip_ms=0,ax=None):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms] 
