@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from spike_trains_original import PoissonSpikeGenerator
-from bmtools.cli.plugins.util.util import relation_matrix
+from bmtool.util.util import relation_matrix
 from build_input import lognorm_fr_list
 
 psg = None

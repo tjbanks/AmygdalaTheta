@@ -26,7 +26,7 @@ min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
 
 # When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = True 
+edge_effects = False#True 
 net_size = 1000#um
 
 #Number of cells in each population
