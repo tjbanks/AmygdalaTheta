@@ -10,7 +10,7 @@
 #SBATCH --time 0-48:00
 
 START=$(date)
-python build_network.py
+python build_network.py homogenous
 END=$(date)
 
 echo "Done running build at $(date)"

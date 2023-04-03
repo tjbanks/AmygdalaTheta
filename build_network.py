@@ -20,13 +20,13 @@ network_dir = 'network'
 components_dir = 'components'
 t_sim = 15000.0
 dt = 0.05
-scale = 1
+scale = 5
 
 min_conn_dist = 0.0
 max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
 
 # When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = False#True 
+edge_effects = True 
 net_size = 1000#um
 
 #Number of cells in each population
@@ -370,7 +370,9 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
             }
         ]
     }
-
+    for cell in shell_network['cells']:
+        print(f"Number of shell {cell['pop_name']} cells to be built: {cell['N']}")
+    print(f"Total shell cells: {sum([cell['N'] for cell in shell_network['cells']])}")
     # Add the shell to our network definitions
     network_definitions.append(shell_network)
 
@@ -933,27 +935,6 @@ build_edges(networks, edge_definitions,edge_params,edge_add_properties,syn)
 # Save the network into the appropriate network dir
 save_networks(networks,network_dir)
 
-if edge_effects:
-    from build_input_shell import build_shell_inputs
-    
-    # This needs to be called after building and saving your networks
-    # There's an optimization in there that determines which shells in the 
-    # shell are connected to bio cells, and only delivers a spike train to
-    # those, excluding others and speeding up the simulation. 
-    # Since edges are semi-random, we want to deliver to the correct cells
-    # each time.
-    build_shell_inputs() 
-
-from build_input import build_input
-
-build_input(t_sim, 
-            numPN_A = numPN_A,
-            numPN_C = numPN_C,
-            numPV = numPV,
-            numSOM = numSOM,
-            numCR = numCR,
-            scale = scale)
-
 # Usually not necessary if you've already built your simulation config
 build_env_bionet(base_dir='./',
 	network_dir=network_dir,
@@ -970,3 +951,24 @@ build_env_bionet(base_dir='./',
         config_file='simulation_config.json',
 	compile_mechanisms=False,
         overwrite_config=True)
+
+if edge_effects:
+    from build_input_shell import build_shell_inputs
+
+    # This needs to be called after building and saving your networks
+    # There's an optimization in there that determines which shells in the
+    # shell are connected to bio cells, and only delivers a spike train to
+    # those, excluding others and speeding up the simulation.
+    # Since edges are semi-random, we want to deliver to the correct cells
+    # each time.
+    build_shell_inputs()
+
+from build_input import build_input
+
+build_input(t_sim,
+            numPN_A = numPN_A,
+            numPN_C = numPN_C,
+            numPV = numPV,
+            numSOM = numSOM,
+            numCR = numCR,
+            scale = scale)

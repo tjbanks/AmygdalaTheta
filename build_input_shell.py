@@ -40,7 +40,7 @@ def add_inputs(**kwargs):
     return 
     
 
-def build_shell_inputs(config='simulation_configECP.json'):
+def build_shell_inputs(config='simulation_config.json'):
 
     population = 'shell'    
     
