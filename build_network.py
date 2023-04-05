@@ -1,6 +1,8 @@
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+import cProfile
+import pstats
 import numpy as np
 import synapses
 import math
@@ -13,6 +15,11 @@ from bmtk.builder import NetworkBuilder
 
 from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent_o2a, recurrent_connector_o2a)
+
+from connectors import init_connectors
+
+profiler = cProfile.Profile()
+profiler.enable()
 
 np.random.seed(123412)
 
@@ -57,7 +64,7 @@ if __name__ == '__main__':
     elif 'homogenous' in sys.argv:
         network_dir = network_dir + '_homogenous'
         components_dir = components_dir + '_homogenous'
-        scale = 1
+        scale = 3
         max_conn_dist = 9999.9
         edge_effects = False
         net_size = 600
@@ -74,6 +81,8 @@ numPV = int(numPV * scale) #100 * scale #854#4860
 numSOM = int(numSOM * scale) #42 * scale
 numCR = int(numCR * scale) #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
+
+init_connectors(num_cells)
 
 # Create the possible x,y,z coordinates
 x_start, x_end = 0+max_conn_dist,net_size+max_conn_dist
@@ -972,3 +981,7 @@ build_input(t_sim,
             numSOM = numSOM,
             numCR = numCR,
             scale = scale)
+
+
+profile_stats = pstats.Stats(profiler).sort_stats('tottime')
+profile_stats.print_stats(100)

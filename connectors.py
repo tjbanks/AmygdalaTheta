@@ -3,7 +3,11 @@ import pandas as pd
 import random
 import math
 
-all_synapses = pd.DataFrame([],columns=['source_gid','target_gid'])
+all_synapses = None
+
+def init_connectors(total_cells):
+    global all_synapses
+    all_synapses = np.zeros([total_cells,total_cells], dtype=bool)
 
 ##############################################################################
 ############################## CONNECT CELLS #################################
@@ -109,11 +113,14 @@ def syn_percent(source,target,p,track_list=None):
         return None
 
     # Do not add synapses if they already exist, we don't want duplicates
-    if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+    #if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+    #    return None
+    if all_synapses[sid][tid]:
         return None
 
     if random.random() < p:
-        all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
+        #all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
+        all_synapses[sid][tid] = True
         if track_list is not None:#we only want to track synapses that may have a recurrent connection, will speed up build time considerably
             track_list.append({'source_gid':source['node_id'],'target_gid':target['node_id']})        
         return 1
@@ -149,8 +156,8 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
         return syns
 
     #Get all existing targets for that source that can't be targetted here
-    existing = all_synapses[all_synapses.source_gid == sid]
-    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+    existing = all_synapses[sid]
+    existing_list = list(np.where(np.any(all_synapses[0]==True, axis=0))[0])
 
     #remove existing synapses from available list
     available = tids.copy()
@@ -202,10 +209,10 @@ def syn_percent_o2a(source,targets,p,track_list=None,no_recip=False, autapses_al
     mask = np.isin(tids,chosen)
     syns[mask] = 1
     #Add to lists
-    new_syns = pd.DataFrame(chosen,columns=['target_gid'])
-    new_syns['source_gid'] = sid
-    all_synapses = all_synapses.append(new_syns,ignore_index=True)
-
+    #new_syns = pd.DataFrame(chosen,columns=['target_gid'])
+    #new_syns['source_gid'] = sid
+    
+    all_synapses[sid][chosen] = True
     if track_list is not None:
         #track_list = track_list.append(new_syns,ignore_index=True)
         for target in chosen:
@@ -230,8 +237,8 @@ def syn_percent_o2a_old(source,targets,p,track_list=None,no_recip=False, angle_d
     syns = np.array([0 for _ in range(len(targets))])
 
     #Get all existing targets for that source that can't be targetted here
-    existing = all_synapses[all_synapses.source_gid == sid]
-    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+    existing = all_synapses[sid]
+    existing_list = list(np.where(np.any(all_synapses[0]==True, axis=0))[0])
 
     #remove existing synapses from available list
     available = tids.copy()
@@ -312,7 +319,7 @@ def syn_percent_o2a_old(source,targets,p,track_list=None,no_recip=False, angle_d
     #Add to lists
     new_syns = pd.DataFrame(chosen,columns=['target_gid'])
     new_syns['source_gid'] = sid
-    all_synapses = all_synapses.append(new_syns,ignore_index=True)
+    all_synapses[sid][new_syns] = True
 
     if track_list is not None:
         #track_list = track_list.append(new_syns,ignore_index=True)
@@ -337,16 +344,19 @@ def recurrent_connector(source,target,p,all_edges=[],min_syn=1, max_syn=1):
     tid = target.node_id
     
     # Do not add synapses if they already exist, we don't want duplicates
-    if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+    #if ((all_synapses.source_gid == sid) & (all_synapses.target_gid == tid)).any():
+    #    return None
+    if all_synapses[sid][tid]:
         return None
-    
+
     for e in all_edges: #should probably make this a pandas df to speed up building... and use .any() to search
         if sid == e['target_gid'] and tid == e['source_gid']:
             #print('found recurrent')
 
             if random.random() < p:
                 #print('--------------connecting')
-                all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
+                #all_synapses = all_synapses.append({'source_gid':sid,'target_gid':tid},ignore_index=True)
+                all_synapses[sid][tid] = True
                 return random.randint(min_syn,max_syn)
             else:
                 return 0
@@ -361,8 +371,10 @@ def recurrent_connector_o2a(source,targets,p,all_edges=[],min_syn=1,max_syn=1):
     #List of synapses that will be returned, initialized to 0 synapses
     syns = np.array([0 for _ in range(len(targets))])
 
-    existing = all_synapses[all_synapses.source_gid == sid]
-    existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+    #existing = all_synapses[all_synapses.source_gid == sid]
+    #existing_list = existing[existing.target_gid.isin(tids)].target_gid.tolist()
+    existing = all_synapses[sid]
+    existing_list = list(np.where(np.any(all_synapses[0]==True, axis=0))[0]) 
 
     #remove existing synapses from available list
     available = tids.copy()
@@ -378,13 +390,13 @@ def recurrent_connector_o2a(source,targets,p,all_edges=[],min_syn=1,max_syn=1):
     extra = 1 if random.random() < (p*100 - math.floor(p*100)) else 0
     n = n + extra #This will account for half percentages
     chosen = np.random.choice(available,size=n,replace=False) 
-
-    syns[np.isin(tids,chosen)] = 1
+    mask = np.isin(tids,chosen)
+    syns[mask] = 1
     
     #Add to lists
-    new_syns = pd.DataFrame(chosen,columns=['target_gid'])
-    new_syns['source_gid'] = sid
-    all_synapses = all_synapses.append(new_syns,ignore_index=True)
-
+    #new_syns = pd.DataFrame(chosen,columns=['target_gid'])
+    #new_syns['source_gid'] = sid
+    #all_synapses = all_synapses.append(new_syns,ignore_index=True)
+    all_synapses[sid][chosen] = True
     #any index selected will be set to 1 and returned
     return syns
