@@ -52,16 +52,19 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None):
     peak_theta = theta.max() 
     mean_gamma = gamma.mean()
     peak_gamma = gamma.max()
-    print('')
-    print("Mean theta (8Hz-12Hz)  : " + str(mean_theta))
-    print("Mean gamma (50Hz-60Hz) : " + str(mean_gamma))     
-    print('')
-    print("Peak theta (8Hz-12Hz)  : " + str(peak_theta))
-    print("Peak gamma (50Hz-60Hz) : " + str(peak_gamma))
-    print('')
+    text = f"""
+    
+Mean theta (8Hz-12Hz)  : {str(round(mean_theta,8))}
+Mean gamma (50Hz-60Hz) : {str(round(mean_gamma,8))} 
+    
+Peak theta (8Hz-12Hz)  : {str(round(peak_theta,8))}
+Peak gamma (50Hz-60Hz) : {str(round(peak_gamma,8))}
+    
+    """
+    return text
 
 def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10):
-    print("Type : mean (std)")
+    return_text = "Type : mean (std)\n"
     for node in node_set:
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
@@ -76,7 +79,8 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         spikes_std = spike_counts_per_second.std()
         
         label = "{} : {:.2f} ({:.2f})".format(node['name'],spikes_mean,spikes_std)
-        print(label)
+        #print(label)
+        return_text = return_text + label + '\n'
         c = "tab:" + node['color']
         if ax:
             ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label,color=c)
@@ -84,9 +88,9 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         ax.set_xscale('log')
         ax.legend() 
         
-        
+    return return_text 
 
-def run(show_plots=False,save_plots=False):
+def run(show_plots=False,save_plots=False,slack=True):
     
 
     dt = 0.05
@@ -123,8 +127,10 @@ def run(show_plots=False,save_plots=False):
         print("plotting...")
         fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(15,4.8))#6.4,4.8 default
         fig.suptitle('Amygdala Theta Analysis')
-        ecp_psd(ecp, skip_n=skip_n, ax=ax2)
-        spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,ax=ax3)
+        output_text = ecp_psd(ecp, skip_n=skip_n, ax=ax2)
+        sfh_text = spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,ax=ax3)
+        output_text = output_text + sfh_text
+        print(output_text)
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax1)
         if save_plots:
             f_name = 'analysis.png'
@@ -134,7 +140,11 @@ def run(show_plots=False,save_plots=False):
             print("showing plots...")
             fig.tight_layout()
             plt.show()
-         
+        if slack:
+            import upload_analysis_slack
+            import subprocess
+            output_text = output_text + '\n\n' + str(subprocess.check_output(['git', 'diff', 'components_homogenous/synaptic_models/']))
+            upload_analysis_slack.upload(output_text)
     else:
         spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms)
 
