@@ -41,14 +41,15 @@
     "ecp": {
       "cells": "all",
       "variable_name": "v",
-      "module": "extracellular",
+      "module": "ecp",
+      "tmp_dir": "/home/tbg28/git_stage/AmygdalaTheta/outputECP",
       "electrode_positions": "/home/tbg28/git_stage/AmygdalaTheta/components_homogenous/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"
     }
   },
   "node_sets_file": "/home/tbg28/git_stage/AmygdalaTheta/node_sets.json",
-  "network": "/home/tbg28/git_stage/AmygdalaTheta/circuit_config.json",
+  "network": "/home/tbg28/git_stage/AmygdalaTheta/circuit_config_homogenous.json",
   "config_path": "/home/tbg28/git_stage/AmygdalaTheta/simulation_configECP_base_homogenous.json",
   "config_dir": "/home/tbg28/git_stage/AmygdalaTheta",
   "components": {
@@ -75,10 +76,6 @@
         "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pyr_node_types.csv"
       },
       {
-        "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pv_nodes.h5",
-        "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pv_node_types.csv"
-      },
-      {
         "nodes_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_nodes.h5",
         "node_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_node_types.csv"
       },
@@ -89,28 +86,24 @@
     ],
     "edges": [
       {
-        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_cr_BLA_edge_types.csv",
-        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_cr_BLA_edges.h5"
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_BLA_edge_types.csv",
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_BLA_edges.h5"
       },
       {
         "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/BLA_BLA_edge_types.csv",
         "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/BLA_BLA_edges.h5"
       },
       {
-        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_BLA_edge_types.csv",
-        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_som_BLA_edges.h5"
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/vpsi_inh_BLA_edge_types.csv",
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/vpsi_inh_BLA_edges.h5"
       },
       {
-        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pv_BLA_edge_types.csv",
-        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pv_BLA_edges.h5"
+        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_cr_BLA_edge_types.csv",
+        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_cr_BLA_edges.h5"
       },
       {
         "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pyr_BLA_edge_types.csv",
         "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/thalamus_pyr_BLA_edges.h5"
-      },
-      {
-        "edge_types_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/vpsi_inh_BLA_edge_types.csv",
-        "edges_file": "/home/tbg28/git_stage/AmygdalaTheta/network_homogenous/vpsi_inh_BLA_edges.h5"
       }
     ],
     "gap_juncs": []

@@ -64,7 +64,7 @@ if __name__ == '__main__':
     elif 'homogenous' in sys.argv:
         network_dir = network_dir + '_homogenous'
         components_dir = components_dir + '_homogenous'
-        scale = 3
+        scale = 1
         max_conn_dist = 9999.9
         edge_effects = False
         net_size = 600
