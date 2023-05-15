@@ -1,72 +1,15 @@
-2022-11-01 11:12:40,110 [INFO] Created log file
-2022-11-01 11:12:40,112 [INFO] Running NEURON with mpi (50 cores).
-2022-11-01 11:12:40,751 [INFO] Building cells.
-2022-11-01 11:12:40,918 [INFO] Building recurrent connections
-2022-11-01 11:12:44,313 [INFO] Building virtual cell stimulations for vpsi_inh_spikes
-2022-11-01 11:13:08,851 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
-2022-11-01 11:13:10,150 [INFO] Building virtual cell stimulations for thalamus_som_spikes
-2022-11-01 11:13:10,322 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
-2022-11-01 11:13:11,547 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
-2022-11-01 11:13:11,547 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
-2022-11-01 11:13:11,547 [INFO] Block save every 5000 steps
-2022-11-01 11:13:16,186 [INFO]     step:5000 t_sim:250.00 ms
-2022-11-01 11:13:21,004 [INFO]     step:10000 t_sim:500.00 ms
-2022-11-01 11:13:25,888 [INFO]     step:15000 t_sim:750.00 ms
-2022-11-01 11:13:30,630 [INFO]     step:20000 t_sim:1000.00 ms
-2022-11-01 11:13:35,881 [INFO]     step:25000 t_sim:1250.00 ms
-2022-11-01 11:13:40,760 [INFO]     step:30000 t_sim:1500.00 ms
-2022-11-01 11:13:45,540 [INFO]     step:35000 t_sim:1750.00 ms
-2022-11-01 11:13:50,841 [INFO]     step:40000 t_sim:2000.00 ms
-2022-11-01 11:13:55,533 [INFO]     step:45000 t_sim:2250.00 ms
-2022-11-01 11:14:00,452 [INFO]     step:50000 t_sim:2500.00 ms
-2022-11-01 11:14:05,219 [INFO]     step:55000 t_sim:2750.00 ms
-2022-11-01 11:14:10,093 [INFO]     step:60000 t_sim:3000.00 ms
-2022-11-01 11:14:15,010 [INFO]     step:65000 t_sim:3250.00 ms
-2022-11-01 11:14:19,701 [INFO]     step:70000 t_sim:3500.00 ms
-2022-11-01 11:14:24,463 [INFO]     step:75000 t_sim:3750.00 ms
-2022-11-01 11:14:29,311 [INFO]     step:80000 t_sim:4000.00 ms
-2022-11-01 11:14:34,145 [INFO]     step:85000 t_sim:4250.00 ms
-2022-11-01 11:14:39,106 [INFO]     step:90000 t_sim:4500.00 ms
-2022-11-01 11:14:43,850 [INFO]     step:95000 t_sim:4750.00 ms
-2022-11-01 11:14:48,792 [INFO]     step:100000 t_sim:5000.00 ms
-2022-11-01 11:14:53,846 [INFO]     step:105000 t_sim:5250.00 ms
-2022-11-01 11:14:58,908 [INFO]     step:110000 t_sim:5500.00 ms
-2022-11-01 11:15:03,848 [INFO]     step:115000 t_sim:5750.00 ms
-2022-11-01 11:15:08,673 [INFO]     step:120000 t_sim:6000.00 ms
-2022-11-01 11:15:13,611 [INFO]     step:125000 t_sim:6250.00 ms
-2022-11-01 11:15:18,592 [INFO]     step:130000 t_sim:6500.00 ms
-2022-11-01 11:15:23,445 [INFO]     step:135000 t_sim:6750.00 ms
-2022-11-01 11:15:28,347 [INFO]     step:140000 t_sim:7000.00 ms
-2022-11-01 11:15:33,291 [INFO]     step:145000 t_sim:7250.00 ms
-2022-11-01 11:15:38,172 [INFO]     step:150000 t_sim:7500.00 ms
-2022-11-01 11:15:43,200 [INFO]     step:155000 t_sim:7750.00 ms
-2022-11-01 11:15:48,132 [INFO]     step:160000 t_sim:8000.00 ms
-2022-11-01 11:15:52,942 [INFO]     step:165000 t_sim:8250.00 ms
-2022-11-01 11:15:57,877 [INFO]     step:170000 t_sim:8500.00 ms
-2022-11-01 11:16:02,901 [INFO]     step:175000 t_sim:8750.00 ms
-2022-11-01 11:16:08,022 [INFO]     step:180000 t_sim:9000.00 ms
-2022-11-01 11:16:12,954 [INFO]     step:185000 t_sim:9250.00 ms
-2022-11-01 11:16:17,937 [INFO]     step:190000 t_sim:9500.00 ms
-2022-11-01 11:16:23,028 [INFO]     step:195000 t_sim:9750.00 ms
-2022-11-01 11:16:28,023 [INFO]     step:200000 t_sim:10000.00 ms
-2022-11-01 11:16:33,018 [INFO]     step:205000 t_sim:10250.00 ms
-2022-11-01 11:16:38,085 [INFO]     step:210000 t_sim:10500.00 ms
-2022-11-01 11:16:43,060 [INFO]     step:215000 t_sim:10750.00 ms
-2022-11-01 11:16:48,075 [INFO]     step:220000 t_sim:11000.00 ms
-2022-11-01 11:16:53,113 [INFO]     step:225000 t_sim:11250.00 ms
-2022-11-01 11:16:58,072 [INFO]     step:230000 t_sim:11500.00 ms
-2022-11-01 11:17:03,189 [INFO]     step:235000 t_sim:11750.00 ms
-2022-11-01 11:17:08,228 [INFO]     step:240000 t_sim:12000.00 ms
-2022-11-01 11:17:13,152 [INFO]     step:245000 t_sim:12250.00 ms
-2022-11-01 11:17:18,173 [INFO]     step:250000 t_sim:12500.00 ms
-2022-11-01 11:17:23,274 [INFO]     step:255000 t_sim:12750.00 ms
-2022-11-01 11:17:28,161 [INFO]     step:260000 t_sim:13000.00 ms
-2022-11-01 11:17:33,138 [INFO]     step:265000 t_sim:13250.00 ms
-2022-11-01 11:17:38,148 [INFO]     step:270000 t_sim:13500.00 ms
-2022-11-01 11:17:43,108 [INFO]     step:275000 t_sim:13750.00 ms
-2022-11-01 11:17:48,065 [INFO]     step:280000 t_sim:14000.00 ms
-2022-11-01 11:17:53,082 [INFO]     step:285000 t_sim:14250.00 ms
-2022-11-01 11:17:57,983 [INFO]     step:290000 t_sim:14500.00 ms
-2022-11-01 11:18:02,968 [INFO]     step:295000 t_sim:14750.00 ms
-2022-11-01 11:18:07,977 [INFO]     step:300000 t_sim:15000.00 ms
-2022-11-01 11:18:10,638 [INFO] Simulation completed in 4.0 minutes, 59.09 seconds 
+2023-04-19 14:43:55,096 [INFO] Created log file
+2023-04-19 14:43:55,096 [INFO] Running NEURON with mpi (24 cores).
+2023-04-19 14:43:55,257 [INFO] Building cells.
+2023-04-19 14:43:55,304 [INFO] Building recurrent connections
+2023-04-19 14:43:56,506 [INFO] Running core neuron sim
+2023-04-19 14:43:56,506 [INFO] Building virtual cell stimulations for vpsi_inh_spikes
+2023-04-19 14:43:56,700 [INFO] Building virtual cell stimulations for thalamus_pyr_spikes
+2023-04-19 14:43:56,929 [INFO] Building virtual cell stimulations for thalamus_som_spikes
+2023-04-19 14:43:56,939 [INFO] Building virtual cell stimulations for thalamus_cr_spikes
+2023-04-19 14:43:56,957 [WARNING] Unrecognized module ecp, skipping.
+2023-04-19 14:43:56,995 [INFO] Running simulation for 15000.000 ms with the time step 0.050 ms
+2023-04-19 14:43:56,995 [INFO] Starting timestep: 0 at t_sim: 0.000 ms
+2023-04-19 14:43:56,995 [INFO] Block save every 5000 steps
+2023-04-19 14:48:09,778 [INFO] Node saving CoreECP Report to ecp.h5
+2023-04-19 14:49:02,784 [INFO] Simulation completed in 5.0 minutes, 5.789 seconds 

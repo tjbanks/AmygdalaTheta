@@ -78,7 +78,7 @@
       "cells": "all",
       "variable_name": "v",
       "module": "ecp",
-      "tmp_dir": "$OUTPUT_DR",
+      "tmp_dir": "$OUTPUT_DIR",
       "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "file_name": "ecp.h5",
       "electrode_channels": "all"
