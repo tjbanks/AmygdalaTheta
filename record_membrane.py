@@ -1,6 +1,7 @@
 import neuron
 from neuron import h
 import numpy as np
+import pandas as pd
 
 def new_cell(cell_name):
     # Get the cell by name
@@ -8,19 +9,23 @@ def new_cell(cell_name):
     cell = invoke_cell()
     return cell
 
-def main(hoc_file, mechanisms_dir, cell_name, currents=[], i_clamp_dur=300, i_clamp_delay=10, v_init=-70, tstop=400):
+def main(hoc_files, mechanisms_dir, cell_names, currents=[], i_clamp_dur=300, i_clamp_delay=10, v_init=-70, tstop=400):
         # Load mechs
         neuron.load_mechanisms(mechanisms_dir)
         # Load the standard hoc file
         h.load_file('stdrun.hoc')
-        # Load the .hoc file
-        h.load_file(hoc_file)
+        for hoc_file in hoc_files:
+            # Load the .hoc file
+            h.load_file(hoc_file)
 
         cells = []
         mem_potentials = []
         i_clamps = []
 
-        for current in currents:
+        if type(cell_names) == str:
+              cell_names = [cell_names]*len(currents)
+
+        for cell_name, current in zip(cell_names, currents):
             cell = new_cell(cell_name)
             recording_section = cell.soma[0](0.5)
 
@@ -37,7 +42,7 @@ def main(hoc_file, mechanisms_dir, cell_name, currents=[], i_clamp_dur=300, i_cl
             mem_potentials.append(mem_potential)
             i_clamps.append(i_clamp)
         
-        steps_per_ms = 5000 / 600
+        steps_per_ms = 10
         h.steps_per_ms = steps_per_ms
         h.dt = 1 / steps_per_ms
         h.tstop = tstop
@@ -46,11 +51,13 @@ def main(hoc_file, mechanisms_dir, cell_name, currents=[], i_clamp_dur=300, i_cl
 
         potentials = [list(v) for v in mem_potentials]
         potentials = np.array(potentials).T
+        potentials_df = pd.DataFrame(potentials,columns=cell_names)
+        potentials_df.to_csv('potentials.csv', index=False)
 
 
 if __name__ == '__main__':
-        currents = [0.1,0.2,0.3,0.4,0.5]
-        main('./components_homogenous/templates/SOM.hoc',
+        currents = [0.16,0.16,0.16,0.16,0.16]
+        main(['./components_homogenous/templates/feng.hoc','./components_homogenous/templates/SOM.hoc'],
              './components_homogenous/mechanisms/modfiles',
-             'SOM_Cell',
+             ['Cell_Af','Cell_Cf','InterneuronCellf','SOM_Cell','CR_Cell'],
              currents)
