@@ -30,11 +30,11 @@ dt = 0.05
 scale = 5
 
 min_conn_dist = 0.0
-max_conn_dist = 300.0 #300.0 #9999.9# Distance constraint for all cells
+max_conn_dist = 9999.0 #300.0 #300.0 #9999.9# Distance constraint for all cells
 
 # When enabled, a shell of virtual cells will be created around the core network.
-edge_effects = True 
-net_size = 1000#um
+edge_effects = False 
+net_size = 1400#um]=[]
 
 #Number of cells in each population
 numPN_A = 569
@@ -81,8 +81,7 @@ numPV = int(numPV * scale) #100 * scale #854#4860
 numSOM = int(numSOM * scale) #42 * scale
 numCR = int(numCR * scale) #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
-
-init_connectors(num_cells)
+num_shell_cells = 0
 
 # Create the possible x,y,z coordinates
 x_start, x_end = 0+max_conn_dist,net_size+max_conn_dist
@@ -381,12 +380,15 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
     }
     for cell in shell_network['cells']:
         print(f"Number of shell {cell['pop_name']} cells to be built: {cell['N']}")
+        num_shell_cells += cell['N']
     print(f"Total shell cells: {sum([cell['N'] for cell in shell_network['cells']])}")
     # Add the shell to our network definitions
     network_definitions.append(shell_network)
 
 ##########################################################################
 ##########################################################################
+
+init_connectors(num_cells+num_shell_cells)
 
 # Build and save our NetworkBuilder dictionary
 networks = build_networks(network_definitions)
@@ -616,7 +618,7 @@ edge_params = {
     'PYR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.02, 'angle_dist':False, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 200},
+        'connection_params':{'p':0.02/scale, 'angle_dist':False, 'min_dist':0, 'max_dist':max_conn_dist, 'angle_dist_radius': 200},
         'syn_weight':1,
         'dynamics_params':'PN2PN_feng_min.json',
         'distance_range':[0,max_conn_dist],
@@ -625,7 +627,7 @@ edge_params = {
     'PV2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.17,'no_recip':True,'track_list':int2int_temp_list, 'max_dist':max_conn_dist},#0.19
+        'connection_params':{'p':0.17/scale,'no_recip':True,'track_list':int2int_temp_list, 'max_dist':max_conn_dist},#0.19
         'syn_weight':1,
         'dynamics_params':'INT2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -634,7 +636,7 @@ edge_params = {
     'PV2PV_bi_1': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.0275, 'track_list':uncoupled_bi_track, 'max_dist':max_conn_dist},#0.03
+        'connection_params':{'p':0.0275/scale, 'track_list':uncoupled_bi_track, 'max_dist':max_conn_dist},#0.03
         'syn_weight':1,
         'dynamics_params':'INT2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -652,7 +654,7 @@ edge_params = {
     'PV2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.40, 'max_dist':max_conn_dist},#{'p':0.40},
+        'connection_params':{'p':0.40/scale, 'max_dist':max_conn_dist},#{'p':0.40},
         'syn_weight':1,
         'dynamics_params':'INT2PN_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -661,7 +663,7 @@ edge_params = {
     'PYR2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.22, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24
+        'connection_params':{'p':0.22/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24
         'syn_weight':1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -670,7 +672,7 @@ edge_params = {
     'PV2PYR_bi': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.09,'track_list':pyr_int_bi_list, 'max_dist':max_conn_dist},
+        'connection_params':{'p':0.09/scale,'track_list':pyr_int_bi_list, 'max_dist':max_conn_dist},
         'syn_weight':1,
         'dynamics_params':'INT2PN_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -688,7 +690,7 @@ edge_params = {
     'PYR2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.31, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309
+        'connection_params':{'p':0.31/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309
         'syn_weight':1,
         'dynamics_params':'PN2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -697,7 +699,7 @@ edge_params = {
     'SOM2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.066, 'max_dist':max_conn_dist},#0.066
+        'connection_params':{'p':0.066/scale, 'max_dist':max_conn_dist},#0.066
         'syn_weight':1,
         'dynamics_params':'SOM2PN_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -706,7 +708,7 @@ edge_params = {
     'PV2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.55, 'max_dist':max_conn_dist},# Dr Unal suggested .1 -> .55 based on 7/1/21 email
+        'connection_params':{'p':0.55/scale, 'max_dist':max_conn_dist},# Dr Unal suggested .1 -> .55 based on 7/1/21 email
         'syn_weight':1,
         'dynamics_params':'INT2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -715,7 +717,7 @@ edge_params = {
     'PYR2CR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.185, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183
+        'connection_params':{'p':0.185/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183
         'syn_weight':1,
         'dynamics_params':'PN2CR_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -724,7 +726,7 @@ edge_params = {
     'CR2PYR': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.116, 'max_dist':max_conn_dist},#0.116
+        'connection_params':{'p':0.116/scale, 'max_dist':max_conn_dist},#0.116
         'syn_weight':1,
         'dynamics_params':'CR2PN_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -733,7 +735,7 @@ edge_params = {
     'CR2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.297, 'max_dist':max_conn_dist},#.297
+        'connection_params':{'p':0.297/scale, 'max_dist':max_conn_dist},#.297
         'syn_weight':1,
         'dynamics_params':'CR2INT_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -742,7 +744,7 @@ edge_params = {
     'CR2SOM': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.764, 'max_dist':max_conn_dist},#.764
+        'connection_params':{'p':0.764/scale, 'max_dist':max_conn_dist},#.764
         'syn_weight':1,
         'dynamics_params':'CR2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
@@ -758,7 +760,7 @@ edge_params = {
     'VPSIinh2PV': {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.012}, # We need aprox 10 aff to each PV
+        'connection_params':{'p':0.012/scale}, # We need aprox 10 aff to each PV
         'syn_weight':1,
         'dynamics_params':'VPSI2PV_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
