@@ -111,6 +111,7 @@ def build_vpsi_input(scale=1, plot=False):
     z = modulateSimSpikes(n_cells,f,depth_of_mod)
     ms_total = int(t_stop/0.001)
 
+    raster = samplePoissonRVS(z)
     if plot:
         plt.subplot(1, 2, 1)
         plt.plot(z[0,:])
@@ -122,7 +123,6 @@ def build_vpsi_input(scale=1, plot=False):
         plt.ylabel('Firing Rate')
 
         plt.subplot(1, 2, 2)
-        raster = samplePoissonRVS(z)
         for i in np.arange(0,z.shape[0]):
             plt.plot(raster[i],np.ones((raster[i].shape[0]))*i,'k.')
         t = np.arange(0,t_stop,0.001)
