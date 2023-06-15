@@ -8,46 +8,46 @@ BF-PN: 89%
 BF-PV+: 7% 
 BF-SOM+: 4% 
 """
-output_file_name = "node_sets.json"
-
-output_dict = {
-  "biophysical_nodes": {
-    "model_type": "biophysical"
-  },
-  "point_nodes": {
-    "model_type": "point_process"
-  },
-  "vclamp_cells": [0,50,100,200,300,400,500,600,700,750]
-}
 
 
+def generate_node_sets(scale=1):
+    output_file_name = "node_sets.json"
 
-scale = 1
+    output_dict = {
+      "biophysical_nodes": {
+        "model_type": "biophysical"
+      },
+      "point_nodes": {
+        "model_type": "point_process"
+      },
+      "vclamp_cells": [0,50,100,200,300,400,500,600,700,750]
+    }
 
-n_pn = 800
-n_pv = 93
-n_som = 51
 
-pn_percent = 0.89
-pv_percent = 0.07
-som_percent = 0.04
+    n_pn = 800*scale
+    n_pv = 93*scale
+    n_som = 51*scale
 
-pn_ids = random.sample(range(0,n_pn),int(pn_percent*n_pn))
-pn_ids.sort()
-pv_ids = random.sample(range(n_pn,n_pn+n_pv),int(pv_percent*n_pv))
-pv_ids.sort()
-som_ids = random.sample(range(n_pn+n_pv,n_pn+n_pv+n_som),int(som_percent*n_som))
-som_ids.sort()
+    pn_percent = 0.89
+    pv_percent = 0.07
+    som_percent = 0.04
 
-print(f"Stimulating {len(pn_ids)} PN cells with ACH.")
-print(f"Stimulating {len(pv_ids)} PV cells with ACH.")
-print(f"Stimulating {len(som_ids)} SOM cells with ACH.")
+    pn_ids = random.sample(range(0,n_pn),int(pn_percent*n_pn))
+    pn_ids.sort()
+    pv_ids = random.sample(range(n_pn,n_pn+n_pv),int(pv_percent*n_pv))
+    pv_ids.sort()
+    som_ids = random.sample(range(n_pn+n_pv,n_pn+n_pv+n_som),int(som_percent*n_som))
+    som_ids.sort()
 
-output_dict["ach_pn"] = pn_ids
-output_dict["ach_pv"] = pv_ids
-output_dict["ach_som"] = som_ids
+    print(f"Stimulating {len(pn_ids)} PN cells with ACH.")
+    print(f"Stimulating {len(pv_ids)} PV cells with ACH.")
+    print(f"Stimulating {len(som_ids)} SOM cells with ACH.")
 
-with open(output_file_name, "w") as outfile:
-    json.dump(output_dict, outfile, indent=2)
+    output_dict["ach_pn"] = pn_ids
+    output_dict["ach_pv"] = pv_ids
+    output_dict["ach_som"] = som_ids
 
-print(f"File written to {output_file_name}")
+    with open(output_file_name, "w") as outfile:
+        json.dump(output_dict, outfile, indent=2)
+
+    print(f"File written to {output_file_name}")

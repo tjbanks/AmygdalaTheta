@@ -27,7 +27,7 @@ network_dir = 'network'
 components_dir = 'components'
 t_sim = 15000.0
 dt = 0.05
-scale = 5
+scale = 1
 
 min_conn_dist = 0.0
 max_conn_dist = 9999.0 #300.0 #300.0 #9999.9# Distance constraint for all cells
@@ -167,8 +167,8 @@ network_definitions = [
                 'N':numPN_A,
                 'pop_name':'PyrA',
                 'a_name':'PN',
-                'rotation_angle_zaxis':xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numPN_A, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numPN_A, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=numPN_A, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'biophysical',
                 'model_template':'hoc:Cell_Af'
             },
@@ -176,8 +176,8 @@ network_definitions = [
                 'N':numPN_C,
                 'pop_name':'PyrC',
                 'a_name':'PN',
-                'rotation_angle_zaxis':xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numPN_C, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numPN_C, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=numPN_C, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'biophysical',
                 'model_template':'hoc:Cell_Cf'
             },
@@ -185,8 +185,8 @@ network_definitions = [
                 'N':numPV,
                 'pop_name':'PV',
                 'a_name':'PV',
-                'rotation_angle_zaxis':xiter_random(N=numPV, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numPV, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numPV, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=numPV, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'biophysical',
                 'model_template':'hoc:InterneuronCellf'
             },
@@ -194,8 +194,8 @@ network_definitions = [
                 'N':numSOM,
                 'pop_name':'SOM',
                 'a_name':'SOM',
-                'rotation_angle_zaxis':xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numSOM, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numSOM, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=numSOM, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'biophysical',
                 'model_template':'hoc:SOM_Cell'
             },
@@ -203,8 +203,8 @@ network_definitions = [
                 'N':numCR,
                 'pop_name':'CR',
                 'a_name':'CR',
-                'rotation_angle_zaxis':xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=numCR, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=numCR, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=numCR, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'biophysical',
                 'model_template':'hoc:CR_Cell'
             }
@@ -340,40 +340,40 @@ if edge_effects: # When enabled, a shell of virtual cells will be created around
                 'N':virt_numPN_A,
                 'pop_name':'PyrA',
                 'a_name':'PN',
-                'rotation_angle_zaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numPN_A, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numPN_A, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPN_A, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'virtual'
             },
             {   # Pyramidal Cells - Type C
                 'N':virt_numPN_C,
                 'pop_name':'PyrC',
                 'a_name':'PN',
-                'rotation_angle_zaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numPN_C, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numPN_C, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPN_C, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'virtual'
             },
             {   # Interneuron - fast spiking PV
                 'N':virt_numPV,
                 'pop_name':'PV',
                 'a_name':'PV',
-                'rotation_angle_zaxis':xiter_random(N=virt_numPV, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numPV, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numPV, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=virt_numPV, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'virtual'
             },
             {   # Interneuron - SOM Cell
                 'N':virt_numSOM,
                 'pop_name':'SOM',
                 'a_name':'SOM',
-                'rotation_angle_zaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numSOM, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numSOM, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=virt_numSOM, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'virtual'
             },
             {   # Interneuron - CR Cell
                 'N':virt_numCR,
                 'pop_name':'CR',
                 'a_name':'CR',
-                'rotation_angle_zaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
-                'rotation_angle_yaxis':xiter_random(N=virt_numCR, min_x=0.0, max_x=2*np.pi),
+                'rotation_angle_zaxis':xiter_random(N=virt_numCR, min_x=np.pi/2, max_x=np.pi/2),
+                'rotation_angle_yaxis':xiter_random(N=virt_numCR, min_x=np.pi/2, max_x=np.pi/2),
                 'model_type':'virtual'
             }
         ]
