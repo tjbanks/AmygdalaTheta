@@ -73,9 +73,9 @@ def run(config_file, coreneuron=False, gpu=False):
         # 2. Iterate through each cell in the network and if it's receptive, alter the synapse
         total_modified_synapses = 0
         num_modified_synapses = 0
-        ach_receptive_property = "bACH"
+        ach_receptive_property = "ACH"
         ach_recpetive_property_on_value = conf.get("ACH_level", 0) #default no ACH delivered
-        for cell_id, cell in graph._rank_node_ids.items():
+        for cell_id, cell in graph._rank_node_ids['BLA'].items():
             if cell_id in ach_receptive_cells:
                 cell_connections = cell.connections()
                 for connection in cell_connections:
