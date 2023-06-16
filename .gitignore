@@ -138,6 +138,13 @@ components/mechanisms/modfiles/*.c
 components/mechanisms/modfiles/*.o
 components/mechanisms/modfiles/*.dll
 
+# Neuron Compilation
+components_homogenous/mechanisms/*.dll
+components_homogenous/mechanisms/x86_64/
+components_homogenous/mechanisms/modfiles/*.c
+components_homogenous/mechanisms/modfiles/*.o
+components_homogenous/mechanisms/modfiles/*.dll
+
 *.h5
 *.c
 *.o
