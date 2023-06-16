@@ -4,7 +4,8 @@ A python implementation of matlab/analysis.m
 TB - 8/4/21
 """
 import scipy
-from scipy.signal import hanning,welch,decimate
+from scipy.signal.windows import hann as hanning
+from scipy.signal import welch,decimate
 import h5py
 import json
 import numpy as np
