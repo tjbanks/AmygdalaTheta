@@ -6,12 +6,15 @@ import warnings
 
 import argparse
 
+from neuron import h
+pc = h.ParallelContext()    # object to access MPI methods
+
 try:
     import corebmtk
 except:
     pass
 
-def run(config_file, coreneuron=False, gpu=False):
+def run(config_file, coreneuron=True, gpu=False):
 
     warnings.simplefilter(action='ignore', category=FutureWarning)
     synapses.load()
@@ -75,7 +78,9 @@ def run(config_file, coreneuron=False, gpu=False):
         num_modified_synapses = 0
         ach_receptive_property = "ACH"
         ach_recpetive_property_on_value = conf.get("ACH_level", 1) #default no ACH delivered
-        for cell_id, cell in graph._rank_node_ids['BLA'].items():
+        local_cells = graph.get_local_cells()
+        print(f"Rank {pc.id()} modifying {len(local_cells)} local cells")
+        for cell_id, cell in local_cells.items():
             if cell_id in ach_receptive_cells:
                 cell_connections = cell.connections()
                 for connection in cell_connections:
@@ -95,13 +100,15 @@ def run(config_file, coreneuron=False, gpu=False):
         
         # 3. Turn on nicotinic receptors per cell
         nic_cells_turned_on = 0
-        for cell in ach_receptive_cells:
-            hobj = cells[cell].hobj
-            if hasattr(hobj, 'activate_ach'):
-                hobj.activate_ach()
-                nic_cells_turned_on += 1
-        print(f"{nic_cells_turned_on}/{len(ach_receptive_cells)} nicotinic (intrinsic) receptors turned on")
+        for cell_id, cell in local_cells.items():
+            if cell_id in ach_receptive_cells:
+                hobj = cell.hobj
+                if hasattr(hobj, 'activate_ach'):
+                    hobj.activate_ach()
+                    nic_cells_turned_on += 1
+        print(f"Rank {pc.id()}: {nic_cells_turned_on}/{len(ach_receptive_cells)} nicotinic (intrinsic) receptors turned on")
 
+        pc.barrier()
 
     sim.run()
     bionet.nrn.quit_execution()

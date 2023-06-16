@@ -47,9 +47,10 @@ def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0,third_
     theta1 = pxx1[np.where((f1>8) & (f1<12))]
     fx2 = f2[np.where((f2>8) & (f2<12))]
     theta2 = pxx2[np.where((f2>8) & (f2<12))]
-
-    label1 = label1 + " ("+ str(round(theta1.mean()*1000,6))+")"
-    label2 = label2 + " ("+ str(round(theta2.mean()*1000,6))+")"
+    print(list(fx1))
+    print(list(fx2))
+    #label1 = label1 + " ("+ str(round(theta1.mean()*1000,6))+")"
+    #label2 = label2 + " ("+ str(round(theta2.mean()*1000,6))+")"
     #ax.set_xscale('log')
     ax.set_yscale('log')
     ax.plot(fx1, theta1*1000,linewidth=0.6,label=label1)
@@ -63,42 +64,49 @@ def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0,third_
         f3,pxx3 = mean_ecp(third_ecps,skip_n)
         fx3 = f3[np.where((f3>8) & (f3<12))]
         theta3 = pxx3[np.where((f3>8) & (f3<12))]
-        label3 = label3 + " ("+ str(round(theta3.mean()*1000,6))+")"
+        #label3 = label3 + " ("+ str(round(theta3.mean()*1000,6))+")"
         ax.plot(fx3, theta3*1000,linewidth=0.6,label=label3)
         f_arr.append(f3)
         pxx_arr.append(pxx3)
         label_arr.append(label3)
+        print(list(fx3))
 
     if fourth_ecps:
         f4,pxx4 = mean_ecp(fourth_ecps,skip_n)
         fx4 = f4[np.where((f4>8) & (f4<12))]
         theta4 = pxx4[np.where((f4>8) & (f4<12))]
-        label4 = label4 + " ("+ str(round(theta4.mean()*1000,6))+")"
+        #label4 = label4 + " ("+ str(round(theta4.mean()*1000,6))+")"
         ax.plot(fx4, theta4*1000,linewidth=0.6,label=label4)
         f_arr.append(f4)
         pxx_arr.append(pxx4)
         label_arr.append(label4)
+        print(list(fx4))
 
     if fifth_ecps:
         f5,pxx5 = mean_ecp(fifth_ecps,skip_n)
         fx5 = f5[np.where((f5>8) & (f5<12))]
         theta5 = pxx5[np.where((f5>8) & (f5<12))]
-        label5 = label5 + " ("+ str(round(theta5.mean()*1000,6))+")"
+        #label5 = label5 + " ("+ str(round(theta5.mean()*1000,6))+")"
         ax.plot(fx5, theta5*1000,linewidth=0.6,label=label5)
         f_arr.append(f5)
         pxx_arr.append(pxx5)
         label_arr.append(label5)
+        print(list(fx5))
 
     if sixth_ecps:
         f6,pxx6 = mean_ecp(sixth_ecps,skip_n)
         fx6 = f6[np.where((f6>8) & (f6<12))]
         theta6 = pxx6[np.where((f6>8) & (f6<12))]
-        label6 = label6 + " ("+ str(round(theta6.mean()*1000,6))+")"
+        #label6 = label6 + " ("+ str(round(theta6.mean()*1000,6))+")"
         ax.plot(fx6, theta6*1000,linewidth=0.6,label=label6)
         f_arr.append(f6)
         pxx_arr.append(pxx6)
         label_arr.append(label6)
+        print(list(fx6))
 
+    print('')
+    means = []
+    peaks = []
     for f,pxx,label in zip(f_arr,pxx_arr,label_arr):
 
         theta = pxx[np.where((f>8) & (f<12))]*1000
@@ -107,13 +115,16 @@ def ecp_psd(first_ecps, second_ecps, ax=None,label1='',label2='',skip_n=0,third_
         peak_theta = theta.max() 
         mean_gamma = gamma.mean()
         peak_gamma = gamma.max()
-        print('')
-        print(label + " Mean theta (8Hz-12Hz)  : " + str(round(mean_theta,6)))
+        means.append(label + " Mean theta (8Hz-12Hz)\t" + str(round(mean_theta,6)))
         #print("Mean gamma (50Hz-60Hz) : " + str(round(mean_gamma,6)))     
         #print('')
-        print(label + " Peak theta (8Hz-12Hz)  : " + str(round(peak_theta,6)))
+        peaks.append(label + " Peak theta (8Hz-12Hz)\t" + str(round(peak_theta,6)))
         #print("Peak gamma (50Hz-60Hz) : " + str(round(peak_gamma,6)))
-        print('')
+    
+    for mean in means:
+        print(mean)
+    for peak in peaks:
+        print(peak)
 
 def get_ecp(ecp_h5_location):
      
