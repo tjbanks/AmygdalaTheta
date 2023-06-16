@@ -3,7 +3,7 @@
 
 begintemplate Cell_Af
 
-	public soma, dend, apic, connect2target, type,drv, insert_mechs,cclA
+	public soma, dend, apic, connect2target, type,drv, insert_mechs, activate_ach, cclA
 	create soma[1], dend[1], apic[1]
 
 	public ncl, synlist,baglist,cclA
@@ -223,6 +223,8 @@ begintemplate Cell_Af
 		}
 	}
 
+	proc activate_ach(){}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
@@ -239,7 +241,7 @@ endtemplate Cell_Af
 /////===================/////
 
 begintemplate Cell_Cf
-	public soma, dend, apic, connect2target, type,drv, insert_mechs,cclA
+	public soma, dend, apic, connect2target, type,drv, insert_mechs, activate_ach, cclA
 	create soma[1], dend[1], apic[1]
 
 	public ncl, synlist,baglist,baglist
@@ -453,6 +455,8 @@ begintemplate Cell_Cf
 		}
 	}
 
+	proc activate_ach(){}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
@@ -463,7 +467,7 @@ endtemplate Cell_Cf
 
 
 begintemplate InterneuronCellf
-	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,insert_mechs
+	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,insert_mechs, activate_ach
 	create soma[1], dend[1]
 
 	public ncl, synlist
@@ -618,7 +622,7 @@ begintemplate InterneuronCellf
 		}
 	}
 	
-	
+	proc activate_ach(){}
 
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)

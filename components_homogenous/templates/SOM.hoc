@@ -254,7 +254,7 @@ proc append_sections() { local i
 endtemplate SOM_Cell_old
 
 begintemplate SOM_Cell
-	public NumSoma,NumDend,insert_mechs
+	public NumSoma,NumDend,insert_mechs,activate_ach
 	NumSoma = 1
 	NumDend = 2
 	
@@ -492,6 +492,8 @@ proc insert_mechs(){
                         noise_inh.setRandObj(noiseRandObj_inh)
                 }
 }
+
+proc activate_ach(){}
 
 objref all
 proc append_sections() { local i

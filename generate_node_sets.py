@@ -43,9 +43,9 @@ def generate_node_sets(scale=1):
     print(f"Stimulating {len(pv_ids)} PV cells with ACH.")
     print(f"Stimulating {len(som_ids)} SOM cells with ACH.")
 
-    #output_dict["ach_pn"] = pn_ids
-    #output_dict["ach_pv"] = pv_ids
-    #output_dict["ach_som"] = som_ids
+    output_dict["ach_pn"] = pn_ids
+    output_dict["ach_pv"] = pv_ids
+    output_dict["ach_som"] = som_ids
 
     output_dict["ach_cells"] = pn_ids + pv_ids + som_ids
 
