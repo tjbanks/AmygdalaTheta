@@ -3,7 +3,7 @@
 
 begintemplate Cell_Af
 
-	public soma, dend, apic, connect2target, type,drv, insert_mechs,cclA
+	public soma, dend, apic, connect2target, type,drv, insert_mechs, activate_ach, cclA
 	create soma[1], dend[1], apic[1]
 
 	public ncl, synlist,baglist,cclA
@@ -11,7 +11,6 @@ begintemplate Cell_Af
 	strdef type
 	objref tlist, area_vec
 	public tlist, area_vec
-	external tstop
 	
 	objref noise_exc, noise_inh, cclA
 	objref noiseRandObj_exc, noiseRandObj_inh
@@ -130,7 +129,7 @@ begintemplate Cell_Af
 				
 				drv = new IClamp(0.5)
 				drv.del = 0
-				drv.dur = tstop
+				drv.dur = 0
 				drv.amp = 0.0//0.2  //nA
 		
 			}
@@ -224,6 +223,8 @@ begintemplate Cell_Af
 		}
 	}
 
+	proc activate_ach(){}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
@@ -240,7 +241,7 @@ endtemplate Cell_Af
 /////===================/////
 
 begintemplate Cell_Cf
-	public soma, dend, apic, connect2target, type,drv, insert_mechs,cclA
+	public soma, dend, apic, connect2target, type,drv, insert_mechs, activate_ach, cclA
 	create soma[1], dend[1], apic[1]
 
 	public ncl, synlist,baglist,baglist
@@ -248,7 +249,6 @@ begintemplate Cell_Cf
 	strdef type
 	objref tlist, area_vec
 	public tlist, area_vec
-	external tstop
 
 	objref noise_exc, noise_inh, cclA
 	objref noiseRandObj_exc, noiseRandObj_inh
@@ -369,7 +369,7 @@ begintemplate Cell_Cf
 				//print r
 				drv = new IClamp(0.5)
 				drv.del = 0
-				drv.dur = tstop
+				drv.dur = 0
 				drv.amp = 0.0//0.2  //nA
 			//}
 		}	
@@ -455,6 +455,8 @@ begintemplate Cell_Cf
 		}
 	}
 
+	proc activate_ach(){}
+
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)
 		nc.threshold = 0
@@ -465,7 +467,7 @@ endtemplate Cell_Cf
 
 
 begintemplate InterneuronCellf
-	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,insert_mechs
+	public soma, dend, connect2target, type,connect_gap,LFPtemp_xtra,drv,insert_mechs, activate_ach
 	create soma[1], dend[1]
 
 	public ncl, synlist
@@ -474,7 +476,6 @@ begintemplate InterneuronCellf
 
 	objref tlist, area_vec
 	public tlist, area_vec
-	external tstop
 	
 	objref noise_exc, noise_inh, cclA
 	objref noiseRandObj_exc, noiseRandObj_inh
@@ -533,7 +534,7 @@ begintemplate InterneuronCellf
 			insert kdrinter
 			drv = new IClamp(0.5)
 			drv.del = 0
-			drv.dur = tstop
+			drv.dur = 0
 			drv.amp = 0.0//0.2  //nA
 		}
 
@@ -621,7 +622,7 @@ begintemplate InterneuronCellf
 		}
 	}
 	
-	
+	proc activate_ach(){}
 
 	obfunc connect2target() { localobj nc
 		soma nc = new NetCon(&v(0.5), $o1)

@@ -27,8 +27,6 @@ begintemplate SOM_Cell_old
     objref tlist, area_vec
 	public tlist, area_vec
     
-    external tstop
-    
     proc init() {
         //append_sections()
         synlist =new List()	
@@ -124,7 +122,7 @@ begintemplate SOM_Cell_old
 
             drv = new IClamp(0.5)
             drv.del = 0
-            drv.dur = tstop
+            drv.dur = 0
             drv.amp = 0.0//0.2  //nA            
 
 			ena=45  ek=-80  ehd=-45  eca = 134		
@@ -256,7 +254,7 @@ proc append_sections() { local i
 endtemplate SOM_Cell_old
 
 begintemplate SOM_Cell
-	public NumSoma,NumDend,insert_mechs
+	public NumSoma,NumDend,insert_mechs,activate_ach
 	NumSoma = 1
 	NumDend = 2
 	
@@ -284,7 +282,7 @@ begintemplate SOM_Cell
     objref tlist, area_vec
 	public tlist, area_vec
     
-    external tstop
+   
     
     proc init() {
         //append_sections()
@@ -495,6 +493,8 @@ proc insert_mechs(){
                 }
 }
 
+proc activate_ach(){}
+
 objref all
 proc append_sections() { local i
 	
@@ -545,7 +545,6 @@ begintemplate CR_Cell
     objref tlist, area_vec
 	public tlist, area_vec
     
-    external tstop
     
     proc init() {
         //append_sections()
@@ -642,7 +641,7 @@ begintemplate CR_Cell
 
             drv = new IClamp(0.5)
             drv.del = 0
-            drv.dur = tstop
+            drv.dur = 0
             drv.amp = 0.0//0.2  //nA            
 
 			ena=45  ek=-80  ehd=-45  eca = 134		
