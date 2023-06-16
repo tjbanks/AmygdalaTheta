@@ -22,6 +22,9 @@ def Bg2Pyr(syn_params, sec_x, sec_id):
     """
 
     lsyn = h.bg2pyr(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -32,6 +35,9 @@ def Bg2Pyr(syn_params, sec_x, sec_id):
 def bginh(syn_params, sec_x, sec_id):
 
     lsyn = h.bginh(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -48,6 +54,9 @@ def bginh(syn_params, sec_x, sec_id):
 def interD2interD_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2interD_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -60,6 +69,9 @@ def interD2interD_STFD(syn_params, sec_x, sec_id):
 def interD2pyrD_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2pyrD_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -71,6 +83,9 @@ def interD2pyrD_STFD(syn_params, sec_x, sec_id):
 def pyrD2interD_STFD(syn_params, sec_x, sec_id):
     
     lsyn = h.pyrD2interD_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -82,6 +97,9 @@ def pyrD2interD_STFD(syn_params, sec_x, sec_id):
 def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
     
     lsyn = h.pyrD2pyrD_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -93,6 +111,9 @@ def pyrD2pyrD_STFD(syn_params, sec_x, sec_id):
 def pyrD2interD_P2SOM_STFD(syn_params, sec_x, sec_id):
     
     lsyn = h.pyrD2interD_P2SOM_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -104,6 +125,9 @@ def pyrD2interD_P2SOM_STFD(syn_params, sec_x, sec_id):
 def interD2pyrD_SOM2P_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2pyrD_SOM2P_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -115,6 +139,9 @@ def interD2pyrD_SOM2P_STFD(syn_params, sec_x, sec_id):
 def pyrD2interD_P2CR_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.pyrD2interD_P2CR_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -126,6 +153,9 @@ def pyrD2interD_P2CR_STFD(syn_params, sec_x, sec_id):
 def interD2pyrD_CR2P_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2pyrD_CR2P_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
@@ -137,6 +167,9 @@ def interD2pyrD_CR2P_STFD(syn_params, sec_x, sec_id):
 def interD2interD_SOMPV_STFD(syn_params, sec_x, sec_id):
 
     lsyn = h.interD2interD_SOMPV_STFD(sec_x, sec=sec_id)
+    if syn_params.get('bACH'):
+        if hasattr(lsyn, 'bACH'):
+            lsyn.bACH = float(syn_params['bACH'])
 
     if syn_params.get('initW'):
         lsyn.initW = float(syn_params['initW'])
