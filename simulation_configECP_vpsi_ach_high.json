@@ -46,7 +46,7 @@
       "input_type": "current_clamp",
       "module": "IClamp",
       "node_set": "ach_pn",
-      "amp": 0.0125,
+      "amp": 0.00625,
       "delay": 0.0,
       "duration": 15000.0
     },
@@ -54,7 +54,7 @@
       "input_type": "current_clamp",
       "module": "IClamp",
       "node_set": "ach_pv",
-      "amp": 0.0125,
+      "amp": 0.00625,
       "delay": 0.0,
       "duration": 15000.0
     },
@@ -62,7 +62,7 @@
       "input_type": "current_clamp",
       "module": "IClamp",
       "node_set": "ach_som",
-      "amp": 0.0125,
+      "amp": 0.00625,
       "delay": 0.0,
       "duration": 15000.0
     }
