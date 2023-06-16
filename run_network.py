@@ -83,6 +83,10 @@ def run(config_file, coreneuron=False, gpu=False):
                     if hasattr(syn, ach_receptive_property):
                         setattr(syn, ach_receptive_property, ach_recpetive_property_on_value)
                         num_modified_synapses += 1
+                    elif 'bg2' in syn.__repr__():
+                        total_modified_synapses -= 1 # not changing bg2pyr
+                    else:
+                        import pdb;pdb.set_trace() # we missed one debug
                 total_modified_synapses += len(cell_connections)
 
         print(f"ACH turned on for {len(ach_receptive_cells)} muscarinic (synaptic) receptors")
