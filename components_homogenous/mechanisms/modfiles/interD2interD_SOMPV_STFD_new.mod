@@ -15,6 +15,7 @@ NEURON {
 	RANGE F, f, tauF, D1, d1, tauD1, D2, d2, tauD2
 	RANGE facfactor
     RANGE neuroM,type
+	RANGE ACH, bACH
 }
 
 UNITS {
@@ -96,6 +97,9 @@ PARAMETER {
 	NE_t2 = 1 :1 : 0.7 : 0.8
 	NE_t3 = 1
 	NE_S = 1 : 0.4
+	ACH = 1
+	bACH = 0
+
 }
 
 ASSIGNED {
@@ -192,7 +196,7 @@ if ((eta(capoolcon)*(lambda1*omega(capoolcon, threshold1, threshold2)-lambda2*GA
 	g_gaba = gbar_gaba*r_gaba*facfactor
 	}
 
-    igaba = W*g_gaba*(v - Erev_gaba)
+    igaba = W*g_gaba*(v - Erev_gaba)*(1 + (bACH * (ACH - 1)))
     irecord=igaba
 	ICag = P0g*g_gaba*(v - eca)	
 	Icatotal = ICag + k*ica*4*pilocal*((15/2)^2)*(0.01)    :  icag+k*ica*Area of soma*unit change

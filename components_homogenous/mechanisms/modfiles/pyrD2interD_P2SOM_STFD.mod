@@ -16,6 +16,7 @@ NEURON {
 	RANGE F, f, tauF, D1, d1, tauD1, D2, d2, tauD2,Flimit
 	RANGE facfactor
 	RANGE neuroM,type
+	RANGE ACH, bACH
 }
 
 UNITS {
@@ -79,7 +80,9 @@ PARAMETER {
         tauD1 = 40 (ms) < 1e-9, 1e9 >
         d2 = 1 (1) < 0, 1 > : 0.9 (1) < 0, 1 >     : slow depression
         tauD2 = 70 (ms) < 1e-9, 1e9 >		
-	
+	ACH = 1
+	bACH = 0
+
 }
 
 ASSIGNED {
@@ -190,7 +193,7 @@ BREAKPOINT {
 	inmda = W_nmda*g_nmda*(v - Erev_nmda)*sfunc(v)
 
 	g_ampa = gbar_ampa*r_ampa*facfactor
-	iampa = W*g_ampa*(v - Erev_ampa)
+	iampa = W*g_ampa*(v - Erev_ampa)*(1 + (bACH * (ACH - 1)))
 
 	ICan = P0n*g_nmda*(v - eca)*sfunc(v)
 	ICaa = P0a*W*g_ampa*(v-eca)/initW	
