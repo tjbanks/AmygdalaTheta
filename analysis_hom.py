@@ -46,18 +46,18 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None):
     ax.plot(f, pxx*1000,linewidth=0.6)
     ax.set_ylim([0,0.1])
     
-    theta = pxx[np.where((f>8) & (f<12))]*1000
-    gamma = pxx[np.where((f>50) & (f<60))]*1000
+    theta = pxx[np.where((f>=4) & (f<=8))]*1000
+    gamma = pxx[np.where((f>=50) & (f<=60))]*1000
     mean_theta = theta.mean()
     peak_theta = theta.max() 
     mean_gamma = gamma.mean()
     peak_gamma = gamma.max()
     text = f"""
     
-Mean theta (8Hz-12Hz)  : {str(round(mean_theta,8))}
+Mean theta (4Hz-8Hz)  : {str(round(mean_theta,8))}
 Mean gamma (50Hz-60Hz) : {str(round(mean_gamma,8))} 
     
-Peak theta (8Hz-12Hz)  : {str(round(peak_theta,8))}
+Peak theta (4Hz-8Hz)  : {str(round(peak_theta,8))}
 Peak gamma (50Hz-60Hz) : {str(round(peak_gamma,8))}
     
     """
