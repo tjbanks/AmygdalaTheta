@@ -14,7 +14,7 @@ def build_vpsi_input(scale=1, plot=False):
     t_stop = 15 #seconds
     n_cells = 893 * scale
     print(f"Building VPSI input for {n_cells} cells.")
-    depth_of_mod = 0.5 # depth of modulation #define
+    depth_of_mod = 1 # depth of modulation #define
     f = 8 # frequency of oscillation (Theta inhibition)
 
     a, b = (0 - mean_fr) / std_fr, (100 - mean_fr) / std_fr  #End points for the truncated normal distribution
