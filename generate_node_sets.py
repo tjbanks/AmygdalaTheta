@@ -28,9 +28,9 @@ def generate_node_sets(scale=1):
     n_pv = 93*scale
     n_som = 51*scale
 
-    pn_percent = 0.89
-    pv_percent = 0.07
-    som_percent = 0.04
+    pn_percent = 1#0.89
+    pv_percent = 1#0.07
+    som_percent = 1#0.04
 
     pn_ids = random.sample(range(0,n_pn),int(pn_percent*n_pn))
     pn_ids.sort()
