@@ -14,7 +14,7 @@ try:
 except:
     pass
 
-def run(config_file, coreneuron=True, gpu=False):
+def run(config_file, coreneuron=False, gpu=False):
 
     warnings.simplefilter(action='ignore', category=FutureWarning)
     synapses.load()

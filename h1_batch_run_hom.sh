@@ -8,8 +8,8 @@
 #SBATCH --time 0-12:00
 
 START=$(date)
-#mpiexec nrniv -mpi -python run_network.py simulation_configECP_base_homogenous.json
-mpiexec ./components_homogenous/mechanisms/x86_64/special -mpi run_network.py simulation_configECP_base_homogenous.json
+mpiexec nrniv -mpi -python run_network.py simulation_configECP_base_homogenous.json
+#mpiexec ./components_homogenous/mechanisms/x86_64/special -mpi run_network.py simulation_configECP_base_homogenous.json
 END=$(date)
 
 printf "Start: $START \nEnd:   $END\n" 
