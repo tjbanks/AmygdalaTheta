@@ -50,19 +50,23 @@ def ecp_psd(ecps,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,cas
     #ecp = np.mean(np.array(ecps),axis=0)
     #skip_n first few
     pxxs = []
+    pxxs_raw = []
     for ecp in ecps:
         data = ecp[skip_n:]
 
         #downsample the data to fit ms (steps used 20=1/.05 step)
         lfp_d = decimate(data,downsample)
+        #lfp_d = data
         raw_ecp(lfp_d)
         win = hanning(nfft, True)
 
         f,pxx = welch(lfp_d,fs,window=win,noverlap=noverlap,nfft=nfft)
-
+        f_raw, pxx_raw = welch(ecp,fs=1000,nfft=1024)
         pxxs.append(pxx)    
+        pxxs_raw.append(pxx_raw)
 
     pxx = np.mean(np.array(pxxs),axis=0)
+    pxx_raw = np.mean(np.array(pxxs_raw),axis=0)
     # check ach theta adjustment match up
     #if case == 1:
     #    pxx = pxx - 0.000000054
@@ -74,21 +78,22 @@ def ecp_psd(ecps,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,cas
     ax.plot(f, pxx*1000,linewidth=0.6)
     ax.set_ylim([0,0.1])
     
-    theta = pxx[np.where((f>=4) & (f<=8))]*1000
+    theta = pxx[np.where((f>=4) & (f<=12))]*1000
     gamma = pxx[np.where((f>=50) & (f<=60))]*1000
     mean_theta = theta.mean()
     peak_theta = theta.max() 
     mean_gamma = gamma.mean()
     peak_gamma = gamma.max()
     print('')
-    print("Mean theta (4Hz-8Hz)  : " + str(round(mean_theta,6)))
+    print("Mean theta (4Hz-12Hz)  : " + str(round(mean_theta,6)))
     #print("Mean gamma (50Hz-60Hz) : " + str(round(mean_gamma,6)))     
     #print('')
-    print("Peak theta (4Hz-8Hz)  : " + str(round(peak_theta,6)))
+    print("Peak theta (4Hz-12Hz)  : " + str(round(peak_theta,6)))
     #print("Peak gamma (50Hz-60Hz) : " + str(round(peak_gamma,6)))
     print('')
 
-    psds[case] = {'f':f.tolist(),'pxx':(pxx*1000).tolist()}
+    psds[case] = {'f':f.tolist(),'pxx':(pxx*1000).tolist(),
+                  'f_raw':f_raw.tolist(), 'pxx_raw':(pxx_raw*1000).tolist()}
 
 def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,case=None):
     print("Type : mean (std)")
@@ -221,29 +226,63 @@ def final_plots():
     ax2.set_xlabel("Hz")
     ax2.set_ylabel("PSD [V^2/Hz]")
     labels = {
-        "1": "1. Base",
+        "1": "1. Baseline",
         "2": "2. VPSI",
-        "3": "3. ACH High",
-        "4": "4. ACH Low",
-        "5": "5. ACH High/No VPSI",
-        "6": "6. ACH Low/No VPSI"
+        "3": "3. VPSI + ACH High",
+        "4": "4. VPSI + ACH Low",
+        "5": "5. No VPSI + ACH High",
+        "6": "6. No VPSI + ACH Low"
     }
+    from fooof import FOOOF
+    from fooof.sim.gen import gen_aperiodic
+    use_fooof = True
+    use_peak = True
+
     for i in range(6):
         case = str(i + 1)
         psd_case = psds[case]
-        f = np.array(psd_case['f'])
-        fx = f[np.where((f>=4) & (f<=8))]
-        pxx = np.array(psd_case['pxx'])
-        theta = pxx[np.where((f>=4) & (f<=8))]
-        ax2.plot(fx,theta,linewidth=0.6,label=labels[case])
-        psd_power[case] = scipy.integrate.simps(theta)
+        if not use_fooof:
+            f = np.array(psd_case['f'])
+            fx = f[np.where((f>=4) & (f<=12))]
+            pxx = np.array(psd_case['pxx'])
+            theta = pxx[np.where((f>=4) & (f<=12))]
+            ax2.plot(fx,theta,linewidth=0.6,label=labels[case])
+        else:
+            freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
+            fm = FOOOF(aperiodic_mode='knee')
+            fm.fit(freqs, spectrum, [1,150])
+            ap_fit = fm._ap_fit
+            residual_spec = spectrum[0:152] - 10**ap_fit
+            #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
+            ax2.plot([i for i in range(len(residual_spec))],residual_spec)
+            theta = residual_spec[4:13]
+            # original
+            #freqs,spectrum = np.array(psd_case['f_raw']),np.array(psd_case['pxx_raw'])
+            #fm = FOOOF(aperiodic_mode='knee')
+            #fm.add_data(freqs,spectrum,[1,150])
+            #fm.fit(freqs, spectrum, [1,150])
+            #ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, fm.power_spectrum))
+            #init_flat_spec = fm.power_spectrum - 10**ap_fit
+            #theta = (init_flat_spec[4:13])
+            #ax2.plot([i for i in range(4,13)],theta)
+
+        if use_peak:
+            psd_power[case] = max(theta)
+        else: # integrage
+            psd_power[case] = scipy.integrate.simps(theta)
         print(f"PSD Theta Power for case {case}: {psd_power[case]}")
     ax2.legend()
 
     # AX3 - Power
-    ax3.set_title("Theta Band Power by Case")
+    if use_peak:
+        ax3.set_title("Theta Band Peak by Case")
+    else:
+        ax3.set_title("Theta Band Power by Case")
     ax3.set_xlabel("Case")
-    ax3.set_ylabel("Power")
+    if use_peak:
+        ax3.set_ylabel("[V^2/Hz]")
+    else:
+        ax3.set_ylabel("Power")
     for i in range(6):
         case = str(i + 1)
         ax3.bar(i+1,psd_power[case], label=labels[case])
