@@ -12,19 +12,18 @@ def lognorm_fr_list(n,m,s):
     return [np.random.lognormal(mean,std) for i in range(n)]
 
 def build_poisson_input(population,node_ids,mean,std,output_h5,t_sim=15000):
-    print('Building input for ' + population + "[" + str(len(node_ids)) + " cells at " + str(mean) + "(" + str(std) + ") Hz]")
+    print('Building input for ' + population + "[" + str(len(node_ids)) + " cells at " + str(mean) + "(" + str(std) + ") Hz] -> " + output_h5)
     psg = PoissonSpikeGenerator(population=population)
     psg.add(node_ids=node_ids,  
     firing_rate=lognorm_fr_list(len(node_ids),mean,std),
     times=(0.0, t_sim/1000.0))  
     psg.to_sonata(output_h5)
 
-def build_input(t_sim, numPN_A = 569, numPN_C=231, numPV = 93, numSOM=51, numCR=56,scale=1):
+def build_input(t_sim, numPN_A = 569, numPN_C=231, numPV = 93, numSOM=51, numCR=56, numVPSI=100, scale=1):
     
-    if numPN_A or numPN_C or numPV:
-        # VPSI
-        build_poisson_input(population='vpsi_inh',
-                        node_ids=range(int((numPN_A+numPN_C+numPV)*scale)),
+    # VPSI
+    build_poisson_input(population='vpsi_inh',
+                       node_ids=range(int((numVPSI)*scale)),
                         mean=3,std=1,
                         output_h5='vpsi_inh_spikes_nonrhythmic.h5',
                         t_sim=t_sim)
