@@ -5,14 +5,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy
 
-def build_vpsi_input(scale=1, plot=False, depth_of_mod=1, output='vpsi_inh_spikes.h5'):
+def build_vpsi_input(n_cells=100, plot=False, depth_of_mod=1, output='vpsi_inh_spikes.h5'):
     #setting up mock population of presynaptic neurons
 
-    mean_fr = 2   # mean firing rate
-    std_fr = 1     # std firing rate
+    mean_fr = 5   # mean firing rate
+    std_fr = 2     # std firing rate
 
     t_stop = 15 #seconds
-    n_cells = 893 * scale
     print(f"Building VPSI input for {n_cells} cells.")
     # depth of modulation #defined in function header now
     f = 8 # frequency of oscillation (Theta inhibition)
