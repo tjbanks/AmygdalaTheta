@@ -43,6 +43,8 @@ numPV = 93
 numSOM = 51
 numCR = 56
 
+numVPSI = 100
+
 if __name__ == '__main__':
     if 'feng_homogenous' in sys.argv:
         numPN_A = 640
@@ -81,6 +83,7 @@ numPV = int(numPV * scale) #100 * scale #854#4860
 numSOM = int(numSOM * scale) #42 * scale
 numCR = int(numCR * scale) #42 * scale
 num_cells = numPN_A + numPN_C + numPV + numSOM + numCR #Only used to populate an overall position list
+numVPSI = int(numVPSI * scale)
 num_shell_cells = 0
 
 # Create the possible x,y,z coordinates
@@ -215,7 +218,7 @@ network_definitions = [
         'positions_list':None,
         'cells':[
             {
-                'N':numPN_A+numPN_C+numPV,
+                'N':numVPSI,
                 'pop_name':'inh_inp',
                 'pop_group':'vpsi_inh',
                 'model_type':'virtual'
@@ -751,16 +754,16 @@ edge_params = {
         'target_sections':['basal']
     },
     'VPSIinh2PYR': {
-        'connection_rule':one_to_one_offset,
-        'connection_params':{'p':0.10/scale, 'offset':0}, # connect a PN cell to a VPSI cell 10% of the time
+        'connection_rule':syn_percent_o2a,
+        'connection_params':{'p':0.10/scale}, # connect a PN cell to a VPSI cell 10% of the time
         'syn_weight':1,
         'dynamics_params':'VPSI2PN_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal'],
     },
     'VPSIinh2PV': {
-        'connection_rule':one_to_one_offset, #syn_percent_o2a,
-        'connection_params':{'p':0.90, 'offset':numPN_A+numPN_C}, # connect a PV cell to a VPSI cell 90% of the time #{'p':0.012/scale}, 
+        'connection_rule':syn_percent_o2a,
+        'connection_params':{'p':0.90/scale}, # connect a PV cell to a VPSI cell 90% of the time #{'p':0.012/scale}, 
         'syn_weight':1,
         'dynamics_params':'VPSI2PV_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
