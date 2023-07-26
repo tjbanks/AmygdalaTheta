@@ -27,11 +27,12 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None):
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
+    ax.set_xlim(8500, 9000)
 
 def raw_ecp(lfp):
     pass
 
-def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_fooof=False):
+def ecp_psd(ecp,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,use_fooof=True):
     
     #skip_n first few
     data = ecp[skip_n:]
@@ -42,7 +43,7 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_
     if not use_fooof:
         win = hanning(nfft, True)
         f,pxx = welch(lfp_d,fs,window=win,noverlap=noverlap,nfft=nfft)
-        ax.set_xscale('log')
+        #ax.set_xscale('log')
         ax.set_yscale('log')
         ax.plot(f, pxx*1000,linewidth=0.6)
         ax.set_ylim([0,0.1])
@@ -57,13 +58,14 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_
         f,pxx = welch(lfp_d,fs=1000,nfft=1024)
         freqs,spectrum = np.array(f),np.array(pxx)
         fm = FOOOF(aperiodic_mode='knee')
-        fm.fit(freqs, spectrum, [1,150])
+        fm.fit(freqs, spectrum, [1,500])
         ap_fit = fm._ap_fit
-        residual_spec = spectrum[0:152] - 10**ap_fit
+        residual_spec = spectrum[0:500] #- 10**ap_fit
 
         # Plot
         #plt.plot([i for i in range(len(residual_spec))],residual_spec)
         ax.plot(freqs[:len(residual_spec)], residual_spec)
+        ax.grid()
         #ax.plot([i for i in range(4,13)],residual_spec[4:13]) # Only theta range
         
         theta = residual_spec[4:13]

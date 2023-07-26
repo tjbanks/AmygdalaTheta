@@ -34,6 +34,10 @@
       {
         "nodes_file": "$NETWORK_DIR/thalamus_cr_nodes.h5",
         "node_types_file": "$NETWORK_DIR/thalamus_cr_node_types.csv"
+      },
+      {
+        "nodes_file": "$NETWORK_DIR/thalamus_pv_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/thalamus_pv_node_types.csv"
       }
     ],
     "edges": [

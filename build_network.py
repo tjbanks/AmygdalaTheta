@@ -751,16 +751,16 @@ edge_params = {
         'target_sections':['basal']
     },
     'VPSIinh2PYR': {
-        'connection_rule':one_to_one,
+        'connection_rule':one_to_one_offset,
+        'connection_params':{'p':0.10/scale, 'offset':0}, # connect a PN cell to a VPSI cell 10% of the time
         'syn_weight':1,
         'dynamics_params':'VPSI2PN_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal'],
     },
     'VPSIinh2PV': {
-        'iterator':'one_to_all',
-        'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.012/scale}, # We need aprox 10 aff to each PV
+        'connection_rule':one_to_one_offset, #syn_percent_o2a,
+        'connection_params':{'p':0.90, 'offset':numPN_A+numPN_C}, # connect a PV cell to a VPSI cell 90% of the time #{'p':0.012/scale}, 
         'syn_weight':1,
         'dynamics_params':'VPSI2PV_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
@@ -774,7 +774,8 @@ edge_params = {
         'target_sections':['basal']
     },
     'THALAMUS2PV': {
-        'connection_rule':one_to_one,
+        'connection_rule':one_to_one_offset,
+        'connection_params':{'offset':numPN_A+numPN_C},
         'syn_weight':1,
         'dynamics_params':'BG2PNi_feng_min.json',
         'distance_range':[0.0, 9999.9],
@@ -990,7 +991,8 @@ generate_node_sets(scale)
 
 #Build VSPI input spikes
 from build_input_vpsi_inh_spikes import build_vpsi_input
-build_vpsi_input(scale)
+build_vpsi_input(scale) # default depth set (1) and 'vpsi_inh_spikes.h5'
+build_vpsi_input(scale, depth_of_mod=0, output='vpsi_inh_spikes_0_depth.h5')
 
 profile_stats = pstats.Stats(profiler).sort_stats('tottime')
 profile_stats.print_stats(100)

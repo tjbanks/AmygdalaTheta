@@ -40,11 +40,12 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None):
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
+    ax.set_xlim(8500, 9000)
 
 def raw_ecp(lfp):
     pass
 
-def ecp_psd(ecps,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,case=None):
+def ecp_psd(ecps,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,case=None):
     
     # Average all the runs
     #ecp = np.mean(np.array(ecps),axis=0)
@@ -236,7 +237,7 @@ def final_plots():
     from fooof import FOOOF
     from fooof.sim.gen import gen_aperiodic
     use_fooof = True
-    use_peak = True
+    use_peak = False
 
     for i in range(6):
         case = str(i + 1)
