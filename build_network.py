@@ -754,6 +754,7 @@ edge_params = {
         'target_sections':['basal']
     },
     'VPSIinh2PYR': {
+        'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.10/scale}, # connect a PN cell to a VPSI cell 10% of the time
         'syn_weight':1,
@@ -762,6 +763,7 @@ edge_params = {
         'target_sections':['basal'],
     },
     'VPSIinh2PV': {
+        'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.90/scale}, # connect a PV cell to a VPSI cell 90% of the time #{'p':0.012/scale}, 
         'syn_weight':1,
