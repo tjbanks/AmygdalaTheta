@@ -1,6 +1,6 @@
 {
     "level_of_detail": "interD2interD_STFD",
-    "initW_lognormal_mean": "10",
-    "initW_lognormal_std": "2",
+    "initW_lognormal_mean": "5",
+    "initW_lognormal_std": "1",
     "bACH": "0.0"
 }

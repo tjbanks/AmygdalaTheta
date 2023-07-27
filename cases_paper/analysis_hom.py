@@ -237,9 +237,9 @@ def final_plots():
     from fooof import FOOOF
     from fooof.sim.gen import gen_aperiodic
     use_fooof = True
-    use_peak = False
+    use_peak = True
 
-    for i in range(6):
+    for i in range(4):
         case = str(i + 1)
         psd_case = psds[case]
         if not use_fooof:
@@ -253,6 +253,7 @@ def final_plots():
             fm = FOOOF(aperiodic_mode='knee')
             fm.fit(freqs, spectrum, [1,150])
             ap_fit = fm._ap_fit
+            print(ap_fit)
             residual_spec = spectrum[0:152] - 10**ap_fit
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
             ax2.plot([i for i in range(len(residual_spec))],residual_spec)
@@ -284,12 +285,12 @@ def final_plots():
         ax3.set_ylabel("[V^2/Hz]")
     else:
         ax3.set_ylabel("Power")
-    for i in range(6):
+    for i in range(4):
         case = str(i + 1)
         ax3.bar(i+1,psd_power[case], label=labels[case])
     #ax3.legend()
     plt.tight_layout() 
-    plt.savefig('analysis_final.png', bbox_inches='tight')
+    plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
     plt.show()
 
 if __name__ == '__main__':
@@ -302,6 +303,6 @@ if __name__ == '__main__':
     if '--final' in sys.argv:
         final_plots()
     else:
-        for i in range(6):
+        for i in range(4):
             run(i+1, show_plots = show_plots, save_plots = save_plots)
         save_data()

@@ -66,6 +66,7 @@ def ecp_psd(ecp,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,use_
         #plt.plot([i for i in range(len(residual_spec))],residual_spec)
         ax.plot(freqs[:len(residual_spec)], residual_spec)
         ax.grid()
+        #ax.set_xlim(1, 25)
         #ax.plot([i for i in range(4,13)],residual_spec[4:13]) # Only theta range
         
         theta = residual_spec[4:13]
