@@ -201,13 +201,13 @@ def final_plots(num_cases=6):
     psds = analysis['psds']
     psd_power = {}
 
-    fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(15,4.8))#6.4,4.8 default
+    fig, ax = plt.subplots(3,3,figsize=(15,9.6))#6.4,4.8 default
     #fig.suptitle('Amygdala Analysis')    
     
     # AX1 - Base raster
-    ax1.set_title("Base Raster")
-    ax1.set_xlabel("Time")
-    ax1.set_ylabel("Cell ID")
+    ax[0,0].set_title("Base Raster")
+    ax[0,0].set_xlabel("Time")
+    ax[0,0].set_ylabel("Cell ID")
     #spikes[case] = spikes_df.to_json()
     case = "1"
     spikes_df = pd.DataFrame({'timestamps':spikes[case]['timestamps'], 'node_ids':spikes[case]['node_ids']})    
@@ -215,48 +215,52 @@ def final_plots(num_cases=6):
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
 
-        ax1.scatter(cell_spikes['timestamps'],cell_spikes['node_ids'],
+        ax[0,0].scatter(cell_spikes['timestamps'],cell_spikes['node_ids'],
                    c='tab:'+node['color'],s=0.25, label=node['name'])
 
-    handles,labels = ax1.get_legend_handles_labels()
-    ax1.legend(reversed(handles), reversed(labels))
-    ax1.grid(True)
+    handles,labels = ax[0,0].get_legend_handles_labels()
+    ax[0,0].legend(reversed(handles), reversed(labels))
+    ax[0,0].grid(True)
 
     # AX2 - Theta band
-    ax2.set_title("Theta Band PSD by Case")
-    ax2.set_xlabel("Hz")
-    ax2.set_ylabel("PSD [V^2/Hz]")
+    ax[0,1].set_title("Theta Band PSD by Case")
+    ax[0,1].set_xlabel("Hz")
+    ax[0,1].set_ylabel("PSD [V^2/Hz]")
     labels = {
-        "1": "1. Baseline",
-        "2": "2. VPSI",
-        "3": "3. VPSI + ACH High",
-        "4": "4. VPSI + ACH Low",
-        "5": "5. No VPSI + ACH High",
-        "6": "6. No VPSI + ACH Low"
+        "1": "1.GABA + no Theta + ACh baseline",
+        "2": "2.GABA + Theta + ACh baseline",
+        "3": "3.GABA + Theta + ACH High",
+        "4": "4.GABA + Theta + ACH Low",
+        "5": "5.GABA + no Theta + ACH High",
+        "6": "6.GABA + no Theta + ACH Low"
     }
     from fooof import FOOOF
     from fooof.sim.gen import gen_aperiodic
     use_fooof = True
     use_peak = True
 
-    for i in range(num_cases):
-        case = str(i + 1)
+    def plot_psd(axis, case_int, max_freq=150, legend=True):
+        prop_cycle = plt.rcParams['axes.prop_cycle']
+        colors = prop_cycle.by_key()['color']
+        
+    #for i in range(num_cases):
+        case = str(case_int)
         psd_case = psds[case]
         if not use_fooof:
             f = np.array(psd_case['f'])
             fx = f[np.where((f>=4) & (f<=12))]
             pxx = np.array(psd_case['pxx'])
             theta = pxx[np.where((f>=4) & (f<=12))]
-            ax2.plot(fx,theta,linewidth=0.6,label=labels[case])
+            axis.plot(fx,theta,linewidth=0.6,label=labels[case],color=colors[case_int-1])
         else:
             freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
             fm = FOOOF(aperiodic_mode='knee')
-            fm.fit(freqs, spectrum, [1,150])
+            fm.fit(freqs, spectrum, [1,max_freq])
             ap_fit = fm._ap_fit
             print(ap_fit)
-            residual_spec = spectrum[0:152] - 10**ap_fit
+            residual_spec = spectrum[0:max_freq+2] - 10**ap_fit
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
-            ax2.plot([i for i in range(len(residual_spec))],residual_spec)
+            axis.plot([i for i in range(len(residual_spec))],residual_spec,color=colors[case_int-1], label=labels[case])
             theta = residual_spec[4:13]
             # original
             #freqs,spectrum = np.array(psd_case['f_raw']),np.array(psd_case['pxx_raw'])
@@ -267,28 +271,52 @@ def final_plots(num_cases=6):
             #init_flat_spec = fm.power_spectrum - 10**ap_fit
             #theta = (init_flat_spec[4:13])
             #ax2.plot([i for i in range(4,13)],theta)
+        axis.set_xscale('log')
+        if legend:
+            axis.legend()
+        return theta
 
+    for case in range(1,num_cases+1):
+        theta = plot_psd(ax[0,1],case,legend=False)
         if use_peak:
-            psd_power[case] = max(theta)
+            psd_power[str(case)] = max(theta)
         else: # integrage
-            psd_power[case] = scipy.integrate.simps(theta)
-        print(f"PSD Theta Power for case {case}: {psd_power[case]}")
-    ax2.legend()
+            psd_power[str(case)] = scipy.integrate.simps(theta)
+        print(f"PSD Theta Power for case {case}: {psd_power[str(case)]}")
 
     # AX3 - Power
     if use_peak:
-        ax3.set_title("Theta Band Peak by Case")
+        ax[0,2].set_title("Theta Band Peak by Case")
     else:
-        ax3.set_title("Theta Band Power by Case")
-    ax3.set_xlabel("Case")
+        ax[0,2].set_title("Theta Band Power by Case")
+    ax[0,2].set_xlabel("Case")
     if use_peak:
-        ax3.set_ylabel("[V^2/Hz]")
+        ax[0,2].set_ylabel("[V^2/Hz]")
     else:
-        ax3.set_ylabel("Power")
+        ax[0,2].set_ylabel("Power")
     for i in range(num_cases):
         case = str(i + 1)
-        ax3.bar(i+1,psd_power[case], label=labels[case])
+        ax[0,2].bar(i+1,psd_power[case], label=labels[case])
     #ax3.legend()
+
+    comparisons = [
+            {'axis':ax[1,0], "cases":[1,2]},
+            {'axis':ax[1,1], "cases":[1,3]},
+            {'axis':ax[1,2], "cases":[1,4]},
+            {'axis':ax[2,0], "cases":[1,5]},
+            {'axis':ax[2,1], "cases":[1,6]},
+            {'axis':ax[2,2], "cases":[3,5]},
+        ]
+    for compare in comparisons:
+        title = "Case "
+        for not_first, case in enumerate(compare["cases"]):
+            plot_psd(compare["axis"], case)
+            if not_first:
+                title = title + " vs Case "
+            title = title + str(case)
+        compare["axis"].set_title(title)
+
+
     plt.tight_layout() 
     plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
     plt.show()
