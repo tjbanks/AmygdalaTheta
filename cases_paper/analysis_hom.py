@@ -96,7 +96,7 @@ def ecp_psd(ecps,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,cas
     psds[case] = {'f':f.tolist(),'pxx':(pxx*1000).tolist(),
                   'f_raw':f_raw.tolist(), 'pxx_raw':(pxx_raw*1000).tolist()}
 
-def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,case=None):
+def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,case=None,title=None):
     print("Type : mean (std)")
     spike_hist[case] = {}
     for node in node_set:
@@ -122,6 +122,8 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,
     if ax:
         ax.set_xscale('log')
         ax.legend() 
+    if title:
+        ax.set_title(title)
         
         
 def run(case,show_plots=False,save_plots=False):
@@ -203,7 +205,8 @@ def final_plots(num_cases=6):
 
     fig, ax = plt.subplots(3,3,figsize=(15,9.6))#6.4,4.8 default
     #fig.suptitle('Amygdala Analysis')    
-    
+    fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))
+
     # AX1 - Base raster
     ax[0,0].set_title("Base Raster")
     ax[0,0].set_xlabel("Time")
@@ -317,8 +320,25 @@ def final_plots(num_cases=6):
         compare["axis"].set_title(title)
 
 
-    plt.tight_layout() 
+    plt.tight_layout()
     plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
+    #plt.show()
+
+    dt = 0.05
+    steps_per_ms = 1/dt
+    skip_seconds = 5
+    skip_ms = skip_seconds*1000
+    skip_n = int(skip_ms * steps_per_ms)
+    end_ms = 15000
+
+    for i, case in enumerate(range(1,num_cases+1)):
+        case = str(case)
+        spikes_df = pd.DataFrame({'timestamps':spikes[case]['timestamps'], 'node_ids':spikes[case]['node_ids']})
+        col = i % 3
+        row = 0 if i < 3 else 1
+        spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
+
+    plt.tight_layout()
     plt.show()
 
 if __name__ == '__main__':
