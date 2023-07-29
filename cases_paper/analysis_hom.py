@@ -189,7 +189,7 @@ def save_data():
         json.dump(full_dict, fp, indent=2)
 
 
-def final_plots():
+def final_plots(num_cases=6):
     # SETUP
     analysis_json = 'analysis.json'
     print("loading " + analysis_json)
@@ -239,7 +239,7 @@ def final_plots():
     use_fooof = True
     use_peak = True
 
-    for i in range(4):
+    for i in range(num_cases):
         case = str(i + 1)
         psd_case = psds[case]
         if not use_fooof:
@@ -285,7 +285,7 @@ def final_plots():
         ax3.set_ylabel("[V^2/Hz]")
     else:
         ax3.set_ylabel("Power")
-    for i in range(4):
+    for i in range(num_cases):
         case = str(i + 1)
         ax3.bar(i+1,psd_power[case], label=labels[case])
     #ax3.legend()
@@ -296,13 +296,14 @@ def final_plots():
 if __name__ == '__main__':
     show_plots = False
     save_plots = True
+    num_cases = 6
     if '--show-plots' in sys.argv:
         show_plots = True
     if '--save-plots' in sys.argv:
         save_plots = True
     if '--final' in sys.argv:
-        final_plots()
+        final_plots(num_cases)
     else:
-        for i in range(4):
+        for i in range(num_cases):
             run(i+1, show_plots = show_plots, save_plots = save_plots)
         save_data()

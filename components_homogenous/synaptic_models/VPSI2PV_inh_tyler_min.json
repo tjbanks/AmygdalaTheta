@@ -1,5 +1,6 @@
 {
     "level_of_detail": "bginh",
-    "initW_lognormal_mean": 1,
-    "initW_lognormal_std": 0.1
+    "initW_lognormal_mean": 0.7,
+    "initW_lognormal_std": 0.1,
+    "bACH": "0.3"
 }
