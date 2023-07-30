@@ -29,7 +29,10 @@ node_set = [
 def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None,title=None):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms] 
     #spikes[case] = spikes_df.to_json()
-    spikes[case] = {'timestamps':spikes_df['timestamps'].tolist(), 'node_ids':spikes_df['node_ids'].tolist()}
+    if not case in spikes.keys():
+        spikes[case] = []
+
+    spikes[case].append({'timestamps':spikes_df['timestamps'].tolist(), 'node_ids':spikes_df['node_ids'].tolist()})
     for node in node_set:
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
@@ -209,6 +212,7 @@ def final_plots(num_cases=6):
     #fig.suptitle('Amygdala Analysis')    
     fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))
     fig3,ax3 = plt.subplots(2,3,figsize=(15,9.6))
+    fig4,ax4 = plt.subplots(2,3,figsize=(15,9.6))
 
     # AX1 - Base raster
     ax[0,0].set_title("Base Raster")
@@ -216,7 +220,7 @@ def final_plots(num_cases=6):
     ax[0,0].set_ylabel("Cell ID")
     #spikes[case] = spikes_df.to_json()
     case = "1"
-    spikes_df = pd.DataFrame({'timestamps':spikes[case]['timestamps'], 'node_ids':spikes[case]['node_ids']})    
+    spikes_df = pd.DataFrame({'timestamps':spikes[case][0]['timestamps'], 'node_ids':spikes[case][0]['node_ids']})    
     for node in node_set:
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
@@ -333,20 +337,56 @@ def final_plots(num_cases=6):
     skip_n = int(skip_ms * steps_per_ms)
     end_ms = 15000
 
+    
+    ### Firing rates
+    def plot_f_rates(spikes_df, node_set, ax=None, bin_size=100, title=None,skip_ms=0):
+
+        for node in node_set:
+            cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
+            cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
+            spiketimes = spikes_df['timestamps']
+            n_cells = len(cells) #len(spikes_df.node_ids.unique()) # we want to include those that didn't fire
+            
+            # do histogram (choose bin size)
+        
+            n,b = np.histogram(spiketimes,bins=np.arange(skip_ms,np.max(spiketimes),bin_size))
+
+            def moving_average(a, n=5):
+                ret = np.cumsum(a, dtype=float)
+                ret[n:] = ret[n:] - ret[:-n]
+                return ret[n - 1:] / n
+
+            spikes_second_cell = n/((bin_size/1000)*n_cells) # spikes per second per cell
+            ax.plot(spikes_second_cell, label = node['name']) #'raw bins')
+            #ax.plot(moving_average(spikes_second_cell), label = node['name']) #'moving average')
+
+            #ax.plot(something, label = node['name'])
+
+        #ax.set_xticks(ticks = np.arange(5000,15000,bin_size), labels = ['{}'.format(5*i) for i in np.arange(5000,15000,bin_size)])
+        ax.set_xlabel('time (ms)')
+        ax.set_ylabel('firing rate (Hz)')
+        if title:
+            ax.set_title(title)
+        ax.legend()
+
     for i, case in enumerate(range(1,num_cases+1)):
         case = str(case)
-        spikes_df = pd.DataFrame({'timestamps':spikes[case]['timestamps'], 'node_ids':spikes[case]['node_ids']})
+        spikes_df = pd.DataFrame({'timestamps':spikes[case][0]['timestamps'], 'node_ids':spikes[case][0]['node_ids']})
         col = i % 3
         row = 0 if i < 3 else 1
         # figure 2
         spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
         # figure 3
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
+        # figure 4
+        plot_f_rates(spikes_df,node_set,ax=ax4[row,col],title=labels[case],skip_ms=skip_ms)
+
 
     #plt.tight_layout()
     fig.set_layout_engine('tight')
     fig2.set_layout_engine('tight')
     fig3.set_layout_engine('tight')
+    fig4.set_layout_engine('tight')
     plt.show()
 
 if __name__ == '__main__':
