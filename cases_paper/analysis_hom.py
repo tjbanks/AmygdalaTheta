@@ -26,7 +26,7 @@ node_set = [
         {"name":"CR","start":944*scale,"end":999*scale,"color":"purple"}
     ]
 
-def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None):
+def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None,title=None):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms] 
     #spikes[case] = spikes_df.to_json()
     spikes[case] = {'timestamps':spikes_df['timestamps'].tolist(), 'node_ids':spikes_df['node_ids'].tolist()}
@@ -41,6 +41,8 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None):
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
     ax.set_xlim(8500, 9000)
+    if title:
+        ax.set_title(title)
 
 def raw_ecp(lfp):
     pass
@@ -206,6 +208,7 @@ def final_plots(num_cases=6):
     fig, ax = plt.subplots(3,3,figsize=(15,9.6))#6.4,4.8 default
     #fig.suptitle('Amygdala Analysis')    
     fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))
+    fig3,ax3 = plt.subplots(2,3,figsize=(15,9.6))
 
     # AX1 - Base raster
     ax[0,0].set_title("Base Raster")
@@ -320,7 +323,6 @@ def final_plots(num_cases=6):
         compare["axis"].set_title(title)
 
 
-    plt.tight_layout()
     plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
     #plt.show()
 
@@ -336,9 +338,15 @@ def final_plots(num_cases=6):
         spikes_df = pd.DataFrame({'timestamps':spikes[case]['timestamps'], 'node_ids':spikes[case]['node_ids']})
         col = i % 3
         row = 0 if i < 3 else 1
+        # figure 2
         spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
+        # figure 3
+        raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
 
-    plt.tight_layout()
+    #plt.tight_layout()
+    fig.set_layout_engine('tight')
+    fig2.set_layout_engine('tight')
+    fig3.set_layout_engine('tight')
     plt.show()
 
 if __name__ == '__main__':
