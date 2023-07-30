@@ -1,5 +1,6 @@
-import os, sys
+import os,pathlib,sys
 from bmtk.simulator import bionet
+import json
 import numpy as np
 import synapses
 import warnings
@@ -35,12 +36,20 @@ def run(config_file, coreneuron=False, gpu=False):
     add_weight_function(lognormal)
     add_weight_function(gaussianBL)
 
+    with open(config_file, 'r') as json_file:
+        conf_dict = json.load(json_file)
+        # modify the output dir if we specify it OUTPUT_DIR=./cases_paper/case1/run2 sbatch h1_.....sh
+        if os.environ.get("OUTPUT_DIR"):
+            output_dir = os.path.abspath(os.environ.get('OUTPUT_DIR'))
+            pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
+            print(f"Output directory updated to {output_dir}")
+            conf_dict['manifest']['$OUTPUT_DIR'] = output_dir
 
-    if coreneuron:
-        conf = corebmtk.Config.from_json(config_file, validate=True)        
-    else:
-        conf = bionet.Config.from_json(config_file, validate=True)
-
+        if coreneuron:
+            conf = corebmtk.Config.from_dict(conf_dict, validate=True)        
+        else:
+            conf = bionet.Config.from_dict(conf_dict, validate=True)
+    
     conf.build_env()
 
     graph = bionet.BioNetwork.from_config(conf)
