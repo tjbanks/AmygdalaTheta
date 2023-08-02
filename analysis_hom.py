@@ -27,7 +27,7 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None):
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
-    ax.set_xlim(8500, 9000)
+    ax.set_xlim(14750, 15250)
 
 def raw_ecp(lfp):
     pass
@@ -122,7 +122,7 @@ def run(show_plots=False,save_plots=False,slack=True):
     skip_seconds = 5
     skip_ms = skip_seconds*1000
     skip_n = int(skip_ms * steps_per_ms)
-    end_ms = 15000
+    end_ms = 300000
 
     spikes_location = 'outputECP/spikes.h5'
     

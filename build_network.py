@@ -996,8 +996,8 @@ generate_node_sets(scale)
 
 #Build VSPI input spikes
 from build_input_vpsi_inh_spikes import build_vpsi_input
-build_vpsi_input(n_cells=numVPSI, depth_of_mod=1, output='vpsi_inh_spikes.h5')
-build_vpsi_input(n_cells=numVPSI, depth_of_mod=0, output='vpsi_inh_spikes_0_depth.h5')
+build_vpsi_input(t_sim=t_sim, n_cells=numVPSI, depth_of_mod=1, output='vpsi_inh_spikes.h5')
+build_vpsi_input(t_sim=t_sim,n_cells=numVPSI, depth_of_mod=0, output='vpsi_inh_spikes_0_depth.h5')
 
 profile_stats = pstats.Stats(profiler).sort_stats('tottime')
 profile_stats.print_stats(100)

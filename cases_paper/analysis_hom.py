@@ -5,7 +5,7 @@ TB - 8/4/21
 """
 import scipy
 from scipy.signal.windows import hann as hanning
-from scipy.signal import welch,decimate
+from scipy.signal import welch,decimate,butter,lfilter
 import h5py
 import json
 import numpy as np
@@ -18,9 +18,12 @@ scale = 1
 spikes = {}
 spike_hist = {}
 psds = {}
+ecps_by_case = {}
 
 node_set = [
-        {"name":"PN","start":0*scale,"end":799*scale,"color":"blue"},
+        #{"name":"PN","start":0*scale,"end":799*scale,"color":"blue"},
+        {"name":"PNa","start":0*scale,"end":639*scale,"color":"blue"},
+        {"name":"PNc","start":640*scale,"end":799*scale,"color":"blue"},
         {"name":"PV","start":800*scale,"end":892*scale,"color":"red"},
         {"name":"SOM","start":893*scale,"end":943*scale,"color":"green"},
         {"name":"CR","start":944*scale,"end":999*scale,"color":"purple"}
@@ -38,7 +41,8 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None,title=None):
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
 
         ax.scatter(cell_spikes['timestamps'],cell_spikes['node_ids'],
-                   c='tab:'+node['color'],s=0.25, label=node['name'])
+                   s=0.25, label=node['name'])
+                   #c='tab:'+node['color'],s=0.25, label=node['name'])
     
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
@@ -123,18 +127,25 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,
         print(label)
         c = "tab:" + node['color']
         if ax:
-            ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label,color=c)
+            ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label)#,color=c)
     if ax:
         ax.set_xscale('log')
         ax.legend() 
     if title:
         ax.set_title(title)
         
-        
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    return butter(order, [lowcut, highcut], fs=fs, btype='band')
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
+
 def run(case,show_plots=False,save_plots=False):
     
 
-    dt = 0.05
+    dt = 0.1
     steps_per_ms = 1/dt
     skip_seconds = 5
     skip_ms = skip_seconds*1000
@@ -157,6 +168,7 @@ def run(case,show_plots=False,save_plots=False):
                run_paths.append(f)
         
         ecps = []
+        thetas = []
         for run_path in run_paths:
             ecp_h5_location = os.path.join(run_path,'ecp.h5')
 
@@ -165,7 +177,13 @@ def run(case,show_plots=False,save_plots=False):
             f = h5py.File(ecp_h5_location)
             data_raw = np.array(f['ecp']['data'])
             ecp = data_raw.T[ecp_channel] #flip verts and grab channel 0
-            ecps.append(ecp)
+            ecps.append(ecp.tolist())
+
+            theta_band = butter_bandpass_filter(ecp,4,12,1000)
+            thetas.append(theta_band.tolist())
+
+        ecps_by_case[case] = {'raw':ecps,
+                              'theta_band':thetas}
 
     if show_plots or save_plots:
         print("plotting...")
@@ -191,7 +209,7 @@ def save_data():
     full_dict['spikes'] = spikes
     full_dict['spike_hist'] = spike_hist
     full_dict['psds'] = psds
-
+    full_dict['ecps'] = ecps_by_case
     with open("analysis.json", "w") as fp:
         json.dump(full_dict, fp, indent=2)
 
@@ -206,14 +224,15 @@ def final_plots(num_cases=6):
     spikes = analysis['spikes']
     spike_hist = analysis['spike_hist']
     psds = analysis['psds']
+    ecps = analysis['ecps']
     psd_power = {}
 
     fig, ax = plt.subplots(3,3,figsize=(15,9.6))#6.4,4.8 default
     #fig.suptitle('Amygdala Analysis')    
-    fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))
-    fig3,ax3 = plt.subplots(2,3,figsize=(15,9.6))
-    fig4,ax4 = plt.subplots(2,3,figsize=(15,9.6))
-
+    fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))# general
+    fig3,ax3 = plt.subplots(2,3,figsize=(15,9.6))# firing rates histogram
+    fig4,ax4 = plt.subplots(2,3,figsize=(15,9.6))# firing rates line plots
+    fig5,ax5 = plt.subplots(2,3,figsize=(15,9.6))# histograms
     # AX1 - Base raster
     ax[0,0].set_title("Base Raster")
     ax[0,0].set_xlabel("Time")
@@ -249,6 +268,14 @@ def final_plots(num_cases=6):
     use_fooof = True
     use_peak = True
 
+    def fooof_spectrum(freqs, spectrum, max_freq):
+        fm = FOOOF(aperiodic_mode='knee')
+        fm.fit(freqs, spectrum, [1,max_freq])
+        ap_fit = fm._ap_fit
+        #print(ap_fit)
+        residual_spec = spectrum[0:max_freq+2] - 10**ap_fit
+        return residual_spec
+
     def plot_psd(axis, case_int, max_freq=150, legend=True):
         prop_cycle = plt.rcParams['axes.prop_cycle']
         colors = prop_cycle.by_key()['color']
@@ -264,11 +291,7 @@ def final_plots(num_cases=6):
             axis.plot(fx,theta,linewidth=0.6,label=labels[case],color=colors[case_int-1])
         else:
             freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
-            fm = FOOOF(aperiodic_mode='knee')
-            fm.fit(freqs, spectrum, [1,max_freq])
-            ap_fit = fm._ap_fit
-            print(ap_fit)
-            residual_spec = spectrum[0:max_freq+2] - 10**ap_fit
+            residual_spec = fooof_spectrum(freqs,spectrum,max_freq)
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
             axis.plot([i for i in range(len(residual_spec))],residual_spec,color=colors[case_int-1], label=labels[case])
             theta = residual_spec[4:13]
@@ -330,37 +353,43 @@ def final_plots(num_cases=6):
     plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
     #plt.show()
 
-    dt = 0.05
+    dt = 0.1
     steps_per_ms = 1/dt
     skip_seconds = 5
     skip_ms = skip_seconds*1000
     skip_n = int(skip_ms * steps_per_ms)
     end_ms = 15000
 
-    
     ### Firing rates
-    def plot_f_rates(spikes_df, node_set, ax=None, bin_size=100, title=None,skip_ms=0):
-
+    def plot_f_rates(spikes_df, node_set, ax=None, hist_ax=None, bin_size=5, title=None,skip_ms=0,start=8500,end=9000,ecp=None):
+        x_axis = np.arange(start,end,bin_size)[:-1]
         for node in node_set:
             cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
             cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
-            spiketimes = spikes_df['timestamps']
+            spiketimes = cell_spikes['timestamps']
+            spiketimes = spiketimes[(spiketimes >= 8500) & (spiketimes <= 9000)]
             n_cells = len(cells) #len(spikes_df.node_ids.unique()) # we want to include those that didn't fire
             
             # do histogram (choose bin size)
         
-            n,b = np.histogram(spiketimes,bins=np.arange(skip_ms,np.max(spiketimes),bin_size))
-
+            #n,b = np.histogram(spiketimes,bins=np.arange(skip_ms,np.max(spiketimes),bin_size))
+            n,b = np.histogram(spiketimes,bins=np.arange(start,end,bin_size))
             def moving_average(a, n=5):
                 ret = np.cumsum(a, dtype=float)
                 ret[n:] = ret[n:] - ret[:-n]
                 return ret[n - 1:] / n
 
             spikes_second_cell = n/((bin_size/1000)*n_cells) # spikes per second per cell
-            ax.plot(spikes_second_cell, label = node['name']) #'raw bins')
+            #ax.plot(np.arange(5000,15000,bin_size)[:-1],spikes_second_cell, label = node['name']) #'raw bins')
+            ax.plot(x_axis,spikes_second_cell, label = node['name']) #'raw bins')
             #ax.plot(moving_average(spikes_second_cell), label = node['name']) #'moving average')
 
             #ax.plot(something, label = node['name'])
+            if hist_ax:
+                hist_ax.stairs(n,b,label=node['name'])
+                hist_ax.legend()
+
+        ax.set_ylim([0,60])
 
         #ax.set_xticks(ticks = np.arange(5000,15000,bin_size), labels = ['{}'.format(5*i) for i in np.arange(5000,15000,bin_size)])
         ax.set_xlabel('time (ms)')
@@ -369,9 +398,16 @@ def final_plots(num_cases=6):
             ax.set_title(title)
         ax.legend()
 
+        if ecp:
+            ax2 = ax.twinx()
+            x_ax = np.arange(start,end)
+            ax2.plot(x_ax,ecp[start:end])
+
+    f_rates_bin_size = 10
     for i, case in enumerate(range(1,num_cases+1)):
         case = str(case)
         spikes_df = pd.DataFrame({'timestamps':spikes[case][0]['timestamps'], 'node_ids':spikes[case][0]['node_ids']})
+        theta_band = ecps[case]['theta_band'][0]
         col = i % 3
         row = 0 if i < 3 else 1
         # figure 2
@@ -379,7 +415,7 @@ def final_plots(num_cases=6):
         # figure 3
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
         # figure 4
-        plot_f_rates(spikes_df,node_set,ax=ax4[row,col],title=labels[case],skip_ms=skip_ms)
+        plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
 
 
     #plt.tight_layout()
@@ -387,6 +423,7 @@ def final_plots(num_cases=6):
     fig2.set_layout_engine('tight')
     fig3.set_layout_engine('tight')
     fig4.set_layout_engine('tight')
+    fig4.suptitle(f'{f_rates_bin_size}ms bins')
     plt.show()
 
 if __name__ == '__main__':
