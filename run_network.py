@@ -44,6 +44,10 @@ def run(config_file, coreneuron=False, gpu=False):
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
             print(f"Output directory updated to {output_dir}")
             conf_dict['manifest']['$OUTPUT_DIR'] = output_dir
+        if os.environ.get("TSTOP"):
+            tstop = float(os.environ.get("TSTOP"))
+            print(f"tstop modified to {tstop}")
+            conf_dict['run']['tstop'] = tstop
 
         if coreneuron:
             conf = corebmtk.Config.from_dict(conf_dict, validate=True)        
