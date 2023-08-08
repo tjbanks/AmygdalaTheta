@@ -14,6 +14,8 @@ import pandas as pd
 import sys
 import os
 
+from plot_signal_phase import plot_phase
+
 scale = 1
 spikes = {}
 spike_hist = {}
@@ -214,7 +216,7 @@ def save_data():
         json.dump(full_dict, fp, indent=2)
 
 
-def final_plots(num_cases=6):
+def final_plots(num_cases=6, plot_phase_cases=[2]):
     # SETUP
     analysis_json = 'analysis.json'
     print("loading " + analysis_json)
@@ -231,8 +233,8 @@ def final_plots(num_cases=6):
     #fig.suptitle('Amygdala Analysis')    
     fig2,ax2 = plt.subplots(2,3,figsize=(15,9.6))# general
     fig3,ax3 = plt.subplots(2,3,figsize=(15,9.6))# firing rates histogram
-    fig4,ax4 = plt.subplots(2,3,figsize=(15,9.6))# firing rates line plots
-    fig5,ax5 = plt.subplots(2,3,figsize=(15,9.6))# histograms
+    #fig4,ax4 = plt.subplots(2,3,figsize=(15,9.6))# firing rates line plots
+    #fig5,ax5 = plt.subplots(2,3,figsize=(15,9.6))# histograms
     # AX1 - Base raster
     ax[0,0].set_title("Base Raster")
     ax[0,0].set_xlabel("Time")
@@ -415,15 +417,16 @@ def final_plots(num_cases=6):
         # figure 3
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
         # figure 4
-        plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
-
+        #plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
+    for i in plot_phase_cases:
+        plot_phase(f'./case{i}/run1/ecp.h5',f'./case{i}/run1/spikes.h5',title=f'Case {i} Theta Phase by Cell Type')
 
     #plt.tight_layout()
     fig.set_layout_engine('tight')
     fig2.set_layout_engine('tight')
     fig3.set_layout_engine('tight')
-    fig4.set_layout_engine('tight')
-    fig4.suptitle(f'{f_rates_bin_size}ms bins')
+    #fig4.set_layout_engine('tight')
+    #fig4.suptitle(f'{f_rates_bin_size}ms bins')
     plt.show()
 
 if __name__ == '__main__':
@@ -436,6 +439,7 @@ if __name__ == '__main__':
         save_plots = True
     if '--final' in sys.argv:
         final_plots(num_cases)
+        #plot_phase('./case2/run1/ecp.h5','./case2/run1/spikes.h5')
     else:
         for i in range(num_cases):
             run(i+1, show_plots = show_plots, save_plots = save_plots)

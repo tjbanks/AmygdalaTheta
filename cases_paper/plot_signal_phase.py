@@ -40,7 +40,7 @@ def get_spikes(spikes_h5_location,skip_ms=0):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms]
     return spikes_df
 
-def run(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2):
+def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
 
     theta_band = get_band(ecp_h5_location, low_band, high_band, fs)
     spikes_df = get_spikes(spikes_h5_location,skip_ms=tstart)
@@ -70,7 +70,7 @@ def run(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, low_band=
     ax[0,0].plot(x,y)
     ax[0,1].plot(x,y)
 
-    def plot_phase(cell_spikes, ax, power_threshold=0):
+    def plot_phase_inner(cell_spikes, ax, power_threshold=0):
         # scatter plot
         #ax[i+1].scatter(cell_spikes['timestamps'],cell_spikes['node_ids'],c='tab:'+node['color'])
         # spike time histogram
@@ -106,10 +106,14 @@ def run(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, low_band=
         ax[i+1,0].set_title(node['name'])
         ax[i+1,1].set_title('top ' + str(int(top_percentage*100)) + '% ' + node['name'])
 
-        plot_phase(cell_spikes, ax[i+1,0])    
-        plot_phase(top_cell_spikes, ax[i+1,1])
+        plot_phase_inner(cell_spikes, ax[i+1,0])    
+        plot_phase_inner(top_cell_spikes, ax[i+1,1])
 
-    plt.tight_layout()
-    plt.show()
+    #plt.tight_layout()
+    if title:
+        fig.suptitle(title)
+    fig.set_layout_engine('tight')
+    if show:
+        plt.show()
 if __name__ == '__main__':
-    run('./outputECP/ecp.h5', './outputECP/spikes.h5')
+    plot_phase('./outputECP/ecp.h5', './outputECP/spikes.h5', show=True)
