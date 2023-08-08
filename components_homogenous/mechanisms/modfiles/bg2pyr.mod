@@ -9,6 +9,7 @@ NEURON {
 	RANGE gnmda, gnmdas, gNMDAmax, enmda
 	RANGE gampa, gampas, gAMPAmax, eampa
 	RANGE initW
+        RANGE ACH, bACH
 }
 
 UNITS {
@@ -33,6 +34,8 @@ PARAMETER {
 	taua2 = 7 (ms)
 	gAMPAmax = 1e-3 (uS)
 	eampa = 0 (mV)
+        ACH = 1
+        bACH = 0
 	
 }
 
@@ -91,7 +94,7 @@ BREAKPOINT {
 	gampa = normconsta*factora*(Ba-Aa)
 	gampas = gampa
 	if (gampas > 1) {gampas = 1}
-	iampa = initW*gAMPAmax*gampas*(v-eampa)
+	iampa = initW*gAMPAmax*gampas*(v-eampa) * (1 + (bACH * (ACH - 1)))
 	
 }
 
