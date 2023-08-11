@@ -61,9 +61,9 @@ def ecp_psd(ecp,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,use_
         f,pxx = welch(lfp_d,fs=1000,nfft=1024)
         freqs,spectrum = np.array(f),np.array(pxx)
         fm = FOOOF(aperiodic_mode='knee')
-        fm.fit(freqs, spectrum, [1,500])
+        fm.fit(freqs, spectrum, [1,150])
         ap_fit = fm._ap_fit
-        residual_spec = spectrum[0:500] #- 10**ap_fit
+        residual_spec = spectrum[0:150] #- 10**ap_fit
 
         # Plot
         #plt.plot([i for i in range(len(residual_spec))],residual_spec)
@@ -120,7 +120,7 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
 def run(show_plots=False,save_plots=False,slack=True,tstop=15000.0,path="outputECP"):
     
 
-    dt = 0.05
+    dt = 0.1
     steps_per_ms = 1/dt
     skip_seconds = 5
     skip_ms = skip_seconds*1000

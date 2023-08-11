@@ -40,7 +40,7 @@ def get_spikes(spikes_h5_location,skip_ms=0):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms]
     return spikes_df
 
-def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
+def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=200000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
 
     theta_band = get_band(ecp_h5_location, low_band, high_band, fs)
     spikes_df = get_spikes(spikes_h5_location,skip_ms=tstart)
@@ -48,7 +48,7 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, lo
 
     start = int(np.round(tstart / dt))
     end = int(np.round(tend / dt))
-    fig,ax = plt.subplots(len(node_set)+1,2,figsize=(10,9.6))
+    fig,ax = plt.subplots(len(node_set)+1,1,figsize=(5,9.6))
 
     x_ax = np.arange(start,end)
     #ax[0].plot(x_ax,theta_band[start:end])
@@ -56,8 +56,8 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, lo
     print(f"Band mean power {hilbert_power.mean()} | std power {hilbert_power.std()}")
     print(f"Band max power {hilbert_power.max()} | min power {hilbert_power.min()} ")
     #ax[0].plot(x_ax,hilbert_power)
-    ax[0,0].set_title("Theta")
-    ax[0,1].set_title("Theta")
+    ax[0].set_title("Theta")
+    #ax[0,1].set_title("Theta")
 
     hilbert_phase = np.angle(hilbert_trans[start:end])
 
@@ -67,8 +67,8 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, lo
 
     x = np.linspace(-np.pi,3*np.pi,1000)
     y = np.cos(x)
-    ax[0,0].plot(x,y)
-    ax[0,1].plot(x,y)
+    ax[0].plot(x,y)
+    #ax[0,1].plot(x,y)
 
     def plot_phase_inner(cell_spikes, ax, power_threshold=0):
         # scatter plot
@@ -103,11 +103,11 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=300000, lo
         top_spiking_cells = cell_spikes.node_ids.value_counts()[:int(top_percentage*len(cells))].index.tolist()
         top_cell_spikes = spikes_df[spikes_df['node_ids'].isin(top_spiking_cells)]
 
-        ax[i+1,0].set_title(node['name'])
-        ax[i+1,1].set_title('top ' + str(int(top_percentage*100)) + '% ' + node['name'])
+        ax[i+1].set_title(node['name'])
+        #ax[i+1,1].set_title('top ' + str(int(top_percentage*100)) + '% ' + node['name'])
 
-        plot_phase_inner(cell_spikes, ax[i+1,0])    
-        plot_phase_inner(top_cell_spikes, ax[i+1,1])
+        plot_phase_inner(cell_spikes, ax[i+1])    
+        #plot_phase_inner(top_cell_spikes, ax[i+1,1])
 
     #plt.tight_layout()
     if title:

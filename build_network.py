@@ -25,8 +25,12 @@ np.random.seed(123412)
 
 network_dir = 'network'
 components_dir = 'components'
-t_sim = 15000.0
-dt = 0.05
+if os.environ.get("TSTOP"):
+    t_sim = float(os.environ.get("TSTOP"))
+else:
+    t_sim = 15000.0
+print(f'TSTOP set to {t_sim}')
+dt = 0.1
 scale = 1
 
 min_conn_dist = 0.0
