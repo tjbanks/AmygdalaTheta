@@ -40,7 +40,7 @@ def get_spikes(spikes_h5_location,skip_ms=0):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms]
     return spikes_df
 
-def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=200000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
+def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
 
     theta_band = get_band(ecp_h5_location, low_band, high_band, fs)
     spikes_df = get_spikes(spikes_h5_location,skip_ms=tstart)
