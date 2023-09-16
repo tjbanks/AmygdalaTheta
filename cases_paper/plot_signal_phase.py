@@ -40,6 +40,18 @@ def get_spikes(spikes_h5_location,skip_ms=0):
     spikes_df = spikes_df[spikes_df['timestamps']>skip_ms]
     return spikes_df
 
+def plot_raster(spikes_df,node,skip_ms=0,ax=None,start=None, end=None):
+    spikes_df = spikes_df[spikes_df['timestamps']>skip_ms]
+    if start and end:
+        spikes_df = spikes_df[(spikes_df['timestamps']>start) & (spikes_df['timestamps']<end)]
+
+    ax.scatter(spikes_df['timestamps'],spikes_df['node_ids'],
+            c='tab:'+node['color'],s=0.25, label=node['name'])
+
+    handles,labels = ax.get_legend_handles_labels()
+    ax.legend(reversed(handles), reversed(labels))
+    ax.grid(True)
+
 def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
 
     theta_band = get_band(ecp_h5_location, low_band, high_band, fs)
@@ -48,7 +60,7 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
 
     start = int(np.round(tstart / dt))
     end = int(np.round(tend / dt))
-    fig,ax = plt.subplots(len(node_set)+1,1,figsize=(5,9.6))
+    fig,ax = plt.subplots(len(node_set)+2,2,figsize=(10,9.6))
 
     x_ax = np.arange(start,end)
     #ax[0].plot(x_ax,theta_band[start:end])
@@ -56,7 +68,7 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
     print(f"Band mean power {hilbert_power.mean()} | std power {hilbert_power.std()}")
     print(f"Band max power {hilbert_power.max()} | min power {hilbert_power.min()} ")
     #ax[0].plot(x_ax,hilbert_power)
-    ax[0].set_title("Theta")
+    ax[0][0].set_title("Theta")
     #ax[0,1].set_title("Theta")
 
     hilbert_phase = np.angle(hilbert_trans[start:end])
@@ -67,7 +79,7 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
 
     x = np.linspace(-np.pi,3*np.pi,1000)
     y = np.cos(x)
-    ax[0].plot(x,y)
+    ax[0][0].plot(x,y)
     #ax[0,1].plot(x,y)
 
     def plot_phase_inner(cell_spikes, ax, power_threshold=0):
@@ -103,11 +115,21 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         top_spiking_cells = cell_spikes.node_ids.value_counts()[:int(top_percentage*len(cells))].index.tolist()
         top_cell_spikes = spikes_df[spikes_df['node_ids'].isin(top_spiking_cells)]
 
-        ax[i+1].set_title(node['name'])
+        ax[i+1][0].set_title(node['name'])
         #ax[i+1,1].set_title('top ' + str(int(top_percentage*100)) + '% ' + node['name'])
 
-        plot_phase_inner(cell_spikes, ax[i+1])    
+        plot_phase_inner(cell_spikes, ax[i+1][0])    
         #plot_phase_inner(top_cell_spikes, ax[i+1,1])
+        plot_raster(cell_spikes, node, ax=ax[i+1][1],start=8000,end=8500)
+
+    ax[6][0].set_title("VPSI input")
+    vpsi_input = h5py.File('./vpsi_inh_spikes.h5')
+    vpsi_spikes = pd.DataFrame({'node_ids':vpsi_input['spikes']['vpsi_inh']['node_ids'],
+                                'timestamps':vpsi_input['spikes']['vpsi_inh']['timestamps']})
+    vpsi_spikes = vpsi_spikes[vpsi_spikes['timestamps']>5000]
+    plot_phase_inner(vpsi_spikes, ax[6][0])
+    node['name']='VPSI'
+    plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
 
     #plt.tight_layout()
     if title:
