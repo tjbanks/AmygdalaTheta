@@ -147,9 +147,11 @@ def build_edges(networks,edge_definitions,edge_params,edge_add_properties,syn=No
             if edge_params_val.get('is_gap_junction'):
                 continue
 
-        dynamics_file = edge_params_val['dynamics_params']
-        model_template = syn[dynamics_file]['level_of_detail']
-        model_template_kwarg = {'model_template':model_template}
+        model_template_kwarg = {}
+        if edge_params_val.get('dynamics_params'):
+            dynamics_file = edge_params_val['dynamics_params']
+            model_template = syn[dynamics_file]['level_of_detail']
+            model_template_kwarg = {'model_template':model_template}
         net = networks[network_name]
 
         conn = net.add_edges(**edge_src_trg,**edge_params_val,**model_template_kwarg)
