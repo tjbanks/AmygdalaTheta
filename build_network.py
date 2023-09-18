@@ -40,6 +40,9 @@ max_conn_dist = 9999.0 #300.0 #300.0 #9999.9# Distance constraint for all cells
 edge_effects = False 
 net_size = 1400#um]=[]
 
+# Use gap junctions?
+use_gap_junctions = True
+
 #Number of cells in each population
 numPN_A = 569
 numPN_C = 231
@@ -132,7 +135,7 @@ def build_networks(network_definitions: list) -> dict:
     
     return networks
 
-def build_edges(networks,edge_definitions,edge_params,edge_add_properties,syn=None):
+def build_edges(networks,edge_definitions,edge_params,edge_add_properties,syn=None,use_gap_junctions=True):
     # Builds the edges for each network given a set of 'edge_definitions'
     # edge_definitions examples shown later in the code
     for edge in edge_definitions:
@@ -145,6 +148,10 @@ def build_edges(networks,edge_definitions,edge_params,edge_add_properties,syn=No
         model_template_kwarg = {'model_template':model_template}
 
         net = networks[network_name]
+
+        if not use_gap_junctions: # we don't want to add gaps if False
+            if edge_params_val.get('is_gap_junction'):
+                continue
 
         conn = net.add_edges(**edge_src_trg,**edge_params_val,**model_template_kwarg)
         
@@ -558,6 +565,17 @@ edge_definitions = [
         'param': 'CR2SOM',
         'add_properties': 'syn_dist_delay_feng_section_default'
     },  
+        ################## GAP JUNCTIONS #####################
+
+    {   # SOM to SOM GAP JUNCTION
+        'network':'BLA',
+        'edge': {
+            'source':{'pop_name': ['SOM']}, 
+            'target':{'pop_name': ['SOM']}
+        },
+        'param': 'SOM2SOM_GAP',
+        'add_properties': 'syn_dist_delay_feng_section_gap'
+    },
 
         ##################### VPSI INPUT #####################
 
@@ -805,7 +823,17 @@ edge_params = {
         'target_sections':['basal'],
         'distance_range':[0.0, 9999.9],
         'dynamics_params':'BG2CR_thalamus_min.json'
-    }
+    },
+    ### GAP JUNCTIONS ###
+    'SOM2SOM_GAP': {
+        'iterator':'one_to_all',
+        'connection_rule':syn_percent_o2a,
+        'connection_params':{'p':0.5/scale, 'max_dist':max_conn_dist},
+        'syn_weight':1, # Conductance
+        'is_gap_junction':True,
+        'distance_range':[min_conn_dist,max_conn_dist],
+        'target_sections':['somatic']
+    },
 } # edges referenced by name
 
 # Will be called by conn.add_properties for the associated connection
@@ -821,7 +849,13 @@ edge_add_properties = {
         'rule':syn_uniform_delay_section,
         'rule_params':{'sec_x':0.9},
         'dtypes':[float, np.int32, float]
-    }
+    },
+    'syn_dist_delay_feng_section_gap': {
+        'names':['delay','sec_id','sec_x'],
+        'rule':syn_dist_delay_feng_section,
+        'rule_params':{'sec_x':0.5},
+        'dtypes':[float, np.int32, float]
+    },
 }
 
 ##########################################################################
@@ -951,7 +985,7 @@ synapses.load()
 syn = synapses.syn_params_dicts()
 
 # Build your edges into the networks
-build_edges(networks, edge_definitions,edge_params,edge_add_properties,syn)
+build_edges(networks, edge_definitions,edge_params,edge_add_properties,syn,use_gap_junctions=use_gap_junctions)
 
 # Save the network into the appropriate network dir
 save_networks(networks,network_dir)
