@@ -13,7 +13,7 @@ from bmtk.builder.auxi.node_params import positions_cuboid, positions_list, xite
 from bmtk.utils.sim_setup import build_env_bionet
 from bmtk.builder import NetworkBuilder
 
-from connectors import (one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
+from connectors import (simple_rand, one_to_one, one_to_one_offset, syn_dist_delay_feng_section, syn_uniform_delay_section,
                         syn_percent_o2a, recurrent_connector_o2a)
 
 from connectors import init_connectors
@@ -143,16 +143,19 @@ def build_edges(networks,edge_definitions,edge_params,edge_add_properties,syn=No
         edge_src_trg = edge['edge']
         edge_params_val  = edge_params[edge['param']]
 
-        if not use_gap_junctions: # we don't want to add gaps if False
-            if edge_params_val.get('is_gap_junction'):
-                continue
+        net = networks[network_name]
+
+        if edge_params_val.get('is_gap_junction'):
+            if use_gap_junctions: # we to add gap
+                del edge_params_val['is_gap_junction']
+                conn = net.add_gap_junctions(**edge_src_trg,**edge_params_val)
+            continue # we're not using gaps or we added, continue
 
         model_template_kwarg = {}
         if edge_params_val.get('dynamics_params'):
             dynamics_file = edge_params_val['dynamics_params']
             model_template = syn[dynamics_file]['level_of_detail']
             model_template_kwarg = {'model_template':model_template}
-        net = networks[network_name]
 
         conn = net.add_edges(**edge_src_trg,**edge_params_val,**model_template_kwarg)
         
@@ -571,11 +574,10 @@ edge_definitions = [
     {   # SOM to SOM GAP JUNCTION
         'network':'BLA',
         'edge': {
-            'source':{'pop_name': ['SOM']}, 
-            'target':{'pop_name': ['SOM']}
+            'source':networks['BLA'].nodes(pop_name=['SOM']), 
+            'target':networks['BLA'].nodes(pop_name=['SOM'])
         },
         'param': 'SOM2SOM_GAP',
-        'add_properties': 'syn_dist_delay_feng_section_gap'
     },
 
         ##################### VPSI INPUT #####################
@@ -827,13 +829,10 @@ edge_params = {
     },
     ### GAP JUNCTIONS ###
     'SOM2SOM_GAP': {
-        'iterator':'one_to_all',
-        'connection_rule':syn_percent_o2a,
-        'connection_params':{'p':0.5/scale, 'max_dist':max_conn_dist},
-        'syn_weight':1, # Conductance
+        'connection_rule':simple_rand,
+        'connection_params':{'p':0.5},
+        'resistance':1, # Conductance
         'is_gap_junction':True,
-        'distance_range':[min_conn_dist,max_conn_dist],
-        'target_sections':['somatic']
     },
 } # edges referenced by name
 
@@ -849,12 +848,6 @@ edge_add_properties = {
         'names':['delay','sec_id','sec_x'],
         'rule':syn_uniform_delay_section,
         'rule_params':{'sec_x':0.9},
-        'dtypes':[float, np.int32, float]
-    },
-    'syn_dist_delay_feng_section_gap': {
-        'names':['delay','sec_id','sec_x'],
-        'rule':syn_dist_delay_feng_section,
-        'rule_params':{'sec_x':0.5},
         'dtypes':[float, np.int32, float]
     },
 }

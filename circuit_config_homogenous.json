@@ -62,6 +62,10 @@
         "edges_file": "$NETWORK_DIR/thalamus_pyr_BLA_edges.h5"
       }
     ],
-    "gap_juncs": []
+    "gap_juncs": [
+      {
+        "gap_juncs_file": "$NETWORK_DIR/BLA_gap_juncs.h5"
+      }
+    ]
   }
 }

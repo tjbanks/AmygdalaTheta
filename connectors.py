@@ -12,6 +12,15 @@ def init_connectors(total_cells):
 ##############################################################################
 ############################## CONNECT CELLS #################################
 
+def simple_rand(source, target, p=1):
+    sid = source.node_id
+    tid = target.node_id
+    if sid != tid and random.random() < p:
+        return 1
+    else:
+        return 0
+
+
 def one_to_one(source, target, p=1):
     
     sid = source.node_id
