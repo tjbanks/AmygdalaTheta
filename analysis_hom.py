@@ -3,15 +3,18 @@ A python implementation of matlab/analysis.m
 
 TB - 8/4/21
 """
+import argparse
+import os
+import sys
+
+import h5py
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from fooof import FOOOF
 from fooof.sim.gen import gen_aperiodic
+from scipy.signal import decimate, welch
 from scipy.signal.windows import hann as hanning
-from scipy.signal import welch,decimate
-import h5py
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-import sys
 
 scale = 1
 
@@ -27,11 +30,12 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None):
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
+    ax.set_xlim(8500, 9000)
 
 def raw_ecp(lfp):
     pass
 
-def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_fooof=False):
+def ecp_psd(ecp,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,use_fooof=True):
     
     #skip_n first few
     data = ecp[skip_n:]
@@ -42,7 +46,7 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_
     if not use_fooof:
         win = hanning(nfft, True)
         f,pxx = welch(lfp_d,fs,window=win,noverlap=noverlap,nfft=nfft)
-        ax.set_xscale('log')
+        #ax.set_xscale('log')
         ax.set_yscale('log')
         ax.plot(f, pxx*1000,linewidth=0.6)
         ax.set_ylim([0,0.1])
@@ -59,11 +63,13 @@ def ecp_psd(ecp,skip_n=0,downsample=20,nfft=1024,fs=1000,noverlap=0,ax=None,use_
         fm = FOOOF(aperiodic_mode='knee')
         fm.fit(freqs, spectrum, [1,150])
         ap_fit = fm._ap_fit
-        residual_spec = spectrum[0:152] - 10**ap_fit
+        residual_spec = spectrum[0:150] #- 10**ap_fit
 
         # Plot
         #plt.plot([i for i in range(len(residual_spec))],residual_spec)
         ax.plot(freqs[:len(residual_spec)], residual_spec)
+        ax.grid()
+        #ax.set_xlim(1, 25)
         #ax.plot([i for i in range(4,13)],residual_spec[4:13]) # Only theta range
         
         theta = residual_spec[4:13]
@@ -111,17 +117,17 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10)
         
     return return_text 
 
-def run(show_plots=False,save_plots=False,slack=True):
+def run(show_plots=False,save_plots=False,slack=True,tstop=15000.0,path="outputECP"):
     
 
-    dt = 0.05
+    dt = 0.1
     steps_per_ms = 1/dt
     skip_seconds = 5
     skip_ms = skip_seconds*1000
     skip_n = int(skip_ms * steps_per_ms)
-    end_ms = 15000
+    end_ms = tstop
 
-    spikes_location = 'outputECP/spikes.h5'
+    spikes_location = os.path.join(path,'spikes.h5')
     
     print("loading " + spikes_location)
     f = h5py.File(spikes_location)
@@ -129,7 +135,7 @@ def run(show_plots=False,save_plots=False,slack=True):
     print("done")
 
     if show_plots or save_plots:
-        ecp_h5_location = 'outputECP/ecp.h5'
+        ecp_h5_location = os.path.join(path,'ecp.h5')
         print("loading " + ecp_h5_location)
         ecp_channel = 0
         f = h5py.File(ecp_h5_location)
@@ -171,11 +177,10 @@ def run(show_plots=False,save_plots=False,slack=True):
 
 
 if __name__ == '__main__':
-    show_plots = False
-    save_plots = False
-    if '--show-plots' in sys.argv:
-        show_plots = True
-    if '--save-plots' in sys.argv:
-        save_plots = True
-        
-    run(show_plots = show_plots, save_plots = save_plots)
+    parser = argparse.ArgumentParser("analysis of results")
+    parser.add_argument("--show-plots",action="store_true")
+    parser.add_argument("--save-plots",action="store_true")
+    parser.add_argument("--tstop",type=float,default=15000.0)
+    parser.add_argument("--path",default="outputECP")
+    args = parser.parse_args()
+    run(show_plots = args.show_plots, save_plots = args.save_plots, tstop=args.tstop, path=args.path)

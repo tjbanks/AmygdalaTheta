@@ -1,6 +1,6 @@
 {
     "level_of_detail": "interD2pyrD_STFD",
-    "initW_lognormal_mean": "20",
-    "initW_lognormal_std": "2",
-    "bACH": "0.0"
+    "initW_lognormal_mean": "1",
+    "initW_lognormal_std": "0.1",
+    "bACH": "0.3"
 }
