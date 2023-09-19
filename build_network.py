@@ -830,8 +830,8 @@ edge_params = {
     ### GAP JUNCTIONS ###
     'SOM2SOM_GAP': {
         'connection_rule':simple_rand,
-        'connection_params':{'p':0.5},
-        'resistance':1, # Conductance
+        'connection_params':{'p':0.08},
+        'resistance':0.0005, # Conductance
         'is_gap_junction':True,
     },
 } # edges referenced by name
