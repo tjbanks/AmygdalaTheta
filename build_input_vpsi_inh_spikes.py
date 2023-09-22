@@ -20,7 +20,7 @@ def build_vpsi_input_jitter(t_sim=15000.0, n_cells=100, plot=False, output='vpsi
     total_timestamps = []
     total_node_ids = []
     for i in range(n_cells):
-        timestamp = np.arange(0,simLength,delay)
+        timestamp = np.arange(1,simLength,delay)
         timestamp = rand_jitter(timestamp, jitter_amount)
         total_timestamps.extend(timestamp)
         for j in range(len(timestamp)):
