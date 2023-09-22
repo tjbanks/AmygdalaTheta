@@ -5,6 +5,49 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy
 
+def build_vpsi_input_jitter(t_sim=15000.0, n_cells=100, plot=False, output='vpsi_inh_spikes.h5', freq=8, jitter_amount=0.001):
+    simLength = 15 #in seconds
+    freq = 8 #in Hz
+
+    delay = 1/freq
+
+    def rand_jitter(arr,jitter_amount=0.001): #lower jitterAmount = less jitter
+        temp = jitter_amount * (max(arr) - min(arr))
+        if temp <= 0:
+            temp = 1
+        return arr + np.random.randn(len(arr)) * temp
+
+    total_timestamps = []
+    total_node_ids = []
+    for i in range(n_cells):
+        timestamp = np.arange(0,simLength,delay)
+        timestamp = rand_jitter(timestamp, jitter_amount)
+        total_timestamps.extend(timestamp)
+        for j in range(len(timestamp)):
+            total_node_ids.append(i)
+
+    total_timestamps= [x * 1000 for x in total_timestamps]
+    
+    vpsi = h5py.File(output, 'w')
+
+    vpsi_spikes = vpsi.create_group("spikes")
+    vpsi_spikes_vp = vpsi_spikes.create_group("vpsi_inh")
+
+    spikes_node_ids = []
+    spikes_timestamps = []
+    nodes=np.array(total_node_ids).astype(int)
+    timestamps=np.array(total_timestamps).astype(float)
+
+    vpsi_spikes_vp.create_dataset("node_ids", data=nodes)
+    vpsi_spikes_vp.create_dataset("timestamps", data=timestamps)
+    vpsi.close()
+
+    if plot:
+        plt.scatter(total_timestamps,total_node_ids)
+        plt.xlim(6000,7000)
+        plt.show()
+
+
 def build_vpsi_input(t_sim=15000.0, n_cells=100, plot=False, depth_of_mod=1, output='vpsi_inh_spikes.h5'):
     #setting up mock population of presynaptic neurons
 

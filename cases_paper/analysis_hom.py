@@ -418,8 +418,8 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
         # figure 4
         #plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
-    for i in plot_phase_cases:
-        plot_phase(f'./case{i}/run1/ecp.h5',f'./case{i}/run1/spikes.h5',title=f'Case {i} Theta Phase by Cell Type')
+    #for i in plot_phase_cases:
+    #    plot_phase(f'./case{i}/run1/ecp.h5',f'./case{i}/run1/spikes.h5',title=f'Case {i} Theta Phase by Cell Type')
 
     #plt.tight_layout()
     fig.set_layout_engine('tight')

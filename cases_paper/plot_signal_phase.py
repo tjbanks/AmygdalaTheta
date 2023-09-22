@@ -1,3 +1,5 @@
+import sys
+
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
@@ -52,7 +54,7 @@ def plot_raster(spikes_df,node,skip_ms=0,ax=None,start=None, end=None):
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
 
-def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None):
+def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None,plot_vpsi=True,vpsi_location='./vpsi_inh_spikes.h5'):
 
     theta_band = get_band(ecp_h5_location, low_band, high_band, fs)
     spikes_df = get_spikes(spikes_h5_location,skip_ms=tstart)
@@ -60,7 +62,8 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
 
     start = int(np.round(tstart / dt))
     end = int(np.round(tend / dt))
-    fig,ax = plt.subplots(len(node_set)+2,2,figsize=(10,9.6))
+    extra_plots = 2 if plot_vpsi else 1
+    fig,ax = plt.subplots(len(node_set)+extra_plots,2,figsize=(10,9.6))
 
     x_ax = np.arange(start,end)
     #ax[0].plot(x_ax,theta_band[start:end])
@@ -122,14 +125,15 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         #plot_phase_inner(top_cell_spikes, ax[i+1,1])
         plot_raster(cell_spikes, node, ax=ax[i+1][1],start=8000,end=8500)
 
-    ax[6][0].set_title("VPSI input")
-    vpsi_input = h5py.File('./vpsi_inh_spikes.h5')
-    vpsi_spikes = pd.DataFrame({'node_ids':vpsi_input['spikes']['vpsi_inh']['node_ids'],
+    if plot_vpsi:
+        ax[6][0].set_title("VPSI input")
+        vpsi_input = h5py.File(vpsi_location)
+        vpsi_spikes = pd.DataFrame({'node_ids':vpsi_input['spikes']['vpsi_inh']['node_ids'],
                                 'timestamps':vpsi_input['spikes']['vpsi_inh']['timestamps']})
-    vpsi_spikes = vpsi_spikes[vpsi_spikes['timestamps']>5000]
-    plot_phase_inner(vpsi_spikes, ax[6][0])
-    node['name']='VPSI'
-    plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
+        vpsi_spikes = vpsi_spikes[vpsi_spikes['timestamps']>5000]
+        plot_phase_inner(vpsi_spikes, ax[6][0])
+        node['name']='VPSI'
+        plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
 
     #plt.tight_layout()
     if title:
@@ -138,4 +142,10 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
     if show:
         plt.show()
 if __name__ == '__main__':
-    plot_phase('./outputECP/ecp.h5', './outputECP/spikes.h5', show=True)
+    if '--all' in sys.argv:
+        for case in range(1,7):
+            plot_vpsi = True if case in [2,3,4] else False
+            plot_phase(f'./case{case}/run1/ecp.h5', f'./case{case}/run1/spikes.h5', show=False, title=f"Case {case}", plot_vpsi=plot_vpsi, vpsi_location='../vpsi_inh_spikes.h5')
+        plt.show()
+    else:
+        plot_phase('./outputECP/ecp.h5', './outputECP/spikes.h5', show=True)
