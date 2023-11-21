@@ -308,13 +308,13 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
             #ax2.plot([i for i in range(4,13)],theta)
         axis.set_xscale('log')
         if legend:
-            axis.legend()
+            axis.legend(prop={'size': 6})
         return theta
 
     for case in range(1,num_cases+1):
-        theta = plot_psd(ax[0,1],case,legend=False)
+        theta = plot_psd(ax[0,1],case,legend=True)
         if use_peak:
-            psd_power[str(case)] = max(theta)
+            psd_power[str(case)] = max(max(theta),0.0001)
         else: # integrage
             psd_power[str(case)] = scipy.integrate.simps(theta)
         print(f"PSD Theta Power for case {case}: {psd_power[str(case)]}")
@@ -332,7 +332,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
     for i in range(num_cases):
         case = str(i + 1)
         ax[0,2].bar(i+1,psd_power[case], label=labels[case])
-    #ax3.legend()
+    ax[0,2].legend(prop={'size': 6})
 
     comparisons = [
             {'axis':ax[1,0], "cases":[1,2]},
