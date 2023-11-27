@@ -43,6 +43,11 @@ net_size = 1400#um]=[]
 # Use gap junctions?
 use_gap_junctions = False
 
+# Ablation
+no_pv = False
+no_som = False
+no_cr = False
+
 #Number of cells in each population
 numPN_A = 569
 numPN_C = 231
@@ -82,6 +87,16 @@ if __name__ == '__main__':
 
     else:
         print('Building full network')
+    
+    if 'no_pv' in sys.argv:
+        no_pv = True
+        print(f"Ablation of PV set")
+    if 'no_som' in sys.argv:
+        no_som = True
+        print(f"Ablation of SOM set")
+    if 'no_cr' in sys.argv:
+        no_cr = True
+        print(f"Ablation of CR set")
 
 #Scale the number of cells in each population
 numPN_A = int(numPN_A * scale) #640 * scale #4114#15930
