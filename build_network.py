@@ -41,7 +41,7 @@ edge_effects = False
 net_size = 1400#um]=[]
 
 # Use gap junctions?
-use_gap_junctions = True
+use_gap_junctions = False
 
 #Number of cells in each population
 numPN_A = 569

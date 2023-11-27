@@ -314,7 +314,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
     for case in range(1,num_cases+1):
         theta = plot_psd(ax[0,1],case,legend=True)
         if use_peak:
-            psd_power[str(case)] = max(max(theta),0.0001)
+            psd_power[str(case)] = max(max(theta),0.00001)
         else: # integrage
             psd_power[str(case)] = scipy.integrate.simps(theta)
         print(f"PSD Theta Power for case {case}: {psd_power[str(case)]}")
