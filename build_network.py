@@ -671,7 +671,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.17/scale,'no_recip':True,'track_list':int2int_temp_list, 'max_dist':max_conn_dist},#0.19
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'INT2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -680,7 +680,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.0275/scale, 'track_list':uncoupled_bi_track, 'max_dist':max_conn_dist},#0.03
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'INT2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -689,7 +689,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':recurrent_connector_o2a,
         'connection_params':{'p':1, 'all_edges':uncoupled_bi_track},#p:1
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'INT2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -698,7 +698,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.40/scale, 'max_dist':max_conn_dist},#{'p':0.40},
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'INT2PN_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -707,7 +707,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.22/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#'p':0.24
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -716,7 +716,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.09/scale,'track_list':pyr_int_bi_list, 'max_dist':max_conn_dist},
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'INT2PN_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -725,7 +725,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':recurrent_connector_o2a,
         'connection_params':{'p':1,'all_edges':pyr_int_bi_list},#was 1
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'PN2INT_feng_min.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -734,7 +734,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.31/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.309
-        'syn_weight':1,
+        'syn_weight':0 if no_som else 1,
         'dynamics_params':'PN2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -743,7 +743,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.066/scale, 'max_dist':max_conn_dist},#0.066
-        'syn_weight':1,
+        'syn_weight':0 if no_som else 1,
         'dynamics_params':'SOM2PN_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -752,7 +752,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.55/scale, 'max_dist':max_conn_dist},# Dr Unal suggested .1 -> .55 based on 7/1/21 email
-        'syn_weight':1,
+        'syn_weight':0 if no_pv or no_som else 1,
         'dynamics_params':'INT2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -761,7 +761,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.185/scale, 'angle_dist':False, 'max_dist':max_conn_dist, 'angle_dist_radius': 100},#0.183
-        'syn_weight':1,
+        'syn_weight':0 if no_cr else 1,
         'dynamics_params':'PN2CR_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -770,7 +770,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.116/scale, 'max_dist':max_conn_dist},#0.116
-        'syn_weight':1,
+        'syn_weight':0 if no_cr else 1,
         'dynamics_params':'CR2PN_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['somatic']
@@ -779,7 +779,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.297/scale, 'max_dist':max_conn_dist},#.297
-        'syn_weight':1,
+        'syn_weight':0 if no_pv or no_cr else 1,
         'dynamics_params':'CR2INT_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -788,7 +788,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.764/scale, 'max_dist':max_conn_dist},#.764
-        'syn_weight':1,
+        'syn_weight':0 if no_som or no_cr else 1,
         'dynamics_params':'CR2SOM_tyler.json',
         'distance_range':[min_conn_dist,max_conn_dist],
         'target_sections':['basal']
@@ -806,7 +806,7 @@ edge_params = {
         'iterator':'one_to_all',
         'connection_rule':syn_percent_o2a,
         'connection_params':{'p':0.90/scale}, # connect a PV cell to a VPSI cell 90% of the time #{'p':0.012/scale}, 
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'VPSI2PV_inh_tyler_min.json',
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal']
@@ -821,7 +821,7 @@ edge_params = {
     'THALAMUS2PV': {
         'connection_rule':one_to_one_offset,
         'connection_params':{'offset':numPN_A+numPN_C},
-        'syn_weight':1,
+        'syn_weight':0 if no_pv else 1,
         'dynamics_params':'BG2PNi_feng_min.json',
         'distance_range':[0.0, 9999.9],
         'target_sections':['basal']
@@ -829,7 +829,7 @@ edge_params = {
     'THALAMUS2SOM': {
         'connection_rule':one_to_one_offset,
         'connection_params':{'offset':numPN_A+numPN_C+numPV},
-        'syn_weight':1,
+        'syn_weight':0 if no_som else 1,
         'target_sections':['basal'],
         'distance_range':[0.0, 9999.9],
         'dynamics_params':'BG2SOM_thalamus_min.json'
@@ -837,7 +837,7 @@ edge_params = {
     'THALAMUS2CR': {
         'connection_rule':one_to_one_offset,
         'connection_params':{'offset':numPN_A+numPN_C+numPV+numSOM},
-        'syn_weight':1,
+        'syn_weight':0 if no_cr else 1,
         'target_sections':['basal'],
         'distance_range':[0.0, 9999.9],
         'dynamics_params':'BG2CR_thalamus_min.json'

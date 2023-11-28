@@ -1,3 +1,4 @@
+import os
 import sys
 
 import h5py
@@ -53,6 +54,7 @@ def plot_raster(spikes_df,node,skip_ms=0,ax=None,start=None, end=None):
     handles,labels = ax.get_legend_handles_labels()
     ax.legend(reversed(handles), reversed(labels))
     ax.grid(True)
+    return spikes_df
 
 def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low_band=4, high_band=12, fs=1000, dt=0.1, bin_size=0.1, top_percentage=0.2, show=False, title=None,plot_vpsi=True,vpsi_location='./vpsi_inh_spikes.h5'):
 
@@ -111,7 +113,13 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         ax2.plot(x,y,linestyle='dashed')
         
         ax.stairs(n,b,color=node['color'],fill=True)
-            
+        return n, b
+    
+    n_list = []
+    b_list =[]
+    spikes_df_list = []
+    vpsi_spikes_df = None 
+
     for i, node in enumerate(node_set):
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
@@ -121,9 +129,12 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         ax[i+1][0].set_title(node['name'])
         #ax[i+1,1].set_title('top ' + str(int(top_percentage*100)) + '% ' + node['name'])
 
-        plot_phase_inner(cell_spikes, ax[i+1][0])    
+        n, b = plot_phase_inner(cell_spikes, ax[i+1][0])
+        n_list.append(n)
+        b_list.append(b)
         #plot_phase_inner(top_cell_spikes, ax[i+1,1])
-        plot_raster(cell_spikes, node, ax=ax[i+1][1],start=8000,end=8500)
+        spikes_df_ret = plot_raster(cell_spikes, node, ax=ax[i+1][1],start=8000,end=8500)
+        spikes_df_list.append(spikes_df_ret)
 
     if plot_vpsi:
         ax[6][0].set_title("VPSI input")
@@ -131,9 +142,12 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         vpsi_spikes = pd.DataFrame({'node_ids':vpsi_input['spikes']['vpsi_inh']['node_ids'],
                                 'timestamps':vpsi_input['spikes']['vpsi_inh']['timestamps']})
         vpsi_spikes = vpsi_spikes[vpsi_spikes['timestamps']>5000]
-        plot_phase_inner(vpsi_spikes, ax[6][0])
+        n_vpsi, b_vpsi = plot_phase_inner(vpsi_spikes, ax[6][0])
+        n_list.append(n_vpsi)
+        b_list.append(b_vpsi)
         node['name']='VPSI'
-        plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
+        vpsi_spikes_df = plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
+        spikes_df_list.append(vpsi_spikes_df)
 
     #plt.tight_layout()
     if title:
@@ -141,11 +155,28 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
     fig.set_layout_engine('tight')
     if show:
         plt.show()
+
+    return n_list, b_list, spikes_df_list 
+
 if __name__ == '__main__':
+    output_folder = "figures_data"
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     if '--all' in sys.argv:
         for case in range(1,7):
             plot_vpsi = True if case in [2,3,4] else False
-            plot_phase(f'./case{case}/run1/ecp.h5', f'./case{case}/run1/spikes.h5', show=False, title=f"Case {case}", plot_vpsi=plot_vpsi, vpsi_location='../vpsi_inh_spikes.h5')
+            (n_list, b_list, spikes_df_list) = plot_phase(f'./case{case}/run1/ecp.h5', f'./case{case}/run1/spikes.h5', show=False, title=f"Case {case}", plot_vpsi=plot_vpsi, vpsi_location='../vpsi_inh_spikes.h5')
+            if case in [2]:
+                nodes = [n["name"] for n in node_set]
+                nodes.append("vpsi")
+                # save the bounds
+                pd.DataFrame(np.array(b_list[0]).T,columns=['bounds']).to_csv(os.path.join(output_folder, f'figure6b_case_{case}_phase_bounds.csv'), index=False)
+                # save the values
+                pd.DataFrame(np.array(n_list).T,columns=nodes).to_csv(os.path.join(output_folder, f'figure6b_case_{case}_phase_values.csv'), index=False)
+                # save the spikes_list
+                for node_name, spikes_df in zip(nodes, spikes_df_list):
+                    spikes_df.to_csv(os.path.join(output_folder, f'figure6b_case_{case}_{node_name}_raster.csv'), index=False)
         plt.show()
     else:
         plot_phase('./outputECP/ecp.h5', './outputECP/spikes.h5', show=True)

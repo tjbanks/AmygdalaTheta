@@ -123,6 +123,30 @@ def run(config_file, coreneuron=False, gpu=False):
                     nic_cells_turned_on += 1
         print(f"Rank {pc.id()}: {nic_cells_turned_on}/{len(ach_receptive_cells)} nicotinic (intrinsic) receptors turned on")
 
+        no_pv = False
+        no_som = False 
+        no_cr = False
+        if os.environ.get("NO_PV"):
+            print(f"Ablation set for PV")
+            no_pv = True
+        if os.environ.get("NO_SOM"):
+            print(f"Ablation set for SOM")
+            no_som = True
+        if os.environ.get("NO_CR"):
+            print(f"Ablation set for CR")
+            no_cr = True
+        if no_pv or no_som or no_cr:
+            for cell_id, cell in local_cells.items():
+                cell_type = ''
+                if hasattr(cell.hobj, 'type'):
+                    cell_type = cell.hobj.type
+                if (cell_type == 'InterneuronCellf' and no_pv) or (cell_type == 'SOM_Cell' and no_pv) or (cell_type == 'CR_Cell' and no_cr):
+                    cell_connections = cell.connections()
+                    for connection in cell_connections:
+                        syn = connection._syn
+                        if hasattr(syn, 'initW'):
+                            syn.initW = 0.000001
+                            print(f"Setting cell {cell_id} syn.initW to 0.000001")
         pc.barrier()
 
     sim.run()

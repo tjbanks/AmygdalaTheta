@@ -52,6 +52,7 @@ def raster(spikes_df,node_set,skip_ms=0,ax=None,case=None,title=None):
     ax.set_xlim(8500, 9000)
     if title:
         ax.set_title(title)
+    return spikes_df
 
 def raw_ecp(lfp):
     pass
@@ -110,6 +111,8 @@ def ecp_psd(ecps,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,cas
 def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,case=None,title=None):
     print("Type : mean (std)")
     spike_hist[case] = {}
+    n_list = []
+    bins_list = []
     for node in node_set:
         cells = range(node['start'],node['end']+1) #+1 to be inclusive of last cell
         cell_spikes = spikes_df[spikes_df['node_ids'].isin(cells)]
@@ -129,12 +132,15 @@ def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,
         print(label)
         c = "tab:" + node['color']
         if ax:
-            ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label)#,color=c)
+            (n, bins, patches) = ax.hist(spike_counts_per_second,n_bins,density=True,histtype='bar',label=label)#,color=c)
+            n_list.append(n)
+            bins_list.append(bins)
     if ax:
         ax.set_xscale('log')
         ax.legend() 
     if title:
         ax.set_title(title)
+    return n_list, bins_list
         
 def butter_bandpass(lowcut, highcut, fs, order=5):
     return butter(order, [lowcut, highcut], fs=fs, btype='band')
@@ -249,6 +255,8 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         ax[0,0].scatter(cell_spikes['timestamps'],cell_spikes['node_ids'],
                    c='tab:'+node['color'],s=0.25, label=node['name'])
 
+    # TODO HERE FOR FIGURE - save spike times, cell id, cell type as csv
+
     handles,labels = ax[0,0].get_legend_handles_labels()
     ax[0,0].legend(reversed(handles), reversed(labels))
     ax[0,0].grid(True)
@@ -312,6 +320,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         return theta
 
     for case in range(1,num_cases+1):
+        # TODO FIGURE HERE return whole spectrum, save in csv
         theta = plot_psd(ax[0,1],case,legend=True)
         if use_peak:
             psd_power[str(case)] = max(max(theta),0.00001)
@@ -333,6 +342,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         case = str(i + 1)
         ax[0,2].bar(i+1,psd_power[case], label=labels[case])
     ax[0,2].legend(prop={'size': 6})
+    # TODO FIGURE save psd_power into csv run, power
 
     comparisons = [
             {'axis':ax[1,0], "cases":[1,2]},
@@ -413,9 +423,11 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         col = i % 3
         row = 0 if i < 3 else 1
         # figure 2
-        spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
+        (n_list, bins_list) = spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
+        # TODO save csv for histogram, each
         # figure 3
-        raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
+        spikes_df_result = raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
+        # TODO save csv for each spike raster, df.to_csv probably easiest
         # figure 4
         #plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
     #for i in plot_phase_cases:
