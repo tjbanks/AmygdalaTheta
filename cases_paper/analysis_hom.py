@@ -83,7 +83,9 @@ def ecp_psd(ecps,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,cas
         pxxs_raw.append(pxx_raw)
 
     pxx = np.mean(np.array(pxxs),axis=0)
+    pxx_std = np.std(np.array(pxxs),axis=0)
     pxx_raw = np.mean(np.array(pxxs_raw),axis=0)
+    pxx_raw_std = np.std(np.array(pxxs_raw),axis=0)
     # check ach theta adjustment match up
     #if case == 1:
     #    pxx = pxx - 0.000000054
@@ -109,8 +111,8 @@ def ecp_psd(ecps,skip_n=0,downsample=10,nfft=1024,fs=1000,noverlap=0,ax=None,cas
     #print("Peak gamma (50Hz-60Hz) : " + str(round(peak_gamma,6)))
     print('')
 
-    psds[case] = {'f':f.tolist(),'pxx':(pxx*1000).tolist(),
-                  'f_raw':f_raw.tolist(), 'pxx_raw':(pxx_raw*1000).tolist()}
+    psds[case] = {'f':f.tolist(),'pxx':(pxx*1000).tolist(),'pxx_std':(pxx_std*1000).tolist(),
+            'f_raw':f_raw.tolist(), 'pxx_raw':(pxx_raw*1000).tolist(), 'pxx_raw_std': (pxx_raw_std*1000).tolist()}
 
 def spike_frequency_histogram(spikes_df,node_set,ms,skip_ms=0,ax=None,n_bins=10,case=None,title=None):
     print("Type : mean (std)")
@@ -306,11 +308,22 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
             axis.plot(fx,theta,linewidth=0.6,label=labels[case],color=colors[case_int-1])
         else:
             freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
+            spectrum_plus_std = spectrum + np.array(psd_case['pxx_std'])
+            spectrum_minus_std = spectrum - np.array(psd_case['pxx_std'])
             residual_spec = fooof_spectrum(freqs,spectrum,max_freq)
+            residual_spec_plus = fooof_spectrum(freqs, spectrum_plus_std, max_freq)
+            residual_spec_minus = fooof_spectrum(freqs, spectrum_minus_std, max_freq)
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
             fx = [i for i in range(len(residual_spec))]
             axis.plot(fx,residual_spec,color=colors[case_int-1], label=labels[case])
+
+            #axis.plot(fx,residual_spec_plus,color=colors[case_int-1], label=labels[case])
+            #axis.plot(fx,residual_spec_minus,color=colors[case_int-1], label=labels[case])
+
             theta = residual_spec[4:13]
+            theta_plus = residual_spec_plus[4:13]
+            theta_minus = residual_spec_minus[4:13]
+
             # original
             #freqs,spectrum = np.array(psd_case['f_raw']),np.array(psd_case['pxx_raw'])
             #fm = FOOOF(aperiodic_mode='knee')
@@ -323,22 +336,35 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         axis.set_xscale('log')
         if legend:
             axis.legend(prop={'size': 6})
-        return fx, theta, residual_spec
+        return fx, theta, residual_spec, residual_spec_plus, residual_spec_minus, theta_plus, theta_minus
     
     fx_list = []
     thetas = []
+    thetas_plus = []
+    thetas_minus = []
     residual_specs = []
+    residual_specs_plus = []
+    residual_specs_minus = []
     psd_power_list = []
+    psd_power_list_low = []
+    psd_power_list_high = []
     for case in range(1,num_cases+1):
         # FIGURE HERE return whole spectrum, save in csv
-        fx, theta, residual_spec = plot_psd(ax[0,1],case,legend=True)
+        fx, theta, residual_spec, residual_spec_plus, residual_spec_minus, theta_plus, theta_minus = plot_psd(ax[0,1],case,legend=True)
         thetas.append(theta)
         fx_list.append(fx)
         residual_specs.append(residual_spec)
+        thetas_plus.append(theta_plus)
+        thetas_minus.append(theta_minus)
+        residual_specs_plus.append(residual_spec_plus)
+        residual_specs_minus.append(residual_spec_minus)
         if use_peak:
-            val = max(max(theta),0.00001)
+            max_theta = max(theta)
+            val = max(max_theta,0.00001)
             psd_power[str(case)] = val
             psd_power_list.append(val)
+            psd_power_list_low.append(max(theta_minus[theta.tolist().index(max_theta)],0.00001))
+            psd_power_list_high.append(max(theta_plus[theta.tolist().index(max_theta)],0.00001))
         else: # integrage
             val = scipy.integrate.simps(theta)
             psd_power[str(case)] = val
@@ -362,7 +388,13 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
     # FIGURE save psd_power into csv run, power
     case_cols = [f'case{i}' for i in range(1,len(psd_power)+1)]
     pd.DataFrame(np.array(residual_specs).T,columns=case_cols).to_csv(os.path.join(output_folder,'figure6a2_psd.csv'),index_label='x_axis_frequency')
-    pd.DataFrame({k:v for k,v in zip(case_cols, psd_power_list)},index=[0]).to_csv(os.path.join(output_folder,'figure6a3_theta_band_peak.csv'),index=False)
+    pd.DataFrame(np.array(residual_specs_plus).T,columns=case_cols).to_csv(os.path.join(output_folder,'figure6a2_psd_plus_std.csv'),index_label='x_axis_frequency')
+    pd.DataFrame(np.array(residual_specs_minus).T,columns=case_cols).to_csv(os.path.join(output_folder,'figure6a2_psd_minus_std.csv'),index_label='x_axis_frequency')
+    d = [{k:v for k,v in zip(case_cols, psd_power_list)},
+            {k:v for k,v in zip(case_cols, psd_power_list_low)},
+            {k:v for k,v in zip(case_cols, psd_power_list_high)}]
+    #pd.DataFrame(d,index=["mean","minus_std","plus_std"]).to_csv(os.path.join(output_folder,'figure6a3_theta_band_peak.csv'),index=True)
+    pd.DataFrame({k:v for k,v in zip(case_cols, psd_power_list)},index=["mean"]).to_csv(os.path.join(output_folder,'figure6a3_theta_band_peak.csv'),index=False)
 
     comparisons = [
             {'axis':ax[1,0], "cases":[1,2]},
