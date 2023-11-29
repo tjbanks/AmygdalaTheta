@@ -16,6 +16,10 @@ import os
 
 from plot_signal_phase import plot_phase
 
+output_folder = "figures_data"
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+
 scale = 1
 spikes = {}
 spike_hist = {}
@@ -293,6 +297,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
     #for i in range(num_cases):
         case = str(case_int)
         psd_case = psds[case]
+        residual_spec = None
         if not use_fooof:
             f = np.array(psd_case['f'])
             fx = f[np.where((f>=4) & (f<=12))]
@@ -303,7 +308,8 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
             freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
             residual_spec = fooof_spectrum(freqs,spectrum,max_freq)
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
-            axis.plot([i for i in range(len(residual_spec))],residual_spec,color=colors[case_int-1], label=labels[case])
+            fx = [i for i in range(len(residual_spec))]
+            axis.plot(fx,residual_spec,color=colors[case_int-1], label=labels[case])
             theta = residual_spec[4:13]
             # original
             #freqs,spectrum = np.array(psd_case['f_raw']),np.array(psd_case['pxx_raw'])
@@ -317,15 +323,26 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         axis.set_xscale('log')
         if legend:
             axis.legend(prop={'size': 6})
-        return theta
-
+        return fx, theta, residual_spec
+    
+    fx_list = []
+    thetas = []
+    residual_specs = []
+    psd_power_list = []
     for case in range(1,num_cases+1):
-        # TODO FIGURE HERE return whole spectrum, save in csv
-        theta = plot_psd(ax[0,1],case,legend=True)
+        # FIGURE HERE return whole spectrum, save in csv
+        fx, theta, residual_spec = plot_psd(ax[0,1],case,legend=True)
+        thetas.append(theta)
+        fx_list.append(fx)
+        residual_specs.append(residual_spec)
         if use_peak:
-            psd_power[str(case)] = max(max(theta),0.00001)
+            val = max(max(theta),0.00001)
+            psd_power[str(case)] = val
+            psd_power_list.append(val)
         else: # integrage
-            psd_power[str(case)] = scipy.integrate.simps(theta)
+            val = scipy.integrate.simps(theta)
+            psd_power[str(case)] = val
+            psd_power_list.append(val)
         print(f"PSD Theta Power for case {case}: {psd_power[str(case)]}")
 
     # AX3 - Power
@@ -342,7 +359,10 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         case = str(i + 1)
         ax[0,2].bar(i+1,psd_power[case], label=labels[case])
     ax[0,2].legend(prop={'size': 6})
-    # TODO FIGURE save psd_power into csv run, power
+    # FIGURE save psd_power into csv run, power
+    case_cols = [f'case{i}' for i in range(1,len(psd_power)+1)]
+    pd.DataFrame(np.array(residual_specs).T,columns=case_cols).to_csv(os.path.join(output_folder,'figure6a2_psd.csv'),index_label='x_axis_frequency')
+    pd.DataFrame({k:v for k,v in zip(case_cols, psd_power_list)},index=[0]).to_csv(os.path.join(output_folder,'figure6a3_theta_band_peak.csv'),index=False)
 
     comparisons = [
             {'axis':ax[1,0], "cases":[1,2]},
@@ -360,7 +380,6 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
                 title = title + " vs Case "
             title = title + str(case)
         compare["axis"].set_title(title)
-
 
     plt.savefig('analysis_final.svg', bbox_inches='tight', format='svg')
     #plt.show()
@@ -416,6 +435,8 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
             ax2.plot(x_ax,ecp[start:end])
 
     f_rates_bin_size = 10
+    nodes = [n["name"] for n in node_set]
+
     for i, case in enumerate(range(1,num_cases+1)):
         case = str(case)
         spikes_df = pd.DataFrame({'timestamps':spikes[case][0]['timestamps'], 'node_ids':spikes[case][0]['node_ids']})
@@ -423,11 +444,16 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         col = i % 3
         row = 0 if i < 3 else 1
         # figure 2
-        (n_list, bins_list) = spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
-        # TODO save csv for histogram, each
+        (n_list, b_list) = spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
+        # save the bounds
+        pd.DataFrame(np.array(b_list[0]).T,columns=['bounds']).to_csv(os.path.join(output_folder, f'figure5b_case_{case}_firing_rates_bounds.csv'), index=False)
+        # save the values
+        pd.DataFrame(np.array(n_list).T,columns=nodes).to_csv(os.path.join(output_folder, f'figure5b_case_{case}_firing_rates_values.csv'), index=False)
+        
         # figure 3
         spikes_df_result = raster(spikes_df,node_set,skip_ms=skip_ms,ax=ax3[row,col],case=case,title=labels[case])
-        # TODO save csv for each spike raster, df.to_csv probably easiest
+        # save csv for each spike raster, df.to_csv probably easiest
+        spikes_df_result.to_csv(os.path.join(output_folder,f"figure5a_case_{case}_raster.csv"),index=False)
         # figure 4
         #plot_f_rates(spikes_df,node_set,ax=ax4[row,col],hist_ax=ax5[row,col],title=labels[case],skip_ms=skip_ms,bin_size=f_rates_bin_size,ecp=theta_band)
     #for i in plot_phase_cases:
@@ -440,6 +466,10 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
     #fig4.set_layout_engine('tight')
     #fig4.suptitle(f'{f_rates_bin_size}ms bins')
     plt.show()
+
+    nodes_dict = {"nodes": node_set}
+    with open(os.path.join(output_folder,'node_set.json'),'w') as f:
+        json.dump(nodes_dict, f, indent=4)
 
 if __name__ == '__main__':
     show_plots = False

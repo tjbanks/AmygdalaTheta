@@ -85,6 +85,7 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
     x = np.linspace(-np.pi,3*np.pi,1000)
     y = np.cos(x)
     ax[0][0].plot(x,y)
+    pd.DataFrame(np.array([x,y]).T,columns=['x','y']).to_csv(os.path.join(output_folder,'figure6b_cosin_wave.csv'),index=False)
     #ax[0,1].plot(x,y)
 
     def plot_phase_inner(cell_spikes, ax, power_threshold=0):

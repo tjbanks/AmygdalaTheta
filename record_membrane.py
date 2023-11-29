@@ -9,9 +9,10 @@ def new_cell(cell_name):
     cell = invoke_cell()
     return cell
 
-def main(hoc_files, mechanisms_dir, cell_names, currents=[], i_clamp_dur=300, i_clamp_delay=10, v_init=-70, tstop=400):
+def main(hoc_files, mechanisms_dir, cell_names, currents=[], i_clamp_dur=400, i_clamp_delay=200, v_init=-70, tstop=500):
         # Load mechs
-        neuron.load_mechanisms(mechanisms_dir)
+        #neuron.load_mechanisms(mechanisms_dir)
+        h.nrn_load_dll('./components_homogenous/mechanisms/x86_64/libnrnmech.so')
         # Load the standard hoc file
         h.load_file('stdrun.hoc')
         for hoc_file in hoc_files:
@@ -53,11 +54,12 @@ def main(hoc_files, mechanisms_dir, cell_names, currents=[], i_clamp_dur=300, i_
         potentials = np.array(potentials).T
         potentials_df = pd.DataFrame(potentials,columns=cell_names)
         potentials_df.to_csv('potentials.csv', index=False)
-
+        
+        potentials_df.to_csv('cases_paper/figures_data/figure4b_200nA_potentials.csv', index=False)
 
 if __name__ == '__main__':
-        currents = [0.16,0.16,0.16,0.16,0.16]
+        currents = [0.2,0.2,0.2,0.2,0.2]
         main(['./components_homogenous/templates/feng.hoc','./components_homogenous/templates/SOM.hoc'],
-             './components_homogenous/mechanisms/modfiles',
+             './components_homogenous/mechanisms/x86_64/libnrnmech.so',
              ['Cell_Af','Cell_Cf','InterneuronCellf','SOM_Cell','CR_Cell'],
              currents)
