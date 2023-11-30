@@ -2,6 +2,31 @@
 #### Code by Tyler Banks. In partnership with Unal Lab (Tuna and Unal)
 Modeling Basal Forebrain GABAergic Neuromodulation of the Amygdala Theta Rhythm
 
+
+## Quickstart
+
+Generate the network and inputs:
+```
+python build_network.py homogenous
+```
+
+Run the experiments (using MPI):
+```
+RUNS=10 ./h99_run_multiple.sh
+```
+
+Analyze:
+```
+cd cases_paper
+python analysis_hom.py && python analysis_hom.py --final
+python plot_signal_phase.py --all
+cd ..
+python whole_picture.py
+```
+
+Raw data output is stored in `cases_paper/figures_data`.
+
+
 ## Core Neuron Update
 
 
