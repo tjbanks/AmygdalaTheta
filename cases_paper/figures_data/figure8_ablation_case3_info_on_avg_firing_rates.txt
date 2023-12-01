@@ -1,0 +1,33 @@
+Firing Rates in Hz (optional plot more for text)
+
+Baseline
+Type : mean (std)
+PNa : 0.45 (0.21)
+PNc : 0.68 (0.34)
+PV : 8.94 (4.45)
+SOM : 20.90 (2.87)
+CR : 50.92 (33.01)
+ 
+No PV connections
+Type : mean (std)
+PNa : 0.45 (0.21)
+PNc : 0.70 (0.34)
+PV : 0.0 (0.0)
+SOM : 31.38 (2.68)
+CR : 59.78 (31.74) 
+
+No SOM connections
+Type : mean (std)
+PNa : 0.45 (0.21)
+PNc : 0.69 (0.34)
+PV : 9.04 (4.47)
+SOM : 0.0 (0.0)
+CR : 46.77 (32.74)
+
+No CR connections
+Type : mean (std)
+PNa : 0.44 (0.21)
+PNc : 0.69 (0.34)
+PV : 9.58 (4.39)
+SOM : 20.35 (2.90)
+CR : 0.0 (0.0)
