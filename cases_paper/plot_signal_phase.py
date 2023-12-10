@@ -146,7 +146,8 @@ def plot_phase(ecp_h5_location, spikes_h5_location, tstart=5000, tend=15000, low
         n_vpsi, b_vpsi = plot_phase_inner(vpsi_spikes, ax[6][0])
         n_list.append(n_vpsi)
         b_list.append(b_vpsi)
-        node['name']='VPSI'
+        #node['name']='VPSI'
+        node = {"name":"vpsi","start":0*scale,"end":892*scale,"color":"purple"}
         vpsi_spikes_df = plot_raster(vpsi_spikes, node , ax=ax[6][1],start=8000,end=8500)
         spikes_df_list.append(vpsi_spikes_df)
 

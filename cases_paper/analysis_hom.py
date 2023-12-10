@@ -290,7 +290,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         ap_fit = fm._ap_fit
         #print(ap_fit)
         residual_spec = spectrum[0:max_freq+2] - 10**ap_fit
-        return residual_spec
+        return residual_spec, 10**ap_fit 
 
     def plot_psd(axis, case_int, max_freq=150, legend=True):
         prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -310,12 +310,17 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
             freqs,spectrum = np.array(psd_case['f']),np.array(psd_case['pxx'])
             spectrum_plus_std = spectrum + np.array(psd_case['pxx_std'])
             spectrum_minus_std = spectrum - np.array(psd_case['pxx_std'])
-            residual_spec = fooof_spectrum(freqs,spectrum,max_freq)
-            residual_spec_plus = fooof_spectrum(freqs, spectrum_plus_std, max_freq)
-            residual_spec_minus = fooof_spectrum(freqs, spectrum_minus_std, max_freq)
+            residual_spec, ap_fit = fooof_spectrum(freqs,spectrum,max_freq)
+            residual_spec_plus, _ = fooof_spectrum(freqs, spectrum_plus_std, max_freq)
+            residual_spec_minus, _ = fooof_spectrum(freqs, spectrum_minus_std, max_freq)
             #ax2.plot([i for i in range(4,13)],residual_spec[4:13])
             fx = [i for i in range(len(residual_spec))]
             axis.plot(fx,residual_spec,color=colors[case_int-1], label=labels[case])
+            
+            if case == "3":
+                plt.figure()
+                plt.plot(spectrum[0:max_freq+2])
+                plt.plot(ap_fit)
 
             #axis.plot(fx,residual_spec_plus,color=colors[case_int-1], label=labels[case])
             #axis.plot(fx,residual_spec_minus,color=colors[case_int-1], label=labels[case])
@@ -478,7 +483,7 @@ def final_plots(num_cases=6, plot_phase_cases=[2]):
         # figure 2
         (n_list, b_list) = spike_frequency_histogram(spikes_df,node_set,end_ms,skip_ms=skip_ms,case=case,ax=ax2[row,col],title=labels[case])
         # save the bounds
-        pd.DataFrame(np.array(b_list[0]).T,columns=['bounds']).to_csv(os.path.join(output_folder, f'figure5b_case_{case}_firing_rates_bounds.csv'), index=False)
+        pd.DataFrame(np.array(b_list).T,columns=nodes).to_csv(os.path.join(output_folder, f'figure5b_case_{case}_firing_rates_bounds.csv'), index=False)
         # save the values
         pd.DataFrame(np.array(n_list).T,columns=nodes).to_csv(os.path.join(output_folder, f'figure5b_case_{case}_firing_rates_values.csv'), index=False)
         
